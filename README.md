@@ -18,6 +18,18 @@ White-label client portal for automation agencies (mainly using n8n). Manage ins
 
 ---
 
+## Quick start
+
+```bash
+git clone https://github.com/FlowEngine-cloud/flowengine.git && cd flowengine && ./setup.sh --prod
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+That pulls the pre-built image, so there is no build step. `setup.sh` writes `.env` from `.env.docker`, creates the Docker network and starts the stack; edit `.env` for your domain and passwords. Building from source instead, and HTTPS via Traefik, are under [Deploy](#deploy).
+
+---
+
 ## What It Does
 
 You run the portal. Your clients log in and see only what you give them access to. You manage everything from behind the scenes.
