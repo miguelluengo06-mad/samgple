@@ -1,8 +1,8 @@
 <div align="center">
 
-# FlowEngine
+# samgple
 
-White-label client portal for automation agencies (mainly using n8n). Manage instances, invite clients, control what they see, and bill them via Stripe. Self-hosted, open source.
+Based on FlowEngine — white-label client portal for automation agencies (mainly using n8n). Manage instances, invite clients, control what they see, and bill them via Stripe. Self-hosted, open source.
 
 [![Docker](https://img.shields.io/badge/docker-flowenginecloud%2Fflowengine-blue?logo=docker)](https://hub.docker.com/r/flowenginecloud/flowengine)
 [![License](https://img.shields.io/badge/license-MIT%20%2B%20Commons%20Clause-blue)](./LICENSE)
