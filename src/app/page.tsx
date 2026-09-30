@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import CookieSettingsLink from '@/components/legal/CookieSettingsLink';
+import SiteFooter from '@/components/home/SiteFooter';
 import type { Metadata } from 'next';
 import { ArrowUpRight } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
@@ -67,22 +67,15 @@ export default async function HomePage() {
             <a href="#ejemplos" className="hidden md:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
               Ejemplos
             </a>
-            <Link href="/aviso-legal" className="hover:text-white transition-colors">Aviso legal</Link>
-            <Link href="/privacidad" className="hover:text-white transition-colors">Privacidad</Link>
-            <Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link>
-            <Link href="/terminos" className="hover:text-white transition-colors">Términos</Link>
-            <CookieSettingsLink />
             <a href="#precios" className="hidden md:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
               Precios
             </a>
             <Link href="/auth" className="px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
               Acceder
             </Link>
-            <Link href="/auth?mode=signup" className="hidden sm:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
-              Registrarse
-            </Link>
-            <BookCallButton className="ml-1 px-4 py-2 rounded-full bg-[var(--signal)] text-black text-sm font-medium hover:bg-[var(--signal-dim)] transition-colors whitespace-nowrap">
-              Agendar llamada
+            <BookCallButton className="ml-1 px-4 py-2 min-h-10 inline-flex items-center rounded-full bg-[var(--signal)] text-black text-sm font-medium hover:bg-[var(--signal-dim)] transition-colors whitespace-nowrap">
+              <span className="sm:hidden">Agendar</span>
+              <span className="hidden sm:inline">Agendar llamada</span>
             </BookCallButton>
           </nav>
         </div>
@@ -112,30 +105,15 @@ export default async function HomePage() {
             </p>
             <BookCallForm businessName={businessName} />
             <p className="text-sm text-white/40 mt-12 pt-8 border-t border-white/10">
-              ¿Quieres seguir tus llamadas y proyectos?{' '}
-              <Link href="/auth?mode=signup" className="text-[var(--signal)] hover:underline">Crea tu cuenta</Link>
-              {' '}o{' '}
-              <Link href="/auth" className="text-white/70 hover:text-white underline underline-offset-4">accede</Link>.
+              ¿Ya eres cliente?{' '}
+              <Link href="/auth" className="text-[var(--signal)] hover:underline">Accede a tu cuenta</Link>
+              {' '}para ver tus compras y escribirnos.
             </p>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="home-slab relative z-[2] w-[calc(100%-clamp(20px,5vw,72px))] max-w-[1320px] mx-auto mt-3 mb-4">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <KineticWordmark name={businessName} className="text-lg" />
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/40">
-            <span>© {new Date().getFullYear()}</span>
-            <a href="#precios" className="hover:text-white transition-colors">Precios</a>
-            <Link href="/store" className="hover:text-white transition-colors">Tienda</Link>
-            <Link href="/auth?mode=signup" className="hover:text-white transition-colors">Registrarse</Link>
-            <Link href="/auth" className="hover:text-white transition-colors inline-flex items-center gap-1">
-              Acceso clientes <ArrowUpRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter businessName={businessName} className="w-[calc(100%-clamp(20px,5vw,72px))] max-w-[1320px] mx-auto mt-3 mb-4" />
     </div>
     </BookCallProvider>
   );

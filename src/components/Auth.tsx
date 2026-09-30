@@ -413,7 +413,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
                   <button
                     type='button'
                     onClick={() => setMode('reset')}
-                    className='text-xs text-white/60 hover:text-white transition-colors cursor-pointer'
+                    className='text-xs text-white/60 hover:text-white transition-colors cursor-pointer py-2'
                   >
                     ¿Has olvidado la contraseña?
                   </button>

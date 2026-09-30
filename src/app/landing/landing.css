@@ -1362,11 +1362,14 @@ button.lp-video:hover .lp-play {
 
 .lp-form {
   display: grid;
+  /* minmax(0, 1fr): los campos no pueden forzar la columna a más ancho que la pantalla */
+  grid-template-columns: minmax(0, 1fr);
   gap: 20px;
 }
 
 .lp-field {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
 }
 
@@ -1378,6 +1381,8 @@ button.lp-video:hover .lp-play {
 
 .lp-field input {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   min-height: 56px;
   padding: 16px 18px;
   border: 1px solid var(--border-strong);
@@ -1468,7 +1473,7 @@ button.lp-video:hover .lp-play {
 .lp-footer {
   padding-block: 28px calc(var(--bar-h) + 28px + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--border);
-  color: var(--muted);
+  color: var(--text-2, var(--text));
   font-size: 14px;
 }
 
@@ -1490,13 +1495,14 @@ button.lp-video:hover .lp-play {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  color: var(--muted);
+  color: var(--text-2, var(--text));
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .lp-footer a:hover {
   color: var(--text);
+  text-decoration: underline;
 }
 
 @media (min-width: 768px) {
@@ -1886,8 +1892,13 @@ button.lp-video:hover {
 /* Pack section */
 .lp-pack__grid {
   display: grid;
+  /* minmax(0, 1fr): sin esto la columna no baja del ancho mínimo de su contenido y en móviles de 360 px la ficha se sale */
+  grid-template-columns: minmax(0, 1fr);
   gap: 32px;
   align-items: start;
+}
+.lp-pack__grid > * {
+  min-width: 0;
 }
 
 .lp-pack h2 {
@@ -2023,7 +2034,7 @@ button.lp-video:hover {
 
 @media (min-width: 1000px) {
   .lp-pack__grid {
-    grid-template-columns: 1.1fr 0.9fr;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     gap: 64px;
   }
   .lp-pack__card {
@@ -2394,4 +2405,20 @@ button.lp-video:hover {
 /* Las fichas ya se mueven solas al pasar el ratón: sin doble transición con el reveal */
 .lp .pack-card {
   transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.3s ease;
+}
+
+/* Enlace «Configurar cookies» del pie: es un botón, pero se ve como los demás enlaces */
+.lp-footer__btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.lp-footer__btn:hover {
+  text-decoration: underline;
 }
