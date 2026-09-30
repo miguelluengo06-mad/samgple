@@ -68,7 +68,7 @@ import {
   recordOrder,
   safeReturnPath,
 } from '../packCheckout';
-import { getPurchasable } from '../packs';
+import { SINGLE_VIDEO, getPurchasable, toPurchasable } from '../packs';
 
 const LEAD = '11111111-1111-4111-8111-111111111111';
 const OWNER = 'owner-1';
@@ -103,17 +103,16 @@ describe('buildCheckoutParams', () => {
     expect(p.metadata).toMatchObject({ pack_id: 'ugc-escala', price_eur_incl_vat: '490' });
   });
 
-  it('monthly plan: subscription with a monthly recurring price and the commitment shown at checkout', () => {
-    const p = buildCheckoutParams(getPurchasable('influencer-crecimiento')!, ctx);
+  it('monthly plan: subscription with a monthly recurring price', () => {
+    const p = buildCheckoutParams(toPurchasable({ ...SINGLE_VIDEO, id: 'plan-mensual', name: 'Plan mensual', price: 690, unit: 'month' }, 'Plan mensual'), ctx);
     expect(p.mode).toBe('subscription');
     const price = (p.line_items![0] as any).price_data;
-    expect(price.unit_amount).toBe(89000);
+    expect(price.unit_amount).toBe(69000);
     expect(price.recurring).toEqual({ interval: 'month' });
     expect(price.tax_behavior).toBe('inclusive');
-    expect(p.subscription_data?.metadata?.pack_id).toBe('influencer-crecimiento');
+    expect(p.subscription_data?.metadata?.pack_id).toBe('plan-mensual');
     expect(p.invoice_creation).toBeUndefined(); // subscriptions invoice on their own
     expect(p.custom_text?.submit?.message).toContain('IVA incluido');
-    expect(p.custom_text?.submit?.message).toContain('Permanencia mínima de 3 meses');
   });
 
   it('welcome pack: 30 €, keeps the lead id, comes back to the landing when cancelled', () => {
@@ -126,7 +125,7 @@ describe('buildCheckoutParams', () => {
   });
 
   it('every purchasable pack is charged exactly its listed price (cents)', () => {
-    for (const id of ['bienvenida', 'ugc-starter', 'ugc-volumen', 'influencer-marca', 'ecommerce-catalogo', 'avatar-pro', 'replica-mensual-16', 'video-suelto']) {
+    for (const id of ['bienvenida', 'ugc-starter', 'ugc-volumen', 'influencer-dominio', 'replica-escala-total', 'video-suelto']) {
       const pack = getPurchasable(id)!;
       const p = buildCheckoutParams(pack, ctx);
       expect((p.line_items![0] as any).price_data.unit_amount).toBe(pack.price * 100);

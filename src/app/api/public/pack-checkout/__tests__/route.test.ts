@@ -70,11 +70,6 @@ describe('POST /api/public/pack-checkout', () => {
     expect(createSession.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(25000);
   });
 
-  it('monthly plans start a subscription', async () => {
-    await post({ packId: 'influencer-presencia' });
-    expect(createSession.mock.calls[0][0].mode).toBe('subscription');
-  });
-
   it('404 for a pack that does not exist', async () => {
     expect((await post({ packId: 'nope' })).status).toBe(404);
     expect((await post({})).status).toBe(404);

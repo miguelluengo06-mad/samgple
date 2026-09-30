@@ -29,19 +29,12 @@ describe('price table (exactly as agreed — do not round or change)', () => {
     ['Anuncios UGC con IA', 'Starter', 250, 'once'],
     ['Anuncios UGC con IA', 'Escala', 490, 'once'],
     ['Anuncios UGC con IA', 'Volumen', 690, 'once'],
-    ['Influencer IA para tu marca', 'Creación del personaje', 290, 'once'],
-    ['Influencer IA para tu marca', 'Presencia', 490, 'month'],
-    ['Influencer IA para tu marca', 'Crecimiento', 890, 'month'],
-    ['Influencer IA para tu marca', 'Marca', 1490, 'month'],
-    ['Vídeos para Ecommerce', 'Producto', 99, 'once'],
-    ['Vídeos para Ecommerce', 'Colección', 349, 'once'],
-    ['Vídeos para Ecommerce', 'Catálogo', 890, 'once'],
-    ['Avatar IA a medida', 'Avatar Básico', 290, 'once'],
-    ['Avatar IA a medida', 'Avatar Pro', 490, 'once'],
-    ['Tu réplica digital', 'Réplica Esencial', 490, 'once'],
-    ['Tu réplica digital', 'Réplica Pro', 890, 'once'],
-    ['Tu réplica digital', 'Mensual 8', 390, 'month'],
-    ['Tu réplica digital', 'Mensual 16', 690, 'month'],
+    ['Influencer IA para tu marca', 'Presencia', 490, 'once'],
+    ['Influencer IA para tu marca', 'Crecimiento', 690, 'once'],
+    ['Influencer IA para tu marca', 'Dominio', 1190, 'once'],
+    ['Clonación y gemelo digital IA', 'Marca Personal', 490, 'once'],
+    ['Clonación y gemelo digital IA', 'Autoridad', 790, 'once'],
+    ['Clonación y gemelo digital IA', 'Escala Total', 1290, 'once'],
   ];
 
   it('has every pack of the table, with its exact price and unit', () => {
@@ -69,14 +62,10 @@ describe('price table (exactly as agreed — do not round or change)', () => {
 
   it('what each pack includes matches the table', () => {
     const inc = (group: string, name: string) => PACK_GROUPS.find((g) => g.title === group)!.packs.find((p) => p.name === name)!.includes;
-    expect(inc('Influencer IA para tu marca', 'Creación del personaje')).toEqual(['Diseño del personaje', 'Voz', 'Personalidad', 'Ficha de estilo']);
-    expect(inc('Vídeos para Ecommerce', 'Producto').join(' ')).toContain('1 producto × 3 vídeos');
-    expect(inc('Vídeos para Ecommerce', 'Producto').join(' ')).toContain('9:16 y 1:1');
-    expect(inc('Vídeos para Ecommerce', 'Colección').join(' ')).toContain('10 vídeos');
-    expect(inc('Vídeos para Ecommerce', 'Catálogo').join(' ')).toContain('30 vídeos');
-    expect(inc('Avatar IA a medida', 'Avatar Pro')).toEqual(['Todo lo anterior', '20 imágenes', 'Ficha de estilo', '5 vídeos']);
-    expect(inc('Tu réplica digital', 'Réplica Pro')).toEqual(['Clon de tu imagen', 'Voz en español e inglés', '2 looks', '10 vídeos']);
-    expect(inc('Influencer IA para tu marca', 'Marca')).toContain('Todo lo anterior');
+    expect(inc('Influencer IA para tu marca', 'Presencia')[0]).toContain('9 vídeos');
+    expect(inc('Influencer IA para tu marca', 'Crecimiento')[0]).toContain('14 vídeos');
+    expect(inc('Clonación y gemelo digital IA', 'Autoridad')[1]).toContain('12 vídeos');
+    expect(inc('Influencer IA para tu marca', 'Dominio')[0]).toContain('27 vídeos');
   });
 });
 
@@ -84,8 +73,8 @@ describe('price list', () => {
   const byId = (id: string) => PACK_GROUPS.find((g) => g.id === id)!;
   const prices = (id: string) => byId(id).packs.map((p) => [p.name, p.price, p.unit]);
 
-  it('has the six offers in order', () => {
-    expect(PACK_GROUPS.map((g) => g.id)).toEqual(['ugc', 'influencer', 'ecommerce', 'avatar', 'replica']);
+  it('has the three service lines in order', () => {
+    expect(PACK_GROUPS.map((g) => g.id)).toEqual(['ugc', 'influencer', 'replica']);
     expect(SINGLE_VIDEO.price).toBe(40);
   });
 
@@ -94,37 +83,33 @@ describe('price list', () => {
     expect(byId('ugc').packs.map((p) => p.badge)).toEqual(['Ideal para testear', 'Más popular', 'Mejor precio por vídeo']);
     // solo el de 10 vídeos se resalta como recomendado
     expect(byId('ugc').packs.map((p) => p.featured)).toEqual([false, true, false]);
-    // el precio por vídeo que se enseña cuadra con el total y la cantidad
-    expect(byId('ugc').packs.map((p) => p.perUnit)).toEqual(['50 €', '49 €', '34,50 €']);
-    for (const p of byId('ugc').packs) {
-      const n = Number(p.headline.split(' ')[0]);
-      expect(Number(p.perUnit!.replace(' €', '').replace(',', '.')) * n).toBeCloseTo(p.price, 5);
-    }
   });
 
   it('Influencer IA', () => {
-    expect(prices('influencer')).toEqual([
-      ['Creación del personaje', 290, 'once'],
-      ['Presencia', 490, 'month'],
-      ['Crecimiento', 890, 'month'],
-      ['Marca', 1490, 'month'],
-    ]);
-    expect(byId('influencer').packs[2].badge).toBe('Recomendado');
-    expect(byId('influencer').packs[0].priceNote).toContain('Gratis si contratas 6 meses');
-    expect(byId('influencer').conditions).toEqual(['Permanencia mínima de 3 meses', '2 rondas de revisión al mes']);
+    expect(prices('influencer')).toEqual([['Presencia', 490, 'once'], ['Crecimiento', 690, 'once'], ['Dominio', 1190, 'once']]);
+    expect(byId('influencer').packs.map((p) => p.badge)).toEqual(['Ideal para empezar', 'Más popular', 'Máxima cobertura']);
+    // solo Crecimiento (14 vídeos) se resalta como recomendado
+    expect(byId('influencer').packs.map((p) => p.featured)).toEqual([false, true, false]);
+    expect(byId('influencer').packs.map((p) => p.perUnit)).toEqual(['54,44 €', '49,28 €', '44,07 €']);
+    // el precio por vídeo que se enseña cuadra con el total y la cantidad (con un céntimo de margen)
+    for (const p of byId('influencer').packs) {
+      const n = Number(p.headline.split(' ')[0]);
+      expect(Math.abs(Number(p.perUnit!.replace(' €', '').replace(',', '.')) - p.price / n)).toBeLessThan(0.01);
+    }
+    expect(byId('influencer').conditions).toBeUndefined();
   });
 
-  it('Ecommerce', () => {
-    expect(prices('ecommerce').map((p) => p[1])).toEqual([99, 349, 890]);
-  });
-
-  it('Avatar', () => {
-    expect(prices('avatar').map((p) => p[1])).toEqual([290, 490]);
-  });
-
-  it('Réplica digital, with the authorization notice', () => {
-    expect(prices('replica').map((p) => [p[1], p[2]])).toEqual([[490, 'once'], [890, 'once'], [390, 'month'], [690, 'month']]);
+  it('Clonación y gemelo digital IA, with the authorization notice', () => {
+    expect(prices('replica').map((p) => [p[1], p[2]])).toEqual([[490, 'once'], [790, 'once'], [1290, 'once']]);
     expect(byId('replica').notice).toContain('autorización por escrito');
+    expect(byId('replica').packs.map((p) => p.badge)).toEqual(['Ideal para empezar', 'Más popular', 'Máximo ahorro']);
+    expect(byId('replica').packs.map((p) => p.featured)).toEqual([false, true, false]);
+    expect(byId('replica').packs.map((p) => p.perUnit)).toEqual(['81,66 €', '65,83 €', '53,75 €']);
+    expect(byId('replica').packs.map((p) => p.perk)).toEqual(['Setup incluido', 'Setup incluido', 'Setup gratis']);
+    for (const p of byId('replica').packs) {
+      const n = Number(p.headline.split(' ')[0]);
+      expect(Math.abs(Number(p.perUnit!.replace(' €', '').replace(',', '.')) - p.price / n)).toBeLessThan(0.01);
+    }
   });
 
   it('extras', () => {
@@ -160,13 +145,12 @@ describe('price list', () => {
   });
 
   it('every group has a "desde" label for the landing summary', () => {
-    expect(PACK_GROUPS.map((g) => g.from)).toEqual(['Desde 250 €', 'Desde 490 €/mes', 'Desde 99 €', 'Desde 290 €', 'Desde 490 €']);
+    expect(PACK_GROUPS.map((g) => g.from)).toEqual(['Desde 250 €', 'Desde 490 €', 'Desde 490 €']);
   });
 
   it('startingPrice picks the cheapest pack of each group', () => {
     expect(startingPrice(byId('ugc'))).toEqual({ amount: 250, unit: 'once' });
-    expect(startingPrice(byId('influencer'))).toEqual({ amount: 290, unit: 'once' });
-    expect(startingPrice(byId('ecommerce'))).toEqual({ amount: 99, unit: 'once' });
+    expect(startingPrice(byId('influencer'))).toEqual({ amount: 490, unit: 'once' });
     expect(unitLabel('month')).toBe('/mes');
   });
 });

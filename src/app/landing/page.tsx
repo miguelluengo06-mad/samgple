@@ -125,7 +125,7 @@ const WHY: { icon: LucideIcon; title: string; text: string }[] = [
   {
     icon: ShieldCheck,
     title: 'Siempre la misma cara',
-    text: 'Tu influencer o tu avatar es siempre el mismo, con su voz y su estilo. Y tu réplica digital, solo con tu autorización por escrito.',
+    text: 'Tu influencer es siempre el mismo, con su voz y su estilo. Y tu réplica digital, solo con tu autorización por escrito.',
   },
 ];
 

@@ -60,7 +60,12 @@ function ProductCard({ pack, kind, chip, group, variant }: { pack: Pack; kind: s
         </div>
         {pack.perUnit && (
           <p className="pack-card__per">
-            <strong>{pack.perUnit}</strong> por vídeo
+            <strong>{pack.perUnit}</strong> por vídeo{pack.perUnitNote ? ` · ${pack.perUnitNote}` : ''}
+          </p>
+        )}
+        {pack.perk && (
+          <p className="pack-card__perk">
+            <Check aria-hidden="true" /> {pack.perk}
           </p>
         )}
         <p className="pack-card__terms">{terms(pack)}</p>
