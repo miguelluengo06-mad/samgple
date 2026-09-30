@@ -351,7 +351,7 @@ export const SINGLE_VIDEO: Pack = {
   id: 'video-suelto',
   name: 'Vídeo suelto',
   headline: '1 vídeo',
-  price: 69,
+  price: 40,
   unit: 'video',
   forWho: 'Para cuando solo necesitas una pieza.',
   pitch: 'Un vídeo, cuando lo necesitas.',
