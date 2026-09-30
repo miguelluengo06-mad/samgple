@@ -47,7 +47,7 @@ function ProductCard({ pack, kind, chip, group, variant }: { pack: Pack; kind: s
   const returnPath = variant === 'landing' ? '/landing#packs' : '/#precios';
 
   return (
-    <article className={`pack-card${pack.badge ? ' pack-card--featured' : ''}`}>
+    <article className={`pack-card${pack.featured ?? !!pack.badge ? ' pack-card--featured' : ''}`}>
       <PackCover kind={kind} chip={chip} headline={pack.headline} badge={pack.badge} />
       <div className="pack-card__body">
         <h4 className="pack-card__name">{pack.name}</h4>
@@ -58,6 +58,11 @@ function ProductCard({ pack, kind, chip, group, variant }: { pack: Pack; kind: s
           <span className="pack-card__amount">{formatAmount(pack.price)} €</span>
           {unit && <span className="pack-card__unit">{unit}</span>}
         </div>
+        {pack.perUnit && (
+          <p className="pack-card__per">
+            <strong>{pack.perUnit}</strong> por vídeo
+          </p>
+        )}
         <p className="pack-card__terms">{terms(pack)}</p>
         {pack.priceNote && <p className="pack-card__note">{pack.priceNote}</p>}
 

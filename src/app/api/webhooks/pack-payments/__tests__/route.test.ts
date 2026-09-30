@@ -37,7 +37,7 @@ const completed = (over: any = {}) => ({
       object: 'checkout.session',
       status: 'complete',
       payment_status: 'paid',
-      metadata: { pack_id: 'ugc-pro', pack_name: 'Anuncios UGC con IA · Pro' },
+      metadata: { pack_id: 'ugc-escala', pack_name: 'Anuncios UGC con IA · Escala' },
       ...over,
     },
   },

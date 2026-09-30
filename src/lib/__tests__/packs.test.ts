@@ -26,9 +26,9 @@ describe('formatAmount / formatEur', () => {
 describe('price table (exactly as agreed — do not round or change)', () => {
   // [servicio, pack, precio €, unidad]
   const TABLE: [string, string, number, string][] = [
-    ['Anuncios UGC con IA', 'Básico', 290, 'once'],
-    ['Anuncios UGC con IA', 'Pro', 490, 'once'],
-    ['Anuncios UGC con IA', 'Mensual', 790, 'month'],
+    ['Anuncios UGC con IA', 'Starter', 250, 'once'],
+    ['Anuncios UGC con IA', 'Escala', 490, 'once'],
+    ['Anuncios UGC con IA', 'Volumen', 690, 'once'],
     ['Influencer IA para tu marca', 'Creación del personaje', 290, 'once'],
     ['Influencer IA para tu marca', 'Presencia', 490, 'month'],
     ['Influencer IA para tu marca', 'Crecimiento', 890, 'month'],
@@ -90,8 +90,16 @@ describe('price list', () => {
   });
 
   it('UGC', () => {
-    expect(prices('ugc')).toEqual([['Básico', 290, 'once'], ['Pro', 490, 'once'], ['Mensual', 790, 'month']]);
-    expect(byId('ugc').packs[1].badge).toBe('El más elegido');
+    expect(prices('ugc')).toEqual([['Starter', 250, 'once'], ['Escala', 490, 'once'], ['Volumen', 690, 'once']]);
+    expect(byId('ugc').packs.map((p) => p.badge)).toEqual(['Ideal para testear', 'Más popular', 'Mejor precio por vídeo']);
+    // solo el de 10 vídeos se resalta como recomendado
+    expect(byId('ugc').packs.map((p) => p.featured)).toEqual([false, true, false]);
+    // el precio por vídeo que se enseña cuadra con el total y la cantidad
+    expect(byId('ugc').packs.map((p) => p.perUnit)).toEqual(['50 €', '49 €', '34,50 €']);
+    for (const p of byId('ugc').packs) {
+      const n = Number(p.headline.split(' ')[0]);
+      expect(Number(p.perUnit!.replace(' €', '').replace(',', '.')) * n).toBeCloseTo(p.price, 5);
+    }
   });
 
   it('Influencer IA', () => {
@@ -143,20 +151,20 @@ describe('price list', () => {
       for (const p of g.packs) expect(p.headline.length).toBeGreaterThan(2);
     }
     expect(SINGLE_VIDEO.headline).toBe('1 vídeo');
-    // the big number on the cover agrees with the pack: "20 vídeos/mes" ↔ 790 €/mes plan
-    expect(PACK_GROUPS[0].packs.map((p) => p.headline)).toEqual(['10 vídeos', '15 vídeos', '20 vídeos/mes']);
+    // the big number on the cover agrees with the pack
+    expect(PACK_GROUPS[0].packs.map((p) => p.headline)).toEqual(['5 vídeos', '10 vídeos', '20 vídeos']);
   });
 
-  it('at most one highlighted badge per group', () => {
-    for (const g of PACK_GROUPS) expect(g.packs.filter((p) => p.badge).length).toBeLessThanOrEqual(1);
+  it('at most one highlighted (featured) pack per group', () => {
+    for (const g of PACK_GROUPS) expect(g.packs.filter((p) => p.featured ?? !!p.badge).length).toBeLessThanOrEqual(1);
   });
 
   it('every group has a "desde" label for the landing summary', () => {
-    expect(PACK_GROUPS.map((g) => g.from)).toEqual(['Desde 290 €', 'Desde 490 €/mes', 'Desde 99 €', 'Desde 290 €', 'Desde 490 €']);
+    expect(PACK_GROUPS.map((g) => g.from)).toEqual(['Desde 250 €', 'Desde 490 €/mes', 'Desde 99 €', 'Desde 290 €', 'Desde 490 €']);
   });
 
   it('startingPrice picks the cheapest pack of each group', () => {
-    expect(startingPrice(byId('ugc'))).toEqual({ amount: 290, unit: 'once' });
+    expect(startingPrice(byId('ugc'))).toEqual({ amount: 250, unit: 'once' });
     expect(startingPrice(byId('influencer'))).toEqual({ amount: 290, unit: 'once' });
     expect(startingPrice(byId('ecommerce'))).toEqual({ amount: 99, unit: 'once' });
     expect(unitLabel('month')).toBe('/mes');

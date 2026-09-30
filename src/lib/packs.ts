@@ -97,8 +97,12 @@ export interface Pack {
   /** Una línea: el beneficio principal */
   pitch: string;
   includes: string[];
-  /** Etiqueta destacada ("El más elegido", "Recomendado") */
+  /** Etiqueta sobre la portada ("El más elegido", "Recomendado"). No implica que la ficha se resalte: ver `featured` */
   badge?: string;
+  /** Resalta la ficha con borde (la opción recomendada). Si no se indica, se resalta la que lleve `badge` */
+  featured?: boolean;
+  /** Precio por vídeo, ya escrito como se enseña ("50 €", "34,50 €"); solo en packs de varios vídeos */
+  perUnit?: string;
   /** Aclaración corta bajo el precio */
   priceNote?: string;
   /** Lo principal que se lleva el cliente, en grande sobre la portada de la ficha ("10 vídeos") */
@@ -130,40 +134,69 @@ export const PACK_GROUPS: PackGroup[] = [
     id: 'ugc',
     short: 'Anuncios UGC',
     title: 'Anuncios UGC con IA',
-    tagline: 'Anuncios que parecen de un cliente real, listos para Meta y TikTok. Sin grabar y sin pagar a creadores.',
-    summary: 'Anuncios UGC para Meta y TikTok, con varios ganchos por vídeo para probar qué vende.',
-    from: 'Desde 290 €',
+    tagline: 'Anuncios que parecen de un cliente real, listos para TikTok, Reels, Shorts y Ads. Sin grabar y sin pagar a creadores.',
+    summary: 'Vídeos UGC con IA en vertical 9:16, con guion, voz y subtítulos, para testear y escalar tus anuncios.',
+    from: 'Desde 250 €',
     packs: [
       {
-        id: 'ugc-basico',
-        name: 'Básico',
-        price: 290,
+        id: 'ugc-starter',
+        name: 'Starter',
+        price: 250,
         unit: 'once',
-        headline: '10 vídeos',
-        forWho: 'Para tu primera tanda de anuncios.',
-        pitch: 'Prueba qué anuncio funciona antes de invertir más.',
-        includes: ['10 vídeos', '2 ganchos por cada vídeo'],
+        perUnit: '50 €',
+        headline: '5 vídeos',
+        badge: 'Ideal para testear',
+        featured: false,
+        forWho: 'Para testear tu primera tanda de anuncios.',
+        pitch: 'Cinco vídeos completos para ver qué funciona antes de invertir más.',
+        includes: [
+          '5 vídeos UGC completos (formato 9:16 vertical para TikTok / Reels / Shorts / Ads)',
+          'Guiones estratégicos generados con IA',
+          'Locución con voz IA natural y música libre de derechos',
+          'Edición dinámica con subtítulos estilo viral',
+          '1 ronda de revisiones estéticas incluida',
+          'Entrega: 3 a 5 días laborables',
+        ],
       },
       {
-        id: 'ugc-pro',
-        name: 'Pro',
+        id: 'ugc-escala',
+        name: 'Escala',
         price: 490,
         unit: 'once',
-        headline: '15 vídeos',
-        badge: 'El más elegido',
-        forWho: 'Para marcas que ya invierten en anuncios.',
-        pitch: 'Más ángulos para probar y dos revisiones para afinar.',
-        includes: ['15 vídeos', 'Ganchos para cada vídeo', '2 revisiones'],
+        perUnit: '49 €',
+        headline: '10 vídeos',
+        badge: 'Más popular',
+        featured: true,
+        forWho: 'Para marcas que ya anuncian y quieren escalar.',
+        pitch: 'Diez vídeos con guiones pensados para convertir y hacer pruebas A/B.',
+        includes: [
+          '10 vídeos UGC en formato vertical 9:16',
+          'Guiones optimizados para conversión y A/B testing',
+          'Voces IA realistas y efectos de sonido',
+          'Subtítulos dinámicos y ganchos visuales',
+          '1 ronda de revisiones por lote',
+          'Entrega: 5 a 7 días laborables',
+        ],
       },
       {
-        id: 'ugc-mensual',
-        name: 'Mensual',
-        price: 790,
-        unit: 'month',
-        headline: '20 vídeos/mes',
-        forWho: 'Para escalar sin quedarte sin creatividades.',
-        pitch: 'Contenido nuevo cada mes, mejorado con lo que ya funciona.',
-        includes: ['20 vídeos al mes', 'Estrategia de ángulos de venta', 'Iteración según resultados'],
+        id: 'ugc-volumen',
+        name: 'Volumen',
+        price: 690,
+        unit: 'once',
+        perUnit: '34,50 €',
+        headline: '20 vídeos',
+        badge: 'Mejor precio por vídeo',
+        featured: false,
+        forWho: 'Para campañas de Ads con muchas variaciones que probar.',
+        pitch: 'Veinte creativos listos para pautar, al mejor precio por vídeo.',
+        includes: [
+          '20 creativos completos listos para campañas de Ads masivas',
+          'Variaciones de hooks/ganchos para pruebas A/B de anuncios',
+          'Guiones, locución IA y edición completa listos para pautar',
+          'Subtítulos interactivos y llamadas a la acción personalizadas',
+          '1 ronda de revisiones por lote',
+          'Entrega: 7 a 10 días laborables',
+        ],
       },
     ],
   },

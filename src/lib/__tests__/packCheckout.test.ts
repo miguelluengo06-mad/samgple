@@ -86,7 +86,7 @@ afterEach(() => vi.restoreAllMocks());
 
 describe('buildCheckoutParams', () => {
   it('one-off pack: charges the exact price with VAT included, in euros, with invoice', () => {
-    const p = buildCheckoutParams(getPurchasable('ugc-pro')!, ctx);
+    const p = buildCheckoutParams(getPurchasable('ugc-escala')!, ctx);
     expect(p.mode).toBe('payment');
     expect(p.locale).toBe('es');
     const price = (p.line_items![0] as any).price_data;
@@ -94,13 +94,13 @@ describe('buildCheckoutParams', () => {
     expect(price.unit_amount).toBe(49000);
     expect(price.tax_behavior).toBe('inclusive');
     expect(price.recurring).toBeUndefined();
-    expect(price.product_data.name).toBe('Anuncios UGC con IA · Pro');
+    expect(price.product_data.name).toBe('Anuncios UGC con IA · Escala');
     expect(p.invoice_creation?.enabled).toBe(true);
     expect(p.customer_creation).toBe('always');
     expect(p.tax_id_collection?.enabled).toBe(true);
     expect(p.billing_address_collection).toBe('required');
     expect(p.subscription_data).toBeUndefined();
-    expect(p.metadata).toMatchObject({ pack_id: 'ugc-pro', price_eur_incl_vat: '490' });
+    expect(p.metadata).toMatchObject({ pack_id: 'ugc-escala', price_eur_incl_vat: '490' });
   });
 
   it('monthly plan: subscription with a monthly recurring price and the commitment shown at checkout', () => {
@@ -126,7 +126,7 @@ describe('buildCheckoutParams', () => {
   });
 
   it('every purchasable pack is charged exactly its listed price (cents)', () => {
-    for (const id of ['bienvenida', 'ugc-basico', 'ugc-mensual', 'influencer-marca', 'ecommerce-catalogo', 'avatar-pro', 'replica-mensual-16', 'video-suelto']) {
+    for (const id of ['bienvenida', 'ugc-starter', 'ugc-volumen', 'influencer-marca', 'ecommerce-catalogo', 'avatar-pro', 'replica-mensual-16', 'video-suelto']) {
       const pack = getPurchasable(id)!;
       const p = buildCheckoutParams(pack, ctx);
       expect((p.line_items![0] as any).price_data.unit_amount).toBe(pack.price * 100);
@@ -134,9 +134,9 @@ describe('buildCheckoutParams', () => {
   });
 
   it('Stripe Tax is off unless STRIPE_AUTOMATIC_TAX=true', () => {
-    expect(buildCheckoutParams(getPurchasable('ugc-basico')!, ctx).automatic_tax).toBeUndefined();
+    expect(buildCheckoutParams(getPurchasable('ugc-starter')!, ctx).automatic_tax).toBeUndefined();
     process.env.STRIPE_AUTOMATIC_TAX = 'true';
-    expect(buildCheckoutParams(getPurchasable('ugc-basico')!, ctx).automatic_tax).toEqual({ enabled: true });
+    expect(buildCheckoutParams(getPurchasable('ugc-starter')!, ctx).automatic_tax).toEqual({ enabled: true });
   });
 });
 
@@ -229,7 +229,7 @@ describe('recordOrder', () => {
   });
 
   it('direct purchase without a form: creates a won lead from the Stripe customer data', async () => {
-    const res = await recordOrder(OWNER, session({ metadata: { pack_id: 'ugc-pro', pack_name: 'Anuncios UGC con IA · Pro' }, amount_total: 49000 }));
+    const res = await recordOrder(OWNER, session({ metadata: { pack_id: 'ugc-escala', pack_name: 'Anuncios UGC con IA · Escala' }, amount_total: 49000 }));
     expect(res).toMatchObject({ created: true, duplicate: false });
     expect(db.inserts[0]).toMatchObject({
       owner_id: OWNER,
@@ -239,7 +239,7 @@ describe('recordOrder', () => {
       source: 'stripe',
       status: 'won',
     });
-    expect(db.inserts[0].message).toContain('Anuncios UGC con IA · Pro');
+    expect(db.inserts[0].message).toContain('Anuncios UGC con IA · Escala');
     expect(db.inserts[0].answers.order.amount_eur).toBe(490);
   });
 });

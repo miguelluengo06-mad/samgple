@@ -57,7 +57,7 @@ beforeEach(() => {
 
 describe('POST /api/public/pack-checkout', () => {
   it('opens a Stripe Checkout session and returns its URL', async () => {
-    const res = await post({ packId: 'ugc-pro' });
+    const res = await post({ packId: 'ugc-escala' });
     expect(res.status).toBe(200);
     expect((await res.json()).url).toBe('https://checkout.stripe.com/c/pay/cs_test_1');
     const params = createSession.mock.calls[0][0];
@@ -66,12 +66,12 @@ describe('POST /api/public/pack-checkout', () => {
   });
 
   it('takes the price from the catalog, never from the browser', async () => {
-    await post({ packId: 'ugc-basico', price: 1, amount: 1, unit_amount: 1, cents: 1 });
-    expect(createSession.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(29000);
+    await post({ packId: 'ugc-starter', price: 1, amount: 1, unit_amount: 1, cents: 1 });
+    expect(createSession.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(25000);
   });
 
   it('monthly plans start a subscription', async () => {
-    await post({ packId: 'ugc-mensual' });
+    await post({ packId: 'influencer-presencia' });
     expect(createSession.mock.calls[0][0].mode).toBe('subscription');
   });
 
@@ -83,7 +83,7 @@ describe('POST /api/public/pack-checkout', () => {
 
   it('503 with a friendly message while Stripe is not connected', async () => {
     state.stripe = false;
-    const res = await post({ packId: 'ugc-pro' });
+    const res = await post({ packId: 'ugc-escala' });
     expect(res.status).toBe(503);
     expect((await res.json()).error).toContain('todavía no están activados');
   });
@@ -114,7 +114,7 @@ describe('POST /api/public/pack-checkout', () => {
   });
 
   it('does not allow an external returnPath (open redirect)', async () => {
-    await post({ packId: 'ugc-pro', returnPath: 'https://evil.example/phish' });
+    await post({ packId: 'ugc-escala', returnPath: 'https://evil.example/phish' });
     const cancel = createSession.mock.calls[0][0].cancel_url as string;
     expect(cancel.startsWith('http://localhost:3001/')).toBe(true);
     expect(cancel).not.toContain('evil.example');
@@ -122,7 +122,7 @@ describe('POST /api/public/pack-checkout', () => {
 
   it('502 with a generic message if Stripe fails (no internals leaked)', async () => {
     createSession.mockRejectedValue(new Error('Invalid API Key provided: sk_test_secret'));
-    const res = await post({ packId: 'ugc-pro' });
+    const res = await post({ packId: 'ugc-escala' });
     expect(res.status).toBe(502);
     expect(JSON.stringify(await res.json())).not.toContain('sk_test');
   });
