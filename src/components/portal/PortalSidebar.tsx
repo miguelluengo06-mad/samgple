@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   Boxes,
   ExternalLink,
+  LineChart,
   FileStack,
   Inbox,
   Layers,
@@ -55,6 +56,7 @@ const AGENCY_GROUPS: NavGroup[] = [
     items: [
       { label: 'Productos', href: '/portal/services', icon: Package },
       { label: 'Clientes', href: '/portal/clients', icon: Users },
+      { label: 'Finanzas', href: '/portal/finance', icon: LineChart },
     ],
   },
   {

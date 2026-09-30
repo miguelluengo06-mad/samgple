@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Inbox, Building2, Mail, Phone, Search, PhoneCall } from 'lucide-react';
+import { Inbox, Building2, Mail, Phone, Search, PhoneCall, BadgeCheck, Hourglass } from 'lucide-react';
 import { useAuth } from '@/components/AuthContext';
 import { useLeadsContext } from './context';
 import type { Lead } from './context';
@@ -13,6 +13,17 @@ import { formatCallDate, formatCallTime } from '@/lib/booking';
 
 type StatusFilter = 'all' | Lead['status'];
 type KindFilter = 'all' | Lead['kind'];
+type PayFilter = 'all' | 'paid' | 'possible';
+
+/** Pagado = hay una compra real registrada; posible compra = aún sin pagar y sin descartar. */
+const isPaid = (l: Lead) => !!l.answers?.order && l.answers.order.livemode !== false;
+const isPossible = (l: Lead) => !l.answers?.order && (l.status === 'new' || l.status === 'contacted');
+
+const PAY_FILTERS: { value: PayFilter; label: string }[] = [
+  { value: 'all', label: 'Todos' },
+  { value: 'paid', label: 'Han comprado' },
+  { value: 'possible', label: 'Posibles compras' },
+];
 
 const STATUS_FILTERS: { value: StatusFilter; label: string }[] = [
   { value: 'all', label: 'Todas' },
@@ -35,6 +46,7 @@ export default function LeadsPage() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<StatusFilter>('all');
   const [kind, setKind] = useState<KindFilter>('all');
+  const [pay, setPay] = useState<PayFilter>('all');
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -53,16 +65,31 @@ export default function LeadsPage() {
     const q = query.trim().toLowerCase();
     return leads.filter((l) => {
       if (kind !== 'all' && l.kind !== kind) return false;
+      if (pay === 'paid' && !isPaid(l)) return false;
+      if (pay === 'possible' && !isPossible(l)) return false;
       if (!q) return true;
       return [l.name, l.email, l.company, l.phone, l.message].some((v) => v?.toLowerCase().includes(q));
     });
-  }, [leads, kind, query]);
+  }, [leads, kind, pay, query]);
 
   const counts = useMemo(() => {
     const c: Record<string, number> = { all: scoped.length, new: 0, contacted: 0, won: 0, lost: 0 };
     for (const l of scoped) c[l.status] = (c[l.status] || 0) + 1;
     return c;
   }, [scoped]);
+
+  const payTotals = useMemo(() => {
+    let paid = 0;
+    let revenue = 0;
+    let possible = 0;
+    for (const l of leads) {
+      if (isPaid(l)) {
+        paid += 1;
+        revenue += Math.max(0, (l.answers!.order!.amount_eur || 0) - (l.answers!.order!.refunded_eur || 0));
+      } else if (isPossible(l)) possible += 1;
+    }
+    return { paid, revenue, possible };
+  }, [leads]);
 
   const filtered = status === 'all' ? scoped : scoped.filter((l) => l.status === status);
   const selected = selectedId ? leads.find((l) => l.id === selectedId) || null : null;
@@ -88,6 +115,38 @@ export default function LeadsPage() {
   return (
     <div className="flex-1 overflow-y-auto">
       <div className="p-4 md:p-6 space-y-5 max-w-[1400px] mx-auto">
+        {/* Compras y posibles compras */}
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            { label: 'Han comprado', value: String(payTotals.paid), icon: BadgeCheck, tone: 'text-green-400' },
+            { label: 'Cobrado (IVA incl.)', value: `${payTotals.revenue.toLocaleString('es-ES')} €`, icon: BadgeCheck, tone: 'text-green-400' },
+            { label: 'Posibles compras', value: String(payTotals.possible), icon: Hourglass, tone: 'text-yellow-400' },
+          ].map((k) => (
+            <div key={k.label} className="card-liquid rounded-2xl p-4">
+              <div className="text-[11px] uppercase tracking-widest text-white/40 mb-1 flex items-center gap-1.5">
+                <k.icon className={cn('w-3.5 h-3.5', k.tone)} /> {k.label}
+              </div>
+              <div className="text-2xl font-semibold tabular-nums">{k.value}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex rounded-full border border-white/10 p-0.5 w-fit max-w-full overflow-x-auto" role="group" aria-label="Compra">
+          {PAY_FILTERS.map((f) => (
+            <button
+              key={f.value}
+              onClick={() => setPay(f.value)}
+              aria-pressed={pay === f.value}
+              className={cn(
+                'px-3 py-1 rounded-full text-xs font-medium transition-colors cursor-pointer whitespace-nowrap',
+                pay === f.value ? 'bg-white/10 text-white' : 'text-white/50 hover:text-white'
+              )}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
         {/* Toolbar */}
         <div className="flex flex-col lg:flex-row lg:items-center gap-3 justify-between">
           <div className="flex items-center gap-1.5 flex-wrap">
@@ -182,7 +241,7 @@ export default function LeadsPage() {
                             <span>{formatCallDate(lead.call_at!).split(',')[0]} {formatCallTime(lead.call_at!)}</span>
                           </span>
                         ) : (
-                          <span className="text-white/50">{lead.answers?.order ? `Compra · ${lead.answers.order.amount_eur.toLocaleString('es-ES')} €` : lead.answers?.pack?.id === 'welcome' ? 'Pack Bienvenida' : lead.source === 'landing' ? 'Landing' : 'Propuesta'}</span>
+                          <span className={lead.answers?.order ? 'text-green-400' : 'text-white/50'}>{lead.answers?.order ? `Pagado · ${lead.answers.order.amount_eur.toLocaleString('es-ES')} €${lead.answers.order.livemode === false ? ' (prueba)' : ''}` : lead.answers?.pack?.id === 'welcome' ? 'Pack Bienvenida' : lead.source === 'landing' ? 'Landing' : 'Propuesta'}</span>
                         )}
                       </div>
                       <p className="md:col-span-3 text-sm text-white/50 line-clamp-1">{lead.message}</p>
