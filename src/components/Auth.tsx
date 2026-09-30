@@ -519,7 +519,9 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
 
           {mode === 'signup' && (
             <p className='text-center text-xs text-white/40'>
-              Al crear la cuenta aceptas que usemos tu email para gestionar tus llamadas y proyectos con nosotros.
+              Al crear la cuenta aceptas que usemos tu email para gestionar tus llamadas y proyectos con nosotros. Consulta los{' '}
+              <a href='/terminos' target='_blank' rel='noopener noreferrer' className='underline hover:text-white'>términos</a> y la{' '}
+              <a href='/privacidad' target='_blank' rel='noopener noreferrer' className='underline hover:text-white'>política de privacidad</a>.
             </p>
           )}
 

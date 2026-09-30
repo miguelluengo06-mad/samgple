@@ -3,6 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import CookieSettingsLink from '@/components/legal/CookieSettingsLink';
 import { Package, Loader2, CheckCircle, ArrowUpRight } from 'lucide-react';
 import KineticWordmark from '@/components/home/KineticWordmark';
 import { BookCallButton } from '@/components/home/BookCall';
@@ -93,6 +94,11 @@ function StorePageInner() {
             <Link href="/auth" className="px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
               Acceder
             </Link>
+            <Link href="/aviso-legal" className="hover:text-white transition-colors">Aviso legal</Link>
+            <Link href="/privacidad" className="hover:text-white transition-colors">Privacidad</Link>
+            <Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link>
+            <Link href="/terminos" className="hover:text-white transition-colors">Términos</Link>
+            <CookieSettingsLink />
             <Link href="/auth?mode=signup" className="hidden sm:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
               Registrarse
             </Link>
@@ -191,7 +197,7 @@ function StorePageInner() {
       <footer className="home-slab relative z-[2] max-w-6xl mx-3 md:mx-auto mt-4 mb-4">
         <div className="max-w-6xl mx-auto px-4 md:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-6">
           <KineticWordmark name={businessName} className="text-lg" />
-          <div className="flex items-center gap-6 text-sm text-white/40">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/40">
             <span>© {new Date().getFullYear()}</span>
             <Link href="/auth?mode=signup" className="hover:text-white transition-colors">Registrarse</Link>
             <Link href="/auth" className="hover:text-white transition-colors">Acceso clientes</Link>

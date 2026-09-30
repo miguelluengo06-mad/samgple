@@ -2,12 +2,7 @@
 
 import { useEffect } from 'react';
 import { startPackCheckout } from '@/components/home/BuyPack';
-
-declare global {
-  interface Window {
-    fbq?: (...args: unknown[]) => void;
-  }
-}
+import { metaTrack } from '@/lib/metaPixel';
 
 const ATTRIBUTION_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid'];
 const ATTRIBUTION_STORAGE = 'lp_attribution';
@@ -128,10 +123,12 @@ function bindLeadForm(cfg: FormConfig): () => void {
       return;
     }
 
-    // Meta Pixel: only fires if the pixel snippet has been added to the page
-    if (typeof window.fbq === 'function') window.fbq('track', 'Lead');
+    // Meta Pixel (solo si hay consentimiento de publicidad): el formulario enviado es un Lead;
+    // si sigue hacia Stripe, además empieza el pago. La compra (Purchase) se registra en /gracias.
+    metaTrack('Lead');
 
     if (outcome && outcome.redirectTo) {
+      metaTrack('InitiateCheckout');
       // On to Stripe: keep the form as it is, with the button busy, until the browser navigates away
       if (submitBtn) {
         submitBtn.dataset.label = submitBtn.textContent || '';

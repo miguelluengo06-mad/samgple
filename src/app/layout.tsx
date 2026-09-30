@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/components/AuthContext';
 import { Suspense } from 'react';
+import CookieConsent from '@/components/CookieConsent';
+import MetaPixel from '@/components/MetaPixel';
 
 export const metadata: Metadata = {
   title: 'samgple — Agencia de contenido y marketing',
@@ -54,6 +56,8 @@ export default function RootLayout({
             {children}
           </Suspense>
         </AuthProvider>
+        <CookieConsent />
+        <MetaPixel />
       </body>
     </html>
   );

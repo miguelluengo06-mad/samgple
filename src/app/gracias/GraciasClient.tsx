@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { CheckCircle2, Clock, Loader2, TriangleAlert } from 'lucide-react';
+import { metaTrackOnce } from '@/lib/metaPixel';
 
 interface Confirmation {
   paid: boolean;
@@ -27,7 +28,14 @@ function Confirm() {
     let cancelled = false;
     fetch(`/api/public/pack-checkout/confirm?session_id=${encodeURIComponent(sessionId)}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
-      .then((data: Confirmation) => !cancelled && setState({ kind: 'done', data }))
+      .then((data: Confirmation) => {
+        if (cancelled) return;
+        setState({ kind: 'done', data });
+        // Purchase para Meta: solo pagos reales y una vez por pedido (el eventID evita duplicados al recargar)
+        if (data.paid && !data.testMode) {
+          metaTrackOnce(sessionId, 'Purchase', { value: data.amount, currency: 'EUR', content_name: data.pack, content_type: 'product' });
+        }
+      })
       .catch(() => !cancelled && setState({ kind: 'error' }));
     return () => {
       cancelled = true;

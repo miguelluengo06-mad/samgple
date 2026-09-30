@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import CookieSettingsLink from '@/components/legal/CookieSettingsLink';
 import type { Metadata } from 'next';
 import { ArrowUpRight } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
@@ -12,7 +13,6 @@ import Services from '@/components/home/Services';
 import VideoExamples from '@/components/home/VideoExamples';
 import Pricing from '@/components/home/Pricing';
 import PaymentNotice from '@/components/home/PaymentNotice';
-import WhatsAppButton from '@/components/home/WhatsAppButton';
 import CaseStudies from '@/components/home/CaseStudies';
 import Process from '@/components/home/Process';
 import Testimonials from '@/components/home/Testimonials';
@@ -67,6 +67,11 @@ export default async function HomePage() {
             <a href="#ejemplos" className="hidden md:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
               Ejemplos
             </a>
+            <Link href="/aviso-legal" className="hover:text-white transition-colors">Aviso legal</Link>
+            <Link href="/privacidad" className="hover:text-white transition-colors">Privacidad</Link>
+            <Link href="/cookies" className="hover:text-white transition-colors">Cookies</Link>
+            <Link href="/terminos" className="hover:text-white transition-colors">Términos</Link>
+            <CookieSettingsLink />
             <a href="#precios" className="hidden md:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
               Precios
             </a>
@@ -84,7 +89,6 @@ export default async function HomePage() {
       </header>
 
       <PaymentNotice />
-      <WhatsAppButton />
 
       <main className="relative z-[2]">
         <Hero businessName={businessName} />
@@ -121,7 +125,7 @@ export default async function HomePage() {
       <footer className="home-slab relative z-[2] w-[calc(100%-clamp(20px,5vw,72px))] max-w-[1320px] mx-auto mt-3 mb-4">
         <div className="max-w-6xl mx-auto px-4 md:px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-6">
           <KineticWordmark name={businessName} className="text-lg" />
-          <div className="flex items-center gap-6 text-sm text-white/40">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-white/40">
             <span>© {new Date().getFullYear()}</span>
             <a href="#precios" className="hover:text-white transition-colors">Precios</a>
             <Link href="/store" className="hover:text-white transition-colors">Tienda</Link>

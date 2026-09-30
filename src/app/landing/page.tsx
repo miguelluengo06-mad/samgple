@@ -4,7 +4,7 @@ import { ShieldCheck, Smartphone, Target, VideoOff, Wallet, Zap, type LucideIcon
 import LandingScripts from './LandingScripts';
 import Pricing from '@/components/home/Pricing';
 import PaymentNotice from '@/components/home/PaymentNotice';
-import WhatsAppButton from '@/components/home/WhatsAppButton';
+import { EXAMPLE_VIDEOS } from '@/lib/exampleVideos';
 import { VAT_LABEL, WEB_PRICING_URL, WELCOME_FAQ, WELCOME_PACK, welcomeSpots } from '@/lib/packs';
 import './landing.css';
 
@@ -131,12 +131,7 @@ const WHY: { icon: LucideIcon; title: string; text: string }[] = [
 
 const HERO_CHECKS = ['Ideas y guiones incluidos', 'No tienes que salir en cámara', 'Listos para publicar'];
 
-const EXAMPLES: { label: string; src: string; poster: string }[] = [
-  { label: 'Restaurante', src: 'https://pub-e87160a916994231bb484c99e8e7ef01.r2.dev/video%20landing%202.mp4', poster: '' },
-  { label: 'Clínica estética', src: 'https://pub-e87160a916994231bb484c99e8e7ef01.r2.dev/video%20landing%20clinica%20chica.mp4', poster: '' },
-  { label: 'Influencer IA · Moda', src: 'https://pub-e87160a916994231bb484c99e8e7ef01.r2.dev/video%20modelo%20landing%20chica%20.mp4', poster: '' },
-  { label: 'Anuncio · Ecommerce', src: 'https://pub-e87160a916994231bb484c99e8e7ef01.r2.dev/4%20video%20.mp4', poster: '' },
-];
+const EXAMPLES = EXAMPLE_VIDEOS;
 
 const INCLUDES = [
   { title: 'Ideas y guiones', text: 'Sabemos qué contar para que tu cliente se pare a mirar.' },
@@ -765,9 +760,10 @@ export default function LandingPage() {
         <div className="lp-container lp-footer__inner">
           <p>© {new Date().getFullYear()} samgple</p>
           <nav aria-label="Legal">
-            <a href="#">Aviso legal</a>
-            <a href="#">Privacidad</a>
-            <a href="#">Cookies</a>
+            <a href="/aviso-legal">Aviso legal</a>
+            <a href="/privacidad">Privacidad</a>
+            <a href="/cookies">Cookies</a>
+            <a href="/terminos">Términos</a>
           </nav>
         </div>
       </footer>
@@ -780,7 +776,6 @@ export default function LandingPage() {
       </div>
 
       <PaymentNotice />
-      <WhatsAppButton lift message="Hola, vengo de vuestro anuncio y quiero información sobre el Pack de Bienvenida." />
       <LandingScripts />
     </div>
   );
