@@ -665,7 +665,7 @@ export default function PublicWidgetPage() {
   if (error && !widget) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-8 max-w-md w-full text-center">
+        <div className="card-liquid rounded-lg p-8 max-w-md w-full text-center">
           <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
           <h1 className="text-xl font-semibold text-white mb-2">Error</h1>
           <p className="text-gray-400">{error}</p>
@@ -678,8 +678,8 @@ export default function PublicWidgetPage() {
   if (submitSuccess && widget?.type !== 'chatbot') {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-8 max-w-md w-full text-center">
-          <CheckCircle className="h-12 w-12 text-green-400 mx-auto mb-4" />
+        <div className="card-liquid rounded-lg p-8 max-w-md w-full text-center">
+          <CheckCircle className="h-12 w-12 text-olive-400 mx-auto mb-4" />
           <h1 className="text-xl font-semibold text-white mb-2">Success!</h1>
           <p className="text-gray-400">Your submission has been received.</p>
         </div>

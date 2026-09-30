@@ -135,7 +135,7 @@ export default function ExecutionDataViewer({
           <div className={cn(depth > 0 && "pl-4 border-l border-gray-700", "space-y-1")}>
             {entries.map(([key, val]) => (
               <div key={key} className="flex gap-2 items-start">
-                <span className="text-green-400 text-sm font-medium">{key}:</span>
+                <span className="text-olive-400 text-sm font-medium">{key}:</span>
                 {renderValue(val, depth + 1)}
               </div>
             ))}
@@ -153,7 +153,7 @@ export default function ExecutionDataViewer({
     }
 
     if (typeof value === 'boolean') {
-      return <span className="text-orange-400">{String(value)}</span>;
+      return <span className="text-olive-400">{String(value)}</span>;
     }
 
     return <span className="text-gray-300">{String(value)}</span>;
@@ -266,7 +266,7 @@ export default function ExecutionDataViewer({
 
   if (!input && !output) {
     return (
-      <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-8 text-center">
+      <div className="card-liquid rounded-lg p-8 text-center">
         <p className="text-gray-500 text-sm">No execution data available</p>
       </div>
     );
@@ -281,7 +281,7 @@ export default function ExecutionDataViewer({
           className={cn(
             'px-4 py-2 text-sm font-medium rounded-lg transition-colors',
             dataTab === 'input'
-              ? 'bg-white text-black'
+              ? 'bg-olive-500 text-black'
               : 'text-gray-400 hover:text-white hover:bg-gray-800'
           )}
         >
@@ -292,7 +292,7 @@ export default function ExecutionDataViewer({
           className={cn(
             'px-4 py-2 text-sm font-medium rounded-lg transition-colors',
             dataTab === 'output'
-              ? 'bg-white text-black'
+              ? 'bg-olive-500 text-black'
               : 'text-gray-400 hover:text-white hover:bg-gray-800'
           )}
         >
@@ -308,7 +308,7 @@ export default function ExecutionDataViewer({
             className={cn(
               'flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
               viewMode === 'schema'
-                ? 'bg-white text-black'
+                ? 'bg-olive-500 text-black'
                 : 'text-gray-400 hover:text-white hover:bg-gray-700'
             )}
           >
@@ -320,7 +320,7 @@ export default function ExecutionDataViewer({
             className={cn(
               'flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
               viewMode === 'json'
-                ? 'bg-white text-black'
+                ? 'bg-olive-500 text-black'
                 : 'text-gray-400 hover:text-white hover:bg-gray-700'
             )}
           >
@@ -332,7 +332,7 @@ export default function ExecutionDataViewer({
             className={cn(
               'flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md transition-colors',
               viewMode === 'table'
-                ? 'bg-white text-black'
+                ? 'bg-olive-500 text-black'
                 : 'text-gray-400 hover:text-white hover:bg-gray-700'
             )}
           >
@@ -350,7 +350,7 @@ export default function ExecutionDataViewer({
           >
             {copied ? (
               <>
-                <Check className="h-3 w-3 text-green-400" />
+                <Check className="h-3 w-3 text-olive-400" />
                 Copied
               </>
             ) : (
@@ -391,11 +391,11 @@ export default function ExecutionDataViewer({
 
       {/* Content */}
       {!currentData ? (
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-8 text-center">
+        <div className="card-liquid rounded-lg p-8 text-center">
           <p className="text-gray-500 text-sm">No {dataTab} data available</p>
         </div>
       ) : (
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+        <div className="card-liquid rounded-lg overflow-hidden">
           {viewMode === 'json' && (
             <div className="p-4 overflow-x-auto max-h-[400px] overflow-y-auto">
               <pre className="text-gray-300 text-sm whitespace-pre-wrap break-words font-mono">

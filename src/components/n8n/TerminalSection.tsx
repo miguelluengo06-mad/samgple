@@ -35,7 +35,7 @@ export default function TerminalSection({
       >
         <div className='flex items-center gap-3'>
           <div className='p-2 bg-green-900/30 rounded-lg'>
-            <svg className='w-5 h-5 text-green-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+            <svg className='w-5 h-5 text-olive-400' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
               <path
                 strokeLinecap='round'
                 strokeLinejoin='round'
@@ -45,7 +45,7 @@ export default function TerminalSection({
             </svg>
           </div>
           <div className='text-left'>
-            <p className='text-green-400 text-sm font-medium'>Terminal</p>
+            <p className='text-olive-400 text-sm font-medium'>Terminal</p>
             <p className='text-white/50 text-xs'>Execute SQL commands directly</p>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function TerminalSection({
                   <div>PostgreSQL interactive terminal</div>
                   <div className='mt-1'>Type SQL commands and press Enter to execute.</div>
                   <div className='mt-1'>
-                    Example: <span className='text-green-400'>SELECT version();</span>
+                    Example: <span className='text-olive-400'>SELECT version();</span>
                   </div>
                 </div>
               )}
@@ -109,7 +109,7 @@ export default function TerminalSection({
                 {terminalOutput.map((line, index) => (
                   <div key={index} className='mb-1'>
                     {line.startsWith('postgres>') ? (
-                      <div className='text-green-400'>{line}</div>
+                      <div className='text-olive-400'>{line}</div>
                     ) : line.startsWith('Error:') ? (
                       <div className='text-red-400'>{line}</div>
                     ) : (
@@ -122,7 +122,7 @@ export default function TerminalSection({
 
               {/* Terminal Input Line */}
               <div className='flex items-center gap-2 font-mono text-sm'>
-                <span className='text-green-400'>postgres{'>'}</span>
+                <span className='text-olive-400'>postgres{'>'}</span>
                 <input
                   type='text'
                   value={terminalInput}

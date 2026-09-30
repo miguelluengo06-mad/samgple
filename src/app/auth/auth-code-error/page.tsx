@@ -17,7 +17,7 @@ export default function AuthErrorPage() {
   }, [router]);
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center bg-black px-4'>
+    <div className='home-root min-h-screen flex flex-col items-center justify-center px-4'>
       <div className='max-w-md w-full space-y-8 text-center'>
         <div className='mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-red-900/20'>
           <svg
@@ -36,11 +36,11 @@ export default function AuthErrorPage() {
           </svg>
         </div>
 
-        <h1 className='text-3xl font-bold text-white'>Authentication Error</h1>
+        <h1 className='text-3xl font-bold text-white'>No hemos podido verificar el enlace</h1>
 
         <p className='text-gray-300 mt-2'>
-          We encountered an issue while processing your authentication request. This could be due to
-          an expired or invalid authentication link.
+          El enlace ha caducado, ya se usó o se abrió en un navegador distinto al del registro. Si acabas de
+          confirmar tu email, prueba a acceder directamente con tu email y contraseña.
         </p>
 
         <div className='mt-8 space-y-4'>
@@ -48,19 +48,19 @@ export default function AuthErrorPage() {
             href='/'
             className='btn-minimal-filled w-full flex justify-center py-3 px-4 rounded-md shadow-sm text-sm font-medium'
           >
-            Return to Home
+            Volver a la web
           </Link>
 
           <button
-            onClick={() => (window.location.href = '/#signin')}
+            onClick={() => router.push('/auth')}
             className='btn-minimal w-full flex justify-center py-3 px-4 rounded-md shadow-sm text-sm font-medium'
           >
-            Try Again
+            Ir a acceder
           </button>
         </div>
 
         <p className='text-sm text-gray-400 mt-8'>
-          You will be automatically redirected to the home page in 10 seconds.
+          Volverás automáticamente a la web en 10 segundos.
         </p>
       </div>
     </div>

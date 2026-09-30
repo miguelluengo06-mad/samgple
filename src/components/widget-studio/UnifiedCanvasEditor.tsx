@@ -508,7 +508,7 @@ export function UnifiedCanvasEditor({
             <button
               onClick={onSave}
               disabled={isSaving || !widgetName.trim()}
-              className="px-3 py-1.5 bg-white text-black text-sm font-medium rounded-lg disabled:opacity-50"
+              className="px-3 py-1.5 bg-olive-500 text-black text-sm font-medium rounded-lg disabled:opacity-50"
             >
               {isSaving ? 'Saving...' : 'Save'}
             </button>
@@ -531,7 +531,7 @@ export function UnifiedCanvasEditor({
               value={mobileSearchQuery}
               onChange={(e) => setMobileSearchQuery(e.target.value)}
               placeholder="Search settings..."
-              className="w-full pl-8 pr-7 py-1.5 bg-gray-800/50 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-white/30"
+              className="w-full pl-8 pr-7 py-1.5 bg-gray-800/50 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-olive-500/30"
             />
             {mobileSearchQuery && (
               <button
@@ -631,7 +631,7 @@ export function UnifiedCanvasEditor({
                 }}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm whitespace-nowrap transition-colors ${
                   isActive
-                    ? 'bg-white text-black'
+                    ? 'bg-olive-500 text-black'
                     : 'bg-gray-800/50 text-gray-400 hover:text-white'
                 }`}
               >
@@ -668,7 +668,7 @@ export function UnifiedCanvasEditor({
                     }}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
                       isActive
-                        ? 'bg-white text-black'
+                        ? 'bg-olive-500 text-black'
                         : 'text-gray-400 hover:text-white hover:bg-gray-800'
                     }`}
                   >
@@ -694,7 +694,7 @@ export function UnifiedCanvasEditor({
                       }}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
                         isSelected
-                          ? 'bg-white text-black'
+                          ? 'bg-olive-500 text-black'
                           : 'text-gray-400 hover:text-white hover:bg-gray-800'
                       }`}
                     >
@@ -843,7 +843,7 @@ export function UnifiedCanvasEditor({
         <button
           onClick={() => setMobilePanel(mobilePanel === 'properties' ? 'none' : 'properties')}
           className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-colors ${
-            mobilePanel === 'properties' ? 'bg-white text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+            mobilePanel === 'properties' ? 'bg-olive-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
           }`}
         >
           <Settings className="w-5 h-5" />

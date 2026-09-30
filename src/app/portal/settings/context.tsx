@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from 'react';
 
-export type SettingsTab = 'account' | 'company' | 'connections' | 'oauth' | 'api';
+export type SettingsTab = 'account' | 'company' | 'connections' | 'oauth';
 
 export interface SettingsContextValue {
   activeTab: SettingsTab;

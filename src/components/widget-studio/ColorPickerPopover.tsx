@@ -137,7 +137,7 @@ export function ColorPickerPopover({
                 color={localColor}
                 onChange={handleColorChange}
                 prefixed={false}
-                className="w-full pl-7 pr-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-white focus:border-white uppercase"
+                className="w-full pl-7 pr-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white font-mono text-sm focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 uppercase"
               />
             </div>
           </div>
@@ -225,7 +225,7 @@ export function ColorPickerPopover({
             </button>
             <button
               onClick={handleApply}
-              className="flex-1 px-3 py-2 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-1.5"
+              className="flex-1 px-3 py-2 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-1.5"
             >
               <Check className="w-3.5 h-3.5" />
               Apply

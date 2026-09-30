@@ -113,7 +113,7 @@ export function AuthenticationSettings() {
 
   if (loading) {
     return (
-      <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+      <div className="card-liquid rounded-lg p-6">
         <div className="animate-pulse space-y-4">
           <div className="h-6 bg-gray-800/30 rounded w-1/3" />
           <div className="h-10 bg-gray-800/30 rounded" />
@@ -184,7 +184,7 @@ export function AuthenticationSettings() {
   ];
 
   return (
-    <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+    <div className="card-liquid rounded-lg p-6">
       <div className="flex items-center gap-2 mb-2">
         <Shield className="h-5 w-5 text-gray-400" />
         <h3 className="text-lg font-medium text-white">Login Options</h3>
@@ -232,7 +232,7 @@ export function AuthenticationSettings() {
                     role="switch"
                     aria-checked={settings[key]}
                     onClick={() => setSettings(prev => ({ ...prev, [key]: !prev[key] }))}
-                    className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-gray-900 ${
+                    className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-olive-500/20 focus:ring-offset-2 focus:ring-offset-gray-900 ${
                       settings[key] ? 'bg-green-500' : 'bg-gray-600'
                     }`}
                   >
@@ -282,7 +282,7 @@ export function AuthenticationSettings() {
           <div
             className={`flex items-center gap-2 p-3 rounded-lg text-sm ${
               message.type === 'success'
-                ? 'bg-green-900/20 border border-green-800 text-green-400'
+                ? 'bg-olive-900/20 border border-olive-800 text-olive-400'
                 : 'bg-red-900/20 border border-red-800 text-red-400'
             }`}
           >
@@ -299,7 +299,7 @@ export function AuthenticationSettings() {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors"
+            className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors"
           >
             {saving ? (
               <span className="flex items-center gap-2">

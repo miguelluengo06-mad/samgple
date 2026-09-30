@@ -396,7 +396,7 @@ export default function CredentialParameterModal({
               value={typeof value === 'string' || typeof value === 'number' ? String(value) : ''}
               onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
               disabled={isLoading}
-              className="w-full px-4 py-3 pr-10 bg-gray-900 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-white/20 focus:border-white appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-4 py-3 pr-10 bg-gray-900 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500 appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ colorScheme: 'dark' }}
             >
               {isLoading ? (
@@ -443,7 +443,7 @@ export default function CredentialParameterModal({
               setFormData({ ...formData, [field.name]: numVal });
             }}
             placeholder={friendlyPlaceholder}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white/20 focus:border-white"
+            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500"
           />
           {field.description && <p className="text-xs text-gray-500">{field.description}</p>}
         </div>
@@ -480,7 +480,7 @@ export default function CredentialParameterModal({
             }}
             placeholder={field.placeholder || 'Paste your data here...'}
             rows={3}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white/20 focus:border-white resize-y min-h-[80px] font-mono text-xs"
+            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500 resize-y min-h-[80px] font-mono text-xs"
           />
           {field.description && <p className="text-xs text-gray-500">{field.description}</p>}
           {hasExpression && (
@@ -513,7 +513,7 @@ export default function CredentialParameterModal({
               onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
               placeholder={friendlyPlaceholder}
               className={cn(
-                'w-full pl-10 pr-10 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white/20 focus:border-white',
+                'w-full pl-10 pr-10 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500',
                 hasExpression && 'font-mono text-xs'
               )}
             />
@@ -557,7 +557,7 @@ export default function CredentialParameterModal({
               type="date"
               value={typeof value === 'string' ? value.split('T')[0] : ''}
               onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
-              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-white/20 focus:border-white cursor-pointer [color-scheme:dark]"
+              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500 cursor-pointer [color-scheme:dark]"
             />
           </div>
           {field.description && <p className="text-xs text-gray-500">{field.description}</p>}
@@ -579,7 +579,7 @@ export default function CredentialParameterModal({
               type="datetime-local"
               value={typeof value === 'string' ? value.slice(0, 16) : ''}
               onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
-              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-white/20 focus:border-white cursor-pointer [color-scheme:dark]"
+              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500 cursor-pointer [color-scheme:dark]"
             />
           </div>
           {field.description && <p className="text-xs text-gray-500">{field.description}</p>}
@@ -601,7 +601,7 @@ export default function CredentialParameterModal({
               type="time"
               value={typeof value === 'string' ? value : ''}
               onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
-              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-white/20 focus:border-white cursor-pointer [color-scheme:dark]"
+              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500 cursor-pointer [color-scheme:dark]"
             />
           </div>
           {field.description && <p className="text-xs text-gray-500">{field.description}</p>}
@@ -624,7 +624,7 @@ export default function CredentialParameterModal({
               value={typeof value === 'string' ? value : JSON.stringify(value)}
               onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
               placeholder={friendlyPlaceholder}
-              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white/20 focus:border-white"
+              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500"
             />
           </div>
           {field.description && <p className="text-xs text-gray-500">{field.description}</p>}
@@ -647,7 +647,7 @@ export default function CredentialParameterModal({
               value={typeof value === 'string' ? value : ''}
               onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
               placeholder={friendlyPlaceholder}
-              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white/20 focus:border-white"
+              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500"
             />
           </div>
           {field.description && <p className="text-xs text-gray-500">{field.description}</p>}
@@ -670,7 +670,7 @@ export default function CredentialParameterModal({
               value={typeof value === 'string' ? value : ''}
               onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
               placeholder={friendlyPlaceholder}
-              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white/20 focus:border-white"
+              className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500"
             />
           </div>
           {field.description && <p className="text-xs text-gray-500">{field.description}</p>}
@@ -700,7 +700,7 @@ export default function CredentialParameterModal({
             placeholder={friendlyPlaceholder}
             rows={4}
             className={cn(
-              'w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white/20 focus:border-white resize-y min-h-[100px]',
+              'w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500 resize-y min-h-[100px]',
               hasExpression && 'font-mono text-xs'
             )}
           />
@@ -729,7 +729,7 @@ export default function CredentialParameterModal({
             onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
             placeholder={friendlyPlaceholder}
             className={cn(
-              'w-full px-4 py-3 pr-10 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white/20 focus:border-white',
+              'w-full px-4 py-3 pr-10 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500/20 focus:border-olive-500',
               hasExpression && 'font-mono text-xs'
             )}
           />
@@ -895,7 +895,7 @@ export default function CredentialParameterModal({
                       value={expressionSearch}
                       onChange={(e) => setExpressionSearch(e.target.value)}
                       placeholder="Search expressions..."
-                      className="w-full pl-9 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-gray-600"
+                      className="w-full pl-9 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-olive-500/30 focus:border-gray-600"
                     />
                   </div>
                   <p className="text-[10px] text-gray-500 mt-1.5">{filteredTemplates.length} of {EXPRESSION_TEMPLATES.length} expressions</p>
@@ -939,7 +939,7 @@ export default function CredentialParameterModal({
               <button
                 onClick={handleSubmit}
                 disabled={isSaving || paramInfo.config.fields.length === 0}
-                className="w-full py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2"
               >
                 {isSaving ? (
                   <>

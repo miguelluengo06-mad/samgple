@@ -3,6 +3,7 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { invalidateSettingsCache } from '@/lib/portalSettings';
 import { getEffectiveOwnerId, canManageBilling } from '@/lib/teamUtils';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 
 let _client: SupabaseClient | null = null;
 function getSupabaseAdmin(): SupabaseClient {
@@ -28,7 +29,7 @@ const ALLOWED_FIELDS = [
 ];
 
 // Fields that should be masked when returned (sensitive values)
-const SENSITIVE_FIELDS = ['n8n_api_key', 'ai_api_key', 'n8n_smtp_pass', 'flowengine_api_key'];
+const SENSITIVE_FIELDS = ['n8n_api_key', 'ai_api_key', 'n8n_smtp_pass', 'flowengine_api_key', 'coolify_api_token'];
 
 export async function GET(req: NextRequest) {
   try {
@@ -42,6 +43,10 @@ export async function GET(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    // These are the agency's infrastructure keys — never hand them to a merely registered account
+    const denied = await requireAgencyPrincipal(supabaseAdmin, user.id);
+    if (denied) return denied;
 
     const { data, error } = await getSupabaseAdmin()
       .from('portal_settings')
@@ -103,6 +108,10 @@ export async function PATCH(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    // getEffectiveOwnerId() treats any non-team account as an "owner", so also require real agency membership
+    const denied = await requireAgencyPrincipal(supabaseAdmin, user.id);
+    if (denied) return denied;
 
     const ctx = await getEffectiveOwnerId(supabaseAdmin, user.id);
     if (!canManageBilling(ctx.role)) {

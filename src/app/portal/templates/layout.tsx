@@ -218,7 +218,7 @@ export default function TemplatesLayout({ children }: { children: React.ReactNod
                   />
                   <button
                     onClick={() => setShowAddModal(true)}
-                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                    className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     New
@@ -256,7 +256,7 @@ export default function TemplatesLayout({ children }: { children: React.ReactNod
             {selectedTemplate && (
               <span className="text-white/20 shrink-0">/</span>
             )}
-            <h1 className="text-lg font-semibold text-white truncate">{headerTitle}</h1>
+            <h1 className="text-lg font-semibold text-white uppercase tracking-wide truncate">{headerTitle}</h1>
           </div>
         </div>
 
@@ -264,7 +264,7 @@ export default function TemplatesLayout({ children }: { children: React.ReactNod
         {showSkeleton ? (
           <div className="flex-1 overflow-y-auto">
             <div className="max-w-4xl mx-auto p-6 space-y-4">
-              <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-4">
+              <div className="card-liquid rounded-lg p-6 space-y-4">
                 <div className="h-5 w-32 bg-gray-800/30 rounded animate-pulse" />
                 <div className="h-24 bg-gray-800/30 rounded-lg animate-pulse" />
                 <div className="h-10 w-40 bg-gray-800/30 rounded-lg animate-pulse" />
@@ -278,7 +278,7 @@ export default function TemplatesLayout({ children }: { children: React.ReactNod
       {/* Toast */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-lg text-sm font-medium shadow-lg ${
-          toast.type === 'success' ? 'bg-green-900/90 text-green-400 border border-green-800' : 'bg-red-900/90 text-red-400 border border-red-800'
+          toast.type === 'success' ? 'bg-green-900/90 text-olive-400 border border-olive-800' : 'bg-red-900/90 text-red-400 border border-red-800'
         }`}>
           {toast.message}
         </div>

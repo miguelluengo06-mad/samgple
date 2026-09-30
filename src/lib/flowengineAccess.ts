@@ -1,5 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { getEffectiveOwnerId, TeamRole } from '@/lib/teamUtils';
+import { isAgencyPrincipal } from '@/lib/agencyAccess';
 
 /**
  * Verifies that a portal user has access to manage FlowEngine instances.
@@ -21,6 +22,13 @@ export async function verifyFlowEngineAccess(
 ): Promise<{ authorized: boolean; effectiveUserId: string; role: TeamRole }> {
   const ctx = await getEffectiveOwnerId(supabase, userId);
   const effectiveUserId = ctx.ownerId;
+
+  // Managing FlowEngine instances spends the agency's own FlowEngine key, so it is limited to the
+  // agency owner and their team. Anyone else who merely has an account (e.g. someone who
+  // registered from the public site) is refused, even without any local instance records.
+  if (!(await isAgencyPrincipal(supabase, userId))) {
+    return { authorized: false, effectiveUserId, role: ctx.role };
+  }
 
   // Team members resolved to a different owner — authorized based on their role
   if (ctx.isTeamMember) {

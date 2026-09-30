@@ -31,8 +31,8 @@ interface InstanceData {
 type ClientAssignment = { user_id: string; client_email: string; client_name?: string };
 
 const STATUS_MAP: Record<string, { label: string; cls: string }> = {
-  running:      { label: 'Running',      cls: 'text-green-400 bg-green-900/20 border-green-800' },
-  active:       { label: 'Running',      cls: 'text-green-400 bg-green-900/20 border-green-800' },
+  running:      { label: 'Running',      cls: 'text-olive-400 bg-olive-900/20 border-olive-800' },
+  active:       { label: 'Running',      cls: 'text-olive-400 bg-olive-900/20 border-olive-800' },
   stopped:      { label: 'Stopped',      cls: 'text-red-400 bg-red-900/20 border-red-800' },
   error:        { label: 'Error',        cls: 'text-red-400 bg-red-900/20 border-red-800' },
   deploying:    { label: 'Deploying',    cls: 'text-yellow-400 bg-yellow-900/20 border-yellow-800' },
@@ -83,12 +83,12 @@ function InlineNameEditor({
         onChange={e => setDraft(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter') handleSave(); if (e.key === 'Escape') setEditing(false); }}
         maxLength={50}
-        className="flex-1 min-w-0 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-white text-sm focus:outline-none focus:border-white"
+        className="flex-1 min-w-0 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-white text-sm focus:outline-none focus:border-olive-500"
       />
       <button
         onClick={handleSave}
         disabled={saving}
-        className="p-1 rounded hover:bg-gray-700 text-green-400 hover:text-green-300 transition-colors flex-shrink-0 disabled:opacity-50"
+        className="p-1 rounded hover:bg-gray-700 text-olive-400 hover:text-green-300 transition-colors flex-shrink-0 disabled:opacity-50"
       >
         {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
       </button>
@@ -285,7 +285,7 @@ export default function N8nAccountPage({ focusInstanceId, liveStatus: liveStatus
   if (!instance) {
     return (
       <div className="max-w-4xl mx-auto p-6">
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-8 text-center">
+        <div className="card-liquid rounded-lg p-8 text-center">
           <Server className="w-8 h-8 text-white/20 mx-auto mb-3" />
           <p className="text-white/40 text-sm">Instance not found</p>
         </div>
@@ -306,7 +306,7 @@ export default function N8nAccountPage({ focusInstanceId, liveStatus: liveStatus
     <div className="max-w-2xl mx-auto px-4 py-8 space-y-4">
 
       {/* Header card */}
-      <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-5">
+      <div className="card-liquid rounded-lg p-5">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-10 h-10 bg-gray-800/30 rounded-lg flex items-center justify-center flex-shrink-0">
             <img src={iconSrc} className="w-5 h-5 object-contain" alt="" style={iconStyle} />
@@ -327,7 +327,7 @@ export default function N8nAccountPage({ focusInstanceId, liveStatus: liveStatus
               href={instance.instance_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-4 py-2 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors flex-shrink-0"
+              className="flex items-center gap-1.5 px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors flex-shrink-0"
             >
               Open <ExternalLink className="w-3.5 h-3.5" />
             </a>
@@ -360,9 +360,9 @@ export default function N8nAccountPage({ focusInstanceId, liveStatus: liveStatus
                     onChange={e => setApiKeyInput(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter') handleSaveApiKey(); if (e.key === 'Escape') { setEditingApiKey(false); setApiKeyInput(''); } }}
                     placeholder="Paste new key…"
-                    className="flex-1 min-w-0 px-2 py-1 bg-gray-900 border border-gray-600 rounded text-white text-xs font-mono focus:outline-none focus:border-white"
+                    className="flex-1 min-w-0 px-2 py-1 bg-gray-900 border border-gray-600 rounded text-white text-xs font-mono focus:outline-none focus:border-olive-500"
                   />
-                  <button onClick={handleSaveApiKey} disabled={apiKeySaving || !apiKeyInput.trim()} className="p-1 rounded hover:bg-gray-700 text-green-400 hover:text-green-300 transition-colors disabled:opacity-50">
+                  <button onClick={handleSaveApiKey} disabled={apiKeySaving || !apiKeyInput.trim()} className="p-1 rounded hover:bg-gray-700 text-olive-400 hover:text-green-300 transition-colors disabled:opacity-50">
                     {apiKeySaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
                   </button>
                   <button onClick={() => { setEditingApiKey(false); setApiKeyInput(''); }} className="p-1 rounded hover:bg-gray-700 text-white/40 hover:text-white/60 transition-colors">
@@ -396,7 +396,7 @@ export default function N8nAccountPage({ focusInstanceId, liveStatus: liveStatus
 
       {/* URL editing — external instances only, owner only */}
       {instance.is_external && isOwner && (
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4">
+        <div className="card-liquid rounded-lg p-4">
           <p className="text-xs text-white/40 mb-2">Instance URL</p>
           {editingUrl ? (
             <div className="flex items-center gap-2">
@@ -407,9 +407,9 @@ export default function N8nAccountPage({ focusInstanceId, liveStatus: liveStatus
                 onChange={e => setUrlInput(e.target.value)}
                 onKeyDown={e => { if (e.key === 'Enter') handleSaveUrl(); if (e.key === 'Escape') setEditingUrl(false); }}
                 placeholder="https://your-server.com"
-                className="flex-1 min-w-0 px-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-white text-sm font-mono focus:outline-none focus:border-white"
+                className="flex-1 min-w-0 px-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-white text-sm font-mono focus:outline-none focus:border-olive-500"
               />
-              <button onClick={handleSaveUrl} disabled={urlSaving} className="p-1 rounded hover:bg-gray-700 text-green-400 hover:text-green-300 transition-colors disabled:opacity-50">
+              <button onClick={handleSaveUrl} disabled={urlSaving} className="p-1 rounded hover:bg-gray-700 text-olive-400 hover:text-green-300 transition-colors disabled:opacity-50">
                 {urlSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
               </button>
               <button onClick={() => setEditingUrl(false)} className="p-1 rounded hover:bg-gray-700 text-white/40 hover:text-white/60 transition-colors">
@@ -431,7 +431,7 @@ export default function N8nAccountPage({ focusInstanceId, liveStatus: liveStatus
 
       {/* Assigned Client — one per instance, owner only */}
       {isOwner && (
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-5 space-y-3">
+        <div className="card-liquid rounded-lg p-5 space-y-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-medium text-white">Assigned Client</p>
             {clientsLoaded && !clientAssignment && !showAssignClientForm && allAgencyClients.length > 0 && (
@@ -463,7 +463,7 @@ export default function N8nAccountPage({ focusInstanceId, liveStatus: liveStatus
                 <button
                   onClick={handleAssignClient}
                   disabled={!selectedClientId || assigningClient}
-                  className="px-3 py-2 bg-white text-black hover:bg-gray-100 disabled:opacity-50 rounded-lg text-sm font-medium transition-colors"
+                  className="px-3 py-2 bg-olive-500 text-black hover:bg-olive-400 disabled:opacity-50 rounded-full text-sm font-medium transition-colors"
                 >
                   {assigningClient ? 'Assigning...' : 'Assign'}
                 </button>
@@ -482,7 +482,7 @@ export default function N8nAccountPage({ focusInstanceId, liveStatus: liveStatus
           ) : !clientAssignment ? (
             <p className="text-sm text-white/40">No client assigned</p>
           ) : (
-            <div className="flex items-center gap-3 p-3 bg-gray-900/50 border border-gray-800 rounded-lg">
+            <div className="flex items-center gap-3 p-3 card-liquid rounded-lg">
               <Users className="w-4 h-4 text-white/30 shrink-0" />
               <div className="flex-1 min-w-0">
                 {clientAssignment.client_name && <p className="text-sm font-medium text-white truncate">{clientAssignment.client_name}</p>}

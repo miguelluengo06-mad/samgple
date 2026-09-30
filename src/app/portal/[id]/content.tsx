@@ -2320,13 +2320,13 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
               'fixed top-4 left-1/2 z-[200] flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg border',
               toast.type === 'error'
                 ? 'bg-red-900/90 border-red-800 text-red-100'
-                : 'bg-green-900/90 border-green-800 text-green-100'
+                : 'bg-green-900/90 border-olive-800 text-green-100'
             )}
           >
             {toast.type === 'error' ? (
               <XCircle className="h-5 w-5 text-red-400 flex-shrink-0" />
             ) : (
-              <CheckCircle className="h-5 w-5 text-green-400 flex-shrink-0" />
+              <CheckCircle className="h-5 w-5 text-olive-400 flex-shrink-0" />
             )}
             <span className="text-sm font-medium">{toast.message}</span>
             <button
@@ -2349,7 +2349,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
             </span>
             <button
               onClick={() => setDemoModalOpen(true)}
-              className="px-3 py-1 bg-white text-black text-sm font-medium rounded-lg hover:bg-gray-100 transition-colors"
+              className="px-3 py-1 bg-olive-500 text-black text-sm font-medium rounded-lg hover:bg-gray-100 transition-colors"
             >
               View Pricing
             </button>
@@ -2380,7 +2380,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
             href={`/portal/${instance.id}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm bg-white text-black hover:bg-gray-100 rounded-lg font-semibold transition-all"
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm bg-olive-500 text-black hover:bg-olive-400 rounded-full font-semibold transition-all"
           >
             <ExternalLink className="w-3.5 h-3.5 shrink-0" />
             Client Portal
@@ -2412,7 +2412,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
             <div className="flex items-center gap-4">
               {/* Logo or Back button */}
               {isSafeImageUrl(agencyLogoUrl) && !logoError ? (
-                <div className="p-2 bg-gray-900/50 border border-gray-800 rounded-xl flex items-center justify-center">
+                <div className="p-2 card-liquid rounded-xl flex items-center justify-center">
                   <img
                     src={agencyLogoUrl!}
                     alt="Agency"
@@ -2423,7 +2423,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
               ) : (
                 <Link
                   href={backUrl ?? ((isOwner || isAgencyManager) ? "/portal/hosting" : "/portal")}
-                  className="p-2.5 bg-gray-900/50 border border-gray-800 hover:border-purple-500/50 hover:bg-purple-500/10 rounded-xl text-gray-400 hover:text-white transition-all"
+                  className="p-2.5 card-liquid hover:border-purple-500/50 hover:bg-purple-500/10 rounded-xl text-gray-400 hover:text-white transition-all"
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </Link>
@@ -2473,7 +2473,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                   className={cn(
                     "flex items-center gap-2 px-4 py-2.5 border rounded-xl text-sm font-medium transition-all",
                     copiedClientUrl
-                      ? "bg-green-500/10 border-green-500/50 text-green-400"
+                      ? "bg-olive-500/10 border-green-500/50 text-olive-400"
                       : "bg-gray-900/50 border-gray-800 hover:border-gray-700 text-white/60"
                   )}
                   title="Copy direct link for client to access their panel"
@@ -2493,7 +2493,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                     if (handlePreviewAction()) return;
                     window.open(`/portal/${instanceId}?preview=true${agencyLogoUrl ? `&logo=${encodeURIComponent(agencyLogoUrl)}` : ''}`, '_blank');
                   }}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-gray-900/50 border border-gray-800 hover:border-purple-500/50 hover:bg-purple-500/10 text-white/60 rounded-xl text-sm font-medium transition-all"
+                  className="flex items-center gap-2 px-4 py-2.5 card-liquid hover:border-purple-500/50 hover:bg-purple-500/10 text-white/60 rounded-xl text-sm font-medium transition-all"
                   title="Preview client panel"
                 >
                   <Eye className="h-4 w-4" /> Preview
@@ -2571,7 +2571,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
               <UnifiedSkeleton count={4} />
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-3">
+                <div className="card-liquid rounded-lg p-3">
                   <div className="flex items-center gap-2 mb-1">
                     <Activity className="h-4 w-4 text-white/40" />
                     <span className="text-white/40 text-xs">Total</span>
@@ -2579,17 +2579,17 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                   <p className="text-white font-semibold text-lg">{executionMetrics?.total || 0}</p>
                 </div>
                 <div
-                  className="bg-gray-900/50 border border-gray-800 rounded-lg p-3 cursor-pointer hover:border-green-800 transition-colors"
+                  className="card-liquid rounded-lg p-3 cursor-pointer hover:border-olive-800 transition-colors"
                   onClick={() => setExecutionFilter('success')}
                 >
                   <div className="flex items-center gap-2 mb-1">
-                    <CheckCircle className="h-4 w-4 text-green-400/60" />
+                    <CheckCircle className="h-4 w-4 text-olive-400/60" />
                     <span className="text-white/40 text-xs">Success</span>
                   </div>
-                  <p className="text-green-400 font-semibold text-lg">{executionMetrics?.success || 0}</p>
+                  <p className="text-olive-400 font-semibold text-lg">{executionMetrics?.success || 0}</p>
                 </div>
                 <div
-                  className="bg-gray-900/50 border border-gray-800 rounded-lg p-3 cursor-pointer hover:border-red-800 transition-colors"
+                  className="card-liquid rounded-lg p-3 cursor-pointer hover:border-red-800 transition-colors"
                   onClick={() => setExecutionFilter('error')}
                 >
                   <div className="flex items-center gap-2 mb-1">
@@ -2598,7 +2598,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                   </div>
                   <p className="text-red-400 font-semibold text-lg">{executionMetrics?.failed || 0}</p>
                 </div>
-                <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-3">
+                <div className="card-liquid rounded-lg p-3">
                   <div className="flex items-center gap-2 mb-1">
                     <Clock className="h-4 w-4 text-white/40" />
                     <span className="text-white/40 text-xs">Running</span>
@@ -2609,7 +2609,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
             )}
 
             {/* Execution List with Filters */}
-            <div className="bg-gray-900/50 border border-gray-800 rounded-2xl overflow-hidden">
+            <div className="card-liquid rounded-2xl overflow-hidden">
               {/* Filter Tabs */}
               <div className="flex flex-wrap items-center justify-between gap-2 p-2 bg-gray-900/50 border-b border-gray-800">
                 <div className="flex items-center gap-1">
@@ -2618,7 +2618,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                     className={cn(
                       'px-4 py-2 text-sm font-medium rounded-lg transition-all',
                       executionFilter === 'all'
-                      ? 'bg-white text-black'
+                      ? 'bg-olive-500 text-black'
                       : 'text-gray-400 hover:text-white hover:bg-gray-800'
                   )}
                 >
@@ -2629,8 +2629,8 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                   className={cn(
                     'px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2',
                     executionFilter === 'success'
-                      ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                      : 'text-gray-400 hover:text-green-400 hover:bg-green-500/10'
+                      ? 'bg-green-500/20 text-olive-400 border border-green-500/30'
+                      : 'text-gray-400 hover:text-olive-400 hover:bg-olive-500/10'
                   )}
                 >
                   <CheckCircle className="h-3.5 w-3.5" />
@@ -2657,8 +2657,8 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                         onClick={() => setWorkflowDropdownOpen(!workflowDropdownOpen)}
                         className={cn(
                           'flex items-center gap-2 pl-8 pr-8 py-1.5 text-sm font-medium rounded-lg transition-all cursor-pointer',
-                          'bg-gray-900/50 border border-gray-800 text-white/60',
-                          'hover:border-gray-700 focus:outline-none focus:ring-2 focus:ring-white',
+                          'card-liquid text-white/60',
+                          'hover:border-gray-700 focus:outline-none focus:ring-2 focus:ring-olive-500',
                           workflowFilter !== 'all' && 'border-gray-600 text-white'
                         )}
                       >
@@ -2691,7 +2691,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                               animate={{ opacity: 1, y: 0 }}
                               exit={{ opacity: 0, y: -4 }}
                               transition={{ duration: 0.15 }}
-                              className="absolute right-0 top-full mt-1 w-64 bg-gray-900 border border-gray-800 rounded-lg shadow-xl z-50 overflow-hidden"
+                              className="absolute right-0 top-full mt-1 w-64 card-liquid rounded-lg shadow-xl z-50 overflow-hidden"
                             >
                               {/* Search Input */}
                               <div className="p-2 border-b border-gray-800">
@@ -2702,7 +2702,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                                     value={workflowSearchQuery}
                                     onChange={(e) => setWorkflowSearchQuery(e.target.value)}
                                     placeholder="Search workflows..."
-                                    className="w-full pl-8 pr-3 py-1.5 text-sm bg-gray-800/30 border border-gray-700 rounded-md text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-white"
+                                    className="w-full pl-8 pr-3 py-1.5 text-sm bg-gray-800/30 border border-gray-700 rounded-md text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-olive-500"
                                     autoFocus
                                   />
                                 </div>
@@ -2781,7 +2781,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                           className={cn(
                             'px-2.5 py-1 text-xs font-medium rounded transition-colors',
                             timeRange === range
-                              ? 'bg-white text-black'
+                              ? 'bg-olive-500 text-black'
                               : 'text-white/60 hover:text-white hover:bg-gray-700'
                           )}
                         >
@@ -2809,7 +2809,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                       </p>
                       <button
                         onClick={() => setActiveTab('settings')}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors"
                       >
                         <Settings className="h-4 w-4" />
                         Go to Settings
@@ -2862,7 +2862,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                           exec.status === 'error' ? 'bg-red-500/20' : 'bg-gray-800/30'
                         )}>
                           {exec.status === 'success' ? (
-                            <CheckCircle className="h-5 w-5 text-green-400" />
+                            <CheckCircle className="h-5 w-5 text-olive-400" />
                           ) : exec.status === 'error' ? (
                             <XCircle className="h-5 w-5 text-red-400" />
                           ) : (
@@ -2876,7 +2876,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                         <div className="text-right">
                           <span className={cn(
                             'inline-block px-2.5 py-1 text-xs font-medium rounded-full mb-1',
-                            exec.status === 'success' ? 'bg-green-500/20 text-green-400' :
+                            exec.status === 'success' ? 'bg-green-500/20 text-olive-400' :
                             exec.status === 'error' ? 'bg-red-500/20 text-red-400' : 'bg-gray-800/30 text-white/60'
                           )}>
                             {exec.status === 'success' ? 'Success' : exec.status === 'error' ? 'Failed' : 'Running'}
@@ -2890,7 +2890,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                             href={`${instance.instance_url.replace(/\/$/, '')}/workflow/${exec.workflowId}/executions/${exec.id}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-1.5 text-gray-500 hover:text-orange-400 hover:bg-orange-500/10 rounded-lg transition-all flex-shrink-0"
+                            className="p-1.5 text-gray-500 hover:text-olive-400 hover:bg-olive-500/10 rounded-lg transition-all flex-shrink-0"
                             title="Open in n8n"
                             onClick={(e) => e.stopPropagation()}
                           >
@@ -2914,7 +2914,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
             </div>
 
             {/* Workflows with Component Gallery */}
-            <div id="workflows-section" className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 hover:border-purple-500/30 transition-all">
+            <div id="workflows-section" className="card-liquid rounded-2xl p-6 hover:border-purple-500/30 transition-all">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
@@ -3031,7 +3031,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
             <div className="flex items-start justify-between">
               <div>
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-gray-900/50 border border-gray-800 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl card-liquid flex items-center justify-center">
                     <Layers className="w-5 h-5 text-gray-400" />
                   </div>
                   <h2 className="text-2xl font-semibold text-white">UI Components</h2>
@@ -3062,7 +3062,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                       className={cn(
                         'px-4 py-2 rounded-lg text-sm font-medium transition-all',
                         widgetTab === 'instance'
-                          ? 'bg-white text-black'
+                          ? 'bg-olive-500 text-black'
                           : 'bg-gray-900/50 text-gray-400 hover:text-white border border-gray-800'
                       )}
                     >
@@ -3081,7 +3081,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                       className={cn(
                         'px-4 py-2 rounded-lg text-sm font-medium transition-all group relative',
                         widgetTab === 'all'
-                          ? 'bg-white text-black'
+                          ? 'bg-olive-500 text-black'
                           : 'bg-gray-900/50 text-gray-400 hover:text-white border border-gray-800'
                       )}
                       title="Clients cannot see this tab"
@@ -3117,7 +3117,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                     value={widgetSearch}
                     onChange={(e) => setWidgetSearch(e.target.value)}
                     placeholder="Search..."
-                    className="w-full pl-10 pr-4 py-2.5 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white text-sm"
+                    className="w-full pl-10 pr-4 py-2.5 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
                   />
                 </div>
               )}
@@ -3153,7 +3153,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
               <UnifiedSkeleton count={6} />
             ) : widgets.length === 0 ? (
               <div className="text-center py-24">
-                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gray-900/50 border border-gray-800 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto mb-5 rounded-2xl card-liquid flex items-center justify-center">
                   <Layers className="w-8 h-8 text-gray-500" />
                 </div>
                 <h3 className="text-lg font-medium text-white mb-2">No UI components assigned</h3>
@@ -3166,7 +3166,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                   <Link
                     href="/portal/ui-studio/editor"
                     target="_blank"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors"
                   >
                     <Plus className="h-4 w-4" />
                     Create First Component
@@ -3194,7 +3194,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                   return (
                     <div
                       key={widget.id}
-                      className="group bg-gray-900/50 border border-gray-800 rounded-xl p-5 hover:border-gray-700 hover:bg-gray-800/30 transition-all"
+                      className="group card-liquid rounded-xl p-5 hover:border-gray-700 hover:bg-gray-800/30 transition-all"
                     >
                       <div className="flex items-start justify-between mb-4">
                         {/* Type Icon */}
@@ -3232,7 +3232,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                             ) : null;
                           })()}
                           {linkedWorkflow && (
-                            <span className="flex items-center gap-1 px-3 py-1 bg-green-500/10 text-green-400 text-xs font-medium rounded-full border border-green-500/20">
+                            <span className="flex items-center gap-1 px-3 py-1 bg-olive-500/10 text-olive-400 text-xs font-medium rounded-full border border-olive-500/20">
                               <Zap className="w-3 h-3" /> Active
                             </span>
                           )}
@@ -3248,7 +3248,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                             </button>
                             {widgetMenuOpen === widget.id && (
                               <div
-                                className="absolute right-0 top-full mt-1 w-52 py-1.5 bg-gray-900 border border-gray-800 rounded-xl shadow-xl z-10"
+                                className="absolute right-0 top-full mt-1 w-52 py-1.5 card-liquid rounded-xl shadow-xl z-10"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 {/* Component Status toggle */}
@@ -3265,7 +3265,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                                   </span>
                                   <span className={cn(
                                     'px-1.5 py-0.5 text-xs rounded font-medium shrink-0',
-                                    widget.is_active ? 'bg-green-500/20 text-green-400' : 'bg-gray-700 text-gray-500'
+                                    widget.is_active ? 'bg-green-500/20 text-olive-400' : 'bg-gray-700 text-gray-500'
                                   )}>
                                     {widget.is_active ? 'Active' : 'Inactive'}
                                   </span>
@@ -3484,11 +3484,11 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
             className="space-y-6"
           >
             {/* WhatsApp Section */}
-            <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+            <div className="card-liquid rounded-xl p-6">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-green-900/20 border border-green-800 rounded-lg">
-                    <MessageSquare className="h-5 w-5 text-green-400" />
+                  <div className="p-2 bg-olive-900/20 border border-olive-800 rounded-lg">
+                    <MessageSquare className="h-5 w-5 text-olive-400" />
                   </div>
                   <div>
                     <h3 className="text-white font-medium">WhatsApp</h3>
@@ -3535,7 +3535,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                   <p className="text-white/30 text-xs mb-4">Link a WhatsApp number to this instance</p>
                   <button
                     onClick={openLinkWhatsAppModal}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors cursor-pointer"
                   >
                     <Plus className="h-4 w-4" />
                     Add WhatsApp
@@ -3545,7 +3545,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                 <div className="space-y-3">
                   {servicesWhatsApp.map((wa) => {
                     const statusCfg: Record<string, { label: string; className: string }> = {
-                      connected:    { label: 'Connected',    className: 'text-green-400 bg-green-900/20 border-green-800' },
+                      connected:    { label: 'Connected',    className: 'text-olive-400 bg-olive-900/20 border-olive-800' },
                       pending_scan: { label: 'Scan QR',      className: 'text-white/60 bg-gray-800/30 border-gray-700' },
                       connecting:   { label: 'Connecting',   className: 'text-white/60 bg-gray-800/30 border-gray-700' },
                       disconnected: { label: 'Disconnected', className: 'text-red-400 bg-red-900/20 border-red-800' },
@@ -3553,8 +3553,8 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                     const cfg = statusCfg[wa.status] || { label: wa.status, className: 'text-gray-400 bg-gray-800/30 border-gray-700' };
                     return (
                       <div key={wa.id} className="bg-gray-800/30 border border-gray-700 rounded-lg p-4 flex items-center gap-3">
-                        <div className="p-1.5 bg-green-900/20 border border-green-800 rounded-lg flex-shrink-0">
-                          <MessageSquare className="h-4 w-4 text-green-400" />
+                        <div className="p-1.5 bg-olive-900/20 border border-olive-800 rounded-lg flex-shrink-0">
+                          <MessageSquare className="h-4 w-4 text-olive-400" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-white text-sm font-medium truncate">
@@ -3586,7 +3586,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
               className="space-y-6"
             >
               <div className="max-w-lg mx-auto">
-                <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 text-center">
+                <div className="card-liquid rounded-2xl p-8 text-center">
                   <div className="w-16 h-16 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center mx-auto mb-4">
                     <CreditCard className="h-8 w-8 text-purple-400" />
                   </div>
@@ -3611,7 +3611,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
               ) : !paymentInfo.stripeConnected ? (
               // Stripe not connected
               <div className="max-w-lg mx-auto">
-                <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 text-center">
+                <div className="card-liquid rounded-2xl p-8 text-center">
                   <div className="w-16 h-16 rounded-2xl bg-gray-800/30 flex items-center justify-center mx-auto mb-4">
                     <CreditCard className="h-8 w-8 text-gray-500" />
                   </div>
@@ -3638,7 +3638,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
             ) : !client && paymentInfo?.isAgency ? (
               // No client assigned (agency view)
               <div className="max-w-lg mx-auto">
-                <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 text-center">
+                <div className="card-liquid rounded-2xl p-8 text-center">
                   <div className="w-16 h-16 rounded-2xl bg-gray-800/30 flex items-center justify-center mx-auto mb-4">
                     <Users className="h-8 w-8 text-white/50" />
                   </div>
@@ -3659,7 +3659,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                 {/* Left Column - Customer Info & Linking */}
                 <div className="lg:col-span-1 space-y-6">
                   {/* Linked Customer Card */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 hover:border-purple-500/30 transition-all">
+                  <div className="card-liquid rounded-2xl p-6 hover:border-purple-500/30 transition-all">
                     <div className="flex items-center justify-between mb-5">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
@@ -3679,7 +3679,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
 
                     {paymentInfo?.customer ? (
                       <div className="space-y-4">
-                        <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-xl">
+                        <div className="p-4 bg-olive-500/10 border border-green-500/30 rounded-xl">
                           <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white font-medium">
                               {(paymentInfo.customer.email || paymentInfo.customer.name || '?').charAt(0).toUpperCase()}
@@ -3693,9 +3693,9 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                               )}
                             </div>
                           </div>
-                          <div className="mt-3 pt-3 border-t border-green-500/20 flex items-center justify-between">
+                          <div className="mt-3 pt-3 border-t border-olive-500/20 flex items-center justify-between">
                             <span className="text-xs text-gray-500">Customer ID</span>
-                            <code className="text-xs text-green-400 bg-green-500/10 px-2 py-0.5 rounded">
+                            <code className="text-xs text-olive-400 bg-olive-500/10 px-2 py-0.5 rounded">
                               {paymentInfo.customer.id}
                             </code>
                           </div>
@@ -3731,7 +3731,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                               }
                             }}
                             placeholder="Search by email or enter customer ID..."
-                            className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white transition-all"
+                            className="w-full px-4 py-3 card-liquid rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-all"
                           />
 
                           <AnimatePresence>
@@ -3791,7 +3791,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                           <button
                             onClick={() => handleLinkCustomer(customerSearch)}
                             disabled={linkingCustomer}
-                            className="w-full px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-700 disabled:text-gray-600 font-medium rounded-xl transition-all flex items-center justify-center gap-2"
+                            className="w-full px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-700 disabled:text-gray-600 font-medium rounded-full transition-all flex items-center justify-center gap-2"
                           >
                             {linkingCustomer ? (
                               <RefreshCw className="h-4 w-4 animate-spin" />
@@ -3835,11 +3835,11 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
 
                 {/* Right Column - Transaction History */}
                 <div className="lg:col-span-2">
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 hover:border-purple-500/30 transition-all">
+                  <div className="card-liquid rounded-2xl p-6 hover:border-purple-500/30 transition-all">
                     <div className="flex items-center justify-between mb-5">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
-                          <Activity className="h-5 w-5 text-green-400" />
+                          <Activity className="h-5 w-5 text-olive-400" />
                         </div>
                         <div>
                           <h3 className="text-white font-semibold">Transaction History</h3>
@@ -3898,13 +3898,13 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                                 {txn.type === 'payment' ? (
                                   <CreditCard className={cn(
                                     'h-5 w-5',
-                                    txn.status === 'succeeded' ? 'text-green-400' :
+                                    txn.status === 'succeeded' ? 'text-olive-400' :
                                     txn.status === 'pending' ? 'text-white/60' : 'text-gray-500'
                                   )} />
                                 ) : (
                                   <FileText className={cn(
                                     'h-5 w-5',
-                                    txn.status === 'paid' ? 'text-green-400' :
+                                    txn.status === 'paid' ? 'text-olive-400' :
                                     txn.status === 'open' ? 'text-white/60' : 'text-gray-500'
                                   )} />
                                 )}
@@ -3924,7 +3924,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                                 <span className={cn(
                                   'text-xs',
                                   txn.status === 'succeeded' || txn.status === 'paid'
-                                    ? 'text-green-400'
+                                    ? 'text-olive-400'
                                     : txn.status === 'pending' || txn.status === 'open'
                                       ? 'text-white/60'
                                       : 'text-gray-500'
@@ -3968,7 +3968,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                 {/* Left Column: Client Access + API Key stacked */}
                 <div className="space-y-6">
                   {/* Client Access Card */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 hover:border-purple-500/30 transition-all">
+                  <div className="card-liquid rounded-2xl p-6 hover:border-purple-500/30 transition-all">
                     <div className="flex items-center justify-between mb-5">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
@@ -3989,9 +3989,9 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                       )}
                     </div>
                     {isDedicated ? (
-                      <div className="p-3 bg-green-900/10 border border-green-800/30 rounded-xl flex items-center gap-3">
-                        <CheckCircle className="h-4 w-4 text-green-400 shrink-0" />
-                        <p className="text-sm text-green-400">Payments are for client portals and not included in the dedicated portal</p>
+                      <div className="p-3 bg-green-900/10 border border-olive-800/30 rounded-xl flex items-center gap-3">
+                        <CheckCircle className="h-4 w-4 text-olive-400 shrink-0" />
+                        <p className="text-sm text-olive-400">Payments are for client portals and not included in the dedicated portal</p>
                       </div>
                     ) : client && !editingClient ? (
                       <div className="flex items-center gap-4 p-4 bg-gray-800/30 border border-gray-700 rounded-xl">
@@ -4005,7 +4005,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                         <span className={cn(
                           'px-3 py-1.5 text-xs font-medium rounded-full',
                           client.status === 'accepted'
-                            ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                            ? 'bg-green-500/20 text-olive-400 border border-green-500/30'
                             : 'bg-gray-800/30 text-white/60 border border-gray-700'
                         )}>
                           {client.status === 'accepted' ? 'Active' : 'Pending Invite'}
@@ -4019,7 +4019,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                             value={inviteEmail}
                             onChange={(e) => setInviteEmail(e.target.value)}
                             placeholder="client@email.com"
-                            className="flex-1 px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white transition-all"
+                            className="flex-1 px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-all"
                           />
                           <button
                             onClick={handleAssignClient}
@@ -4051,7 +4051,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                   </div>
 
                   {/* n8n API Key Card */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-6 hover:border-purple-500/30 transition-all">
+                  <div className="card-liquid rounded-2xl p-6 hover:border-purple-500/30 transition-all">
                     <div className="flex items-center justify-between mb-5">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
@@ -4074,7 +4074,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                           <span className={cn(
                             'px-3 py-1 text-xs font-medium rounded-full border flex items-center gap-1.5',
                             apiVerified === true
-                              ? 'bg-green-500/20 text-green-400 border-green-500/30'
+                              ? 'bg-green-500/20 text-olive-400 border-green-500/30'
                               : apiVerified === false
                                 ? 'bg-red-500/20 text-red-400 border-red-500/30'
                                 : workflowsLoading
@@ -4145,7 +4145,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                           value={apiKey}
                           onChange={(e) => { setApiKey(e.target.value); setApiVerified(null); setApiError(null); }}
                           placeholder="Enter your n8n API key"
-                          className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white pr-12 transition-all"
+                          className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 pr-12 transition-all"
                         />
                         {apiKey !== '********' && (
                           <button
@@ -4180,7 +4180,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                             value={externalUrl}
                             onChange={(e) => { setExternalUrl(e.target.value); setApiVerified(null); setApiError(null); }}
                             placeholder="https://your-n8n-instance.com"
-                            className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white transition-all"
+                            className="w-full px-4 py-3 card-liquid rounded-xl text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-all"
                           />
                           <p className="text-xs text-gray-500 mt-2">Enter the URL of your self-hosted n8n instance</p>
                         </motion.div>
@@ -4253,7 +4253,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                     className="w-full p-4 rounded-lg border transition-all text-left bg-gray-800/30 border-gray-800 hover:border-gray-700 hover:bg-gray-800/30 disabled:opacity-50 cursor-pointer"
                   >
                     <div className="flex items-center gap-3">
-                      <MessageSquare className="h-4 w-4 text-green-400 flex-shrink-0" />
+                      <MessageSquare className="h-4 w-4 text-olive-400 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-white text-sm font-medium truncate">{wa.display_name || wa.instance_name}</p>
                         {wa.phone_number && <p className="text-white/40 text-xs">+{wa.phone_number}</p>}
@@ -4323,7 +4323,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
               className="fixed inset-0 z-[100] flex items-center justify-center p-4"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="w-full max-w-lg bg-gray-900/50 border border-gray-800 rounded-2xl overflow-hidden">
+              <div className="w-full max-w-lg card-liquid rounded-2xl overflow-hidden">
                 <div className="px-6 py-5 border-b border-gray-800">
                   <div className="flex items-center justify-between">
                     <div>
@@ -4355,7 +4355,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                         className={cn(
                           'flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-medium transition-all',
                           linkWidgetTab === tab.id
-                            ? 'bg-white text-black'
+                            ? 'bg-olive-500 text-black'
                             : 'text-gray-400 hover:text-white hover:bg-gray-800/30'
                         )}
                       >
@@ -4482,7 +4482,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                         >
                           <div className="flex items-center gap-3">
                             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${workflow.active ? 'bg-green-500/20' : 'bg-gray-800/30'}`}>
-                              <Zap className={`w-5 h-5 ${workflow.active ? 'text-green-400' : 'text-gray-500'}`} />
+                              <Zap className={`w-5 h-5 ${workflow.active ? 'text-olive-400' : 'text-gray-500'}`} />
                             </div>
                             <div>
                               <p className="text-white font-medium text-sm">{workflow.name}</p>
@@ -4671,7 +4671,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                     selectedExecution.status === 'error' ? 'bg-red-500/20' : 'bg-gray-800/30'
                   )}>
                     {selectedExecution.status === 'success' ? (
-                      <CheckCircle className="h-4 w-4 text-green-400" />
+                      <CheckCircle className="h-4 w-4 text-olive-400" />
                     ) : selectedExecution.status === 'error' ? (
                       <XCircle className="h-4 w-4 text-red-400" />
                     ) : (
@@ -4705,7 +4705,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                         <p className="text-gray-500 text-xs mb-1">Status</p>
                         <p className={cn(
                           'text-sm font-medium',
-                          executionDetail.status === 'success' ? 'text-green-400' :
+                          executionDetail.status === 'success' ? 'text-olive-400' :
                           executionDetail.status === 'error' ? 'text-red-400' : 'text-white/60'
                         )}>
                           {executionDetail.status === 'success' ? 'Success' :
@@ -4811,19 +4811,19 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
                 </p>
                 <ul className="space-y-2 text-sm text-gray-400">
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-400 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-olive-400 flex-shrink-0" />
                     <span>Workflow automation & templates</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-400 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-olive-400 flex-shrink-0" />
                     <span>Credential management & integrations</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-400 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-olive-400 flex-shrink-0" />
                     <span>Custom UI components & widgets</span>
                   </li>
                   <li className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4 text-green-400 flex-shrink-0" />
+                    <CheckCircle className="h-4 w-4 text-olive-400 flex-shrink-0" />
                     <span>Client portal & sharing features</span>
                   </li>
                 </ul>
@@ -4832,7 +4832,7 @@ export function ClientPanelContent({ instanceId, embedded = false, portalEmbedde
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => setDemoModalOpen(false)}
-                  className="flex-1 px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors"
+                  className="flex-1 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors"
                 >
                   Continue Exploring
                 </button>

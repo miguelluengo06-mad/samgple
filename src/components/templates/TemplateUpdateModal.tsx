@@ -193,8 +193,8 @@ export default function TemplateUpdateModal({
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-800">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center">
-                <ArrowUpCircle className="h-5 w-5 text-green-400" />
+              <div className="w-10 h-10 rounded-xl bg-olive-500/10 border border-green-500/30 flex items-center justify-center">
+                <ArrowUpCircle className="h-5 w-5 text-olive-400" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white">Template Update Available</h3>
@@ -250,10 +250,10 @@ export default function TemplateUpdateModal({
               <div className="space-y-3">
                 {/* Preserved Nodes */}
                 {preview.preservedNodes && preview.preservedNodes.length > 0 && (
-                  <div className="bg-green-900/20 border border-green-800 rounded-lg p-3">
+                  <div className="bg-olive-900/20 border border-olive-800 rounded-lg p-3">
                     <div className="flex items-center gap-2 mb-2">
-                      <CheckCircle className="h-4 w-4 text-green-400" />
-                      <p className="text-sm font-medium text-green-400">
+                      <CheckCircle className="h-4 w-4 text-olive-400" />
+                      <p className="text-sm font-medium text-olive-400">
                         Configuration Preserved ({preview.preservedNodes.length})
                       </p>
                     </div>
@@ -261,20 +261,20 @@ export default function TemplateUpdateModal({
                       {preview.preservedNodes.slice(0, 6).map((node, i) => (
                         <div
                           key={i}
-                          className="flex items-center justify-between px-2 py-1.5 bg-green-900/30 border border-green-800/50 rounded text-green-300"
+                          className="flex items-center justify-between px-2 py-1.5 bg-green-900/30 border border-olive-800/50 rounded text-green-300"
                         >
                           <div className="flex-1 min-w-0">
                             <p className="text-xs font-medium truncate">{node.name}</p>
-                            <p className="text-xs text-green-400/60 truncate">{formatNodeType(node.type)}</p>
+                            <p className="text-xs text-olive-400/60 truncate">{formatNodeType(node.type)}</p>
                           </div>
                           <div className="flex items-center gap-2 ml-2 flex-shrink-0">
                             {node.hasCredentials && (
-                              <span className="text-xs px-1.5 py-0.5 bg-green-900/40 border border-green-800/60 rounded text-green-300">
+                              <span className="text-xs px-1.5 py-0.5 bg-green-900/40 border border-olive-800/60 rounded text-green-300">
                                 Creds
                               </span>
                             )}
                             {node.hasParameters && (
-                              <span className="text-xs px-1.5 py-0.5 bg-green-900/40 border border-green-800/60 rounded text-green-300">
+                              <span className="text-xs px-1.5 py-0.5 bg-green-900/40 border border-olive-800/60 rounded text-green-300">
                                 {node.parameterCount} params
                               </span>
                             )}
@@ -282,7 +282,7 @@ export default function TemplateUpdateModal({
                         </div>
                       ))}
                       {preview.preservedNodes.length > 6 && (
-                        <p className="text-xs text-green-400 text-center pt-1">
+                        <p className="text-xs text-olive-400 text-center pt-1">
                           +{preview.preservedNodes.length - 6} more nodes preserved
                         </p>
                       )}
@@ -374,9 +374,9 @@ export default function TemplateUpdateModal({
 
             {/* Success */}
             {success && (
-              <div className="bg-green-900/20 border border-green-800 rounded-lg p-4 text-center">
-                <CheckCircle className="h-8 w-8 text-green-400 mx-auto mb-2" />
-                <p className="text-green-400 font-medium">Update Complete!</p>
+              <div className="bg-olive-900/20 border border-olive-800 rounded-lg p-4 text-center">
+                <CheckCircle className="h-8 w-8 text-olive-400 mx-auto mb-2" />
+                <p className="text-olive-400 font-medium">Update Complete!</p>
                 <p className="text-xs text-green-300/70 mt-1">
                   Your workflow has been updated to v{latestVersion}
                 </p>
@@ -401,7 +401,7 @@ export default function TemplateUpdateModal({
                   'flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2',
                   loading || updating || error
                     ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                    : 'bg-white text-black hover:bg-gray-100'
+                    : 'bg-olive-500 text-black hover:bg-olive-400'
                 )}
               >
                 {updating ? (

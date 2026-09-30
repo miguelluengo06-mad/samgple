@@ -2,23 +2,29 @@
 
 import { createContext, useContext } from 'react';
 
-export interface ServiceConnection {
+export interface Product {
   id: string;
-  instance_name: string;
-  display_name: string | null;
-  phone_number: string | null;
-  status: string;
-  server_url: string | null;
-  linked_instance_id?: string | null;
+  name: string;
+  description: string | null;
+  price_cents: number;
+  currency: string;
+  image_url: string | null;
+  active: boolean;
+  display_order: number;
 }
 
-interface ServicesContextValue {
-  connections: ServiceConnection[];
+interface ProductsContextValue {
+  products: Product[];
   loading: boolean;
-  liveStatus: Record<string, string>;
-  statusLoading: boolean;
   refetch: () => Promise<void>;
 }
 
-export const ServicesContext = createContext<ServicesContextValue>({ connections: [], loading: true, liveStatus: {}, statusLoading: true, refetch: async () => {} });
-export function useServicesContext() { return useContext(ServicesContext); }
+export const ProductsContext = createContext<ProductsContextValue>({
+  products: [],
+  loading: true,
+  refetch: async () => {},
+});
+
+export function useProductsContext() {
+  return useContext(ProductsContext);
+}

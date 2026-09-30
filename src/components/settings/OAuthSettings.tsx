@@ -169,7 +169,7 @@ export function OAuthSettings() {
     return (
       <div className="space-y-6">
         {[1, 2, 3].map(i => (
-          <div key={i} className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+          <div key={i} className="card-liquid rounded-lg p-6">
             <div className="animate-pulse space-y-4">
               <div className="h-6 bg-gray-800/30 rounded w-1/3" />
               <div className="h-10 bg-gray-800/30 rounded" />
@@ -183,7 +183,7 @@ export function OAuthSettings() {
   return (
     <div className="space-y-8">
       {/* Explanation */}
-      <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+      <div className="card-liquid rounded-lg p-6">
         <div className="flex items-center gap-2 mb-3">
           <KeyRound className="h-5 w-5 text-gray-400" />
           <h3 className="text-lg font-medium text-white">What is OAuth?</h3>
@@ -206,7 +206,7 @@ export function OAuthSettings() {
           const isSaving = savingProvider === provider.id;
 
           return (
-            <div key={provider.id} id={provider.id} className="bg-gray-900/50 border border-gray-800 rounded-lg scroll-mt-24">
+            <div key={provider.id} id={provider.id} className="card-liquid rounded-lg scroll-mt-24">
               <button
                 onClick={() => toggleExpanded(provider.id)}
                 className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-800/30 transition-colors rounded-lg"
@@ -249,7 +249,7 @@ export function OAuthSettings() {
                       value={cred.clientId}
                       onChange={e => updateCredential(provider.id, 'clientId', e.target.value)}
                       placeholder="Enter Client ID"
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                      className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                     />
                   </div>
 
@@ -262,7 +262,7 @@ export function OAuthSettings() {
                         value={cred.clientSecret}
                         onChange={e => updateCredential(provider.id, 'clientSecret', e.target.value)}
                         placeholder="Enter Client Secret"
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white pr-12"
+                        className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 pr-12"
                       />
                       <button
                         type="button"
@@ -278,7 +278,7 @@ export function OAuthSettings() {
                   {message?.provider === provider.id && (
                     <div className={`flex items-center gap-2 p-3 rounded-lg text-sm ${
                       message.type === 'success'
-                        ? 'bg-green-900/20 border border-green-800 text-green-400'
+                        ? 'bg-olive-900/20 border border-olive-800 text-olive-400'
                         : 'bg-red-900/20 border border-red-800 text-red-400'
                     }`}>
                       {message.type === 'success'
@@ -294,7 +294,7 @@ export function OAuthSettings() {
                     <button
                       onClick={() => handleSave(provider.id)}
                       disabled={isSaving}
-                      className="px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors"
+                      className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors"
                     >
                       {isSaving ? (
                         <span className="flex items-center gap-2">

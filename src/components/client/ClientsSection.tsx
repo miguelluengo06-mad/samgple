@@ -465,7 +465,7 @@ export default function ClientsSection({ session, onInviteClick, onCollapse, onR
 
   if (loading) {
     return (
-      <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+      <div className="card-liquid rounded-lg p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Users className="h-5 w-5 text-white/60" />
@@ -480,7 +480,7 @@ export default function ClientsSection({ session, onInviteClick, onCollapse, onR
   }
 
   return (
-    <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+    <div className="card-liquid rounded-lg p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <Users className="h-5 w-5 text-white/60" />
@@ -566,7 +566,7 @@ export default function ClientsSection({ session, onInviteClick, onCollapse, onR
                       </span>
                     )}
                     {invite.status === 'accepted' && (
-                      <span className="flex items-center gap-1.5 px-2.5 py-1 bg-green-900/20 text-green-400 text-xs rounded-full">
+                      <span className="flex items-center gap-1.5 px-2.5 py-1 bg-olive-900/20 text-olive-400 text-xs rounded-full">
                         <CheckCircle className="h-3 w-3" />
                         Active
                       </span>
@@ -594,7 +594,7 @@ export default function ClientsSection({ session, onInviteClick, onCollapse, onR
                             onClick={() => handleCopyLink(invite)}
                             className={`flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
                               copiedId === invite.id
-                                ? 'bg-green-900/20 text-green-400'
+                                ? 'bg-olive-900/20 text-olive-400'
                                 : 'bg-gray-800/30 hover:bg-gray-800/30 text-gray-400'
                             }`}
                           >
@@ -671,7 +671,7 @@ export default function ClientsSection({ session, onInviteClick, onCollapse, onR
                             onClick={() => handleCopyLink(invite)}
                             className={`flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-colors ${
                               copiedId === invite.id
-                                ? 'bg-green-900/20 text-green-400'
+                                ? 'bg-olive-900/20 text-olive-400'
                                 : 'bg-gray-800/30 hover:bg-gray-800/30 text-gray-400'
                             }`}
                           >

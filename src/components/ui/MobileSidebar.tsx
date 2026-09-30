@@ -218,7 +218,7 @@ export function MobileSidebarLink({
       className={cn(
         'w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all',
         active
-          ? 'bg-white text-black'
+          ? 'bg-olive-500 text-black'
           : 'text-gray-400 hover:text-white hover:bg-gray-800/50',
         className
       )}

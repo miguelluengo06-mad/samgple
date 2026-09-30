@@ -100,7 +100,7 @@ export function FieldRenderer({
     color: s.textColor,
   };
 
-  const baseClasses = `w-full px-4 py-3 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white/30 ${
+  const baseClasses = `w-full px-4 py-3 placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500/30 ${
     previewMode ? 'pointer-events-none' : ''
   }`;
 
@@ -283,7 +283,7 @@ export function FieldRenderer({
                 type="checkbox"
                 checked={((value as string[]) || []).includes(option)}
                 onChange={previewMode ? undefined : () => onToggleCheckbox?.(option)}
-                className={`w-4 h-4 rounded focus:ring-white/30 ${previewMode ? 'pointer-events-none' : ''}`}
+                className={`w-4 h-4 rounded focus:ring-olive-500/30 ${previewMode ? 'pointer-events-none' : ''}`}
                 style={{
                   borderColor: s.inputBorderColor,
                   backgroundColor: s.inputBackgroundColor,
@@ -312,7 +312,7 @@ export function FieldRenderer({
                 name={field.name}
                 checked={(value as string) === option}
                 onChange={previewMode ? undefined : () => onChange?.(option)}
-                className={`w-4 h-4 focus:ring-white/30 ${previewMode ? 'pointer-events-none' : ''}`}
+                className={`w-4 h-4 focus:ring-olive-500/30 ${previewMode ? 'pointer-events-none' : ''}`}
                 style={{
                   borderColor: s.inputBorderColor,
                   backgroundColor: s.inputBackgroundColor,

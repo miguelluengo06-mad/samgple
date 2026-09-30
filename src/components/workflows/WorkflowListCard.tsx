@@ -80,7 +80,7 @@ export default function WorkflowListCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
       className={cn(
-        'bg-gray-900/50 border border-gray-800 rounded-xl hover:border-purple-500/30 transition-all',
+        'card-liquid rounded-xl hover:border-purple-500/30 transition-all',
         (href || onClick) && 'cursor-pointer group'
       )}
       onClick={onClick}
@@ -96,7 +96,7 @@ export default function WorkflowListCard({
           )}>
             <Zap className={cn(
               'h-5 w-5',
-              workflow.active ? 'text-green-400' : 'text-gray-500'
+              workflow.active ? 'text-olive-400' : 'text-gray-500'
             )} />
           </div>
           <div className="flex-1 min-w-0">
@@ -109,7 +109,7 @@ export default function WorkflowListCard({
                 {hasUpdate && (
                   <button
                     onClick={handleUpdateClick}
-                    className="flex items-center gap-1 px-1.5 py-0.5 bg-green-500/10 border border-green-500/30 rounded text-xs text-green-400 hover:bg-green-500/20 transition-colors"
+                    className="flex items-center gap-1 px-1.5 py-0.5 bg-olive-500/10 border border-green-500/30 rounded text-xs text-olive-400 hover:bg-green-500/20 transition-colors"
                     title={`Update available: v${workflow.updateInfo!.installedVersion} → v${workflow.updateInfo!.latestVersion}`}
                   >
                     <ArrowUpCircle className="h-3 w-3" />
@@ -133,7 +133,7 @@ export default function WorkflowListCard({
             <div className="flex items-center gap-2 mt-0.5">
               <span className={cn(
                 'text-xs',
-                workflow.active ? 'text-green-400' : 'text-gray-500'
+                workflow.active ? 'text-olive-400' : 'text-gray-500'
               )}>
                 {workflow.active ? 'Active' : 'Inactive'}
               </span>
@@ -160,7 +160,7 @@ export default function WorkflowListCard({
               {connectedCredentials.slice(0, 4).map((cred, i) => (
                 <div
                   key={`connected-${i}`}
-                  className="flex items-center gap-1 px-2 py-1 bg-green-900/20 border border-green-800/50 rounded text-xs text-green-400"
+                  className="flex items-center gap-1 px-2 py-1 bg-olive-900/20 border border-olive-800/50 rounded text-xs text-olive-400"
                   title={`${cred.name}: Connected`}
                 >
                   <CredentialIcon type={cred.type.replace(/Api$|OAuth2Api$/i, '').toLowerCase()} fallback="none" className="h-3 w-3" />

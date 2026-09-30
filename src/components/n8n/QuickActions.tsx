@@ -98,7 +98,7 @@ export default function QuickActions({
             disabled={!isRunning || isTransitioning}
             className='flex items-center justify-center gap-2 px-4 py-3.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-medium border border-gray-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer group'
           >
-            <Download className='w-4 h-4 text-green-400 group-hover:translate-y-0.5 transition-transform' />
+            <Download className='w-4 h-4 text-olive-400 group-hover:translate-y-0.5 transition-transform' />
             <span>Update n8n Version</span>
           </button>
         )}

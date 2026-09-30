@@ -56,7 +56,7 @@ export default function UpgradeModal({ isOpen, onClose, feature, type = 'upgrade
               <Link
                 href="/n8n-account"
                 onClick={onClose}
-                className="w-full px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors text-center"
+                className="w-full px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors text-center"
               >
                 Deploy Instance
               </Link>
@@ -72,7 +72,7 @@ export default function UpgradeModal({ isOpen, onClose, feature, type = 'upgrade
               <Link
                 href="/n8n-account"
                 onClick={onClose}
-                className="w-full px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors text-center"
+                className="w-full px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors text-center"
               >
                 Deploy New Instance
               </Link>
@@ -91,7 +91,7 @@ export default function UpgradeModal({ isOpen, onClose, feature, type = 'upgrade
               <Link
                 href="/#pricing"
                 onClick={onClose}
-                className="w-full px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors text-center"
+                className="w-full px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors text-center"
               >
                 View Pricing
               </Link>

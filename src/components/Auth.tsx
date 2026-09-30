@@ -18,17 +18,34 @@ interface AuthProps {
   authConfig?: AuthConfig;
 }
 
+const INFO_PREFIX = 'Revisa tu email';
+
+/** Supabase returns English messages — translate the ones people actually hit. */
+function friendlyError(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes('invalid login credentials')) return 'Email o contraseña incorrectos';
+  if (m.includes('email not confirmed')) return 'Aún no has confirmado tu email. Revisa tu bandeja de entrada.';
+  if (m.includes('user already registered')) return 'Ya existe una cuenta con este email. Prueba a acceder.';
+  if (m.includes('password should be at least')) return 'La contraseña debe tener al menos 6 caracteres';
+  if (m.includes('rate limit') || m.includes('too many')) return 'Demasiados intentos. Espera un momento y vuelve a probar.';
+  if (m.includes('signups not allowed') || m.includes('signup is disabled')) return 'El registro está cerrado por ahora.';
+  if (m.includes('unable to validate email') || m.includes('invalid email')) return 'Introduce un email válido';
+  return message;
+}
+
 export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lockedEmail, authConfig }: AuthProps) {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [linkedinLoading, setLinkedinLoading] = useState(false);
   const [githubLoading, setGithubLoading] = useState(false);
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState(lockedEmail || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<'signin' | 'signup' | 'reset'>(initialMode);
   const [resetLoading, setResetLoading] = useState(false);
+  const isInfo = !!error && error.startsWith(INFO_PREFIX);
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +55,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
     try {
       if (mode === 'signup') {
         if (password !== confirmPassword) {
-          setError('Passwords do not match');
+          setError('Las contraseñas no coinciden');
           setLoading(false);
           return;
         }
@@ -59,12 +76,14 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
           password,
           options: {
             emailRedirectTo: callbackUrl,
+            // handle_new_user() copies full_name into profiles
+            data: fullName.trim() ? { full_name: fullName.trim() } : undefined,
           },
         });
         if (error) throw error;
 
         // Show success message for sign up
-        setError('Check your email for the confirmation link!');
+        setError(`${INFO_PREFIX}: te hemos enviado un enlace para confirmar tu cuenta.`);
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -82,7 +101,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
         }
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? friendlyError(err.message) : 'Ha ocurrido un error');
     } finally {
       setLoading(false);
     }
@@ -117,7 +136,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
       });
       if (error) throw error;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? friendlyError(err.message) : 'Ha ocurrido un error');
       setLoadingState(false);
     }
   };
@@ -138,9 +157,9 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
 
       if (error) throw error;
 
-      setError('Check your email for the password reset link!');
+      setError(`${INFO_PREFIX}: te hemos enviado el enlace para restablecer tu contraseña.`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      setError(err instanceof Error ? friendlyError(err.message) : 'Ha ocurrido un error');
     } finally {
       setResetLoading(false);
     }
@@ -150,11 +169,11 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
     <div className='w-full max-w-md space-y-8'>
       <div>
         <h2 className='mt-6 text-center text-3xl font-bold tracking-tight text-white'>
-          {mode === 'reset' ? 'Reset your password' : mode === 'signin' ? 'Sign in' : 'Create your account'}
+          {mode === 'reset' ? 'Restablece tu contraseña' : mode === 'signin' ? 'Accede a tu cuenta' : 'Crea tu cuenta'}
         </h2>
         {mode === 'reset' && (
           <p className='mt-2 text-center text-sm text-white/60'>
-            Enter your email to receive a password reset link
+            Introduce tu email y te enviaremos un enlace para restablecerla
           </p>
         )}
       </div>
@@ -192,7 +211,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
                     d='M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z'
                   />
                 </svg>
-                Continue with Google
+                Continuar con Google
               </>
             )}
           </button>}
@@ -211,7 +230,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
                 <svg className='h-5 w-5 mr-3' viewBox='0 0 24 24' fill='#0A66C2'>
                   <path d='M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z'/>
                 </svg>
-                Continue with LinkedIn
+                Continuar con LinkedIn
               </>
             )}
           </button>}
@@ -230,7 +249,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
                 <svg className='h-5 w-5 mr-3' viewBox='0 0 24 24' fill='currentColor'>
                   <path d='M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z'/>
                 </svg>
-                Continue with GitHub
+                Continuar con GitHub
               </>
             )}
           </button>}
@@ -244,7 +263,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
             <div className='w-full border-t border-white/20' />
           </div>
           <div className='relative flex justify-center text-sm'>
-            <span className='bg-black px-2 text-white/60'>Or continue with email</span>
+            <span className='bg-black px-2 text-white/60'>O continúa con tu email</span>
           </div>
         </div>
         )}
@@ -254,7 +273,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
         <form className='space-y-4' onSubmit={handlePasswordReset}>
           <div>
             <label htmlFor='email' className='block text-sm font-medium text-white/80 mb-1'>
-              Email address
+              Email
             </label>
             <input
               id='email'
@@ -262,8 +281,8 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
               type='email'
               autoComplete='email'
               required
-              className='block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/20 sm:text-sm backdrop-blur-sm'
-              placeholder='Enter your email'
+              className='block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:border-olive-500/40 focus:outline-none focus:ring-1 focus:ring-olive-500/20 sm:text-sm backdrop-blur-sm'
+              placeholder='tu@empresa.com'
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
@@ -272,15 +291,15 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
           {error && (
             <div
               className={`rounded-lg p-4 border backdrop-blur-sm ${
-                error.includes('Check your email')
-                  ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                isInfo
+                  ? 'bg-olive-500/10 border-green-500/30 text-olive-400'
                   : 'bg-red-500/10 border-red-500/30 text-red-400'
               }`}
             >
               <div className='flex'>
                 <div className='flex-shrink-0'>
-                  {error.includes('Check your email') ? (
-                    <svg className='h-5 w-5 text-green-400' fill='currentColor' viewBox='0 0 20 20'>
+                  {isInfo ? (
+                    <svg className='h-5 w-5 text-olive-400' fill='currentColor' viewBox='0 0 20 20'>
                       <path
                         fillRule='evenodd'
                         d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
@@ -314,7 +333,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
                 <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white'></div>
               ) : (
                 <>
-                  Send reset link
+                  Enviar enlace
                   <svg
                     className='ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform'
                     fill='none'
@@ -339,7 +358,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
               onClick={() => setMode('signin')}
               className='text-sm text-white/60 hover:text-white font-medium transition-colors cursor-pointer'
             >
-              Back to sign in
+              Volver a acceder
             </button>
           </div>
         </form>
@@ -347,9 +366,27 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
         /* Email/Password Form */
         <form className='space-y-4' onSubmit={handleAuth}>
           <div className='space-y-4'>
+            {mode === 'signup' && !lockedEmail && (
+              <div>
+                <label htmlFor='fullName' className='block text-sm font-medium text-white/80 mb-1'>
+                  Nombre <span className='text-white/40 font-normal'>(opcional)</span>
+                </label>
+                <input
+                  id='fullName'
+                  name='fullName'
+                  type='text'
+                  autoComplete='name'
+                  maxLength={120}
+                  className='block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:border-olive-500/40 focus:outline-none focus:ring-1 focus:ring-olive-500/20 sm:text-sm backdrop-blur-sm'
+                  placeholder='Tu nombre'
+                  value={fullName}
+                  onChange={e => setFullName(e.target.value)}
+                />
+              </div>
+            )}
             <div>
               <label htmlFor='email' className='block text-sm font-medium text-white/80 mb-1'>
-                Email address
+                Email
               </label>
               <input
                 id='email'
@@ -358,19 +395,19 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
                 autoComplete='email'
                 required
                 readOnly={!!lockedEmail}
-                className={`block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/20 sm:text-sm backdrop-blur-sm ${lockedEmail ? 'cursor-not-allowed opacity-70' : ''}`}
-                placeholder='Enter your email'
+                className={`block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:border-olive-500/40 focus:outline-none focus:ring-1 focus:ring-olive-500/20 sm:text-sm backdrop-blur-sm ${lockedEmail ? 'cursor-not-allowed opacity-70' : ''}`}
+                placeholder='tu@empresa.com'
                 value={email}
                 onChange={e => !lockedEmail && setEmail(e.target.value)}
               />
               {lockedEmail && (
-                <p className='mt-1 text-xs text-white/50'>This email was specified in your invitation</p>
+                <p className='mt-1 text-xs text-white/50'>Este email viene de tu invitación</p>
               )}
             </div>
             <div>
               <div className='flex items-center justify-between mb-1'>
                 <label htmlFor='password' className='block text-sm font-medium text-white/80'>
-                  Password
+                  Contraseña
                 </label>
                 {mode === 'signin' && (
                   <button
@@ -378,7 +415,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
                     onClick={() => setMode('reset')}
                     className='text-xs text-white/60 hover:text-white transition-colors cursor-pointer'
                   >
-                    Forgot password?
+                    ¿Has olvidado la contraseña?
                   </button>
                 )}
               </div>
@@ -387,8 +424,10 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
                 name='password'
                 type='password'
                 required
-                className='block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/20 sm:text-sm backdrop-blur-sm'
-                placeholder='Enter your password'
+                minLength={6}
+                autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
+                className='block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:border-olive-500/40 focus:outline-none focus:ring-1 focus:ring-olive-500/20 sm:text-sm backdrop-blur-sm'
+                placeholder='Tu contraseña'
                 value={password}
                 onChange={e => setPassword(e.target.value)}
               />
@@ -396,15 +435,17 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
             {mode === 'signup' && (
             <div>
               <label htmlFor='confirmPassword' className='block text-sm font-medium text-white/80 mb-1'>
-                Confirm password
+                Repite la contraseña
               </label>
               <input
                 id='confirmPassword'
                 name='confirmPassword'
                 type='password'
                 required
-                className='block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:border-white/40 focus:outline-none focus:ring-1 focus:ring-white/20 sm:text-sm backdrop-blur-sm'
-                placeholder='Repeat your password'
+                minLength={6}
+                autoComplete='new-password'
+                className='block w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white placeholder-white/40 focus:border-olive-500/40 focus:outline-none focus:ring-1 focus:ring-olive-500/20 sm:text-sm backdrop-blur-sm'
+                placeholder='Repite tu contraseña'
                 value={confirmPassword}
                 onChange={e => setConfirmPassword(e.target.value)}
               />
@@ -415,15 +456,15 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
           {error && (
             <div
               className={`rounded-lg p-4 border backdrop-blur-sm ${
-                error.includes('Check your email')
-                  ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                isInfo
+                  ? 'bg-olive-500/10 border-green-500/30 text-olive-400'
                   : 'bg-red-500/10 border-red-500/30 text-red-400'
               }`}
             >
               <div className='flex'>
                 <div className='flex-shrink-0'>
-                  {error.includes('Check your email') ? (
-                    <svg className='h-5 w-5 text-green-400' fill='currentColor' viewBox='0 0 20 20'>
+                  {isInfo ? (
+                    <svg className='h-5 w-5 text-olive-400' fill='currentColor' viewBox='0 0 20 20'>
                       <path
                         fillRule='evenodd'
                         d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z'
@@ -457,7 +498,7 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
                 <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white'></div>
               ) : (
                 <>
-                  {mode === 'signin' ? 'Sign in' : 'Create account'}
+                  {mode === 'signin' ? 'Acceder' : 'Crear cuenta'}
                   <svg
                     className='ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform'
                     fill='none'
@@ -476,6 +517,12 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
             </button>
           </div>
 
+          {mode === 'signup' && (
+            <p className='text-center text-xs text-white/40'>
+              Al crear la cuenta aceptas que usemos tu email para gestionar tus llamadas y proyectos con nosotros.
+            </p>
+          )}
+
           {/* Sign up toggle - only shown when allow_signup is enabled */}
           {authConfig?.allow_signup && (
           <div className='text-center'>
@@ -485,8 +532,8 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
               className='text-sm text-white/60 hover:text-white font-medium transition-colors cursor-pointer'
             >
               {mode === 'signin'
-                ? "Don't have an account? Sign up"
-                : 'Already have an account? Sign in'}
+                ? '¿No tienes cuenta? Regístrate'
+                : '¿Ya tienes cuenta? Accede'}
             </button>
           </div>
           )}

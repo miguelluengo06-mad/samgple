@@ -41,7 +41,7 @@ export function SegmentedControl({ value, onChange, className }: SegmentedContro
           onClick={() => onChange(segment.value)}
           className={cn(
             'relative flex-1 px-3 py-1.5 text-xs font-medium transition-colors rounded-md',
-            'focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800',
+            'focus:outline-none focus:ring-2 focus:ring-olive-500 focus:ring-offset-2 focus:ring-offset-gray-800',
             value === segment.value ? 'text-white z-10' : 'text-gray-400 hover:text-white/60'
           )}
           title={segment.tooltip}

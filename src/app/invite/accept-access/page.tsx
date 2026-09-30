@@ -86,7 +86,7 @@ function AcceptAccessContent() {
   if (fetchError) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 max-w-md w-full mx-4 text-center">
+        <div className="card-liquid rounded-xl p-8 max-w-md w-full mx-4 text-center">
           <p className="text-red-400 text-sm">{fetchError}</p>
         </div>
       </div>
@@ -96,8 +96,8 @@ function AcceptAccessContent() {
   if (done) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 max-w-md w-full mx-4 text-center">
-          <p className="text-green-400 font-medium">Access granted!</p>
+        <div className="card-liquid rounded-xl p-8 max-w-md w-full mx-4 text-center">
+          <p className="text-olive-400 font-medium">Access granted!</p>
           <p className="text-white/50 text-sm mt-1">Redirecting to portal…</p>
         </div>
       </div>
@@ -106,7 +106,7 @@ function AcceptAccessContent() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="bg-gray-900 border border-gray-800 rounded-xl p-8 max-w-md w-full mx-4">
+      <div className="card-liquid rounded-xl p-8 max-w-md w-full mx-4">
         <h1 className="text-xl font-semibold text-white mb-2">You&apos;ve been invited</h1>
         <p className="text-white/60 text-sm mb-6">
           <span className="text-white font-medium">{invite?.inviterName}</span> has invited you to access their portal.
@@ -125,7 +125,7 @@ function AcceptAccessContent() {
         <button
           onClick={handleAccept}
           disabled={accepting}
-          className="w-full py-3 bg-white text-black rounded-lg font-medium hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 transition-colors flex items-center justify-center"
+          className="w-full py-3 bg-olive-500 text-black rounded-lg font-medium hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 transition-colors flex items-center justify-center"
         >
           {accepting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Accept invitation'}
         </button>

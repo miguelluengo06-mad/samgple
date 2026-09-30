@@ -45,61 +45,69 @@ export function usePortalRole(): PortalRoleInfo {
 
   const detect = useCallback(async () => {
     if (!user || !session?.access_token) return;
+    try {
+      const [ownedResult, membershipResult, clientCheckRes, teamResult, whoami] = await Promise.all([
+        // Check if user owns any pay-per-instance
+        supabase
+          .from('pay_per_instance_deployments')
+          .select('id')
+          .eq('user_id', user.id)
+          .is('deleted_at', null)
+          .limit(1),
+        // Check if user owns any membership instance
+        supabase
+          .from('n8n_instances')
+          .select('id')
+          .eq('user_id', user.id)
+          .neq('status', 'deleted')
+          .limit(1),
+        // Check if user is a client — uses server-side route to bypass client_instances RLS
+        fetch('/api/portal/client-check', {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        }).then(r => r.json()).catch(() => ({ isClient: false, allowFullAccess: false, instances: [] })),
+        // Check if user is a team member of an agency owner
+        supabase
+          .from('team_members')
+          .select('owner_id')
+          .eq('member_id', user.id)
+          .eq('status', 'accepted')
+          .limit(1),
+        // The agency owner is the earliest profile — they are an admin even before owning any instance
+        fetch('/api/portal/whoami', {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        }).then(r => r.json()).catch(() => ({ isOwner: false })),
+      ]);
 
-    const [ownedResult, membershipResult, clientCheckRes, teamResult] = await Promise.all([
-      // Check if user owns any pay-per-instance
-      supabase
-        .from('pay_per_instance_deployments')
-        .select('id')
-        .eq('user_id', user.id)
-        .is('deleted_at', null)
-        .limit(1),
-      // Check if user owns any membership instance
-      supabase
-        .from('n8n_instances')
-        .select('id')
-        .eq('user_id', user.id)
-        .neq('status', 'deleted')
-        .limit(1),
-      // Check if user is a client — uses server-side route to bypass client_instances RLS
-      fetch('/api/portal/client-check', {
-        headers: { Authorization: `Bearer ${session.access_token}` },
-      }).then(r => r.json()).catch(() => ({ isClient: false, allowFullAccess: false, instances: [] })),
-      // Check if user is a team member of an agency owner
-      supabase
-        .from('team_members')
-        .select('owner_id')
-        .eq('member_id', user.id)
-        .eq('status', 'accepted')
-        .limit(1),
-    ]);
+      const ownsInstances = (ownedResult.data?.length ?? 0) > 0 || (membershipResult.data?.length ?? 0) > 0;
+      const isTeamMember = (teamResult.data?.length ?? 0) > 0;
+      const clientLinks: { instance_id: string; invited_by: string }[] = clientCheckRes.instances || [];
+      const isClient = clientCheckRes.isClient === true;
 
-    const ownsInstances = (ownedResult.data?.length ?? 0) > 0 || (membershipResult.data?.length ?? 0) > 0;
-    const isTeamMember = (teamResult.data?.length ?? 0) > 0;
-    const clientLinks: { instance_id: string; invited_by: string }[] = clientCheckRes.instances || [];
-    const isClient = clientCheckRes.isClient === true;
+      let role: PortalRole = 'free';
+      let agencyId: string | null = null;
+      const clientInstanceIds: string[] = [];
+      let allowFullAccess = false;
 
-    let role: PortalRole = 'free';
-    let agencyId: string | null = null;
-    const clientInstanceIds: string[] = [];
-    let allowFullAccess = false;
-
-    if (ownsInstances || isTeamMember) {
-      // User owns instances or is a team member of an agency — treat as agency
-      role = 'agency';
-    } else if (isClient) {
-      role = 'client';
-      agencyId = clientLinks[0].invited_by;
-      for (const link of clientLinks) {
-        clientInstanceIds.push(link.instance_id);
+      if (whoami?.isOwner === true || ownsInstances || isTeamMember) {
+        // Agency owner, or someone who owns instances / is a team member of an agency — treat as agency
+        role = 'agency';
+      } else if (isClient) {
+        role = 'client';
+        agencyId = clientLinks[0].invited_by;
+        for (const link of clientLinks) {
+          clientInstanceIds.push(link.instance_id);
+        }
+        allowFullAccess = clientCheckRes.allowFullAccess === true;
       }
-      allowFullAccess = clientCheckRes.allowFullAccess === true;
-    }
 
-    const result = { role, agencyId, clientInstanceIds, allowFullAccess };
-    setInfo(result);
-    setCache(result);
-    setLoading(false);
+      const result = { role, agencyId, clientInstanceIds, allowFullAccess };
+      setInfo(result);
+      setCache(result);
+    } catch (err) {
+      console.error('Portal role detection failed:', err);
+    } finally {
+      setLoading(false);
+    }
   }, [user]);
 
   useEffect(() => {

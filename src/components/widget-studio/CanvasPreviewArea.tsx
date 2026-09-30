@@ -929,7 +929,7 @@ export function CanvasPreviewArea({
 
         {/* Button Preview */}
         {widgetType === 'button' && (
-          <div id={`widget-${widgetId}`} className="widget-container bg-gray-900/50 border border-gray-800 rounded-xl p-12 flex items-center justify-center">
+          <div id={`widget-${widgetId}`} className="widget-container card-liquid rounded-xl p-12 flex items-center justify-center">
             <button
               className={`font-medium transition-all shadow-lg cursor-pointer ${
                 chatbotConfig.buttonSize === 'small' ? 'px-4 py-2 text-sm' :

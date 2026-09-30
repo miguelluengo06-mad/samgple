@@ -74,8 +74,21 @@ export default function ClientsLayout({ children }: { children: React.ReactNode 
   const [agencyServices, setAgencyServices] = useState<{ id: string; name: string; phone: string | null }[]>([]);
   const [loading, setLoading] = useState(true);
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [invitePrefill, setInvitePrefill] = useState({ name: '', email: '' });
   const [sending, setSending] = useState(false);
   const [statusFilter, setStatusFilter] = useState('all');
+
+  // Deep-link support: /portal/clients?inviteName=X&inviteEmail=Y opens the
+  // invite modal pre-filled — used to convert a won lead into a client.
+  useEffect(() => {
+    const inviteName = searchParams?.get('inviteName');
+    if (inviteName) {
+      setInvitePrefill({ name: inviteName, email: searchParams?.get('inviteEmail') || '' });
+      setInviteOpen(true);
+      router.replace('/portal/clients');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Live hosting status (instanceId → deployment status)
   const [liveStatus, setLiveStatus] = useState<Record<string, string>>({});
@@ -290,7 +303,7 @@ export default function ClientsLayout({ children }: { children: React.ReactNode 
   // Instance view - redirect to main portal
   if (isInstanceView) {
     if (activeInstanceId) {
-      router.replace(`/portal?instance=${activeInstanceId}`);
+      router.replace(`/portal/manage?instance=${activeInstanceId}`);
     }
     return null;
   }
@@ -387,7 +400,7 @@ export default function ClientsLayout({ children }: { children: React.ReactNode 
           }}
           onFocus={() => setClientDropdownOpen(true)}
           placeholder="Search clients..."
-          className="w-full pl-9 pr-7 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-base text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none"
+          className="w-full pl-9 pr-7 py-2 card-liquid rounded-lg text-base text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none"
         />
         {clientSearch && (
           <button
@@ -399,7 +412,7 @@ export default function ClientsLayout({ children }: { children: React.ReactNode 
         )}
       </div>
       {clientDropdownOpen && (
-        <div className="absolute top-full mt-1 left-0 right-0 z-50 bg-gray-900 border border-gray-800 rounded-lg shadow-xl overflow-hidden">
+        <div className="absolute top-full mt-1 left-0 right-0 z-50 card-liquid rounded-lg shadow-xl overflow-hidden">
           <div className="max-h-60 overflow-y-auto py-1">
             {filteredClients.length === 0 ? (
               <p className="px-3 py-3 text-sm text-white/40">No clients found</p>
@@ -493,7 +506,7 @@ export default function ClientsLayout({ children }: { children: React.ReactNode 
                 {ClientSearchDropdown}
                 <button
                   onClick={() => setInviteOpen(true)}
-                  className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors bg-white text-black hover:bg-gray-100 cursor-pointer"
+                  className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors bg-olive-500 text-black hover:bg-olive-400 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   Add Client
@@ -518,7 +531,7 @@ export default function ClientsLayout({ children }: { children: React.ReactNode 
               <span className="text-white/20 shrink-0">/</span>
             </>
           )}
-          <h1 className="text-lg font-semibold text-white truncate">{headerTitle}</h1>
+          <h1 className="text-lg font-semibold text-white uppercase tracking-wide truncate">{headerTitle}</h1>
         </div>
 
         {/* Content */}
@@ -527,7 +540,7 @@ export default function ClientsLayout({ children }: { children: React.ReactNode 
             <div className="max-w-4xl mx-auto p-6 space-y-4">
               <div className="space-y-3">
                 {[1, 2].map((i) => (
-                  <div key={i} className="bg-gray-900/50 border border-gray-800 rounded-lg p-5 space-y-3">
+                  <div key={i} className="card-liquid rounded-lg p-5 space-y-3">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-gray-800/30 rounded-full animate-pulse" />
                       <div className="flex-1 space-y-1.5">
@@ -549,11 +562,14 @@ export default function ClientsLayout({ children }: { children: React.ReactNode 
         isOpen={inviteOpen}
         onClose={() => {
           setInviteOpen(false);
+          setInvitePrefill({ name: '', email: '' });
           fetchClients();
         }}
         onInvite={handleInvite}
         isSending={sending}
         agencyInstances={agencyInstances}
+        initialName={invitePrefill.name}
+        initialEmail={invitePrefill.email}
       />
     </>
     </ClientsContext.Provider>

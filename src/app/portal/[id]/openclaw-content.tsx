@@ -248,7 +248,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
       {/* Sub-header — clickable URLs with copy buttons */}
       <div className="border-b border-gray-800 bg-black px-6 py-2.5 flex items-center justify-end gap-3">
         {/* Client Portal URL */}
-        <div className="flex items-center bg-gray-900/50 border border-gray-800 hover:border-gray-700 rounded-lg transition-colors overflow-hidden">
+        <div className="flex items-center card-liquid hover:border-gray-700 rounded-lg transition-colors overflow-hidden">
           <a
             href={`/portal/${instance.id}`}
             target="_blank"
@@ -267,13 +267,13 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
             className="px-2 py-2 border-l border-gray-800 hover:bg-gray-800/30 text-gray-400 hover:text-gray-200 transition-colors shrink-0"
             title="Copy Portal URL"
           >
-            {portalCopied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+            {portalCopied ? <Check className="w-3.5 h-3.5 text-olive-400" /> : <Copy className="w-3.5 h-3.5" />}
           </button>
         </div>
 
         {/* Instance URL */}
         {instance.instance_url && (
-          <div className="flex items-center bg-gray-900/50 border border-gray-800 hover:border-gray-700 rounded-lg transition-colors overflow-hidden">
+          <div className="flex items-center card-liquid hover:border-gray-700 rounded-lg transition-colors overflow-hidden">
             <a
               href={instance.gateway_token ? `${instance.instance_url}#token=${instance.gateway_token}` : instance.instance_url}
               target="_blank"
@@ -292,7 +292,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
               className="px-2 py-2 border-l border-gray-800 hover:bg-gray-800/30 text-gray-400 hover:text-gray-200 transition-colors shrink-0"
               title="Copy Instance URL"
             >
-              {instanceCopied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {instanceCopied ? <Check className="w-3.5 h-3.5 text-olive-400" /> : <Copy className="w-3.5 h-3.5" />}
             </button>
           </div>
         )}
@@ -303,7 +303,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
         <div className="px-6 py-6 max-w-4xl mx-auto space-y-6">
           {/* Feedback */}
           {feedback && (
-            <div className={`p-3 rounded-lg text-sm ${feedback.type === 'error' ? 'bg-red-900/20 border border-red-800 text-red-400' : 'bg-green-900/20 border border-green-800 text-green-400'}`}>
+            <div className={`p-3 rounded-lg text-sm ${feedback.type === 'error' ? 'bg-red-900/20 border border-red-800 text-red-400' : 'bg-olive-900/20 border border-olive-800 text-olive-400'}`}>
               {feedback.msg}
             </div>
           )}
@@ -311,7 +311,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
           {activeTab === 'manage' && (
             <>
               {/* Model Config */}
-              <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-4">
+              <div className="card-liquid rounded-lg p-6 space-y-4">
                 <div className="flex items-center gap-2">
                   <Brain className="w-4 h-4 text-white/60" />
                   <h3 className="text-white text-sm font-semibold">Default Model</h3>
@@ -334,14 +334,14 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
                         value={model}
                         onChange={e => setModel(e.target.value)}
                         placeholder={modelsLoading ? 'Loading models...' : 'anthropic/claude-sonnet-4-20250514'}
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm"
+                        className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
                       />
                     )}
                   </div>
                   <button
                     onClick={saveModel}
                     disabled={savingModel || !model.trim()}
-                    className="flex items-center gap-2 px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                    className="flex items-center gap-2 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                   >
                     {savingModel ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
                     Save
@@ -350,12 +350,12 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
               </div>
 
               {/* Channels */}
-              <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-4">
+              <div className="card-liquid rounded-lg p-6 space-y-4">
                 <div className="flex items-center gap-2">
                   <Radio className="w-4 h-4 text-white/60" />
                   <h3 className="text-white text-sm font-semibold">Channels</h3>
                   {channelCount > 0 && (
-                    <span className="px-2 py-0.5 text-sm rounded-full bg-green-500/10 text-green-400 border border-green-500/20">
+                    <span className="px-2 py-0.5 text-sm rounded-full bg-olive-500/10 text-olive-400 border border-olive-500/20">
                       {channelCount} connected
                     </span>
                   )}
@@ -378,7 +378,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
                         value={telegramToken}
                         onChange={e => setTelegramToken(e.target.value)}
                         placeholder="Paste bot token from @BotFather"
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm"
+                        className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
                       />
                     </div>
                   </div>
@@ -396,7 +396,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
                         value={discordToken}
                         onChange={e => setDiscordToken(e.target.value)}
                         placeholder="Paste token from Discord Developer Portal"
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm"
+                        className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
                       />
                     </div>
                   </div>
@@ -415,7 +415,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
                           value={slackBotToken}
                           onChange={e => setSlackBotToken(e.target.value)}
                           placeholder="xoxb-..."
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
                         />
                       </div>
                       <div>
@@ -425,7 +425,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
                           value={slackAppToken}
                           onChange={e => setSlackAppToken(e.target.value)}
                           placeholder="xapp-..."
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
                         />
                       </div>
                     </div>
@@ -434,7 +434,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
                 <button
                   onClick={saveChannels}
                   disabled={savingChannels}
-                  className="flex items-center gap-2 px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {savingChannels ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
                   Save Channels
@@ -442,7 +442,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
               </div>
 
               {/* Gateway Token */}
-              <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-4">
+              <div className="card-liquid rounded-lg p-6 space-y-4">
                 <div className="flex items-center gap-2">
                   <KeyRound className="w-4 h-4 text-white/60" />
                   <h3 className="text-white text-sm font-semibold">Gateway Token</h3>
@@ -470,7 +470,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
                         }}
                         className="p-1.5 rounded-lg hover:bg-gray-700 text-gray-400 hover:text-gray-200 transition-colors shrink-0"
                       >
-                        {tokenCopied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+                        {tokenCopied ? <Check className="w-4 h-4 text-olive-400" /> : <Copy className="w-4 h-4" />}
                       </button>
                     </div>
                     <p className="text-sm text-white/30">
@@ -487,7 +487,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
           )}
 
           {activeTab === 'diagnostics' && (
-            <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-4">
+            <div className="card-liquid rounded-lg p-6 space-y-4">
               <div className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-white/60" />
                 <h3 className="text-white text-sm font-semibold">Diagnostics</h3>
@@ -505,7 +505,7 @@ export function OpenClawContent({ instanceId, externalTab, onTabChange }: Props)
                 <p className="text-sm text-white/30">Instance must be online to run diagnostics.</p>
               )}
               {doctorOutput && (
-                <pre className="bg-gray-900/50 border border-gray-800 rounded-lg p-4 text-sm text-green-400 overflow-x-auto whitespace-pre-wrap max-h-64 overflow-y-auto font-mono">
+                <pre className="card-liquid rounded-lg p-4 text-sm text-olive-400 overflow-x-auto whitespace-pre-wrap max-h-64 overflow-y-auto font-mono">
                   {doctorOutput}
                 </pre>
               )}

@@ -271,10 +271,10 @@ export function BackupSection({
       >
         <div className="flex items-center gap-3 !cursor-pointer">
           <div className="p-2 bg-orange-900/30 rounded-lg !cursor-pointer">
-            <Download className="w-5 h-5 text-orange-400 !cursor-pointer" />
+            <Download className="w-5 h-5 text-olive-400 !cursor-pointer" />
           </div>
           <div className="text-left !cursor-pointer">
-            <p className="text-orange-400 text-sm font-medium !cursor-pointer">Database Backups</p>
+            <p className="text-olive-400 text-sm font-medium !cursor-pointer">Database Backups</p>
             <p className="text-white/50 text-xs !cursor-pointer">Automatic backups {getIntervalText()}</p>
           </div>
         </div>
@@ -292,9 +292,9 @@ export function BackupSection({
           )}
 
           {success && (
-            <div className="bg-green-900/20 border border-green-800 rounded-lg p-3 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
-              <p className="text-green-400 text-sm">{success}</p>
+            <div className="bg-olive-900/20 border border-olive-800 rounded-lg p-3 flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-olive-400 flex-shrink-0" />
+              <p className="text-olive-400 text-sm">{success}</p>
             </div>
           )}
 
@@ -352,7 +352,7 @@ export function BackupSection({
                       createBackup();
                     }}
                     disabled={creating || restoring !== null}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
                   >
                     {creating ? (
                       <>
@@ -404,7 +404,7 @@ export function BackupSection({
                   All Backups ({allCompletedBackups.length})
                 </p>
                 {restorableBackups.length > 0 && (
-                  <p className="text-green-400/60 text-xs">
+                  <p className="text-olive-400/60 text-xs">
                     {restorableBackups.length} restorable
                   </p>
                 )}
@@ -414,7 +414,7 @@ export function BackupSection({
                   <div key={backup.id} className={`p-3 flex items-center justify-between ${backup.fileExists ? 'hover:bg-gray-800/30' : 'opacity-60'}`}>
                     <div className="flex items-center gap-2">
                       {backup.fileExists ? (
-                        <CheckCircle className="w-4 h-4 text-green-400/60" />
+                        <CheckCircle className="w-4 h-4 text-olive-400/60" />
                       ) : (
                         <XCircle className="w-4 h-4 text-gray-500" />
                       )}

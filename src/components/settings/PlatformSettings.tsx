@@ -203,7 +203,7 @@ export function PlatformSettings() {
     return (
       <div className="space-y-6">
         {[1, 2].map((i) => (
-          <div key={i} className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+          <div key={i} className="card-liquid rounded-lg p-6">
             <div className="animate-pulse space-y-4">
               <div className="h-6 bg-gray-800/30 rounded w-1/3" />
               <div className="h-10 bg-gray-800/30 rounded" />
@@ -221,7 +221,7 @@ export function PlatformSettings() {
       <div
         className={`flex items-center gap-2 p-3 rounded-lg text-sm ${
           message.type === 'success'
-            ? 'bg-green-900/20 border border-green-800 text-green-400'
+            ? 'bg-olive-900/20 border border-olive-800 text-olive-400'
             : 'bg-red-900/20 border border-red-800 text-red-400'
         }`}
       >
@@ -293,7 +293,7 @@ export function PlatformSettings() {
             value={value}
             onChange={(e) => updateField(field, e.target.value)}
             placeholder={placeholder}
-            className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white pr-12"
+            className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 pr-12"
           />
           {isSecret && (
             <button
@@ -315,7 +315,7 @@ export function PlatformSettings() {
       <button
         onClick={() => handleSave(section)}
         disabled={isSaving}
-        className="px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors"
+        className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors"
       >
         {isSaving ? (
           <span className="flex items-center gap-2">
@@ -335,7 +335,7 @@ export function PlatformSettings() {
       {/* FlowEngine API */}
       <section id="flowengine" className="scroll-mt-24">
         <h2 className="text-xl font-semibold text-white mb-4">FlowEngine API</h2>
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="card-liquid rounded-lg p-6">
           <div className="flex items-center gap-2 mb-4">
             <Key className="h-5 w-5 text-gray-400" />
             <h3 className="text-lg font-medium text-white">Connection</h3>
@@ -397,7 +397,7 @@ export function PlatformSettings() {
       {/* AI Provider */}
       <section id="ai" className="scroll-mt-24">
         <h2 className="text-xl font-semibold text-white mb-4">AI Provider</h2>
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="card-liquid rounded-lg p-6">
           <div className="flex items-center gap-2 mb-4">
             <Brain className="h-5 w-5 text-gray-400" />
             <h3 className="text-lg font-medium text-white">Connection</h3>

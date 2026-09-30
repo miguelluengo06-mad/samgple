@@ -71,7 +71,7 @@ function ColorRow({
         widgetColors={widgetColors}
         trigger={
           <button
-            className="w-8 h-8 rounded-full border-2 border-gray-600 hover:border-gray-400 hover:scale-110 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900"
+            className="w-8 h-8 rounded-full border-2 border-gray-600 hover:border-gray-400 hover:scale-110 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-olive-500 focus:ring-offset-2 focus:ring-offset-gray-900"
             style={{ background: color }}
             aria-label={`Change ${label} color, currently ${color}`}
           />
@@ -111,7 +111,7 @@ function Toggle({
         aria-label={`${label}: ${checked ? 'enabled' : 'disabled'}`}
         onClick={() => onChange(!checked)}
         onKeyDown={handleKeyDown}
-        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 ${
+        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-olive-500 focus:ring-offset-2 focus:ring-offset-gray-900 ${
           checked ? 'bg-white' : 'bg-gray-700'
         }`}
       >
@@ -153,7 +153,7 @@ function Slider({
         max={max}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-white focus:outline-none focus:ring-2 focus:ring-white"
+        className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-white focus:outline-none focus:ring-2 focus:ring-olive-500"
         aria-label={`${label}: ${value}${unit}`}
       />
     </div>
@@ -238,7 +238,7 @@ function GradientInput({
           onClick={toggleGradient}
           className={`text-xs px-2 py-1 rounded transition-colors ${
             showGradient
-              ? 'bg-white text-black'
+              ? 'bg-olive-500 text-black'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
         >
@@ -255,7 +255,7 @@ function GradientInput({
             widgetColors={widgetColors}
             trigger={
               <button
-                className="w-10 h-10 rounded-full border-2 border-gray-600 hover:border-gray-400 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg"
+                className="w-10 h-10 rounded-full border-2 border-gray-600 hover:border-gray-400 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-olive-500 focus:ring-offset-2 focus:ring-offset-gray-900 shadow-lg"
                 style={{ background: color1 }}
                 aria-label={`${label} color: ${color1}`}
               />
@@ -284,7 +284,7 @@ function GradientInput({
                 widgetColors={widgetColors}
                 trigger={
                   <button
-                    className="w-10 h-10 rounded-full border-2 border-gray-600 hover:border-gray-400 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-white shadow-lg"
+                    className="w-10 h-10 rounded-full border-2 border-gray-600 hover:border-gray-400 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-olive-500 shadow-lg"
                     style={{ background: color1 }}
                     aria-label={`Gradient start color: ${color1}`}
                   />
@@ -300,7 +300,7 @@ function GradientInput({
                 widgetColors={widgetColors}
                 trigger={
                   <button
-                    className="w-10 h-10 rounded-full border-2 border-gray-600 hover:border-gray-400 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-white shadow-lg"
+                    className="w-10 h-10 rounded-full border-2 border-gray-600 hover:border-gray-400 hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-olive-500 shadow-lg"
                     style={{ background: color2 }}
                     aria-label={`Gradient end color: ${color2}`}
                   />
@@ -315,7 +315,7 @@ function GradientInput({
             <button
               onClick={() => handleTypeChange('linear')}
               className={`flex-1 py-1.5 text-xs rounded transition-colors ${
-                gradientType === 'linear' ? 'bg-white text-black' : 'bg-gray-700 text-gray-300'
+                gradientType === 'linear' ? 'bg-olive-500 text-black' : 'bg-gray-700 text-gray-300'
               }`}
             >
               Linear
@@ -323,7 +323,7 @@ function GradientInput({
             <button
               onClick={() => handleTypeChange('radial')}
               className={`flex-1 py-1.5 text-xs rounded transition-colors ${
-                gradientType === 'radial' ? 'bg-white text-black' : 'bg-gray-700 text-gray-300'
+                gradientType === 'radial' ? 'bg-olive-500 text-black' : 'bg-gray-700 text-gray-300'
               }`}
             >
               Radial
@@ -661,7 +661,7 @@ export function ColorsPanel({
             <button
               key={theme.id}
               onClick={() => updateStyles(theme.colors)}
-              className="p-2 bg-gray-800/30 border border-gray-700 rounded-lg hover:bg-gray-800 hover:border-gray-600 transition-all focus:outline-none focus:ring-2 focus:ring-white"
+              className="p-2 bg-gray-800/30 border border-gray-700 rounded-lg hover:bg-gray-800 hover:border-gray-600 transition-all focus:outline-none focus:ring-2 focus:ring-olive-500"
               aria-label={`Apply ${theme.name} theme`}
             >
               <div className="h-8 rounded overflow-hidden border border-gray-700 mb-1.5" style={{ background: theme.colors.backgroundColor }}>
@@ -746,7 +746,7 @@ export function ColorsPanel({
             <button
               key={theme.id}
               onClick={() => updateStyles(theme.colors)}
-              className="p-2 bg-gray-800/30 border border-gray-700 rounded-lg hover:bg-gray-800 hover:border-gray-600 transition-all focus:outline-none focus:ring-2 focus:ring-white"
+              className="p-2 bg-gray-800/30 border border-gray-700 rounded-lg hover:bg-gray-800 hover:border-gray-600 transition-all focus:outline-none focus:ring-2 focus:ring-olive-500"
               aria-label={`Apply ${theme.name} theme`}
             >
               <div className="h-6 rounded mx-auto mb-1.5" style={{ background: theme.colors.primaryColor, width: '80%' }} />
@@ -794,7 +794,7 @@ export function ColorsPanel({
             <button
               key={theme.id}
               onClick={() => applyTheme(theme)}
-              className="p-2 bg-gray-800/30 border border-gray-700 rounded-lg hover:bg-gray-800 hover:border-gray-600 transition-all focus:outline-none focus:ring-2 focus:ring-white"
+              className="p-2 bg-gray-800/30 border border-gray-700 rounded-lg hover:bg-gray-800 hover:border-gray-600 transition-all focus:outline-none focus:ring-2 focus:ring-olive-500"
               tabIndex={0}
               aria-label={`Apply ${theme.name} theme`}
             >
@@ -1136,7 +1136,7 @@ export function ColorsPanel({
                       onClick={() => updateConfig({ userAvatarIcon: avatarIcon.id, userAvatarCustom: undefined })}
                       className={`p-2 rounded-lg transition-all flex flex-col items-center gap-1 ${
                         isSelected
-                          ? 'bg-white text-black ring-2 ring-white'
+                          ? 'bg-olive-500 text-black ring-2 ring-white'
                           : 'bg-gray-800 text-white hover:bg-gray-700'
                       }`}
                       title={avatarIcon.label}
@@ -1161,7 +1161,7 @@ export function ColorsPanel({
                       });
                     }}
                     placeholder="🚀 or https://..."
-                    className="flex-1 px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                    className="flex-1 px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                   />
                   {chatbotConfig.userAvatarCustom && (
                     <button
@@ -1198,7 +1198,7 @@ export function ColorsPanel({
                       onClick={() => updateConfig({ botAvatarIcon: avatarIcon.id, botAvatarCustom: undefined })}
                       className={`p-2 rounded-lg transition-all flex flex-col items-center gap-1 ${
                         isSelected
-                          ? 'bg-white text-black ring-2 ring-white'
+                          ? 'bg-olive-500 text-black ring-2 ring-white'
                           : 'bg-gray-800 text-white hover:bg-gray-700'
                       }`}
                       title={avatarIcon.label}
@@ -1223,7 +1223,7 @@ export function ColorsPanel({
                       });
                     }}
                     placeholder="🤖 or https://..."
-                    className="flex-1 px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                    className="flex-1 px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                   />
                   {chatbotConfig.botAvatarCustom && (
                     <button

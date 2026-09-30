@@ -266,7 +266,7 @@ export default function UIStudioLayout({ children }: { children: React.ReactNode
                 )}
                 <button
                   onClick={() => router.push('/portal/ui-studio/editor?editor=new')}
-                  className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 bg-white text-black hover:bg-gray-100 rounded-lg text-xs font-medium transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-xs font-medium transition-colors cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   New
@@ -280,7 +280,7 @@ export default function UIStudioLayout({ children }: { children: React.ReactNode
         {/* Header bar */}
         <div className="flex-shrink-0 border-b border-gray-800 px-6 h-[64px] flex items-center">
           <div className="flex items-center gap-3 min-w-0">
-            <h1 className="text-lg font-semibold text-white truncate">UI Embeds</h1>
+            <h1 className="text-lg font-semibold text-white uppercase tracking-wide truncate">UI Embeds</h1>
           </div>
         </div>
 
@@ -288,7 +288,7 @@ export default function UIStudioLayout({ children }: { children: React.ReactNode
         {showSkeleton ? (
           <div className="flex-1 overflow-y-auto">
             <div className="max-w-4xl mx-auto p-6 space-y-4">
-              <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-4">
+              <div className="card-liquid rounded-lg p-6 space-y-4">
                 <div className="h-5 w-32 bg-gray-800/30 rounded animate-pulse" />
                 <div className="h-24 bg-gray-800/30 rounded-lg animate-pulse" />
                 <div className="h-10 w-40 bg-gray-800/30 rounded-lg animate-pulse" />

@@ -120,7 +120,7 @@ export function GradientBuilder({
           onClick={() => handleModeChange('solid')}
           className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
             mode === 'solid'
-              ? 'bg-white text-black'
+              ? 'bg-olive-500 text-black'
               : 'bg-gray-800/30 text-gray-400 hover:text-white border border-gray-700'
           }`}
         >
@@ -130,7 +130,7 @@ export function GradientBuilder({
           onClick={() => handleModeChange('gradient')}
           className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
             mode === 'gradient'
-              ? 'bg-white text-black'
+              ? 'bg-olive-500 text-black'
               : 'bg-gray-800/30 text-gray-400 hover:text-white border border-gray-700'
           }`}
         >

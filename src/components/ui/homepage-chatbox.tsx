@@ -128,7 +128,7 @@ export function HomepageChatbox({
                 'bg-transparent',
                 'border border-white/20 rounded-xl',
                 'text-white text-base',
-                'focus:outline-none focus:border-white/40',
+                'focus:outline-none focus:border-olive-500/40',
                 'placeholder:text-white/40',
                 'min-h-[100px]',
                 'transition-all duration-200',

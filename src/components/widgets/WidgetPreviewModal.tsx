@@ -150,7 +150,7 @@ export default function WidgetPreviewModal({
             onClick={onClose}
           >
             <div
-              className="w-full h-full max-w-5xl bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden flex flex-col"
+              className="w-full h-full max-w-5xl card-liquid rounded-2xl overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -166,7 +166,7 @@ export default function WidgetPreviewModal({
                       {widget.workflow_id && (
                         <>
                           <span className="text-gray-700">·</span>
-                          <span className="flex items-center gap-1 text-xs text-green-400">
+                          <span className="flex items-center gap-1 text-xs text-olive-400">
                             <Zap className="h-2.5 w-2.5" />
                             {widget.workflow_name || 'Linked'}
                           </span>
@@ -198,7 +198,7 @@ export default function WidgetPreviewModal({
                     <div className="p-4 border-b border-gray-800">
                       <div className="flex items-center justify-between p-3 bg-gray-800/30 border border-gray-700/50 rounded-lg">
                         <div className="flex items-center gap-2">
-                          <Power className={cn('h-4 w-4', widget.is_active ? 'text-green-400' : 'text-gray-500')} />
+                          <Power className={cn('h-4 w-4', widget.is_active ? 'text-olive-400' : 'text-gray-500')} />
                           <span className="text-sm text-gray-300">Component Status</span>
                         </div>
                         <button
@@ -235,7 +235,7 @@ export default function WidgetPreviewModal({
                         </span>
                         <button
                           onClick={() => copyToClipboard(widgetLink, 'link')}
-                          className={cn('px-2 py-1.5 rounded text-xs transition-all', copiedField === 'link' ? 'bg-green-500/20 text-green-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700')}
+                          className={cn('px-2 py-1.5 rounded text-xs transition-all', copiedField === 'link' ? 'bg-green-500/20 text-olive-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700')}
                         >
                           {copiedField === 'link' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                         </button>
@@ -262,7 +262,7 @@ export default function WidgetPreviewModal({
                             </pre>
                             <button
                               onClick={() => copyToClipboard(iframeCode, 'iframe')}
-                              className={cn('px-2 py-1.5 rounded text-xs transition-all self-start', copiedField === 'iframe' ? 'bg-green-500/20 text-green-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700')}
+                              className={cn('px-2 py-1.5 rounded text-xs transition-all self-start', copiedField === 'iframe' ? 'bg-green-500/20 text-olive-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700')}
                             >
                               {copiedField === 'iframe' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                             </button>
@@ -291,7 +291,7 @@ export default function WidgetPreviewModal({
                             </pre>
                             <button
                               onClick={() => copyToClipboard(jsCode, 'js')}
-                              className={cn('px-2 py-1.5 rounded text-xs transition-all self-start', copiedField === 'js' ? 'bg-green-500/20 text-green-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700')}
+                              className={cn('px-2 py-1.5 rounded text-xs transition-all self-start', copiedField === 'js' ? 'bg-green-500/20 text-olive-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700')}
                             >
                               {copiedField === 'js' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                             </button>
@@ -320,7 +320,7 @@ export default function WidgetPreviewModal({
                             </pre>
                             <button
                               onClick={() => copyToClipboard(htmlLink, 'html')}
-                              className={cn('px-2 py-1.5 rounded text-xs transition-all self-start', copiedField === 'html' ? 'bg-green-500/20 text-green-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700')}
+                              className={cn('px-2 py-1.5 rounded text-xs transition-all self-start', copiedField === 'html' ? 'bg-green-500/20 text-olive-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700')}
                             >
                               {copiedField === 'html' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
                             </button>

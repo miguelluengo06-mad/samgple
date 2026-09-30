@@ -126,7 +126,7 @@ export default function WorkflowManagementCard({
           )}>
             <Zap className={cn(
               'h-5 w-5',
-              workflow.active ? 'text-green-400' : 'text-gray-500'
+              workflow.active ? 'text-olive-400' : 'text-gray-500'
             )} />
           </div>
           <div className="flex-1 min-w-0">
@@ -160,7 +160,7 @@ export default function WorkflowManagementCard({
             <div className="flex items-center gap-2 mt-0.5">
               <span className={cn(
                 'text-xs',
-                workflow.active ? 'text-green-400' : 'text-gray-500'
+                workflow.active ? 'text-olive-400' : 'text-gray-500'
               )}>
                 {workflow.active ? 'Active' : 'Inactive'}
               </span>
@@ -299,7 +299,7 @@ export default function WorkflowManagementCard({
                         <button
                           key={cred.type}
                           onClick={() => onConfigureCredential(cred, workflow)}
-                          className="flex items-center gap-1 px-2 py-1 bg-green-900/20 border border-green-800/50 rounded text-xs text-green-400 hover:bg-green-900/30 hover:border-green-700/50 transition-colors whitespace-nowrap cursor-pointer"
+                          className="flex items-center gap-1 px-2 py-1 bg-olive-900/20 border border-olive-800/50 rounded text-xs text-olive-400 hover:bg-green-900/30 hover:border-green-700/50 transition-colors whitespace-nowrap cursor-pointer"
                           title={`${cred.name} - Click to configure`}
                         >
                           <CredentialIcon type={cred.type.replace(/Api$|OAuth2Api$/i, '').toLowerCase()} fallback="none" className="h-3 w-3" />
@@ -312,7 +312,7 @@ export default function WorkflowManagementCard({
                     return (
                       <div
                         key={cred.type}
-                        className="flex items-center gap-1 px-2 py-1 bg-green-900/20 border border-green-800/50 rounded text-xs text-green-400 whitespace-nowrap"
+                        className="flex items-center gap-1 px-2 py-1 bg-olive-900/20 border border-olive-800/50 rounded text-xs text-olive-400 whitespace-nowrap"
                         title={`${cred.name} - Connected`}
                       >
                         <CredentialIcon type={cred.type.replace(/Api$|OAuth2Api$/i, '').toLowerCase()} fallback="none" className="h-3 w-3" />

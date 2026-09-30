@@ -147,7 +147,7 @@ export function UserProfileEditor() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-white placeholder-white/30 focus:outline-none focus:border-white/30 transition-colors"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-white placeholder-white/30 focus:outline-none focus:border-olive-500/30 transition-colors"
                   required
                 />
               </div>
@@ -161,7 +161,7 @@ export function UserProfileEditor() {
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-white placeholder-white/30 focus:outline-none focus:border-white/30 transition-colors"
+                  className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-white placeholder-white/30 focus:outline-none focus:border-olive-500/30 transition-colors"
                   placeholder="Your name"
                 />
               </div>
@@ -170,7 +170,7 @@ export function UserProfileEditor() {
             <button
               type="submit"
               disabled={loading}
-              className="px-4 py-2 bg-white text-black hover:bg-white/90 disabled:bg-white/50 disabled:cursor-not-allowed rounded text-sm font-medium transition-colors"
+              className="px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-white/50 disabled:cursor-not-allowed rounded text-sm font-medium transition-colors"
             >
               {loading ? 'Saving...' : 'Save Profile'}
             </button>
@@ -190,7 +190,7 @@ export function UserProfileEditor() {
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-white placeholder-white/30 focus:outline-none focus:border-white/30 transition-colors"
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-white placeholder-white/30 focus:outline-none focus:border-olive-500/30 transition-colors"
                     placeholder="Min. 6 characters"
                     minLength={6}
                   />
@@ -205,7 +205,7 @@ export function UserProfileEditor() {
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-white placeholder-white/30 focus:outline-none focus:border-white/30 transition-colors"
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded text-sm text-white placeholder-white/30 focus:outline-none focus:border-olive-500/30 transition-colors"
                     placeholder="Confirm"
                     minLength={6}
                   />
@@ -215,7 +215,7 @@ export function UserProfileEditor() {
               <button
                 type="submit"
                 disabled={loading || !newPassword || !confirmPassword}
-                className="px-4 py-2 bg-white text-black hover:bg-white/90 disabled:bg-white/50 disabled:cursor-not-allowed rounded text-sm font-medium transition-colors"
+                className="px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-white/50 disabled:cursor-not-allowed rounded text-sm font-medium transition-colors"
               >
                 {loading ? 'Updating...' : 'Update Password'}
               </button>

@@ -1244,7 +1244,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
         {/* Content skeleton */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {[1, 2].map(i => (
-            <div key={i} className="bg-gray-900/50 border border-gray-800 rounded-lg p-5 space-y-3">
+            <div key={i} className="card-liquid rounded-lg p-5 space-y-3">
               <div className="h-4 w-24 bg-gray-800/30 rounded animate-pulse" />
               <div className="space-y-2">
                 {[1, 2].map(j => (
@@ -1269,7 +1269,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
   }
 
   const handleOpenInstance = (instanceId: string) => {
-    router.push(`/portal?instance=${instanceId}`);
+    router.push(`/portal/manage?instance=${instanceId}`);
   };
 
   // Get instances not already assigned to this client (for assign modal)
@@ -1279,9 +1279,9 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
 
   // Instance status tags (for instance rows in overview)
   const instanceStatusTags: Record<string, { label: string; badgeClass: string; dotColor: string }> = {
-    active: { label: 'Running', badgeClass: 'bg-green-500/10 text-green-400 border border-green-500/20', dotColor: 'bg-green-400' },
-    running: { label: 'Running', badgeClass: 'bg-green-500/10 text-green-400 border border-green-500/20', dotColor: 'bg-green-400' },
-    healthy: { label: 'Running', badgeClass: 'bg-green-500/10 text-green-400 border border-green-500/20', dotColor: 'bg-green-400' },
+    active: { label: 'Running', badgeClass: 'bg-olive-500/10 text-olive-400 border border-olive-500/20', dotColor: 'bg-olive-400' },
+    running: { label: 'Running', badgeClass: 'bg-olive-500/10 text-olive-400 border border-olive-500/20', dotColor: 'bg-olive-400' },
+    healthy: { label: 'Running', badgeClass: 'bg-olive-500/10 text-olive-400 border border-olive-500/20', dotColor: 'bg-olive-400' },
     deploying: { label: 'Deploying', badgeClass: 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20', dotColor: 'bg-yellow-400' },
     error: { label: 'Error', badgeClass: 'bg-red-500/10 text-red-400 border border-red-500/20', dotColor: 'bg-red-400' },
     stopped: { label: 'Stopped', badgeClass: 'bg-red-500/10 text-red-400 border border-red-500/20', dotColor: 'bg-red-400' },
@@ -1342,7 +1342,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
           )}
 
           {/* Client Info */}
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-5">
+          <div className="card-liquid rounded-lg p-5">
             {editingClientInfo ? (
               <div className="space-y-3">
                 <div>
@@ -1352,7 +1352,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                     value={clientInfoName}
                     onChange={e => setClientInfoName(e.target.value)}
                     autoFocus
-                    className="w-full px-4 py-2.5 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                    className="w-full px-4 py-2.5 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                   />
                 </div>
                 <div>
@@ -1362,7 +1362,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                     value={clientInfoEmail}
                     onChange={e => setClientInfoEmail(e.target.value)}
                     placeholder="client@example.com"
-                    className="w-full px-4 py-2.5 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                    className="w-full px-4 py-2.5 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                   />
                 </div>
                 {clientInfoError && <p className="text-red-400 text-sm">{clientInfoError}</p>}
@@ -1370,7 +1370,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                   <button
                     onClick={() => saveClientInfo(storedEmail)}
                     disabled={clientInfoSaving || !clientInfoName.trim()}
-                    className="px-4 py-2 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                    className="px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer"
                   >
                     {clientInfoSaving ? 'Saving...' : 'Save'}
                   </button>
@@ -1403,7 +1403,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4">
+            <div className="card-liquid rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <DollarSign className="w-4 h-4 text-white/40" />
                 <span className="text-sm text-white/60">Monthly Rev</span>
@@ -1426,14 +1426,14 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 })()}
               </p>
             </div>
-            <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4">
+            <div className="card-liquid rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Server className="w-4 h-4 text-white/40" />
                 <span className="text-sm text-white/60">Instances</span>
               </div>
               <p className="text-2xl font-semibold text-white">{realInstances.length}</p>
             </div>
-            <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4">
+            <div className="card-liquid rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Coins className="w-4 h-4 text-white/40" />
                 <span className="text-sm text-white/60">AI Tokens</span>
@@ -1442,7 +1442,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 {budgetLoading ? '-' : clientBudget ? clientBudget.tokensRemaining.toLocaleString() : '0'}
               </p>
             </div>
-            <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4">
+            <div className="card-liquid rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
                 <UsersRound className="w-4 h-4 text-white/40" />
                 <span className="text-sm text-white/60">Members</span>
@@ -1452,7 +1452,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
           </div>
 
           {/* Instances */}
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg">
+          <div className="card-liquid rounded-lg">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
               <h3 className="text-sm font-semibold text-white">Instances</h3>
               <button
@@ -1501,7 +1501,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
           </div>
 
           {/* Recent Payments */}
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg">
+          <div className="card-liquid rounded-lg">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
               <h3 className="text-sm font-semibold text-white">Recent Payments</h3>
               <button
@@ -1530,7 +1530,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                         <p className="text-sm text-white truncate">{tx.description || tx.type}</p>
                         <p className="text-sm text-white/30">{formatDate(tx.created)}</p>
                       </div>
-                      <span className={cn('text-sm font-medium', isPaid ? 'text-green-400' : 'text-white/60')}>
+                      <span className={cn('text-sm font-medium', isPaid ? 'text-olive-400' : 'text-white/60')}>
                         {formatAmount(tx.amount, tx.currency)}
                       </span>
                     </div>
@@ -1541,7 +1541,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
           </div>
 
           {/* Team Members */}
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg">
+          <div className="card-liquid rounded-lg">
             <div className="flex items-center justify-between px-5 py-4 border-b border-gray-800">
               <h3 className="text-sm font-semibold text-white">Team Members</h3>
               <button
@@ -1571,7 +1571,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                     <span className={cn(
                       'px-2 py-0.5 text-xs rounded-full',
                       m.status === 'accepted'
-                        ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                        ? 'bg-olive-500/10 text-olive-400 border border-olive-500/20'
                         : 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
                     )}>
                       {m.status === 'accepted' ? 'Active' : 'Pending'}
@@ -1635,7 +1635,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 <button
                   onClick={handleRemoveClient}
                   disabled={removingClient}
-                  className="flex-1 px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:bg-gray-400 disabled:text-gray-600"
+                  className="flex-1 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors cursor-pointer disabled:bg-gray-400 disabled:text-gray-600"
                 >
                   {removingClient ? (
                     <span className="flex items-center justify-center gap-2">
@@ -1673,7 +1673,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
             </div>
 
             {realInstances.filter(i => !i.is_external).length === 0 ? (
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 flex flex-col items-center text-center">
+              <div className="card-liquid rounded-xl p-6 flex flex-col items-center text-center">
                 <Server className="w-8 h-8 text-white/20 mb-2" />
                 <p className="text-sm text-white/40">No hosted instances linked to this client.</p>
               </div>
@@ -1682,7 +1682,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 {realInstances.filter(i => !i.is_external).map((inst) => {
                   const isConfirming = revokeConfirm === inst.instance_id;
                   return (
-                    <div key={inst.instance_id} className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+                    <div key={inst.instance_id} className="card-liquid rounded-xl overflow-hidden">
                       {isConfirming ? (
                         <div className="flex items-center gap-2 px-4 py-3">
                           <span className="text-sm text-white/60 flex-1">Revoke access?</span>
@@ -1716,7 +1716,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                                 return (
                                   <span className={cn(
                                     'w-2 h-2 rounded-full shrink-0',
-                                    isActive ? 'bg-green-400' : isConnecting ? 'bg-yellow-400 animate-pulse' : isError ? 'bg-red-400' : statusLoading ? 'bg-gray-500 animate-pulse' : 'bg-gray-500'
+                                    isActive ? 'bg-olive-400' : isConnecting ? 'bg-yellow-400 animate-pulse' : isError ? 'bg-red-400' : statusLoading ? 'bg-gray-500 animate-pulse' : 'bg-gray-500'
                                   )} />
                                 );
                               })()}
@@ -1729,7 +1729,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                               <span className={cn(
                                 'px-2 py-0.5 rounded-full text-xs shrink-0',
                                 inst.client_paid
-                                  ? 'bg-green-900/20 text-green-400 border border-green-800'
+                                  ? 'bg-olive-900/20 text-olive-400 border border-olive-800'
                                   : 'bg-gray-800/30 text-white/40 border border-gray-700'
                               )}>
                                 {inst.client_paid ? 'Client pays' : 'You pay'}
@@ -1770,7 +1770,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
             </div>
 
             {realInstances.filter(i => i.is_external).length === 0 && (
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 flex flex-col items-center text-center">
+              <div className="card-liquid rounded-xl p-6 flex flex-col items-center text-center">
                 <Server className="w-8 h-8 text-white/20 mb-2" />
                 <p className="text-sm text-white/40">No external instances linked.</p>
                 <p className="text-sm text-white/25 mt-1">Link any n8n, OpenClaw, or other external service.</p>
@@ -1783,7 +1783,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                   const isConfirmingExternal = revokeConfirm === `ext-${inst.instance_id}`;
                   const typeLabel = inst.service_type === 'openclaw' ? 'OpenClaw' : inst.service_type === 'n8n' ? 'n8n' : inst.service_type === 'other' ? 'Other' : 'External';
                   return (
-                    <div key={inst.instance_id} className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+                    <div key={inst.instance_id} className="card-liquid rounded-xl overflow-hidden">
                       {isConfirmingExternal ? (
                         <div className="flex items-center gap-2 px-4 py-3">
                           <span className="text-sm text-white/60 flex-1">Unlink this external instance?</span>
@@ -1846,7 +1846,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
             {waLoading ? (
               <div className="space-y-3">
                 {[1, 2].map(i => (
-                  <div key={i} className="bg-gray-900/50 border border-gray-800 rounded-xl p-4 animate-pulse">
+                  <div key={i} className="card-liquid rounded-xl p-4 animate-pulse">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 bg-gray-800/30 rounded-lg" />
                       <div className="flex-1 space-y-1.5">
@@ -1858,7 +1858,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 ))}
               </div>
             ) : linkedWhatsApp.length === 0 ? (
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 flex flex-col items-center text-center">
+              <div className="card-liquid rounded-xl p-6 flex flex-col items-center text-center">
                 <MessageSquare className="w-8 h-8 text-white/20 mb-2" />
                 <p className="text-sm text-white/40">No WhatsApp services linked</p>
               </div>
@@ -1868,7 +1868,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                   const linkedInst = realInstances.find(i => i.instance_id === wa.linked_instance_id);
                   const isConfirmingUnlink = unlinkServiceConfirm === wa.id;
                   return (
-                    <div key={wa.id} className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+                    <div key={wa.id} className="card-liquid rounded-xl overflow-hidden">
                       {isConfirmingUnlink ? (
                         <div className="flex items-center gap-2 px-4 py-3">
                           <span className="text-sm text-white/60 flex-1">Unlink this service?</span>
@@ -1888,8 +1888,8 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                         </div>
                       ) : (
                         <div className="flex items-center p-4 gap-4">
-                          <div className="p-2 bg-green-900/20 border border-green-800 rounded-lg shrink-0">
-                            <MessageSquare className="w-4 h-4 text-green-400" />
+                          <div className="p-2 bg-olive-900/20 border border-olive-800 rounded-lg shrink-0">
+                            <MessageSquare className="w-4 h-4 text-olive-400" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-white truncate">{wa.display_name || wa.instance_name}</p>
@@ -1940,13 +1940,13 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                   onChange={e => setNotesDraft(e.target.value)}
                   placeholder="Add notes about this client..."
                   rows={4}
-                  className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm resize-none"
+                  className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm resize-none"
                 />
                 <div className="flex gap-2">
                   <button
                     onClick={saveClientNotes}
                     disabled={notesSaving}
-                    className="px-4 py-2.5 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                    className="px-4 py-2.5 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer"
                   >
                     {notesSaving ? 'Saving...' : 'Save'}
                   </button>
@@ -1959,11 +1959,11 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 </div>
               </div>
             ) : clientNotes ? (
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4">
+              <div className="card-liquid rounded-xl p-4">
                 <p className="text-sm text-white/60 whitespace-pre-wrap">{clientNotes}</p>
               </div>
             ) : (
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 flex flex-col items-center text-center">
+              <div className="card-liquid rounded-xl p-6 flex flex-col items-center text-center">
                 <StickyNote className="w-8 h-8 text-white/20 mb-2" />
                 <p className="text-sm text-white/40">No notes yet. Add notes about this client.</p>
               </div>
@@ -1986,41 +1986,41 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
             </div>
 
             {showOtherForm && (
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4 space-y-3 mb-3">
+              <div className="card-liquid rounded-xl p-4 space-y-3 mb-3">
                 <input
                   type="text"
                   placeholder="Name (required)"
                   value={otherForm.name}
                   onChange={e => setOtherForm(f => ({ ...f, name: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                  className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                 />
                 <input
                   type="text"
                   placeholder="Domain"
                   value={otherForm.domain}
                   onChange={e => setOtherForm(f => ({ ...f, domain: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                  className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                 />
                 <input
                   type="text"
                   placeholder="Access"
                   value={otherForm.access}
                   onChange={e => setOtherForm(f => ({ ...f, access: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                  className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                 />
                 <input
                   type="text"
                   placeholder="Notes"
                   value={otherForm.notes}
                   onChange={e => setOtherForm(f => ({ ...f, notes: e.target.value }))}
-                  className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                  className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                 />
                 {otherError && <p className="text-sm text-red-400">{otherError}</p>}
                 <div className="flex gap-2 pt-1">
                   <button
                     onClick={handleAddOtherEntry}
                     disabled={otherSaving || !otherForm.name.trim()}
-                    className="px-4 py-2.5 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                    className="px-4 py-2.5 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer"
                   >
                     {otherSaving ? 'Saving...' : 'Add'}
                   </button>
@@ -2035,7 +2035,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
             )}
 
             {customEntries.length === 0 && !showOtherForm ? (
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 flex flex-col items-center text-center">
+              <div className="card-liquid rounded-xl p-6 flex flex-col items-center text-center">
                 <FileText className="w-8 h-8 text-white/20 mb-2" />
                 <p className="text-sm text-white/40">No entries yet.</p>
               </div>
@@ -2045,7 +2045,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                   const isEditing = editingEntry === entry.id;
                   const isConfirmingDelete = confirmDeleteEntry === entry.id;
                   return (
-                    <div key={entry.id} className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+                    <div key={entry.id} className="card-liquid rounded-xl overflow-hidden">
                       {isConfirmingDelete ? (
                         <div className="flex items-center gap-2 px-4 py-3">
                           <span className="text-sm text-white/60 flex-1">Delete this entry?</span>
@@ -2070,34 +2070,34 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                             placeholder="Name (required)"
                             value={editForm.name}
                             onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))}
-                            className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                            className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                           />
                           <input
                             type="text"
                             placeholder="Domain"
                             value={editForm.domain}
                             onChange={e => setEditForm(f => ({ ...f, domain: e.target.value }))}
-                            className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                            className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                           />
                           <input
                             type="text"
                             placeholder="Access"
                             value={editForm.access}
                             onChange={e => setEditForm(f => ({ ...f, access: e.target.value }))}
-                            className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                            className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                           />
                           <input
                             type="text"
                             placeholder="Notes"
                             value={editForm.notes}
                             onChange={e => setEditForm(f => ({ ...f, notes: e.target.value }))}
-                            className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                            className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                           />
                           <div className="flex gap-2">
                             <button
                               onClick={() => handleUpdateOtherEntry(entry.id)}
                               disabled={otherSaving || !editForm.name.trim()}
-                              className="px-4 py-2.5 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                              className="px-4 py-2.5 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer"
                             >
                               {otherSaving ? 'Saving...' : 'Save'}
                             </button>
@@ -2169,7 +2169,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
         {showAssignInstance && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => { setShowAssignInstance(false); setAssignInstanceId(''); }}>
             <div className="absolute inset-0 bg-black/70" />
-            <div className="relative w-full max-w-md bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="relative w-full max-w-md card-liquid rounded-2xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
                 <h3 className="text-base font-semibold text-white">Link Hosted Instance</h3>
                 <button onClick={() => { setShowAssignInstance(false); setAssignInstanceId(''); }} className="p-1.5 rounded-lg hover:bg-gray-800 text-white/40 hover:text-white transition-colors cursor-pointer">
@@ -2214,7 +2214,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
         {showAssignExternal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => setShowAssignExternal(false)}>
             <div className="absolute inset-0 bg-black/70" />
-            <div className="relative w-full max-w-md bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="relative w-full max-w-md card-liquid rounded-2xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
                 <h3 className="text-base font-semibold text-white">Link External Instance</h3>
                 <button onClick={() => setShowAssignExternal(false)} className="p-1.5 rounded-lg hover:bg-gray-800 text-white/40 hover:text-white transition-colors cursor-pointer">
@@ -2265,7 +2265,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
         {showLinkService && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={() => { setShowLinkService(false); setLinkServiceId(''); setLinkServiceInstanceId(''); }}>
             <div className="absolute inset-0 bg-black/70" />
-            <div className="relative w-full max-w-md bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+            <div className="relative w-full max-w-md card-liquid rounded-2xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
               <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
                 <h3 className="text-base font-semibold text-white">Link Service</h3>
                 <button onClick={() => { setShowLinkService(false); setLinkServiceId(''); setLinkServiceInstanceId(''); }} className="p-1.5 rounded-lg hover:bg-gray-800 text-white/40 hover:text-white transition-colors cursor-pointer">
@@ -2309,8 +2309,8 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                             disabled={!instId || linkingService}
                             className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-900/60 transition-colors cursor-pointer text-left disabled:opacity-40"
                           >
-                            <div className="p-1.5 bg-green-900/20 border border-green-800 rounded-lg shrink-0">
-                              <MessageSquare className="w-3.5 h-3.5 text-green-400" />
+                            <div className="p-1.5 bg-olive-900/20 border border-olive-800 rounded-lg shrink-0">
+                              <MessageSquare className="w-3.5 h-3.5 text-olive-400" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <p className="text-sm text-white truncate">{s.name}</p>
@@ -2395,7 +2395,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 <button
                   onClick={handleRemoveClient}
                   disabled={removingClient}
-                  className="flex-1 px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:bg-gray-400 disabled:text-gray-600"
+                  className="flex-1 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors cursor-pointer disabled:bg-gray-400 disabled:text-gray-600"
                 >
                   {removingClient ? (
                     <span className="flex items-center justify-center gap-2">
@@ -2420,7 +2420,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
       return (
         <div className="flex-1 overflow-y-auto">
           <div className="max-w-3xl mx-auto p-4 md:p-6">
-            <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 flex flex-col items-center gap-4 text-center">
+            <div className="card-liquid rounded-xl p-8 flex flex-col items-center gap-4 text-center">
               <div className="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
                 <CreditCard className="h-6 w-6 text-purple-400/60" />
               </div>
@@ -2445,7 +2445,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
     return (
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-3xl mx-auto p-4 md:p-6">
-          <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5 space-y-5">
+          <div className="card-liquid rounded-xl p-5 space-y-5">
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -2469,9 +2469,9 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
 
             {/* Success / Error messages */}
             {payerSuccess && (
-              <div className="p-3 bg-green-900/20 border border-green-800 rounded-lg flex items-center gap-2">
-                <Settings className="h-4 w-4 text-green-400" />
-                <p className="text-sm text-green-400">{payerSuccess}</p>
+              <div className="p-3 bg-olive-900/20 border border-olive-800 rounded-lg flex items-center gap-2">
+                <Settings className="h-4 w-4 text-olive-400" />
+                <p className="text-sm text-olive-400">{payerSuccess}</p>
               </div>
             )}
             {error && (
@@ -2534,7 +2534,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                         className={cn(
                           'flex-1 p-3 rounded-lg border transition-all text-left cursor-pointer',
                           clientPayer === 'agency'
-                            ? 'bg-white text-black border-white'
+                            ? 'bg-olive-500 text-black border-white'
                             : 'bg-gray-800/30 border-gray-700 hover:border-gray-600 text-white',
                           payerSwitching && 'opacity-50 cursor-not-allowed'
                         )}
@@ -2550,7 +2550,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                         className={cn(
                           'flex-1 p-3 rounded-lg border transition-all text-left',
                           clientPayer === 'client'
-                            ? 'bg-white text-black border-white cursor-pointer'
+                            ? 'bg-olive-500 text-black border-white cursor-pointer'
                             : 'bg-gray-800/30 border-gray-700 hover:border-gray-600 text-white',
                           (!canSwitchToClient || payerSwitching) && 'opacity-50 cursor-not-allowed',
                           canSwitchToClient && clientPayer !== 'client' && 'cursor-pointer'
@@ -2593,7 +2593,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                         className={cn(
                           'px-3 py-2 text-sm rounded-lg border font-medium cursor-pointer transition-colors',
                           topupAmount === preset
-                            ? 'bg-white text-black border-white'
+                            ? 'bg-olive-500 text-black border-white'
                             : 'bg-gray-800/30 text-white/60 border-gray-700 hover:border-gray-600'
                         )}
                       >
@@ -2611,13 +2611,13 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                       max="1000"
                       step="1"
                       placeholder="Enter amount"
-                      className="w-full pl-10 pr-4 py-3 bg-gray-900/50 text-white border border-gray-800 rounded-lg focus:ring-2 focus:ring-white focus:border-white text-sm placeholder:text-gray-500"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-900/50 text-white border border-gray-800 rounded-lg focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm placeholder:text-gray-500"
                     />
                   </div>
                   <button
                     onClick={handleTopup}
                     disabled={topupLoading || !topupAmount || parseFloat(topupAmount) < 1}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 font-medium rounded-lg transition-colors cursor-pointer text-sm"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 font-medium rounded-full transition-colors cursor-pointer text-sm"
                   >
                     {topupLoading ? (
                       <>
@@ -2670,7 +2670,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 <button
                   onClick={confirmPayerSwitch}
                   disabled={payerSwitching}
-                  className="flex-1 px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:bg-gray-400 disabled:text-gray-600"
+                  className="flex-1 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors cursor-pointer disabled:bg-gray-400 disabled:text-gray-600"
                 >
                   {payerSwitching ? (
                     <span className="flex items-center justify-center gap-2">
@@ -2697,7 +2697,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
     return (
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-3xl mx-auto p-4 md:p-6">
-          <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5 space-y-5">
+          <div className="card-liquid rounded-xl p-5 space-y-5">
             {/* Header */}
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gray-800/30 flex items-center justify-center">
@@ -2717,12 +2717,12 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                   value={teamInviteEmail}
                   onChange={e => { setTeamInviteEmail(e.target.value); setTeamError(null); setTeamSuccess(null); }}
                   placeholder="team@example.com"
-                  className="flex-1 px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm"
+                  className="flex-1 px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
                 />
                 <select
                   value={teamInviteRole}
                   onChange={e => setTeamInviteRole(e.target.value)}
-                  className="px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white text-sm focus:ring-2 focus:ring-white focus:border-white"
+                  className="px-4 py-3 card-liquid rounded-lg text-white text-sm focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                 >
                   <option value="member">Member (read-only)</option>
                   <option value="manager">Manager (no billing)</option>
@@ -2731,14 +2731,14 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 <button
                   type="submit"
                   disabled={teamInviting || !teamInviteEmail.trim()}
-                  className="px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors whitespace-nowrap"
+                  className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors whitespace-nowrap"
                 >
                   {teamInviting ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : 'Send Invite'}
                 </button>
               </div>
 
               {teamError && <p className="mt-2 text-sm text-red-400">{teamError}</p>}
-              {teamSuccess && <p className="mt-2 text-sm text-green-400">{teamSuccess}</p>}
+              {teamSuccess && <p className="mt-2 text-sm text-olive-400">{teamSuccess}</p>}
             </form>
 
             {/* Members Table */}
@@ -2752,7 +2752,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
               <>
                 {/* Stats */}
                 <div className="flex gap-4 text-sm">
-                  <span className="text-green-400">{activeCount} active</span>
+                  <span className="text-olive-400">{activeCount} active</span>
                   {pendingCount > 0 && <span className="text-yellow-400">{pendingCount} pending</span>}
                 </div>
 
@@ -2779,14 +2779,14 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                         <select
                           value={member.role}
                           onChange={e => handleTeamRoleChange(member.id, e.target.value)}
-                          className="px-2 py-1 bg-gray-900/50 border border-gray-800 rounded text-sm text-white focus:ring-1 focus:ring-white"
+                          className="px-2 py-1 card-liquid rounded text-sm text-white focus:ring-1 focus:ring-olive-500"
                         >
                           <option value="member">Member</option>
                           <option value="manager">Manager</option>
                           <option value="admin">Admin</option>
                         </select>
 
-                        <span className={`text-sm px-2 py-0.5 rounded-full border ${member.status === 'accepted' ? 'bg-green-900/20 border-green-800 text-green-400' : 'bg-yellow-900/20 border-yellow-900/40 text-yellow-400'}`}>
+                        <span className={`text-sm px-2 py-0.5 rounded-full border ${member.status === 'accepted' ? 'bg-olive-900/20 border-olive-800 text-olive-400' : 'bg-yellow-900/20 border-yellow-900/40 text-yellow-400'}`}>
                           {member.status === 'accepted' ? 'Active' : 'Pending'}
                         </span>
 
@@ -2837,7 +2837,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
 
     const statusBadge = (normalized: string) => {
       const styles: Record<string, string> = {
-        paid: 'bg-green-900/20 text-green-400 border-green-800',
+        paid: 'bg-olive-900/20 text-olive-400 border-olive-800',
         pending: 'bg-yellow-900/20 text-yellow-400 border-yellow-900/40',
         overdue: 'bg-red-900/20 text-red-400 border-red-800',
         failed: 'bg-red-900/20 text-red-400 border-red-800',
@@ -2921,7 +2921,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
           {paymentsLoading ? (
             <div className="space-y-4">
               {[1, 2].map(i => (
-                <div key={i} className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 animate-pulse">
+                <div key={i} className="card-liquid rounded-xl p-6 animate-pulse">
                   <div className="h-4 w-40 bg-gray-800/30 rounded mb-3" />
                   <div className="h-20 bg-gray-800/30 rounded-lg" />
                 </div>
@@ -2938,7 +2938,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
 
               {/* Monthly Summary - always visible when expected amount is set */}
               {expectedAmount > 0 && (
-                <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5">
+                <div className="card-liquid rounded-xl p-5">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-sm font-semibold text-white/60 uppercase tracking-wide">{monthLabel}</h3>
                     {debt > 0 && (
@@ -2948,7 +2948,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                       </span>
                     )}
                     {debt === 0 && totalCollected >= expectedAmount && (
-                      <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm font-medium bg-green-900/20 text-green-400 border border-green-800">
+                      <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-sm font-medium bg-olive-900/20 text-olive-400 border border-olive-800">
                         <Check className="w-3.5 h-3.5" />
                         Paid in full
                       </span>
@@ -2963,7 +2963,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                       <div
                         className={cn(
                           'h-2 rounded-full transition-all',
-                          totalCollected >= expectedAmount ? 'bg-green-400' : totalCollected > 0 ? 'bg-yellow-400' : 'bg-gray-700'
+                          totalCollected >= expectedAmount ? 'bg-olive-400' : totalCollected > 0 ? 'bg-yellow-400' : 'bg-gray-700'
                         )}
                         style={{ width: `${Math.min(100, expectedAmount > 0 ? (totalCollected / expectedAmount) * 100 : 0)}%` }}
                       />
@@ -2974,7 +2974,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
 
               {/* Stripe section */}
               {!stripeConnected && customersFetched ? (
-                <div className="p-4 bg-gray-900/50 border border-gray-800 rounded-xl flex items-center justify-between gap-4">
+                <div className="p-4 card-liquid rounded-xl flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
                     <CreditCard className="w-5 h-5 text-white/30 shrink-0" />
                     <div>
@@ -2990,7 +2990,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                   </div>
                   <button
                     onClick={() => router.push('/portal/settings')}
-                    className="px-4 py-2.5 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors cursor-pointer shrink-0"
+                    className="px-4 py-2.5 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors cursor-pointer shrink-0"
                   >
                     Settings
                   </button>
@@ -3005,7 +3005,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                         <div className="flex items-center gap-2">
                           <button
                             onClick={() => { setBillingAction('charge'); setBillingResult(null); setRecurringEnabled(false); }}
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors cursor-pointer"
                             title="Charges the customer's card on file instantly"
                           >
                             <DollarSign className="w-3.5 h-3.5" />
@@ -3040,7 +3040,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
 
                     {/* Billing action form */}
                     {billingAction && (
-                      <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5 space-y-3 mb-3">
+                      <div className="card-liquid rounded-xl p-5 space-y-3 mb-3">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {billingAction === 'charge' ? (
@@ -3085,7 +3085,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                             placeholder="Amount (USD)"
                             min="0.50"
                             step="0.01"
-                            className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                            className="w-full pl-10 pr-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                           />
                         </div>
 
@@ -3094,7 +3094,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                           value={billingDescription}
                           onChange={(e) => setBillingDescription(e.target.value)}
                           placeholder="Description (optional)"
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                         />
 
                         {/* Recurring toggle (charge/invoice only) or interval picker (subscription) */}
@@ -3108,7 +3108,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                                 onChange={(e) => setRecurringIntervalCount(e.target.value)}
                                 min="1"
                                 max="12"
-                                className="w-16 px-2 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-white text-sm text-center focus:ring-2 focus:ring-white focus:border-white outline-none"
+                                className="w-16 px-2 py-2 card-liquid rounded-lg text-white text-sm text-center focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none"
                               />
                               <span className="text-sm text-white/60">every</span>
                               <div className="flex gap-1">
@@ -3120,7 +3120,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                                     className={cn(
                                       'px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
                                       recurringInterval === iv
-                                        ? 'bg-white text-black'
+                                        ? 'bg-olive-500 text-black'
                                         : 'border border-gray-700 text-white/60 hover:bg-gray-700 hover:text-white'
                                     )}
                                   >
@@ -3159,7 +3159,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                                   onChange={(e) => setRecurringIntervalCount(e.target.value)}
                                   min="1"
                                   max="12"
-                                  className="w-16 px-2 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-white text-sm text-center focus:ring-2 focus:ring-white focus:border-white outline-none"
+                                  className="w-16 px-2 py-2 card-liquid rounded-lg text-white text-sm text-center focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none"
                                 />
                                 <div className="flex gap-1">
                                   {(['week', 'month', 'year'] as const).map(iv => (
@@ -3170,7 +3170,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                                       className={cn(
                                         'px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer',
                                         recurringInterval === iv
-                                          ? 'bg-white text-black'
+                                          ? 'bg-olive-500 text-black'
                                           : 'border border-gray-700 text-white/60 hover:bg-gray-700 hover:text-white'
                                       )}
                                     >
@@ -3192,7 +3192,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                         <button
                           onClick={handleBillingAction}
                           disabled={billingLoading || !billingAmount}
-                          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer"
                         >
                           {billingLoading ? (
                             <>
@@ -3224,19 +3224,19 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                       <div className={cn(
                         'p-4 rounded-xl mb-3 border space-y-3',
                         billingResult.type === 'charge' && billingResult.status === 'succeeded'
-                          ? 'bg-green-900/20 border-green-800'
+                          ? 'bg-olive-900/20 border-olive-800'
                           : billingResult.type === 'invoice' || billingResult.type === 'subscription'
-                            ? 'bg-green-900/20 border-green-800'
+                            ? 'bg-olive-900/20 border-olive-800'
                             : 'bg-yellow-900/20 border-yellow-900/40'
                       )}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             {billingResult.type === 'charge' ? (
-                              <DollarSign className="w-4 h-4 text-green-400" />
+                              <DollarSign className="w-4 h-4 text-olive-400" />
                             ) : billingResult.type === 'subscription' ? (
-                              <RefreshCw className="w-4 h-4 text-green-400" />
+                              <RefreshCw className="w-4 h-4 text-olive-400" />
                             ) : (
-                              <FileText className="w-4 h-4 text-green-400" />
+                              <FileText className="w-4 h-4 text-olive-400" />
                             )}
                             <p className="text-sm font-medium text-white">
                               {billingResult.type === 'charge'
@@ -3274,7 +3274,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                               onClick={() => copyToClipboard(billingResult.invoiceUrl!)}
                               className="flex items-center gap-1.5 px-3 py-2 border border-gray-700 hover:bg-gray-700 text-white/60 rounded-lg text-sm font-medium transition-colors cursor-pointer"
                             >
-                              {copiedLink ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+                              {copiedLink ? <Check className="w-3.5 h-3.5 text-olive-400" /> : <Copy className="w-3.5 h-3.5" />}
                               {copiedLink ? 'Copied' : 'Copy Link'}
                             </button>
                           </div>
@@ -3295,7 +3295,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                     )}
 
                     {/* Stripe Customer */}
-                    <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5 space-y-4">
+                    <div className="card-liquid rounded-xl p-5 space-y-4">
                       <div className="flex items-center justify-between">
                         <span className="text-sm font-medium text-white">Stripe Customer</span>
                         {linkedCustomer && (
@@ -3337,7 +3337,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                           <button
                             onClick={handleLinkCustomer}
                             disabled={!selectedCustomerId || linkingCustomer}
-                            className="px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer shrink-0"
+                            className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer shrink-0"
                           >
                             {linkingCustomer ? 'Linking...' : 'Link'}
                           </button>
@@ -3397,11 +3397,11 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                         return ns === txFilter;
                       });
                       return filteredTx.length === 0 ? (
-                      <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 text-center">
+                      <div className="card-liquid rounded-xl p-6 text-center">
                         <p className="text-sm text-white/40">{txFilter === 'all' ? 'No transactions yet.' : `No ${txFilter} transactions.`}</p>
                       </div>
                     ) : (
-                      <div className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+                      <div className="card-liquid rounded-xl overflow-hidden">
                         {filteredTx.map((tx, idx) => {
                           const nStatus = tx.normalizedStatus || (tx.status === 'succeeded' ? 'paid' : tx.status === 'open' ? 'pending' : tx.status);
                           return (
@@ -3431,7 +3431,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                               <div className="flex items-center gap-3 shrink-0">
                                 <span className={cn(
                                   'text-sm font-semibold',
-                                  nStatus === 'paid' ? 'text-green-400'
+                                  nStatus === 'paid' ? 'text-olive-400'
                                     : nStatus === 'pending' ? 'text-yellow-400'
                                     : nStatus === 'overdue' || nStatus === 'failed' ? 'text-red-400'
                                     : 'text-white/60'
@@ -3475,7 +3475,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 </div>
 
                 {showManualForm && (
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5 space-y-3 mb-3">
+                  <div className="card-liquid rounded-xl p-5 space-y-3 mb-3">
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-medium text-white">Record External Payment</h4>
                       <button
@@ -3497,14 +3497,14 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                           placeholder="Amount (USD)"
                           min="0.01"
                           step="0.01"
-                          className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                          className="w-full pl-10 pr-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                         />
                       </div>
                       <input
                         type="date"
                         value={manualForm.date}
                         onChange={(e) => setManualForm(f => ({ ...f, date: e.target.value }))}
-                        className="px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white focus:ring-2 focus:ring-white focus:border-white outline-none text-sm [color-scheme:dark]"
+                        className="px-4 py-3 card-liquid rounded-lg text-white focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm [color-scheme:dark]"
                       />
                     </div>
 
@@ -3526,7 +3526,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                       value={manualForm.description}
                       onChange={(e) => setManualForm(f => ({ ...f, description: e.target.value }))}
                       placeholder="Description (optional)"
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                      className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                     />
 
                     <input
@@ -3534,13 +3534,13 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                       value={manualForm.reference}
                       onChange={(e) => setManualForm(f => ({ ...f, reference: e.target.value }))}
                       placeholder="Reference / receipt # (optional)"
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                      className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                     />
 
                     <button
                       onClick={handleAddManualPayment}
                       disabled={manualLoading || !manualForm.amount || !manualForm.date}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer"
                     >
                       {manualLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Banknote className="w-4 h-4" />}
                       {manualLoading ? 'Saving...' : 'Record Payment'}
@@ -3549,7 +3549,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 )}
 
                 {manualPayments.length > 0 && (
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+                  <div className="card-liquid rounded-xl overflow-hidden">
                     {manualPayments.map((mp, idx) => (
                       <div
                         key={mp.id}
@@ -3578,7 +3578,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                           </div>
                         </div>
                         <div className="flex items-center gap-3 shrink-0">
-                          <span className="text-sm font-semibold text-green-400">
+                          <span className="text-sm font-semibold text-olive-400">
                             {formatAmount(mp.amount, mp.currency)}
                           </span>
                           <button
@@ -3595,7 +3595,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 )}
 
                 {manualPayments.length === 0 && !showManualForm && (
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 text-center">
+                  <div className="card-liquid rounded-xl p-6 text-center">
                     <p className="text-sm text-white/40">No manual payments recorded.</p>
                   </div>
                 )}
@@ -3617,7 +3617,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 </div>
 
                 {showSettingsForm && (
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5 space-y-3 mb-3">
+                  <div className="card-liquid rounded-xl p-5 space-y-3 mb-3">
                     <div className="flex items-center justify-between">
                       <h4 className="text-sm font-medium text-white">Monthly Expected Amount</h4>
                       <button
@@ -3638,7 +3638,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                         placeholder="Monthly amount (USD)"
                         min="0"
                         step="1"
-                        className="w-full pl-10 pr-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                        className="w-full pl-10 pr-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                       />
                     </div>
 
@@ -3647,13 +3647,13 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                       onChange={(e) => setSettingsNotes(e.target.value)}
                       placeholder="Notes about this client's billing (optional)"
                       rows={2}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm resize-none"
+                      className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm resize-none"
                     />
 
                     <button
                       onClick={handleSaveBillingSettings}
                       disabled={savingSettings}
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer"
                     >
                       {savingSettings ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
                       {savingSettings ? 'Saving...' : 'Save Settings'}
@@ -3662,7 +3662,7 @@ export default function ClientDetailPage({ params }: { params: Promise<{ slug: s
                 )}
 
                 {!showSettingsForm && billingSettings && (
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5 space-y-2">
+                  <div className="card-liquid rounded-xl p-5 space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-white/60">Monthly expected</span>
                       <span className="text-sm font-medium text-white">

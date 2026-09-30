@@ -214,7 +214,7 @@ export function CanvasPropertiesPanel({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search settings..."
-            className="w-full pl-9 pr-8 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-white/30 focus:border-gray-600"
+            className="w-full pl-9 pr-8 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-olive-500/30 focus:border-gray-600"
           />
           {searchQuery && (
             <button

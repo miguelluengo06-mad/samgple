@@ -101,7 +101,7 @@ export function CanvasSidebar({
                         }}
                         className={`w-full px-2 py-2.5 flex flex-col items-center gap-1.5 transition-colors ${
                           isSelected
-                            ? 'bg-white text-black'
+                            ? 'bg-olive-500 text-black'
                             : 'text-gray-400 hover:text-white hover:bg-gray-800/30'
                         }`}
                         title={type.label}
@@ -132,7 +132,7 @@ export function CanvasSidebar({
                   }}
                   className={`w-full px-2 py-3 flex flex-col items-center gap-1.5 transition-colors group ${
                     isActive
-                      ? 'bg-white text-black'
+                      ? 'bg-olive-500 text-black'
                       : 'text-gray-400 hover:text-white hover:bg-gray-800/30'
                   }`}
                   title={item.label}

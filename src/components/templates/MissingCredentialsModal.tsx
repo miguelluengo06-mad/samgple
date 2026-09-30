@@ -76,9 +76,9 @@ export default function MissingCredentialsModal({
             {/* Content */}
             <div className="p-6 space-y-3">
               {allAdded ? (
-                <div className="p-4 rounded-lg bg-green-900/20 border border-green-800/50 text-center">
-                  <CheckCircle className="w-8 h-8 text-green-400 mx-auto mb-2" />
-                  <p className="text-green-400 font-medium">All credentials added!</p>
+                <div className="p-4 rounded-lg bg-olive-900/20 border border-olive-800/50 text-center">
+                  <CheckCircle className="w-8 h-8 text-olive-400 mx-auto mb-2" />
+                  <p className="text-olive-400 font-medium">All credentials added!</p>
                   <p className="text-sm text-gray-400 mt-1">Your workflow is ready to use.</p>
                 </div>
               ) : (
@@ -95,7 +95,7 @@ export default function MissingCredentialsModal({
                         disabled={isAdded}
                         className={`w-full flex items-center justify-between p-4 rounded-lg transition-all text-left ${
                           isAdded
-                            ? 'bg-green-900/20 border border-green-800/50'
+                            ? 'bg-olive-900/20 border border-olive-800/50'
                             : 'bg-red-900/20 border border-red-800/50 hover:bg-red-900/30 hover:border-red-700 cursor-pointer'
                         }`}
                       >
@@ -103,14 +103,14 @@ export default function MissingCredentialsModal({
                           <CredentialIcon
                             type={cred.icon}
                             fallback="none"
-                            className={`w-6 h-6 ${isAdded ? 'text-green-400' : 'text-red-400'}`}
+                            className={`w-6 h-6 ${isAdded ? 'text-olive-400' : 'text-red-400'}`}
                           />
                           <span className="text-white font-medium">{cred.name}</span>
                         </div>
                         {isAdded ? (
                           <div className="flex items-center gap-2">
-                            <CheckCircle className="w-5 h-5 text-green-400" />
-                            <span className="text-xs text-green-400">Added</span>
+                            <CheckCircle className="w-5 h-5 text-olive-400" />
+                            <span className="text-xs text-olive-400">Added</span>
                           </div>
                         ) : (
                           <div className="flex items-center gap-2 text-red-400">
@@ -129,7 +129,7 @@ export default function MissingCredentialsModal({
             <div className="p-6 border-t border-gray-800">
               <button
                 onClick={onClose}
-                className="w-full py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors"
+                className="w-full py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors"
               >
                 {allAdded ? 'Done' : `Skip (${remainingCount} remaining)`}
               </button>

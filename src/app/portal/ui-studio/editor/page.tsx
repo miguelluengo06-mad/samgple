@@ -2279,13 +2279,13 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
             </div>
             <div className="p-4 space-y-3">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-10 bg-gray-900/50 border border-gray-800 rounded-lg animate-pulse" />
+                <div key={i} className="h-10 card-liquid rounded-lg animate-pulse" />
               ))}
             </div>
           </div>
           {/* Canvas area */}
           <div className="flex-1 flex items-center justify-center">
-            <div className="w-[400px] h-[500px] bg-gray-900/50 border border-gray-800 rounded-xl animate-pulse" />
+            <div className="w-[400px] h-[500px] card-liquid rounded-xl animate-pulse" />
           </div>
           {/* Right panel skeleton */}
           <div className="w-[300px] border-l border-gray-800 p-4 space-y-4">
@@ -2293,7 +2293,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
             {[1, 2, 3].map((i) => (
               <div key={i} className="space-y-2">
                 <div className="h-4 w-16 bg-gray-800/30 rounded animate-pulse" />
-                <div className="h-9 bg-gray-900/50 border border-gray-800 rounded-lg animate-pulse" />
+                <div className="h-9 card-liquid rounded-lg animate-pulse" />
               </div>
             ))}
           </div>
@@ -2316,7 +2316,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
         />
         <div className="min-h-screen bg-black flex items-center justify-center">
           <div className="max-w-md mx-auto px-6">
-            <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 text-center">
+            <div className="card-liquid rounded-xl p-8 text-center">
               <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 border border-purple-500/30 flex items-center justify-center mx-auto mb-6">
                 <Lock className="w-8 h-8 text-purple-400" />
               </div>
@@ -2385,7 +2385,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
             onClick={() => setShowUpgradeModal(false)}
           >
             <div
-              className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl overflow-hidden"
+              className="w-full max-w-sm card-liquid rounded-xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-6 text-center">
@@ -2411,7 +2411,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   <Link
                     href="/#pricing"
                     onClick={() => setShowUpgradeModal(false)}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
+                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
                   >
                     <Sparkles className="w-4 h-4" />
                     Upgrade
@@ -2486,7 +2486,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               <button
                 onClick={handleSaveTemplate}
                 disabled={!widgetName.trim() || isSaving}
-                className="px-6 py-2.5 bg-white text-black rounded-lg font-medium hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-6 py-2.5 bg-olive-500 text-black rounded-lg font-medium hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {isSaving ? 'Saving...' : savedWidgetId ? (editingTemplate ? 'Save Changes' : 'Save') : 'Save and Share'}
               </button>
@@ -2495,14 +2495,14 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
 
           {/* Share Panel - Hidden (moved to under preview) */}
           {false && savedWidgetId && (
-            <div className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden mb-8">
+            <div className="card-liquid rounded-xl overflow-hidden mb-8">
               <button
                 onClick={() => setSharePanelExpanded(!sharePanelExpanded)}
                 className="w-full px-8 py-5 flex items-center justify-between hover:bg-gray-800/30 transition-colors group"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-green-900/20 border border-green-800 flex items-center justify-center">
-                    <Check className="w-6 h-6 text-green-400" />
+                  <div className="w-12 h-12 rounded-xl bg-olive-900/20 border border-olive-800 flex items-center justify-center">
+                    <Check className="w-6 h-6 text-olive-400" />
                   </div>
                   <div className="text-left">
                     <h3 className="text-base font-semibold text-white mb-0.5">Component Saved Successfully!</h3>
@@ -2525,7 +2525,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         type="text"
                         readOnly
                         value={`${originUrl}/w/${savedWidgetId}`}
-                        className="flex-1 px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white text-sm focus:ring-2 focus:ring-white focus:border-white"
+                        className="flex-1 px-4 py-3 card-liquid rounded-lg text-white text-sm focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                         onClick={(e) => e.currentTarget.select()}
                       />
                       <button
@@ -2535,7 +2535,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           setShareLinkCopied(true);
                           setTimeout(() => setShareLinkCopied(false), 2000);
                         }}
-                        className="px-6 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 whitespace-nowrap"
+                        className="px-6 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors flex items-center gap-2 whitespace-nowrap"
                       >
                         {shareLinkCopied ? (
                           <>
@@ -2563,13 +2563,13 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       <textarea
                         readOnly
                         value={generateEmbedCode()}
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white text-xs font-mono resize-none focus:ring-2 focus:ring-white focus:border-white"
+                        className="w-full px-4 py-3 card-liquid rounded-lg text-white text-xs font-mono resize-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                         rows={5}
                         onClick={(e) => e.currentTarget.select()}
                       />
                       <button
                         onClick={handleCopyEmbedCode}
-                        className="w-full px-6 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                        className="w-full px-6 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2"
                       >
                         <Copy className="w-4 h-4" />
                         {embedCodeCopied ? 'Copied!' : 'Copy Embed Code'}
@@ -2601,7 +2601,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         <a
                           href={`https://api.qrserver.com/v1/create-qr-code/?size=512x512&data=${encodeURIComponent(`${originUrl}/w/${savedWidgetId}`)}`}
                           download={`widget-${savedWidgetId}-qr.png`}
-                          className="px-6 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors inline-flex items-center justify-center gap-2"
+                          className="px-6 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors inline-flex items-center justify-center gap-2"
                         >
                           <QrCode className="w-4 h-4" />
                           Download QR Code
@@ -2658,12 +2658,12 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                 {/* Top Bar */}
                 <div className="bg-black border-b border-gray-800 px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
                   <div className="flex items-center gap-2 lg:gap-4">
-                    <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-gray-900/50 border border-gray-800 flex items-center justify-center">
+                    <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg card-liquid flex items-center justify-center">
                       <Sparkles className="w-4 h-4 lg:w-5 lg:h-5 text-white" />
                     </div>
                     <h2 className="text-white font-medium text-sm lg:text-base">AI Builder</h2>
                     {aiChangeApplied && (
-                      <span className="flex items-center gap-1 lg:gap-1.5 text-xs text-green-400 bg-green-900/20 px-2 lg:px-3 py-1 lg:py-1.5 rounded-lg border border-green-800/30">
+                      <span className="flex items-center gap-1 lg:gap-1.5 text-xs text-olive-400 bg-olive-900/20 px-2 lg:px-3 py-1 lg:py-1.5 rounded-lg border border-olive-800/30">
                         <Check className="w-3 h-3 lg:w-3.5 lg:h-3.5" />
                         <span className="hidden sm:inline">Changes Applied</span>
                         <span className="sm:hidden">Applied</span>
@@ -2716,7 +2716,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                     <div className="flex-1 overflow-y-auto p-4 lg:p-8">
                       {aiChatMessages.length === 0 ? (
                         <div className="text-center py-20">
-                          <div className="w-20 h-20 mx-auto mb-6 rounded-xl bg-gray-900/50 border border-gray-800 flex items-center justify-center">
+                          <div className="w-20 h-20 mx-auto mb-6 rounded-xl card-liquid flex items-center justify-center">
                             <Sparkles className="w-10 h-10 text-gray-400" />
                           </div>
                           <h3 className="text-xl font-medium text-white mb-3">Start Building</h3>
@@ -2725,19 +2725,19 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             <p className="text-xs text-gray-500 text-left mb-2">Example prompts:</p>
                             <button
                               onClick={() => setAiInput('"Create a contact form with name, email, and message fields"')}
-                              className="w-full text-left px-5 py-4 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-gray-300 hover:border-gray-700 hover:bg-gray-800/30 transition-colors"
+                              className="w-full text-left px-5 py-4 card-liquid rounded-lg text-sm text-gray-300 hover:border-gray-700 hover:bg-gray-800/30 transition-colors"
                             >
                               "Create a contact form with name, email, and message fields"
                             </button>
                             <button
                               onClick={() => setAiInput('"Make the button background blue with rounded corners"')}
-                              className="w-full text-left px-5 py-4 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-gray-300 hover:border-gray-700 hover:bg-gray-800/30 transition-colors"
+                              className="w-full text-left px-5 py-4 card-liquid rounded-lg text-sm text-gray-300 hover:border-gray-700 hover:bg-gray-800/30 transition-colors"
                             >
                               "Make the button background blue with rounded corners"
                             </button>
                             <button
                               onClick={() => setAiInput('"Change chatbot welcome message and bubble color"')}
-                              className="w-full text-left px-5 py-4 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-gray-300 hover:border-gray-700 hover:bg-gray-800/30 transition-colors"
+                              className="w-full text-left px-5 py-4 card-liquid rounded-lg text-sm text-gray-300 hover:border-gray-700 hover:bg-gray-800/30 transition-colors"
                             >
                               "Change chatbot welcome message and bubble color"
                             </button>
@@ -2754,7 +2754,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               )}
                             >
                               {msg.role === 'assistant' && (
-                                <div className="w-10 h-10 rounded-lg bg-gray-900/50 border border-gray-800 flex items-center justify-center flex-shrink-0">
+                                <div className="w-10 h-10 rounded-lg card-liquid flex items-center justify-center flex-shrink-0">
                                   <Sparkles className="w-5 h-5 text-gray-400" />
                                 </div>
                               )}
@@ -2762,8 +2762,8 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 className={cn(
                                   "px-5 py-4 rounded-lg max-w-[75%]",
                                   msg.role === 'user'
-                                    ? 'bg-white text-black'
-                                    : 'bg-gray-900/50 border border-gray-800 text-gray-200'
+                                    ? 'bg-olive-500 text-black'
+                                    : 'card-liquid text-gray-200'
                                 )}
                               >
                                 <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">
@@ -2800,12 +2800,12 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleAiAssistantSubmit()}
                           placeholder="Describe what you want to build..."
                           disabled={aiIsLoading}
-                          className="flex-1 px-5 py-4 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white disabled:opacity-50"
+                          className="flex-1 px-5 py-4 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 disabled:opacity-50"
                         />
                         <button
                           onClick={handleAiAssistantSubmit}
                           disabled={aiIsLoading || !aiInput.trim()}
-                          className="px-6 py-4 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg font-medium transition-colors flex items-center gap-2"
+                          className="px-6 py-4 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full font-medium transition-colors flex items-center gap-2"
                         >
                           {aiIsLoading ? (
                             <>
@@ -2849,7 +2849,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                     <div className="flex items-center justify-between px-4 lg:px-6 py-3 lg:py-4 border-b border-gray-800">
                       <div className="flex items-center gap-2">
                         <span className="text-white font-medium text-sm">Live Preview</span>
-                        <span className="text-xs text-gray-500 bg-gray-900/50 border border-gray-800 px-2 py-1 rounded hidden sm:inline">{widgetType}</span>
+                        <span className="text-xs text-gray-500 card-liquid px-2 py-1 rounded hidden sm:inline">{widgetType}</span>
                       </div>
                       <button
                         onClick={() => setPreviewBg(previewBg === 'dark' ? 'light' : 'dark')}
@@ -2874,7 +2874,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
             {/* Left Panel - Builder */}
             <div className="space-y-6 overflow-y-auto max-h-[calc(100vh-80px)]">
               {/* Basic Info */}
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+              <div className="card-liquid rounded-xl p-6">
                 <h2 className="text-lg font-medium mb-4">Basic Info</h2>
                 <div className="space-y-4">
                   <div>
@@ -2884,7 +2884,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       value={widgetName}
                       onChange={(e) => setWidgetName(e.target.value)}
                       placeholder="e.g., Contact Form"
-                      className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                      className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                     />
                   </div>
                   <div>
@@ -2894,7 +2894,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       onChange={(e) => setWidgetDescription(e.target.value)}
                       placeholder="What is this component for?"
                       rows={2}
-                      className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors resize-none"
+                      className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors resize-none"
                     />
                   </div>
                   <div>
@@ -2904,7 +2904,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       value={defaultWebhookPath}
                       onChange={(e) => setDefaultWebhookPath(e.target.value)}
                       placeholder="/webhook/my-form"
-                      className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                      className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                     />
                     <p className="mt-2 text-xs text-gray-500">
                       <span className="text-gray-400">Tip:</span> When assigning this component to a workflow in n8n Hosting, the workflow&apos;s webhook will be used automatically.
@@ -2947,7 +2947,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               }}
                               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 ${
                                 isSelected
-                                  ? 'bg-white text-black'
+                                  ? 'bg-olive-500 text-black'
                                   : 'bg-gray-800/50 text-gray-400 hover:text-white border border-gray-700 hover:border-gray-600'
                               }`}
                             >
@@ -3031,7 +3031,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               {builderTab === 'content' && widgetType === 'form' && (
                 <div className="space-y-4">
                   {/* Quick Start Templates */}
-                  <details className="group bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden" open>
+                  <details className="group card-liquid rounded-xl overflow-hidden" open>
                     <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                       <span className="text-sm font-medium text-white flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-purple-400" />
@@ -3090,7 +3090,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </details>
 
                   {/* Field Types */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4">
+                  <div className="card-liquid rounded-xl p-4">
                     <h3 className="text-sm font-medium text-gray-400 mb-3">Add Field</h3>
                     <div className="grid grid-cols-4 gap-2">
                       {FIELD_TYPES.map(({ type, label, icon: Icon }) => (
@@ -3107,7 +3107,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* Fields List */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4">
+                  <div className="card-liquid rounded-xl p-4">
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-sm font-medium text-gray-400">
                         Form Fields ({formFields.length}/{MAX_FIELDS})
@@ -3164,7 +3164,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
 
                   {/* Selected Field Properties */}
                   {typeof selectedFieldIndex === 'number' && formFields[selectedFieldIndex as number] && (
-                    <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4">
+                    <div className="card-liquid rounded-xl p-4">
                       <h3 className="text-sm font-medium text-gray-400 mb-3">Field Properties</h3>
                       <div className="space-y-4">
                         <div>
@@ -3173,7 +3173,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             type="text"
                             value={formFields[selectedFieldIndex as number].name}
                             onChange={(e) => updateField(selectedFieldIndex as number, { name: e.target.value })}
-                            className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                            className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                           />
                         </div>
                         <div>
@@ -3183,7 +3183,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             value={formFields[selectedFieldIndex as number].placeholder || ''}
                             onChange={(e) => updateField(selectedFieldIndex as number, { placeholder: e.target.value })}
                             placeholder="Enter placeholder text..."
-                            className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                            className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                           />
                         </div>
                         <label className="flex items-center gap-3 cursor-pointer">
@@ -3191,7 +3191,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             type="checkbox"
                             checked={formFields[selectedFieldIndex as number].required}
                             onChange={(e) => updateField(selectedFieldIndex as number, { required: e.target.checked })}
-                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                           />
                           <span className="text-sm text-gray-300">Required field</span>
                         </label>
@@ -3202,7 +3202,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               value={(formFields[selectedFieldIndex as number].options || []).join('\n')}
                               onChange={(e) => updateField(selectedFieldIndex as number, { options: e.target.value.split('\n').filter(Boolean) })}
                               rows={3}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors resize-none"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors resize-none"
                             />
                           </div>
                         )}
@@ -3219,7 +3219,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               <select
                                 value={formFields[selectedFieldIndex as number].width || '100'}
                                 onChange={(e) => updateField(selectedFieldIndex as number, { width: e.target.value as FormField['width'] })}
-                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                               >
                                 <option value="100">Full Width (100%)</option>
                                 <option value="50">Half Width (50%)</option>
@@ -3237,7 +3237,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 max="24"
                                 value={formFields[selectedFieldIndex as number].customBorderRadius || styles.borderRadius}
                                 onChange={(e) => updateField(selectedFieldIndex as number, { customBorderRadius: e.target.value })}
-                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                                 placeholder={`Default: ${styles.borderRadius}`}
                               />
                               <p className="text-[10px] text-gray-500 mt-1">Leave empty to use global form border radius</p>
@@ -3251,7 +3251,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 max="32"
                                 value={formFields[selectedFieldIndex as number].customPadding || styles.inputPadding}
                                 onChange={(e) => updateField(selectedFieldIndex as number, { customPadding: e.target.value })}
-                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                                 placeholder={`Default: ${styles.inputPadding}`}
                               />
                             </div>
@@ -3264,7 +3264,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 max="24"
                                 value={formFields[selectedFieldIndex as number].customFontSize || styles.inputFontSize}
                                 onChange={(e) => updateField(selectedFieldIndex as number, { customFontSize: e.target.value })}
-                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                                 placeholder={`Default: ${styles.inputFontSize}`}
                               />
                             </div>
@@ -3278,7 +3278,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                   max="80"
                                   value={formFields[selectedFieldIndex as number].customHeight || ''}
                                   onChange={(e) => updateField(selectedFieldIndex as number, { customHeight: e.target.value })}
-                                  className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                                  className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                                   placeholder="Auto"
                                 />
                               </div>
@@ -3295,7 +3295,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               {builderTab === 'content' && widgetType === 'button' && (
                 <div className="space-y-4">
                   {/* Button Style Preset Gallery */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4 flex items-center gap-2">
                       <Sparkles className="w-4 h-4" />
                       Quick Start: Button Presets
@@ -3337,7 +3337,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* Info Card */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-3 flex items-center gap-2">
                       <MousePointer className="w-4 h-4" />
                       Button Customization
@@ -3353,7 +3353,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               {builderTab === 'content' && widgetType === 'chatbot' && (
                 <div className="space-y-4">
                   {/* Theme Preset Gallery */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4 flex items-center gap-2">
                       <Sparkles className="w-4 h-4" />
                       Quick Start: Theme Presets
@@ -3423,7 +3423,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             {/* Theme Name */}
                             <div className={`px-2 py-1.5 text-[10px] font-medium text-center border-t ${
                               isActive
-                                ? 'bg-white text-black border-white'
+                                ? 'bg-olive-500 text-black border-white'
                                 : 'bg-gray-800/50 text-gray-300 border-gray-700'
                             }`}>
                               {key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')}
@@ -3435,7 +3435,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* Display Mode */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4 flex items-center gap-2">
                       <MessageCircle className="w-4 h-4" />
                       Display Mode
@@ -3448,7 +3448,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             onClick={() => setChatbotConfig({ ...chatbotConfig, displayMode: 'embedded' })}
                             className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
                               chatbotConfig.displayMode === 'embedded'
-                                ? 'bg-white text-black'
+                                ? 'bg-olive-500 text-black'
                                 : 'bg-gray-800/30 text-gray-400 hover:text-white border border-gray-700'
                             }`}
                           >
@@ -3458,7 +3458,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             onClick={() => setChatbotConfig({ ...chatbotConfig, displayMode: 'popup' })}
                             className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
                               chatbotConfig.displayMode === 'popup'
-                                ? 'bg-white text-black'
+                                ? 'bg-olive-500 text-black'
                                 : 'bg-gray-800/30 text-gray-400 hover:text-white border border-gray-700'
                             }`}
                           >
@@ -3477,7 +3477,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 onClick={() => setChatbotConfig({ ...chatbotConfig, position: pos })}
                                 className={`py-2.5 px-3 rounded-lg text-xs font-medium transition-colors capitalize ${
                                   chatbotConfig.position === pos
-                                    ? 'bg-white text-black'
+                                    ? 'bg-olive-500 text-black'
                                     : 'bg-gray-800/30 text-gray-400 hover:text-white border border-gray-700'
                                 }`}
                               >
@@ -3491,7 +3491,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* File Uploads */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4 flex items-center gap-2">
                       <Paperclip className="w-4 h-4" />
                       File Uploads
@@ -3517,7 +3517,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             type="text"
                             value={chatbotConfig.allowedFileMimeTypes || ''}
                             onChange={(e) => setChatbotConfig({ ...chatbotConfig, allowedFileMimeTypes: e.target.value })}
-                            className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                            className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                             placeholder="image/*,application/pdf,.doc,.docx"
                           />
                           <p className="text-xs text-gray-500 mt-1">Comma-separated. Leave empty to allow all files.</p>
@@ -3527,7 +3527,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* Branding */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4">Branding</h3>
                     <div className="space-y-4">
                       <div>
@@ -3536,7 +3536,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           type="text"
                           value={chatbotConfig.chatbotName}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, chatbotName: e.target.value })}
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                           placeholder="Chat Assistant"
                         />
                       </div>
@@ -3550,7 +3550,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               onClick={() => setChatbotConfig({ ...chatbotConfig, avatarIcon: icon.value })}
                               className={`aspect-square flex items-center justify-center text-2xl rounded-lg transition-all ${
                                 chatbotConfig.avatarIcon === icon.value
-                                  ? 'bg-white text-black ring-2 ring-white scale-105'
+                                  ? 'bg-olive-500 text-black ring-2 ring-white scale-105'
                                   : 'bg-gray-800/30 hover:bg-gray-700 border border-gray-700'
                               }`}
                               title={icon.label}
@@ -3571,7 +3571,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           type="url"
                           value={chatbotConfig.chatbotLogo || ''}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, chatbotLogo: e.target.value })}
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                           placeholder="https://example.com/logo.png"
                         />
                       </div>
@@ -3601,7 +3601,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             type="checkbox"
                             checked={chatbotConfig.showWatermark}
                             onChange={(e) => setChatbotConfig({ ...chatbotConfig, showWatermark: e.target.checked })}
-                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                           />
                           <span className="text-sm text-gray-400">Show &quot;Powered by FlowEngine&quot; watermark</span>
                         </label>
@@ -3610,7 +3610,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* Behavior */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4">Behavior</h3>
                     <div className="space-y-4">
                       <div>
@@ -3618,7 +3618,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         <textarea
                           value={chatbotConfig.welcomeMessage}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, welcomeMessage: e.target.value })}
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white resize-none"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 resize-none"
                           rows={3}
                           placeholder="Hi! How can I help you today?"
                         />
@@ -3630,7 +3630,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           type="text"
                           value={chatbotConfig.placeholder}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, placeholder: e.target.value })}
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                           placeholder="Type your message..."
                         />
                       </div>
@@ -3642,7 +3642,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             onClick={() => setChatbotConfig({ ...chatbotConfig, autoOpen: 'always' })}
                             className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
                               chatbotConfig.autoOpen === 'always'
-                                ? 'bg-white text-black'
+                                ? 'bg-olive-500 text-black'
                                 : 'bg-gray-800/30 text-gray-400 hover:text-white border border-gray-700'
                             }`}
                           >
@@ -3652,7 +3652,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             onClick={() => setChatbotConfig({ ...chatbotConfig, autoOpen: 'delayed' })}
                             className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
                               chatbotConfig.autoOpen === 'delayed'
-                                ? 'bg-white text-black'
+                                ? 'bg-olive-500 text-black'
                                 : 'bg-gray-800/30 text-gray-400 hover:text-white border border-gray-700'
                             }`}
                           >
@@ -3662,7 +3662,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             onClick={() => setChatbotConfig({ ...chatbotConfig, autoOpen: 'click-only' })}
                             className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
                               chatbotConfig.autoOpen === 'click-only'
-                                ? 'bg-white text-black'
+                                ? 'bg-olive-500 text-black'
                                 : 'bg-gray-800/30 text-gray-400 hover:text-white border border-gray-700'
                             }`}
                           >
@@ -3685,7 +3685,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             max="30"
                             value={chatbotConfig.autoOpenDelay}
                             onChange={(e) => setChatbotConfig({ ...chatbotConfig, autoOpenDelay: parseInt(e.target.value) || 0 })}
-                            className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                            className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                           />
                         </div>
                       )}
@@ -3745,7 +3745,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
 
                   {/* Form & Button Colors */}
                   {(widgetType === 'form' || widgetType === 'button') && (
-                    <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 space-y-6">
+                    <div className="card-liquid rounded-xl p-6 space-y-6">
                       <div className="text-center mb-4">
                         <h3 className="text-lg font-medium text-white mb-2">Form Colors</h3>
                         <p className="text-sm text-gray-400">Customize your form appearance</p>
@@ -3821,7 +3821,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   {widgetType === 'chatbot' && (
                     <>
                       {/* Quick Themes */}
-                      <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden" open>
+                      <details className="group card-liquid rounded-lg overflow-hidden" open>
                         <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                           <span className="text-sm font-medium text-white flex items-center gap-2">
                             <Sparkles className="w-4 h-4 text-purple-400" />
@@ -3871,7 +3871,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       </details>
 
                       {/* Colors */}
-                      <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                      <details className="group card-liquid rounded-lg overflow-hidden">
                         <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                           <span className="text-sm font-medium text-white">Chatbot Colors</span>
                           <ChevronDown className="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" />
@@ -3883,7 +3883,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="color"
                               value={chatbotConfig.headerColor}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, headerColor: e.target.value })}
-                              className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                              className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                             />
                           </div>
                           <div>
@@ -3892,7 +3892,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="color"
                               value={chatbotConfig.headerTextColor}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, headerTextColor: e.target.value })}
-                              className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                              className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                             />
                           </div>
                           <div>
@@ -3901,7 +3901,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="color"
                               value={chatbotConfig.chatBackgroundColor}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, chatBackgroundColor: e.target.value })}
-                              className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                              className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -3911,7 +3911,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 type="color"
                                 value={chatbotConfig.userMessageColor}
                                 onChange={(e) => setChatbotConfig({ ...chatbotConfig, userMessageColor: e.target.value })}
-                                className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                                className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                               />
                             </div>
                             <div>
@@ -3920,7 +3920,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 type="color"
                                 value={chatbotConfig.userMessageTextColor}
                                 onChange={(e) => setChatbotConfig({ ...chatbotConfig, userMessageTextColor: e.target.value })}
-                                className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                                className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                               />
                             </div>
                           </div>
@@ -3931,7 +3931,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 type="color"
                                 value={chatbotConfig.botMessageColor}
                                 onChange={(e) => setChatbotConfig({ ...chatbotConfig, botMessageColor: e.target.value })}
-                                className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                                className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                               />
                             </div>
                             <div>
@@ -3940,7 +3940,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 type="color"
                                 value={chatbotConfig.botMessageTextColor}
                                 onChange={(e) => setChatbotConfig({ ...chatbotConfig, botMessageTextColor: e.target.value })}
-                                className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                                className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                               />
                             </div>
                           </div>
@@ -3948,7 +3948,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       </details>
 
                       {/* Layout */}
-                      <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                      <details className="group card-liquid rounded-lg overflow-hidden">
                         <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                           <span className="text-sm font-medium text-white">Layout</span>
                           <ChevronDown className="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" />
@@ -3962,7 +3962,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               max="600"
                               value={chatbotConfig.chatWidth}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, chatWidth: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                             />
                           </div>
                           <div>
@@ -3973,7 +3973,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               max="800"
                               value={chatbotConfig.chatHeight}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, chatHeight: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                             />
                           </div>
                           <div>
@@ -3992,7 +3992,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             <select
                               value={chatbotConfig.fontFamily}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, fontFamily: e.target.value })}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                             >
                               <option value="system-ui">System UI</option>
                               <option value="Inter">Inter</option>
@@ -4018,7 +4018,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         </div>
                       </div>
 
-                      <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                      <details className="group card-liquid rounded-lg overflow-hidden">
                         <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                           <span className="text-sm font-medium text-gray-400">🎨 Gradients (Advanced CSS Mode)</span>
                           <div className="flex items-center gap-2">
@@ -4039,7 +4039,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="text"
                               value={chatbotConfig.bubbleGradient || ''}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, bubbleGradient: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white font-mono text-xs"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 font-mono text-xs"
                               placeholder="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
                             />
                             <p className="text-[10px] text-gray-500 mt-1">Leave empty to use solid color</p>
@@ -4050,7 +4050,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="text"
                               value={chatbotConfig.headerGradient || ''}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, headerGradient: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white font-mono text-xs"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 font-mono text-xs"
                               placeholder="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
                             />
                           </div>
@@ -4060,7 +4060,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="text"
                               value={chatbotConfig.chatBackgroundGradient || ''}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, chatBackgroundGradient: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white font-mono text-xs"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 font-mono text-xs"
                               placeholder="linear-gradient(180deg, #0f0c29 0%, #302b63 100%)"
                             />
                           </div>
@@ -4069,7 +4069,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             <select
                               value={chatbotConfig.chatBackgroundPattern || 'none'}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, chatBackgroundPattern: e.target.value as any })}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                             >
                               <option value="none">None</option>
                               <option value="dots">Dots</option>
@@ -4084,7 +4084,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="text"
                               value={chatbotConfig.userMessageGradient || ''}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, userMessageGradient: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white font-mono text-xs"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 font-mono text-xs"
                               placeholder="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"
                             />
                           </div>
@@ -4094,7 +4094,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="text"
                               value={chatbotConfig.botMessageGradient || ''}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, botMessageGradient: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white font-mono text-xs"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 font-mono text-xs"
                               placeholder="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
                             />
                           </div>
@@ -4102,7 +4102,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       </details>
 
                       {/* Effects & Animations */}
-                      <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                      <details className="group card-liquid rounded-lg overflow-hidden">
                         <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                           <span className="text-sm font-medium text-white">✨ Effects & Animations</span>
                           <div className="flex items-center gap-2">
@@ -4122,7 +4122,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             <select
                               value={chatbotConfig.bubbleAnimation}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, bubbleAnimation: e.target.value as any })}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                             >
                               <option value="none">None</option>
                               <option value="pulse">Pulse</option>
@@ -4136,7 +4136,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             <select
                               value={chatbotConfig.messageAnimation}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, messageAnimation: e.target.value as any })}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                             >
                               <option value="none">None</option>
                               <option value="slide">Slide In</option>
@@ -4150,7 +4150,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             <select
                               value={chatbotConfig.typingIndicator}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, typingIndicator: e.target.value as any })}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                             >
                               <option value="dots">Bouncing Dots</option>
                               <option value="pulse">Pulsing Dots</option>
@@ -4196,7 +4196,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="checkbox"
                               checked={chatbotConfig.bubbleGlow}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, bubbleGlow: e.target.checked })}
-                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                             />
                             <span className="text-sm text-gray-300">Enable bubble glow effect</span>
                           </label>
@@ -4207,7 +4207,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 type="color"
                                 value={chatbotConfig.bubbleGlowColor}
                                 onChange={(e) => setChatbotConfig({ ...chatbotConfig, bubbleGlowColor: e.target.value })}
-                                className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                                className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                               />
                             </div>
                           )}
@@ -4216,7 +4216,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="checkbox"
                               checked={chatbotConfig.userMessageGlow}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, userMessageGlow: e.target.checked })}
-                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                             />
                             <span className="text-sm text-gray-300">Enable user message glow</span>
                           </label>
@@ -4227,7 +4227,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 type="color"
                                 value={chatbotConfig.userMessageGlowColor}
                                 onChange={(e) => setChatbotConfig({ ...chatbotConfig, userMessageGlowColor: e.target.value })}
-                                className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                                className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                               />
                             </div>
                           )}
@@ -4236,7 +4236,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="checkbox"
                               checked={chatbotConfig.botMessageGlow}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, botMessageGlow: e.target.checked })}
-                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                             />
                             <span className="text-sm text-gray-300">Enable bot message glow</span>
                           </label>
@@ -4247,7 +4247,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 type="color"
                                 value={chatbotConfig.botMessageGlowColor}
                                 onChange={(e) => setChatbotConfig({ ...chatbotConfig, botMessageGlowColor: e.target.value })}
-                                className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                                className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                               />
                             </div>
                           )}
@@ -4256,7 +4256,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="checkbox"
                               checked={chatbotConfig.glassEffect}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, glassEffect: e.target.checked })}
-                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                             />
                             <span className="text-sm text-gray-300">Enable glassmorphism effect</span>
                           </label>
@@ -4278,7 +4278,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="checkbox"
                               checked={chatbotConfig.soundEffects}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, soundEffects: e.target.checked })}
-                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                             />
                             <span className="text-sm text-gray-300">Enable sound effects</span>
                           </label>
@@ -4286,7 +4286,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       </details>
 
                       {/* Typography & RTL */}
-                      <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                      <details className="group card-liquid rounded-lg overflow-hidden">
                         <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                           <span className="text-sm font-medium text-white">✍️ Typography & RTL</span>
                           <div className="flex items-center gap-2">
@@ -4308,7 +4308,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 onClick={() => setChatbotConfig({ ...chatbotConfig, direction: 'ltr', textAlign: 'left' })}
                                 className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
                                   chatbotConfig.direction === 'ltr'
-                                    ? 'bg-white text-black'
+                                    ? 'bg-olive-500 text-black'
                                     : 'bg-gray-800/30 text-gray-400 hover:text-white border border-gray-700'
                                 }`}
                               >
@@ -4318,7 +4318,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 onClick={() => setChatbotConfig({ ...chatbotConfig, direction: 'rtl', textAlign: 'right' })}
                                 className={`py-2.5 px-3 rounded-lg text-sm font-medium transition-colors ${
                                   chatbotConfig.direction === 'rtl'
-                                    ? 'bg-white text-black'
+                                    ? 'bg-olive-500 text-black'
                                     : 'bg-gray-800/30 text-gray-400 hover:text-white border border-gray-700'
                                 }`}
                               >
@@ -4334,7 +4334,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               max="24"
                               value={chatbotConfig.fontSize}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, fontSize: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                             />
                           </div>
                           <div>
@@ -4342,7 +4342,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             <select
                               value={chatbotConfig.fontWeight}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, fontWeight: e.target.value })}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                             >
                               <option value="300">Light (300)</option>
                               <option value="400">Regular (400)</option>
@@ -4360,7 +4360,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               step="0.1"
                               value={chatbotConfig.lineHeight}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, lineHeight: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                             />
                           </div>
                           <div>
@@ -4372,7 +4372,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               step="0.5"
                               value={chatbotConfig.letterSpacing}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, letterSpacing: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                             />
                           </div>
                           <div>
@@ -4380,7 +4380,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             <select
                               value={chatbotConfig.textTransform}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, textTransform: e.target.value as any })}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                             >
                               <option value="none">None</option>
                               <option value="uppercase">UPPERCASE</option>
@@ -4392,7 +4392,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       </details>
 
                       {/* Messages & Display */}
-                      <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                      <details className="group card-liquid rounded-lg overflow-hidden">
                         <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                           <span className="text-sm font-medium text-white">💬 Messages & Display</span>
                           <ChevronDown className="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" />
@@ -4403,7 +4403,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="checkbox"
                               checked={chatbotConfig.showAvatar}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, showAvatar: e.target.checked })}
-                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                             />
                             <span className="text-sm text-gray-300">Show bot avatar</span>
                           </label>
@@ -4414,7 +4414,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 type="url"
                                 value={chatbotConfig.avatarUrl || ''}
                                 onChange={(e) => setChatbotConfig({ ...chatbotConfig, avatarUrl: e.target.value })}
-                                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                                className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                                 placeholder="https://example.com/avatar.png"
                               />
                             </div>
@@ -4424,7 +4424,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="checkbox"
                               checked={chatbotConfig.showTimestamp}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, showTimestamp: e.target.checked })}
-                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                              className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                             />
                             <span className="text-sm text-gray-300">Show message timestamps</span>
                           </label>
@@ -4435,7 +4435,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                                 type="color"
                                 value={chatbotConfig.timestampColor}
                                 onChange={(e) => setChatbotConfig({ ...chatbotConfig, timestampColor: e.target.value })}
-                                className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                                className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                               />
                             </div>
                           )}
@@ -4447,7 +4447,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               max="32"
                               value={chatbotConfig.messageSpacing}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, messageSpacing: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                             />
                           </div>
                           <div>
@@ -4458,7 +4458,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               max="24"
                               value={chatbotConfig.messagePadding}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, messagePadding: e.target.value })}
-                              className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                              className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                             />
                           </div>
                         </div>
@@ -4467,7 +4467,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   )}
 
                   {/* Form Title & Description */}
-                  <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                  <details className="group card-liquid rounded-lg overflow-hidden">
                     <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                       <span className="text-sm font-medium text-white">Form Title & Description</span>
                       <ChevronDown className="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" />
@@ -4478,7 +4478,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           type="checkbox"
                           checked={styles.showTitle}
                           onChange={(e) => setStyles({ ...styles, showTitle: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                          className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                         />
                         <span className="text-sm text-gray-300">Show form title</span>
                       </label>
@@ -4490,7 +4490,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="text"
                               value={styles.formTitle}
                               onChange={(e) => setStyles({ ...styles, formTitle: e.target.value })}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -4529,7 +4529,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               <select
                                 value={styles.titleFontWeight}
                                 onChange={(e) => setStyles({ ...styles, titleFontWeight: e.target.value })}
-                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                               >
                                 <option value="400">Normal</option>
                                 <option value="500">Medium</option>
@@ -4542,7 +4542,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               <select
                                 value={styles.titleAlignment}
                                 onChange={(e) => setStyles({ ...styles, titleAlignment: e.target.value })}
-                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                                className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                               >
                                 <option value="left">Left</option>
                                 <option value="center">Center</option>
@@ -4558,7 +4558,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             type="checkbox"
                             checked={styles.showDescription}
                             onChange={(e) => setStyles({ ...styles, showDescription: e.target.checked })}
-                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                           />
                           <span className="text-sm text-gray-300">Show description</span>
                         </label>
@@ -4571,7 +4571,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               value={styles.formDescription}
                               onChange={(e) => setStyles({ ...styles, formDescription: e.target.value })}
                               rows={2}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors resize-none"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors resize-none"
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-4">
@@ -4610,7 +4610,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </details>
 
                   {/* Form Container */}
-                  <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                  <details className="group card-liquid rounded-lg overflow-hidden">
                     <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                       <span className="text-sm font-medium text-white">Form Container</span>
                       <ChevronDown className="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" />
@@ -4663,7 +4663,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         <select
                           value={styles.formShadow}
                           onChange={(e) => setStyles({ ...styles, formShadow: e.target.value })}
-                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                         >
                           <option value="none">None</option>
                           <option value="0 1px 3px rgba(0,0,0,0.12)">Small</option>
@@ -4676,7 +4676,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </details>
 
                   {/* Labels */}
-                  <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                  <details className="group card-liquid rounded-lg overflow-hidden">
                     <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                       <span className="text-sm font-medium text-white">Labels</span>
                       <ChevronDown className="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" />
@@ -4735,7 +4735,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           <select
                             value={styles.labelFontWeight}
                             onChange={(e) => setStyles({ ...styles, labelFontWeight: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                            className="w-full px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                           >
                             <option value="400">Normal</option>
                             <option value="500">Medium</option>
@@ -4758,7 +4758,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </details>
 
                   {/* Input Fields */}
-                  <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                  <details className="group card-liquid rounded-lg overflow-hidden">
                     <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                       <span className="text-sm font-medium text-white">Input Fields</span>
                       <div className="flex items-center gap-2">
@@ -4905,7 +4905,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             <select
                               value={styles.inputFocusShadow}
                               onChange={(e) => setStyles({ ...styles, inputFocusShadow: e.target.value })}
-                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                              className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                             >
                               <option value="none">None</option>
                               <option value="0 0 0 2px rgba(255,255,255,0.1)">Subtle</option>
@@ -4919,7 +4919,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </details>
 
                   {/* Button */}
-                  <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                  <details className="group card-liquid rounded-lg overflow-hidden">
                     <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                       <span className="text-sm font-medium text-white">Submit Button</span>
                       <div className="flex items-center gap-2">
@@ -4940,7 +4940,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           type="text"
                           value={styles.buttonText}
                           onChange={(e) => setStyles({ ...styles, buttonText: e.target.value })}
-                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-4">
@@ -5002,7 +5002,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           <select
                             value={styles.buttonWidth}
                             onChange={(e) => setStyles({ ...styles, buttonWidth: e.target.value })}
-                            className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                            className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                           >
                             <option value="full">Full Width</option>
                             <option value="auto">Auto (fit content)</option>
@@ -5027,7 +5027,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           <select
                             value={styles.buttonFontWeight}
                             onChange={(e) => setStyles({ ...styles, buttonFontWeight: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                            className="w-full px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                           >
                             <option value="400">Normal</option>
                             <option value="500">Medium</option>
@@ -5052,7 +5052,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         <select
                           value={styles.buttonShadow}
                           onChange={(e) => setStyles({ ...styles, buttonShadow: e.target.value })}
-                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                         >
                           <option value="none">None</option>
                           <option value="0 2px 4px rgba(0,0,0,0.1)">Subtle</option>
@@ -5064,7 +5064,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </details>
 
                   {/* Typography */}
-                  <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                  <details className="group card-liquid rounded-lg overflow-hidden">
                     <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                       <span className="text-sm font-medium text-white">Typography</span>
                       <ChevronDown className="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" />
@@ -5075,7 +5075,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         <select
                           value={styles.fontFamily}
                           onChange={(e) => setStyles({ ...styles, fontFamily: e.target.value })}
-                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                         >
                           <option value="system-ui">System Default</option>
                           <option value="Inter">Inter</option>
@@ -5095,7 +5095,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </details>
 
                   {/* Layout & Spacing */}
-                  <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                  <details className="group card-liquid rounded-lg overflow-hidden">
                     <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                       <span className="text-sm font-medium text-white">Layout & Spacing</span>
                       <ChevronDown className="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" />
@@ -5129,7 +5129,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </details>
 
                   {/* Messages */}
-                  <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                  <details className="group card-liquid rounded-lg overflow-hidden">
                     <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                       <span className="text-sm font-medium text-white">Success & Error Messages</span>
                       <ChevronDown className="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" />
@@ -5215,7 +5215,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </details>
 
                   {/* Quick Presets */}
-                  <details className="group bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+                  <details className="group card-liquid rounded-lg overflow-hidden">
                     <summary className="px-4 py-3 cursor-pointer flex items-center justify-between hover:bg-gray-800/30 transition-colors">
                       <span className="text-sm font-medium text-white flex items-center gap-2">
                         <Sparkles className="w-4 h-4 text-yellow-400" />
@@ -5383,7 +5383,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               {builderTab === 'effects' && widgetType === 'chatbot' && (
                 <div className="space-y-4">
                   {/* Gradient Effects */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4">Gradient Effects</h3>
                     <div className="space-y-4">
                       <div>
@@ -5392,7 +5392,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           type="text"
                           value={chatbotConfig.chatBackgroundGradient || ''}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, chatBackgroundGradient: e.target.value })}
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white font-mono text-xs"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 font-mono text-xs"
                           placeholder="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
                         />
                         {chatbotConfig.chatBackgroundGradient && (
@@ -5405,7 +5405,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           type="text"
                           value={chatbotConfig.headerGradient || ''}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, headerGradient: e.target.value })}
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white font-mono text-xs"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 font-mono text-xs"
                           placeholder="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
                         />
                         {chatbotConfig.headerGradient && (
@@ -5418,7 +5418,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           type="text"
                           value={chatbotConfig.botMessageGradient || ''}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, botMessageGradient: e.target.value })}
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white font-mono text-xs"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 font-mono text-xs"
                           placeholder="linear-gradient(135deg, #1e293b 0%, #334155 100%)"
                         />
                         {chatbotConfig.botMessageGradient && (
@@ -5431,7 +5431,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           type="text"
                           value={chatbotConfig.userMessageGradient || ''}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, userMessageGradient: e.target.value })}
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white font-mono text-xs"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 font-mono text-xs"
                           placeholder="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
                         />
                         {chatbotConfig.userMessageGradient && (
@@ -5442,7 +5442,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* Glow Effects */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4">Glow Effects</h3>
                     <div className="space-y-4">
                       <div>
@@ -5451,7 +5451,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             type="checkbox"
                             checked={chatbotConfig.botMessageGlow}
                             onChange={(e) => setChatbotConfig({ ...chatbotConfig, botMessageGlow: e.target.checked })}
-                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                           />
                           <span className="text-sm text-gray-300">Enable Bot Message Glow</span>
                         </label>
@@ -5462,7 +5462,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="color"
                               value={chatbotConfig.botMessageGlowColor}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, botMessageGlowColor: e.target.value })}
-                              className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                              className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                             />
                           </div>
                         )}
@@ -5473,7 +5473,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             type="checkbox"
                             checked={chatbotConfig.userMessageGlow}
                             onChange={(e) => setChatbotConfig({ ...chatbotConfig, userMessageGlow: e.target.checked })}
-                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                           />
                           <span className="text-sm text-gray-300">Enable User Message Glow</span>
                         </label>
@@ -5484,7 +5484,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="color"
                               value={chatbotConfig.userMessageGlowColor}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, userMessageGlowColor: e.target.value })}
-                              className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                              className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                             />
                           </div>
                         )}
@@ -5495,7 +5495,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             type="checkbox"
                             checked={chatbotConfig.bubbleGlow}
                             onChange={(e) => setChatbotConfig({ ...chatbotConfig, bubbleGlow: e.target.checked })}
-                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                           />
                           <span className="text-sm text-gray-300">Enable Bubble Glow</span>
                         </label>
@@ -5506,7 +5506,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                               type="color"
                               value={chatbotConfig.bubbleGlowColor}
                               onChange={(e) => setChatbotConfig({ ...chatbotConfig, bubbleGlowColor: e.target.value })}
-                              className="w-full h-12 bg-gray-900/50 border border-gray-800 rounded-lg cursor-pointer"
+                              className="w-full h-12 card-liquid rounded-lg cursor-pointer"
                             />
                           </div>
                         )}
@@ -5515,7 +5515,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* Glass Effects */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4">Glass & Blur Effects</h3>
                     <div className="space-y-4">
                       <div>
@@ -5524,7 +5524,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             type="checkbox"
                             checked={chatbotConfig.glassEffect}
                             onChange={(e) => setChatbotConfig({ ...chatbotConfig, glassEffect: e.target.checked })}
-                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-white"
+                            className="w-4 h-4 rounded border-gray-600 bg-gray-800 text-white focus:ring-olive-500"
                           />
                           <span className="text-sm text-gray-300">Enable Glassmorphism Effect</span>
                         </label>
@@ -5534,7 +5534,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* Typing Indicator */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4">Typing Indicator</h3>
                     <div className="space-y-4">
                       <div>
@@ -5542,7 +5542,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         <select
                           value={chatbotConfig.typingIndicator}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, typingIndicator: e.target.value as any })}
-                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                         >
                           <option value="dots">Bouncing Dots</option>
                           <option value="pulse">Pulsing Dots</option>
@@ -5596,7 +5596,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               {builderTab === 'animations' && widgetType === 'chatbot' && (
                 <div className="space-y-4">
                   {/* Bubble Animations */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4">Bubble Animations</h3>
                     <div className="space-y-4">
                       <div>
@@ -5604,7 +5604,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         <select
                           value={chatbotConfig.bubbleAnimation}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, bubbleAnimation: e.target.value as any })}
-                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                         >
                           <option value="none">None</option>
                           <option value="pulse">Pulse</option>
@@ -5631,7 +5631,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* Message Animations */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4">Message Animations</h3>
                     <div className="space-y-4">
                       <div>
@@ -5639,7 +5639,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         <select
                           value={chatbotConfig.messageAnimation || 'slideIn'}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, messageAnimation: e.target.value as any })}
-                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                         >
                           <option value="none">None</option>
                           <option value="slideIn">Slide In</option>
@@ -5652,7 +5652,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         <select
                           value={chatbotConfig.typingIndicator}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, typingIndicator: e.target.value as any })}
-                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                         >
                           <option value="dots">Bouncing Dots</option>
                           <option value="pulse">Pulsing Dots</option>
@@ -5665,7 +5665,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                   </div>
 
                   {/* Window Animations */}
-                  <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+                  <div className="card-liquid rounded-xl p-6">
                     <h3 className="text-sm font-medium mb-4">Window Animations</h3>
                     <div className="space-y-4">
                       <div>
@@ -5673,7 +5673,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                         <select
                           value={chatbotConfig.windowAnimation || 'slideUp'}
                           onChange={(e) => setChatbotConfig({ ...chatbotConfig, windowAnimation: e.target.value as any })}
-                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors"
+                          className="w-full px-4 py-2.5 bg-gray-800/30 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
                         >
                           <option value="none">None</option>
                           <option value="slideUp">Slide Up</option>
@@ -5690,7 +5690,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
 
             {/* Right Panel - Live Preview */}
             <div className="lg:sticky lg:top-28 flex flex-col">
-              <div className="bg-gray-900/50 border border-gray-800 rounded-xl flex flex-col relative" style={{height: `${previewHeight}px`, overflow: 'hidden'}}>
+              <div className="card-liquid rounded-xl flex flex-col relative" style={{height: `${previewHeight}px`, overflow: 'hidden'}}>
                 <div className="px-4 py-3 border-b border-gray-800 flex items-center justify-between">
                   <span className="text-sm font-medium text-gray-400">Live Preview</span>
                   <div className="flex items-center gap-2">
@@ -5702,7 +5702,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                     >
                       <Copy className="w-3.5 h-3.5" />
                       {embedCodeCopied ? (
-                        <span className="text-green-400 font-medium">Copied!</span>
+                        <span className="text-olive-400 font-medium">Copied!</span>
                       ) : (
                         <span>Embed Code</span>
                       )}
@@ -6318,7 +6318,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               </div>
 
               {/* AI Widget Assistant - Always Visible */}
-              <div className="mt-4 bg-gray-900/50 border border-gray-800 rounded-xl flex flex-col overflow-hidden relative" style={{height: `${aiChatHeight}px`}}>
+              <div className="mt-4 card-liquid rounded-xl flex flex-col overflow-hidden relative" style={{height: `${aiChatHeight}px`}}>
                 {/* Header */}
                 <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
                   <div className="flex items-center gap-3">
@@ -6328,7 +6328,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium text-white">AI Component Builder</span>
                       {aiChangeApplied && (
-                        <span className="flex items-center gap-1 text-xs text-green-400 bg-green-900/20 px-1.5 py-0.5 rounded border border-green-800/30">
+                        <span className="flex items-center gap-1 text-xs text-olive-400 bg-olive-900/20 px-1.5 py-0.5 rounded border border-olive-800/30">
                           <Check className="w-3 h-3" />
                           Applied
                         </span>
@@ -6390,7 +6390,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             className={cn(
                               "px-3 py-2 rounded-lg max-w-[75%]",
                               msg.role === 'user'
-                                ? 'bg-white text-black'
+                                ? 'bg-olive-500 text-black'
                                 : 'bg-gray-800/30 border border-gray-700 text-gray-200'
                             )}
                           >
@@ -6428,12 +6428,12 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleAiAssistantSubmit()}
                       placeholder="Describe what you want..."
                       disabled={aiIsLoading}
-                      className="flex-1 px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white disabled:opacity-50 text-xs"
+                      className="flex-1 px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 disabled:opacity-50 text-xs"
                     />
                     <button
                       onClick={handleAiAssistantSubmit}
                       disabled={aiIsLoading || !aiInput.trim()}
-                      className="px-4 py-2 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg font-medium transition-colors flex items-center gap-2 text-xs"
+                      className="px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full font-medium transition-colors flex items-center gap-2 text-xs"
                     >
                       {aiIsLoading ? (
                         <>
@@ -6503,7 +6503,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               </div>
 
               {/* Share Links - Below Preview */}
-              <div className="mt-4 bg-gray-900/50 border border-gray-800 rounded-xl p-4">
+              <div className="mt-4 card-liquid rounded-xl p-4">
                 <p className="text-sm font-medium text-white mb-3">Share & Embed</p>
                 {!savedWidgetId ? (
                   <div className="text-center py-8">
@@ -6511,7 +6511,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                     <button
                       onClick={handleSaveTemplate}
                       disabled={isSaving || !widgetName.trim()}
-                      className="px-6 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors inline-flex items-center gap-2"
+                      className="px-6 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors inline-flex items-center gap-2"
                     >
                       {isSaving ? (
                         <>
@@ -6548,7 +6548,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                           }}
                           className={cn(
                             'px-2 py-1.5 rounded text-xs transition-all',
-                            shareLinkCopied ? 'bg-green-500/20 text-green-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                            shareLinkCopied ? 'bg-green-500/20 text-olive-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                           )}
                         >
                           {shareLinkCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
@@ -6574,7 +6574,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                             onClick={handleCopyEmbedCode}
                             className={cn(
                               'px-2 py-1.5 rounded text-xs transition-all self-start',
-                              embedCodeCopied ? 'bg-green-500/20 text-green-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                              embedCodeCopied ? 'bg-green-500/20 text-olive-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                             )}
                           >
                             {embedCodeCopied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
@@ -6629,7 +6629,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-10">
           <div className="min-w-0">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-gray-900/50 border border-gray-800 flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 rounded-xl card-liquid flex items-center justify-center flex-shrink-0">
                 <Layers className="w-5 h-5 text-gray-400" />
               </div>
               <h1 className="text-xl sm:text-2xl font-semibold">UI Studio</h1>
@@ -6645,7 +6645,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               className={cn(
                 "flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all text-sm",
                 isSelectMode
-                  ? "bg-white text-black font-medium"
+                  ? "bg-olive-500 text-black font-medium"
                   : "text-gray-400 hover:text-white border border-gray-800 hover:border-gray-700"
               )}
             >
@@ -6661,7 +6661,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
             </button>
             <button
               onClick={handleCreateWidget}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white text-black rounded-lg font-medium hover:bg-gray-100 transition-all text-sm"
+              className="flex items-center gap-2 px-4 py-2.5 bg-olive-500 text-black rounded-lg font-medium hover:bg-gray-100 transition-all text-sm"
             >
               <Plus className="w-4 h-4" />
               New
@@ -6671,7 +6671,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
 
         {/* Select Mode Bar */}
         {isSelectMode && (
-          <div className="flex items-center justify-between gap-3 mb-6 p-4 bg-gray-900/50 border border-gray-800 rounded-xl">
+          <div className="flex items-center justify-between gap-3 mb-6 p-4 card-liquid rounded-xl">
             <div className="flex items-center gap-3">
               <span className="text-sm text-white font-medium">
                 {selectedTemplateIds.size} selected
@@ -6718,7 +6718,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               onClick={() => setSelectedInstanceFilter(null)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 !selectedInstanceFilter
-                  ? 'bg-white text-black'
+                  ? 'bg-olive-500 text-black'
                   : 'bg-gray-900/50 text-gray-400 hover:text-white border border-gray-800'
               }`}
             >
@@ -6730,7 +6730,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                 onClick={() => setSelectedInstanceFilter(inst.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
                   selectedInstanceFilter === inst.id
-                    ? 'bg-white text-black'
+                    ? 'bg-olive-500 text-black'
                     : 'bg-gray-900/50 text-gray-400 hover:text-white border border-gray-800'
                 }`}
               >
@@ -6749,7 +6749,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
-                className="w-full pl-10 pr-4 py-2.5 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white text-sm"
+                className="w-full pl-10 pr-4 py-2.5 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
               />
             </div>
           )}
@@ -6760,7 +6760,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
           <CardGridSkeleton count={6} />
         ) : templates.length === 0 ? (
           <div className="text-center py-24">
-            <div className="w-16 h-16 mx-auto mb-5 rounded-2xl bg-gray-900/50 border border-gray-800 flex items-center justify-center">
+            <div className="w-16 h-16 mx-auto mb-5 rounded-2xl card-liquid flex items-center justify-center">
               <Layers className="w-8 h-8 text-gray-500" />
             </div>
             <h3 className="text-lg font-medium mb-2">No UI embeds yet</h3>
@@ -6769,7 +6769,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
             </p>
             <button
               onClick={handleCreateWidget}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-black rounded-lg font-medium hover:bg-gray-100 text-sm"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-olive-500 text-black rounded-lg font-medium hover:bg-gray-100 text-sm"
             >
               <Plus className="w-4 h-4" />
               Create Component
@@ -6847,7 +6847,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                       </button>
                       {activeMenu === template.id && (
                         <div
-                          className="absolute right-0 top-full mt-1 w-44 py-1 bg-gray-900 border border-gray-800 rounded-xl shadow-xl z-10"
+                          className="absolute right-0 top-full mt-1 w-44 py-1 card-liquid rounded-xl shadow-xl z-10"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <button
@@ -6925,7 +6925,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
           onClick={() => setShowCategoryModal(false)}
         >
           <div
-            className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl overflow-hidden"
+            className="w-full max-w-sm card-liquid rounded-xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6">
@@ -6939,7 +6939,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                     value={newCategoryName}
                     onChange={(e) => setNewCategoryName(e.target.value)}
                     placeholder="e.g., Lead Forms"
-                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+                    className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                     autoFocus
                   />
                 </div>
@@ -6974,7 +6974,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               <button
                 onClick={handleCreateCategory}
                 disabled={!newCategoryName.trim()}
-                className="flex-1 py-3 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                className="flex-1 py-3 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
               >
                 Create
               </button>
@@ -6990,7 +6990,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
           onClick={() => setDeleteConfirm(null)}
         >
           <div
-            className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl p-6"
+            className="w-full max-w-sm card-liquid rounded-xl p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
@@ -7037,7 +7037,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
           onClick={() => setShowBulkDeleteConfirm(false)}
         >
           <div
-            className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl p-6"
+            className="w-full max-w-sm card-liquid rounded-xl p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
@@ -7087,7 +7087,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
           }}
         >
           <div
-            className="w-full max-w-sm bg-gray-900/50 border border-gray-800 rounded-xl p-6"
+            className="w-full max-w-sm card-liquid rounded-xl p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-lg font-medium mb-2">Edit Tags</h3>
@@ -7139,7 +7139,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               <button
                 onClick={handleBulkUpdateTags}
                 disabled={isBulkUpdating || bulkTagsInstanceIds.size === 0}
-                className="flex-1 py-3 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
               >
                 {isBulkUpdating ? (
                   <>
@@ -7162,7 +7162,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
           onClick={() => setShowHelpModal(false)}
         >
           <div
-            className="w-full max-w-lg bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden"
+            className="w-full max-w-lg card-liquid rounded-xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 border-b border-gray-800">
@@ -7185,7 +7185,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
             <div className="p-6 space-y-6">
               {/* Step 1 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-bold">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-olive-500 text-black flex items-center justify-center text-sm font-bold">
                   1
                 </div>
                 <div>
@@ -7199,7 +7199,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
 
               {/* Step 2 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-bold">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-olive-500 text-black flex items-center justify-center text-sm font-bold">
                   2
                 </div>
                 <div>
@@ -7213,7 +7213,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
 
               {/* Step 3 */}
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-bold">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-olive-500 text-black flex items-center justify-center text-sm font-bold">
                   3
                 </div>
                 <div>
@@ -7249,7 +7249,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
               </Link>
               <button
                 onClick={() => setShowHelpModal(false)}
-                className="px-5 py-2.5 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
+                className="px-5 py-2.5 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
               >
                 Got it
               </button>
@@ -7265,7 +7265,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
           onClick={() => setShowUpgradeModal(false)}
         >
           <div
-            className="w-full max-w-sm bg-gray-900 border border-gray-800 rounded-xl overflow-hidden"
+            className="w-full max-w-sm card-liquid rounded-xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 text-center">
@@ -7291,7 +7291,7 @@ function WidgetStudioContent({ embedded = false }: { embedded?: boolean } = {}) 
                 <Link
                   href="/#pricing"
                   onClick={() => setShowUpgradeModal(false)}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
                 >
                   <Sparkles className="w-4 h-4" />
                   Upgrade
@@ -7330,19 +7330,19 @@ export default function WidgetStudioPage({ embedded = false }: { embedded?: bool
         </div>
         <div className="p-4 space-y-3">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-10 bg-gray-900/50 border border-gray-800 rounded-lg animate-pulse" />
+            <div key={i} className="h-10 card-liquid rounded-lg animate-pulse" />
           ))}
         </div>
       </div>
       <div className="flex-1 flex items-center justify-center">
-        <div className="w-[400px] h-[500px] bg-gray-900/50 border border-gray-800 rounded-xl animate-pulse" />
+        <div className="w-[400px] h-[500px] card-liquid rounded-xl animate-pulse" />
       </div>
       <div className="w-[300px] border-l border-gray-800 p-4 space-y-4">
         <div className="h-5 w-20 bg-gray-800/30 rounded animate-pulse" />
         {[1, 2, 3].map((i) => (
           <div key={i} className="space-y-2">
             <div className="h-4 w-16 bg-gray-800/30 rounded animate-pulse" />
-            <div className="h-9 bg-gray-900/50 border border-gray-800 rounded-lg animate-pulse" />
+            <div className="h-9 card-liquid rounded-lg animate-pulse" />
           </div>
         ))}
       </div>

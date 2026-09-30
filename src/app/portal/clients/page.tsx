@@ -12,7 +12,7 @@ type SortDir = 'asc' | 'desc';
 const STATUS_ORDER = { active: 0, pending: 1, inactive: 2 } as const;
 
 const statusTags: Record<string, { label: string; badgeClass: string; dotColor: string }> = {
-  active: { label: 'Active', badgeClass: 'bg-green-500/10 text-green-400 border border-green-500/20', dotColor: 'bg-green-400' },
+  active: { label: 'Active', badgeClass: 'bg-olive-500/10 text-olive-400 border border-olive-500/20', dotColor: 'bg-olive-400' },
   pending: { label: 'Pending', badgeClass: 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20', dotColor: 'bg-yellow-400' },
   inactive: { label: 'Inactive', badgeClass: 'bg-gray-800/30 text-white/50 border border-gray-700', dotColor: 'bg-white/30' },
 };
@@ -97,34 +97,25 @@ export default function ClientsPage() {
         <div className="p-4 md:p-6 space-y-4">
           {/* Toolbar skeleton */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-            <div className="h-9 w-full sm:max-w-xs bg-gray-900/50 border border-gray-800 rounded-lg animate-pulse" />
+            <div className="h-9 w-full sm:max-w-xs card-liquid rounded-lg animate-pulse" />
             <div className="flex items-center gap-1.5">
               {[1, 2, 3].map(i => (
-                <div key={i} className="h-8 w-16 bg-gray-900/50 border border-gray-800 rounded-lg animate-pulse" />
+                <div key={i} className="h-8 w-16 card-liquid rounded-lg animate-pulse" />
               ))}
             </div>
           </div>
-          {/* Table skeleton */}
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
-            <div className="grid grid-cols-[1fr_120px_100px] md:grid-cols-[1fr_200px_120px_100px] border-b border-gray-800 px-4 py-3">
-              <div className="h-4 w-12 bg-gray-800/30 rounded animate-pulse" />
-              <div className="hidden md:block h-4 w-16 bg-gray-800/30 rounded animate-pulse" />
-              <div className="h-4 w-12 bg-gray-800/30 rounded animate-pulse" />
-              <div className="h-4 w-12 bg-gray-800/30 rounded animate-pulse ml-auto" />
-            </div>
-            <div className="divide-y divide-gray-800">
-              {[1, 2, 3, 4, 5].map(i => (
-                <div key={i} className="grid grid-cols-[1fr_120px_100px] md:grid-cols-[1fr_200px_120px_100px] items-center px-4 py-3.5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gray-800/30 animate-pulse" />
-                    <div className="h-4 w-36 bg-gray-800/30 rounded animate-pulse" />
-                  </div>
-                  <div className="hidden md:block h-4 w-20 bg-gray-800/30 rounded animate-pulse" />
-                  <div className="h-6 w-16 bg-gray-800/30 rounded-full animate-pulse" />
-                  <div className="h-4 w-8 bg-gray-800/30 rounded animate-pulse ml-auto" />
+          {/* Card grid skeleton */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="card-liquid rounded-xl p-5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-gray-800/30 animate-pulse" />
+                  <div className="h-5 w-16 bg-gray-800/30 rounded-full animate-pulse" />
                 </div>
-              ))}
-            </div>
+                <div className="h-4 w-3/4 bg-gray-800/30 rounded animate-pulse" />
+                <div className="h-3 w-1/2 bg-gray-800/30 rounded animate-pulse" />
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -134,8 +125,8 @@ export default function ClientsPage() {
   if (clients.length === 0) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center py-20 text-center">
-        <div className="w-16 h-16 bg-gray-800/30 border border-gray-700 rounded-2xl flex items-center justify-center mb-4">
-          <Users className="w-8 h-8 text-white/40" />
+        <div className="icon-badge icon-badge-neutral w-16 h-16 rounded-2xl mb-4">
+          <Users className="w-8 h-8 text-white/90" />
         </div>
         <h3 className="text-lg font-semibold text-white mb-2">No clients yet</h3>
         <p className="text-white/60 text-base mb-6 max-w-sm">
@@ -143,7 +134,7 @@ export default function ClientsPage() {
         </p>
         <button
           onClick={openInvite}
-          className="px-4 py-3 rounded-lg text-base font-medium transition-colors bg-white text-black hover:bg-gray-100 cursor-pointer"
+          className="px-4 py-3 rounded-lg text-base font-medium transition-colors bg-olive-500 text-black hover:bg-olive-400 cursor-pointer"
         >
           <Plus className="w-4 h-4 inline mr-2" />
           Add Client
@@ -164,7 +155,7 @@ export default function ClientsPage() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search clients..."
-              className="w-full pl-9 pr-3 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none"
+              className="w-full pl-9 pr-3 py-2 card-liquid rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none"
             />
           </div>
 
@@ -180,8 +171,8 @@ export default function ClientsPage() {
                   className={cn(
                     "px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer",
                     isActive
-                      ? "bg-white text-black"
-                      : "bg-gray-900/50 border border-gray-800 text-white/60 hover:text-white hover:border-gray-700"
+                      ? "bg-olive-500 text-black"
+                      : "card-liquid text-white/60 hover:text-white hover:border-gray-700"
                   )}
                 >
                   {f.label}
@@ -196,92 +187,72 @@ export default function ClientsPage() {
           </span>
         </div>
 
-        {/* Table */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
-          <div className="grid grid-cols-[1fr_120px_100px] md:grid-cols-[1fr_200px_120px_100px] border-b border-gray-800 px-4 py-3">
-            <button
-              onClick={() => handleSort('email')}
-              className="flex items-center gap-1.5 text-sm font-semibold text-white/60 hover:text-white transition-colors cursor-pointer text-left"
-            >
-              Client <SortIcon column="email" />
-            </button>
-            <button
-              onClick={() => handleSort('instances')}
-              className="hidden md:flex items-center gap-1.5 text-sm font-semibold text-white/60 hover:text-white transition-colors cursor-pointer text-left"
-            >
-              Instances <SortIcon column="instances" />
-            </button>
-            <button
-              onClick={() => handleSort('status')}
-              className="flex items-center gap-1.5 text-sm font-semibold text-white/60 hover:text-white transition-colors cursor-pointer text-left"
-            >
-              Status <SortIcon column="status" />
-            </button>
-            <span className="text-sm font-semibold text-white/60 text-right">Actions</span>
-          </div>
-
-          {filtered.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-sm text-white/40">
-                {search ? 'No clients match your search.' : 'No clients match this filter.'}
-              </p>
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-800">
-              {filtered.map(client => {
-                const realInsts = client.instances.filter(i => !i.instance_id.startsWith('invite:') && i.status !== 'deleted');
-                const tag = statusTags[client.bestStatus] || statusTags.inactive;
-                return (
-                  <button
-                    key={client.userId}
-                    onClick={() => router.push(`/portal/clients/${client.userId}`)}
-                    className="w-full grid grid-cols-[1fr_120px_100px] md:grid-cols-[1fr_200px_120px_100px] items-center px-4 py-3.5 text-left hover:bg-gray-800/30 transition-colors cursor-pointer group"
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center shrink-0">
-                        <Users className="w-4 h-4 text-purple-400" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-white truncate group-hover:text-white/90">
-                          {client.email}
-                        </p>
-                        <p className="text-sm text-white/40 md:hidden">
-                          {realInsts.length} instance{realInsts.length !== 1 ? 's' : ''}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="hidden md:flex items-center gap-1.5 min-w-0">
-                      {realInsts.length === 0 ? (
-                        <span className="text-sm text-white/30">-</span>
-                      ) : (
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <Server className="w-3.5 h-3.5 text-white/30 shrink-0" />
-                          <span className="text-sm text-white/60 truncate">
-                            {realInsts.length} instance{realInsts.length !== 1 ? 's' : ''}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div>
-                      <span className={cn('px-2.5 py-1 text-xs rounded-full inline-flex items-center gap-1.5', tag.badgeClass)}>
-                        <span className={cn('w-1.5 h-1.5 rounded-full', tag.dotColor)} />
-                        {tag.label}
-                      </span>
-                    </div>
-
-                    <div className="text-right">
-                      <span className="text-sm text-white/30 group-hover:text-white/60 transition-colors">
-                        View
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          )}
+        {/* Sort bar */}
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm text-white/40 mr-1">Sort:</span>
+          <button
+            onClick={() => handleSort('email')}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-medium text-white/60 hover:text-white hover:bg-gray-800/30 transition-colors cursor-pointer"
+          >
+            Name <SortIcon column="email" />
+          </button>
+          <button
+            onClick={() => handleSort('instances')}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-medium text-white/60 hover:text-white hover:bg-gray-800/30 transition-colors cursor-pointer"
+          >
+            Instances <SortIcon column="instances" />
+          </button>
+          <button
+            onClick={() => handleSort('status')}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-sm font-medium text-white/60 hover:text-white hover:bg-gray-800/30 transition-colors cursor-pointer"
+          >
+            Status <SortIcon column="status" />
+          </button>
         </div>
+
+        {/* Cards */}
+        {filtered.length === 0 ? (
+          <div className="card-liquid rounded-xl text-center py-12">
+            <p className="text-sm text-white/40">
+              {search ? 'No clients match your search.' : 'No clients match this filter.'}
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filtered.map(client => {
+              const realInsts = client.instances.filter(i => !i.instance_id.startsWith('invite:') && i.status !== 'deleted');
+              const tag = statusTags[client.bestStatus] || statusTags.inactive;
+              return (
+                <button
+                  key={client.userId}
+                  onClick={() => router.push(`/portal/clients/${client.userId}`)}
+                  className="card-liquid card-liquid-interactive rounded-xl p-5 text-left group"
+                >
+                  <div className="flex items-start justify-between gap-2 mb-4">
+                    <div className="icon-badge icon-badge-neutral w-10 h-10 shrink-0">
+                      <Users className="w-5 h-5 text-white/90" />
+                    </div>
+                    <span className={cn('px-2.5 py-1 text-xs rounded-full inline-flex items-center gap-1.5 shrink-0', tag.badgeClass)}>
+                      <span className={cn('w-1.5 h-1.5 rounded-full', tag.dotColor)} />
+                      {tag.label}
+                    </span>
+                  </div>
+
+                  <p className="text-sm font-semibold text-white truncate group-hover:text-white/90 mb-1">
+                    {client.email}
+                  </p>
+
+                  <div className="flex items-center gap-1.5 min-w-0">
+                    <Server className="w-3.5 h-3.5 text-white/30 shrink-0" />
+                    <span className="text-sm text-white/50 truncate">
+                      {realInsts.length === 0 ? 'No instances' : `${realInsts.length} instance${realInsts.length !== 1 ? 's' : ''}`}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

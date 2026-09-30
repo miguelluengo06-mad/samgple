@@ -3,6 +3,8 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { checkRateLimit } from '@/lib/validation';
 import { getPortalSettings } from '@/lib/portalSettings';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 
 interface AIAssistantRequest {
   prompt: string;
@@ -54,6 +56,10 @@ export async function POST(request: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
     }
+
+    // The assistant spends the agency's AI key — agency team only
+    const denied = await requireAgencyPrincipal(supabaseAdmin, user.id);
+    if (denied) return denied;
 
     // Rate limit: 30 requests/minute per user
     const rateLimitResult = checkRateLimit(`ai-assistant:${user.id}`, 30, 60 * 1000);

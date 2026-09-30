@@ -64,7 +64,7 @@ export default function InstancePickerModal({
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="relative w-full max-w-md mx-4 bg-gray-900/50 border border-gray-800 rounded-xl shadow-2xl overflow-hidden"
+          className="relative w-full max-w-md mx-4 card-liquid rounded-xl shadow-2xl overflow-hidden"
         >
           {/* Header */}
           <div className="p-5 border-b border-gray-800">

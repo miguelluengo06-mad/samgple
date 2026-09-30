@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { getEffectiveOwnerId, canWrite } from '@/lib/teamUtils';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 
 /**
  * POST /api/hosting/connect
@@ -19,6 +20,9 @@ export async function POST(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    const denied = await requireAgencyPrincipal(supabaseAdmin, user.id);
+    if (denied) return denied;
 
     const ctx = await getEffectiveOwnerId(supabaseAdmin, user.id);
     if (!canWrite(ctx.role)) {

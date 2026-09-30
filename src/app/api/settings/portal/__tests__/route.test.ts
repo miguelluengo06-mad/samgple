@@ -21,6 +21,11 @@ vi.mock('@/lib/teamUtils', () => ({
   canManageBilling: vi.fn().mockReturnValue(true),
 }));
 
+// Agency-only guard: by default the caller belongs to the agency; individual tests flip it.
+vi.mock('@/lib/agencyAccess', () => ({
+  requireAgencyPrincipal: vi.fn().mockResolvedValue(null),
+}));
+
 // Mock invalidateSettingsCache so it's a no-op in tests
 vi.mock('@/lib/portalSettings', () => ({
   invalidateSettingsCache: vi.fn(),
@@ -302,5 +307,33 @@ describe('PATCH /api/settings/portal', () => {
     const req = makePatchRequest({ n8n_base_url: 'http://test.local' });
     const res = await PATCH(req as any);
     expect(res.status).toBe(403);
+  });
+});
+
+describe('agency-only access (registered visitors must not reach the agency keys)', () => {
+  async function denyAsOutsider() {
+    const { requireAgencyPrincipal } = await import('@/lib/agencyAccess');
+    const { NextResponse } = await import('next/server');
+    (requireAgencyPrincipal as any).mockResolvedValueOnce(
+      NextResponse.json({ error: 'Only the agency team can do this' }, { status: 403 })
+    );
+  }
+
+  it('GET returns 403 and never reads the settings row for an outsider', async () => {
+    mockAuth('visitor-1');
+    mockClient.from.mockClear();
+    await denyAsOutsider();
+    const res = await GET(makeGetRequest('valid-token') as any);
+    expect(res.status).toBe(403);
+    expect(mockClient.from).not.toHaveBeenCalled();
+  });
+
+  it('PATCH returns 403 and never writes for an outsider', async () => {
+    mockAuth('visitor-1');
+    mockClient.from.mockClear();
+    await denyAsOutsider();
+    const res = await PATCH(makePatchRequest({ allow_signup: true, n8n_base_url: 'https://evil.example' }) as any);
+    expect(res.status).toBe(403);
+    expect(mockClient.from).not.toHaveBeenCalled();
   });
 });

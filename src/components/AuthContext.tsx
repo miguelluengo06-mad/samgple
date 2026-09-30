@@ -129,12 +129,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     try {
       setLoading(true);
-      // Clear caches to prevent showing wrong data on next login
+      // Clear caches to prevent showing wrong data (or a stale role) on next login
       clearCachedAgencyLogo();
       clearCachedClientStatus();
       clearCachedAuthState();
+      try {
+        sessionStorage.removeItem('portal-role');
+        sessionStorage.removeItem('portal-hosting-instances-v3');
+      } catch { /* sessionStorage unavailable — nothing to clear */ }
       await supabase.auth.signOut();
-      // Auth state change listener will update the state
+      // Auth state change listener will update user/session to null
+      setUser(null);
+      setSession(null);
     } catch (error) {
       console.error('Error signing out:', error);
     } finally {

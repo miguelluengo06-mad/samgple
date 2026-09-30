@@ -41,7 +41,7 @@ export default function SearchableSelect({ value, onChange, options, placeholder
       <button
         type="button"
         onClick={() => { setOpen(o => !o); setSearch(''); }}
-        className="w-full flex items-center justify-between px-3 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-white outline-none cursor-pointer hover:border-gray-700 transition-colors"
+        className="w-full flex items-center justify-between px-3 py-2 card-liquid rounded-lg text-sm text-white outline-none cursor-pointer hover:border-gray-700 transition-colors"
       >
         <span className={cn('truncate', !selected && 'text-gray-500')}>
           {selected ? selected.label : placeholder}
@@ -50,7 +50,7 @@ export default function SearchableSelect({ value, onChange, options, placeholder
       </button>
 
       {open && (
-        <div className="absolute top-full mt-1 left-0 right-0 z-50 bg-gray-900 border border-gray-800 rounded-lg shadow-xl overflow-hidden">
+        <div className="absolute top-full mt-1 left-0 right-0 z-50 card-liquid rounded-lg shadow-xl overflow-hidden">
           <div className="p-2 border-b border-gray-800">
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />

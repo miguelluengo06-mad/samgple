@@ -168,8 +168,8 @@ export function InstancePanel({
     }
     if (isRunning) {
       return (
-        <span className='px-3 py-1 text-xs rounded-full bg-green-500/10 text-green-400 border border-green-500/20 flex items-center gap-2'>
-          <span className='w-2 h-2 bg-green-400 rounded-full animate-pulse' />
+        <span className='px-3 py-1 text-xs rounded-full bg-olive-500/10 text-olive-400 border border-olive-500/20 flex items-center gap-2'>
+          <span className='w-2 h-2 bg-olive-400 rounded-full animate-pulse' />
           Active
         </span>
       );
@@ -207,7 +207,7 @@ export function InstancePanel({
   };
 
   return (
-    <div className='bg-gray-900 border border-gray-800 rounded-lg overflow-hidden'>
+    <div className='card-liquid rounded-lg overflow-hidden'>
       {/* Collapsed header - always visible, fully clickable */}
       <button
         onClick={onToggleExpand}
@@ -378,7 +378,7 @@ export function InstancePanel({
                 disabled={actionLoading === 'update' || !isRunning}
                 className='flex items-center justify-center gap-2 px-4 py-3.5 bg-gray-900 hover:bg-gray-800 text-white rounded-lg text-sm font-medium border border-gray-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer group'
               >
-                <Download className={`w-4 h-4 text-green-400 group-hover:translate-y-0.5 transition-transform ${actionLoading === 'update' ? 'animate-bounce' : ''}`} />
+                <Download className={`w-4 h-4 text-olive-400 group-hover:translate-y-0.5 transition-transform ${actionLoading === 'update' ? 'animate-bounce' : ''}`} />
                 <span>{actionLoading === 'update' ? 'Updating...' : 'Update n8n Version'}</span>
               </button>
             </div>
@@ -452,12 +452,12 @@ export function InstancePanel({
                 >
                   <div className='flex items-center gap-3 !cursor-pointer'>
                     <div className='p-2 bg-green-900/30 rounded-lg !cursor-pointer'>
-                      <svg className='w-5 h-5 text-green-400 !cursor-pointer' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                      <svg className='w-5 h-5 text-olive-400 !cursor-pointer' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
                         <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' />
                       </svg>
                     </div>
                     <div className='text-left !cursor-pointer'>
-                      <p className='text-green-400 text-sm font-medium !cursor-pointer'>Terminal</p>
+                      <p className='text-olive-400 text-sm font-medium !cursor-pointer'>Terminal</p>
                       <p className='text-white/50 text-xs !cursor-pointer'>Execute SQL commands directly</p>
                     </div>
                   </div>
@@ -492,7 +492,7 @@ export function InstancePanel({
                           <div className='font-mono text-xs text-gray-500 mb-3'>
                             <div>PostgreSQL interactive terminal</div>
                             <div className='mt-1'>Type SQL commands and press Enter to execute.</div>
-                            <div className='mt-1'>Example: <span className='text-green-400'>SELECT version();</span></div>
+                            <div className='mt-1'>Example: <span className='text-olive-400'>SELECT version();</span></div>
                           </div>
                         )}
 
@@ -500,7 +500,7 @@ export function InstancePanel({
                           {terminalOutput.map((line, index) => (
                             <div key={index} className='mb-1'>
                               {line.startsWith('postgres>') ? (
-                                <div className='text-green-400'>{line}</div>
+                                <div className='text-olive-400'>{line}</div>
                               ) : line.startsWith('Error:') ? (
                                 <div className='text-red-400'>{line}</div>
                               ) : (
@@ -514,7 +514,7 @@ export function InstancePanel({
                         </div>
 
                         <div className='flex items-center gap-2 font-mono text-sm'>
-                          <span className='text-green-400'>postgres={'>'}</span>
+                          <span className='text-olive-400'>postgres={'>'}</span>
                           <input
                             type='text'
                             value={terminalInput}

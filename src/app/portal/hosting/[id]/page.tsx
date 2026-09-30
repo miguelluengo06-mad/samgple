@@ -66,12 +66,12 @@ function InlineNameEditor({
         onChange={e => setDraft(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter') handleSave(); if (e.key === 'Escape') setEditing(false); }}
         maxLength={50}
-        className="flex-1 min-w-0 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-white text-sm focus:outline-none focus:border-white"
+        className="flex-1 min-w-0 px-2 py-1 bg-gray-800 border border-gray-600 rounded text-white text-sm focus:outline-none focus:border-olive-500"
       />
       <button
         onClick={handleSave}
         disabled={saving}
-        className="p-1 rounded hover:bg-gray-700 text-green-400 hover:text-green-300 transition-colors flex-shrink-0 disabled:opacity-50"
+        className="p-1 rounded hover:bg-gray-700 text-olive-400 hover:text-green-300 transition-colors flex-shrink-0 disabled:opacity-50"
       >
         {saving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
       </button>
@@ -174,7 +174,7 @@ function ClientAssignmentSection({ instanceId, access }: { instanceId: string; a
   const available = allAgencyClients.filter(c => !clientAssignments.some(a => a.user_id === c.user_id));
 
   return (
-    <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-5 space-y-3">
+    <div className="card-liquid rounded-lg p-5 space-y-3">
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium text-white">Assigned Clients</p>
         {clientsLoaded && !showForm && clientAssignments.length === 0 && available.length > 0 && (
@@ -203,7 +203,7 @@ function ClientAssignmentSection({ instanceId, access }: { instanceId: string; a
             <button
               onClick={handleAssign}
               disabled={!selectedClientId || assigning}
-              className="px-3 py-2 bg-white text-black hover:bg-gray-100 disabled:opacity-50 rounded-lg text-sm font-medium transition-colors"
+              className="px-3 py-2 bg-olive-500 text-black hover:bg-olive-400 disabled:opacity-50 rounded-full text-sm font-medium transition-colors"
             >
               {assigning ? 'Assigning…' : 'Assign'}
             </button>
@@ -224,7 +224,7 @@ function ClientAssignmentSection({ instanceId, access }: { instanceId: string; a
       ) : (
         <div className="space-y-2">
           {clientAssignments.map(c => (
-            <div key={c.user_id} className="flex items-center gap-3 p-3 bg-gray-900/50 border border-gray-800 rounded-lg">
+            <div key={c.user_id} className="flex items-center gap-3 p-3 card-liquid rounded-lg">
               <Users className="w-4 h-4 text-white/30 shrink-0" />
               <div className="flex-1 min-w-0">
                 {c.client_name && <p className="text-sm font-medium text-white truncate">{c.client_name}</p>}
@@ -249,9 +249,9 @@ function ClientAssignmentSection({ instanceId, access }: { instanceId: string; a
 // ─── FlowEngine Instance Detail ──────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<string, { label: string; cls: string; spin?: boolean; pulse?: boolean }> = {
-  running:      { label: 'Running',      cls: 'text-green-400 bg-green-900/20 border-green-800', pulse: true },
-  active:       { label: 'Running',      cls: 'text-green-400 bg-green-900/20 border-green-800', pulse: true },
-  unhealthy:    { label: 'Unhealthy',    cls: 'text-orange-400 bg-orange-900/20 border-orange-800', pulse: true },
+  running:      { label: 'Running',      cls: 'text-olive-400 bg-olive-900/20 border-olive-800', pulse: true },
+  active:       { label: 'Running',      cls: 'text-olive-400 bg-olive-900/20 border-olive-800', pulse: true },
+  unhealthy:    { label: 'Unhealthy',    cls: 'text-yellow-400 bg-yellow-900/20 border-yellow-800', pulse: true },
   stopped:      { label: 'Stopped',      cls: 'text-red-400 bg-red-900/20 border-red-800' },
   exited:       { label: 'Stopped',      cls: 'text-red-400 bg-red-900/20 border-red-800' },
   error:        { label: 'Error',        cls: 'text-red-400 bg-red-900/20 border-red-800' },
@@ -361,7 +361,7 @@ function FlowEngineInstanceDetail(props: { instance: PortalInstance; onDeleted: 
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-4">
 
         {/* Header card */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-5">
+        <div className="card-liquid rounded-lg p-5">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-10 h-10 bg-gray-800/30 rounded-lg flex items-center justify-center flex-shrink-0">
               <Cloud className="w-5 h-5 text-white/60" />
@@ -379,7 +379,7 @@ function FlowEngineInstanceDetail(props: { instance: PortalInstance; onDeleted: 
                 href={instance.instance_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-4 py-2 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors flex-shrink-0"
+                className="flex items-center gap-1.5 px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors flex-shrink-0"
               >
                 Open <ExternalLink className="w-3.5 h-3.5" />
               </a>
@@ -406,13 +406,13 @@ function FlowEngineInstanceDetail(props: { instance: PortalInstance; onDeleted: 
         </div>
 
         {/* Controls */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-5">
+        <div className="card-liquid rounded-lg p-5">
           <p className="text-sm font-medium text-white mb-4">Controls</p>
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => handleManage('start')}
               disabled={!!actionLoading || isTransitioning || isRunning}
-              className="flex items-center gap-1.5 px-3 py-2 bg-green-900/20 text-green-400 border border-green-800 hover:bg-green-900/30 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-1.5 px-3 py-2 bg-olive-900/20 text-olive-400 border border-olive-800 hover:bg-green-900/30 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {actionLoading === 'start' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
               Start
@@ -619,7 +619,7 @@ function WebsiteInstanceDetail({ instance, onDeleted }: { instance: PortalInstan
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-4">
 
         {/* Header card */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-5">
+        <div className="card-liquid rounded-lg p-5">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-10 h-10 bg-gray-800/30 rounded-lg flex items-center justify-center flex-shrink-0">
               <Globe className="w-5 h-5 text-white/60" />
@@ -637,7 +637,7 @@ function WebsiteInstanceDetail({ instance, onDeleted }: { instance: PortalInstan
                 href={instance.instance_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-4 py-2 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors flex-shrink-0"
+                className="flex items-center gap-1.5 px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors flex-shrink-0"
               >
                 Open <ExternalLink className="w-3.5 h-3.5" />
               </a>
@@ -667,13 +667,13 @@ function WebsiteInstanceDetail({ instance, onDeleted }: { instance: PortalInstan
         </div>
 
         {/* Controls */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-5">
+        <div className="card-liquid rounded-lg p-5">
           <p className="text-sm font-medium text-white mb-4">Controls</p>
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => handleManage('start')}
               disabled={!!actionLoading || isTransitioning || isRunning}
-              className="flex items-center gap-1.5 px-3 py-2 bg-green-900/20 text-green-400 border border-green-800 hover:bg-green-900/30 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex items-center gap-1.5 px-3 py-2 bg-olive-900/20 text-olive-400 border border-olive-800 hover:bg-green-900/30 rounded-lg text-sm font-medium transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {actionLoading === 'start' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Play className="w-3.5 h-3.5" />}
               Start
@@ -707,7 +707,7 @@ function WebsiteInstanceDetail({ instance, onDeleted }: { instance: PortalInstan
         </div>
 
         {/* Logs */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+        <div className="card-liquid rounded-lg overflow-hidden">
           <button
             onClick={() => {
               const next = !logsOpen;
@@ -739,7 +739,7 @@ function WebsiteInstanceDetail({ instance, onDeleted }: { instance: PortalInstan
                   <Loader2 className="w-5 h-5 animate-spin text-white/30" />
                 </div>
               ) : (
-                <pre className="p-4 text-sm text-green-400 font-mono overflow-x-auto whitespace-pre-wrap max-h-96 overflow-y-auto bg-black/30">
+                <pre className="p-4 text-sm text-olive-400 font-mono overflow-x-auto whitespace-pre-wrap max-h-96 overflow-y-auto bg-black/30">
                   {logs || '(no logs)'}
                 </pre>
               )}
@@ -748,7 +748,7 @@ function WebsiteInstanceDetail({ instance, onDeleted }: { instance: PortalInstan
         </div>
 
         {/* Deployment history */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+        <div className="card-liquid rounded-lg overflow-hidden">
           <button
             onClick={() => {
               const next = !deploymentsOpen;
@@ -777,7 +777,7 @@ function WebsiteInstanceDetail({ instance, onDeleted }: { instance: PortalInstan
                     <div key={d.id || i} className="px-5 py-3 flex items-center justify-between gap-3">
                       <div className="flex items-center gap-2 min-w-0">
                         <span className={`w-2 h-2 rounded-full flex-shrink-0 ${
-                          d.status?.includes('finish') || d.status === 'running' ? 'bg-green-400' :
+                          d.status?.includes('finish') || d.status === 'running' ? 'bg-olive-400' :
                           d.status?.includes('error') || d.status?.includes('fail') ? 'bg-red-400' :
                           'bg-yellow-400'
                         }`} />
@@ -796,7 +796,7 @@ function WebsiteInstanceDetail({ instance, onDeleted }: { instance: PortalInstan
 
         {/* Billing */}
         {instance.stripe_subscription_id && instance.access === 'owner' && (
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-5">
+          <div className="card-liquid rounded-lg p-5">
             <p className="text-sm font-medium text-white mb-3">Subscription</p>
             <button
               onClick={handleOpenBilling}
@@ -973,7 +973,7 @@ function ExternalInstanceDetail({ instance, onDeleted }: { instance: PortalInsta
       <div className="max-w-2xl mx-auto px-4 py-8 space-y-4">
 
         {/* Header card */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-5">
+        <div className="card-liquid rounded-lg p-5">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-10 h-10 bg-gray-800/30 rounded-lg flex items-center justify-center flex-shrink-0">
               <Link2 className="w-5 h-5 text-white/60" />
@@ -992,7 +992,7 @@ function ExternalInstanceDetail({ instance, onDeleted }: { instance: PortalInsta
                 href={currentUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1.5 px-4 py-2 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors flex-shrink-0"
+                className="flex items-center gap-1.5 px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors flex-shrink-0"
               >
                 Open <ExternalLink className="w-3.5 h-3.5" />
               </a>
@@ -1010,7 +1010,7 @@ function ExternalInstanceDetail({ instance, onDeleted }: { instance: PortalInsta
         </div>
 
         {/* URL — editable for owners */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4">
+        <div className="card-liquid rounded-lg p-4">
           <p className="text-xs text-white/40 mb-2">URL</p>
           {isOwner && editingUrl ? (
             <div className="space-y-2">
@@ -1022,9 +1022,9 @@ function ExternalInstanceDetail({ instance, onDeleted }: { instance: PortalInsta
                   onChange={e => setUrlInput(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter') handleSaveUrl(); if (e.key === 'Escape') { setEditingUrl(false); setUrlError(null); } }}
                   placeholder="https://your-service.example.com"
-                  className="flex-1 min-w-0 px-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-white text-sm font-mono focus:outline-none focus:border-white"
+                  className="flex-1 min-w-0 px-3 py-1.5 bg-gray-800 border border-gray-600 rounded text-white text-sm font-mono focus:outline-none focus:border-olive-500"
                 />
-                <button onClick={handleSaveUrl} disabled={urlSaving} className="p-1.5 rounded hover:bg-gray-700 text-green-400 hover:text-green-300 transition-colors disabled:opacity-50">
+                <button onClick={handleSaveUrl} disabled={urlSaving} className="p-1.5 rounded hover:bg-gray-700 text-olive-400 hover:text-green-300 transition-colors disabled:opacity-50">
                   {urlSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
                 </button>
                 <button onClick={() => { setEditingUrl(false); setUrlError(null); }} className="p-1.5 rounded hover:bg-gray-700 text-white/40 hover:text-white/60 transition-colors">
@@ -1051,7 +1051,7 @@ function ExternalInstanceDetail({ instance, onDeleted }: { instance: PortalInsta
         </div>
 
         {/* Notes */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4">
+        <div className="card-liquid rounded-lg p-4">
           <div className="flex items-center justify-between mb-2">
             <p className="text-xs text-white/40">Notes</p>
             {isOwner && notesLoaded && !editingNotes && (
@@ -1072,13 +1072,13 @@ function ExternalInstanceDetail({ instance, onDeleted }: { instance: PortalInsta
                 maxLength={1000}
                 rows={3}
                 placeholder="Add a note about this instance…"
-                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white text-sm focus:outline-none focus:border-white resize-y"
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded text-white text-sm focus:outline-none focus:border-olive-500 resize-y"
               />
               <div className="flex gap-2">
                 <button
                   onClick={handleSaveNotes}
                   disabled={notesSaving}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors disabled:opacity-50"
                 >
                   {notesSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
                   Save
@@ -1570,7 +1570,7 @@ export default function HostingDetailPage({ params }: { params: Promise<{ id: st
         </div>
 
         {selectedService === 'website' && (
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4 space-y-3">
+          <div className="card-liquid rounded-lg p-4 space-y-3">
             <div>
               <label className="text-sm text-white/60 mb-1.5 block">Docker Image</label>
               <input
@@ -1578,7 +1578,7 @@ export default function HostingDetailPage({ params }: { params: Promise<{ id: st
                 value={dockerImage}
                 onChange={e => setDockerImage(e.target.value)}
                 placeholder="e.g. nginx:latest, ghcr.io/myorg/myapp:1.0"
-                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm"
+                className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
               />
             </div>
             <div>
@@ -1590,7 +1590,7 @@ export default function HostingDetailPage({ params }: { params: Promise<{ id: st
                 placeholder="3000"
                 min={1}
                 max={65535}
-                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm"
+                className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
               />
             </div>
           </div>
@@ -1606,7 +1606,7 @@ export default function HostingDetailPage({ params }: { params: Promise<{ id: st
           <button
             onClick={handleDeploy}
             disabled={deploying || (selectedService === 'website' && !dockerImage.trim())}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {deploying ? (
               <><Loader2 className="w-4 h-4 animate-spin" />Deploying...</>

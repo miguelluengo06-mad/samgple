@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
 /**
- * Redirect /portal/[id] → /portal?instance=[id]
+ * Redirect /portal/[id] → /portal/manage?instance=[id]
  * Preserves query params (tab, OAuth callbacks, etc.)
  * The unified portal at /portal handles all instance views.
  */
@@ -16,7 +16,7 @@ function RedirectToPortal({ id }: { id: string }) {
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('instance', id);
-    router.replace(`/portal?${params.toString()}`);
+    router.replace(`/portal/manage?${params.toString()}`);
   }, [id, router, searchParams]);
 
   return null;

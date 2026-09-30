@@ -178,7 +178,7 @@ export function AgencyBranding() {
       {message && (
         <div className={`mb-4 p-3 rounded-lg ${
           message.type === 'success'
-            ? 'bg-green-900/20 border border-green-800 text-green-400'
+            ? 'bg-olive-900/20 border border-olive-800 text-olive-400'
             : 'bg-red-900/20 border border-red-800 text-red-400'
         }`}>
           {message.text}
@@ -195,12 +195,12 @@ export function AgencyBranding() {
               value={businessName}
               onChange={e => setBusinessName(e.target.value)}
               placeholder="Your business name"
-              className="flex-1 px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+              className="flex-1 px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
             />
             <button
               onClick={handleSaveName}
               disabled={savingName || businessName.trim() === serverBusinessName}
-              className="px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors"
+              className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors"
             >
               {savingName ? 'Saving...' : 'Save'}
             </button>

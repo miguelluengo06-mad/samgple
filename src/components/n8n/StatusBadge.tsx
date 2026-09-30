@@ -29,8 +29,8 @@ export function isActionInProgress(status: InstanceStatus): boolean {
 export default function StatusBadge({ status }: StatusBadgeProps) {
   if (status === 'running') {
     return (
-      <span className='px-3 py-1 text-xs rounded-full bg-green-500/10 text-green-400 border border-green-500/20 flex items-center gap-2'>
-        <span className='w-2 h-2 bg-green-400 rounded-full animate-pulse' />
+      <span className='px-3 py-1 text-xs rounded-full bg-olive-500/10 text-olive-400 border border-olive-500/20 flex items-center gap-2'>
+        <span className='w-2 h-2 bg-olive-400 rounded-full animate-pulse' />
         Active
       </span>
     );
@@ -47,7 +47,7 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
 
   if (status === 'stopping') {
     return (
-      <span className='px-3 py-1 text-xs rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center gap-2'>
+      <span className='px-3 py-1 text-xs rounded-full bg-olive-500/10 text-olive-400 border border-olive-500/20 flex items-center gap-2'>
         <Loader2 className='w-3 h-3 animate-spin' />
         Stopping
       </span>
@@ -119,8 +119,8 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
 
   if (status === 'unknown') {
     return (
-      <span className='px-3 py-1 text-xs rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center gap-2'>
-        <span className='w-2 h-2 bg-orange-400 rounded-full' />
+      <span className='px-3 py-1 text-xs rounded-full bg-olive-500/10 text-olive-400 border border-olive-500/20 flex items-center gap-2'>
+        <span className='w-2 h-2 bg-olive-400 rounded-full' />
         Unknown
       </span>
     );

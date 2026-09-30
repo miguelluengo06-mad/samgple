@@ -85,7 +85,7 @@ export function WebsitePortalContent({ instanceId, instanceName, instanceUrl }: 
                 className="p-1 rounded hover:bg-white/5 text-white/30 hover:text-white/60 transition-colors shrink-0"
                 title="Copy URL"
               >
-                {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+                {copied ? <Check className="w-3.5 h-3.5 text-olive-400" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
             </>
           ) : (
@@ -124,7 +124,7 @@ export function WebsitePortalContent({ instanceId, instanceName, instanceUrl }: 
                 <button
                   onClick={saveNotes}
                   disabled={notesSaving}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors disabled:opacity-50"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors disabled:opacity-50"
                 >
                   {notesSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   Save

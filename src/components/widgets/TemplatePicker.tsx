@@ -166,7 +166,7 @@ export default function TemplatePicker({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search templates..."
-              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-white/20 text-sm"
+              className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:outline-none focus:border-olive-500/20 text-sm"
             />
           </div>
           <div className="flex gap-2 flex-wrap">
@@ -174,7 +174,7 @@ export default function TemplatePicker({
               onClick={() => setSelectedCategory(null)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                 selectedCategory === null
-                  ? 'bg-white text-black'
+                  ? 'bg-olive-500 text-black'
                   : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'
               }`}
             >
@@ -186,7 +186,7 @@ export default function TemplatePicker({
                 onClick={() => setSelectedCategory(cat.id)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all flex items-center gap-1.5 ${
                   selectedCategory === cat.id
-                    ? 'bg-white text-black'
+                    ? 'bg-olive-500 text-black'
                     : 'bg-white/5 text-white/50 hover:bg-white/10 hover:text-white'
                 }`}
               >
@@ -298,7 +298,7 @@ export default function TemplatePicker({
               }}
               placeholder={`${instanceUrl}/webhook/...`}
               className={`w-full px-4 py-3 bg-white/[0.03] border rounded-xl text-white placeholder:text-white/20 focus:outline-none transition-colors ${
-                error ? 'border-red-500/50 focus:border-red-500/50' : 'border-white/10 focus:border-white/20'
+                error ? 'border-red-500/50 focus:border-red-500/50' : 'border-white/10 focus:border-olive-500/20'
               }`}
             />
             {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
@@ -317,7 +317,7 @@ export default function TemplatePicker({
           <button
             onClick={handleConfirm}
             disabled={isSaving || !selectedTemplate}
-            className="flex-1 py-3 bg-white text-black rounded-xl text-sm font-medium hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+            className="flex-1 py-3 bg-olive-500 text-black rounded-xl text-sm font-medium hover:bg-white/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
           >
             {isSaving ? (
               <>

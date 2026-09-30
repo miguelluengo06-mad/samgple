@@ -12,7 +12,7 @@ function CopyBtn({ text }: { text: string }) {
       onClick={() => { navigator.clipboard.writeText(text).catch(() => {}); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
       className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white rounded text-xs font-medium transition-colors border border-gray-700 flex-shrink-0"
     >
-      {copied ? <><Check className="w-3 h-3 text-green-400" /><span className="text-green-400">Copied</span></> : <><Copy className="w-3 h-3" />Copy</>}
+      {copied ? <><Check className="w-3 h-3 text-olive-400" /><span className="text-olive-400">Copied</span></> : <><Copy className="w-3 h-3" />Copy</>}
     </button>
   );
 }
@@ -32,7 +32,7 @@ function CodeBlock({ code, lang = 'bash' }: { code: string; lang?: string }) {
 function MethodBadge({ method }: { method: string }) {
   const map: Record<string, string> = {
     GET:    'bg-blue-900/30  text-blue-400  border-blue-700/40',
-    POST:   'bg-green-900/30 text-green-400 border-green-700/40',
+    POST:   'bg-green-900/30 text-olive-400 border-green-700/40',
     PUT:    'bg-yellow-900/30 text-yellow-400 border-yellow-700/40',
     DELETE: 'bg-red-900/30   text-red-400   border-red-700/40',
     PATCH:  'bg-purple-900/30 text-purple-400 border-purple-700/40',
@@ -167,7 +167,7 @@ export function APIDocsSection() {
     <div id="api-docs" className="scroll-mt-24 space-y-5">
 
       {/* ── Auth ── */}
-      <div className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+      <div className="card-liquid rounded-xl overflow-hidden">
         <div className="px-6 py-5 border-b border-gray-800">
           <h3 className="text-white text-base font-semibold">Authentication</h3>
           <p className="text-gray-500 text-sm mt-0.5">
@@ -197,7 +197,7 @@ export function APIDocsSection() {
       </div>
 
       {/* ── Endpoints ── */}
-      <div className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+      <div className="card-liquid rounded-xl overflow-hidden">
         <div className="px-6 py-5 border-b border-gray-800">
           <h3 className="text-white text-base font-semibold">Endpoints</h3>
           <p className="text-gray-500 text-sm mt-0.5">Click any row to expand the request/response details.</p>
@@ -268,7 +268,7 @@ export function APIDocsSection() {
       </div>
 
       {/* ── Errors ── */}
-      <div className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+      <div className="card-liquid rounded-xl overflow-hidden">
         <div className="px-6 py-5 border-b border-gray-800">
           <h3 className="text-white text-base font-semibold">Error Responses</h3>
           <p className="text-gray-500 text-sm mt-0.5">All errors return a consistent JSON shape.</p>
@@ -284,7 +284,7 @@ export function APIDocsSection() {
               ['404', 'Not Found',    'gray',   'Resource does not exist'],
               ['500', 'Server Error', 'red',    'Unexpected error — check logs'],
             ].map(([code, label, color, desc]) => {
-              const codeColor = color === 'green' ? 'text-green-400' : color === 'yellow' ? 'text-yellow-400' : color === 'red' ? 'text-red-400' : 'text-gray-400';
+              const codeColor = color === 'green' ? 'text-olive-400' : color === 'yellow' ? 'text-yellow-400' : color === 'red' ? 'text-red-400' : 'text-gray-400';
               return (
                 <div key={code} className="flex items-center gap-4 px-4 py-2.5 bg-gray-900/20">
                   <code className={`text-xs font-mono font-bold w-8 flex-shrink-0 ${codeColor}`}>{code}</code>

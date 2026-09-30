@@ -85,7 +85,7 @@ export function CustomAIPrompt() {
         <div className='p-6 pb-0'>
           <div className={`mb-4 p-3 rounded-lg ${
             message.type === 'success'
-              ? 'bg-green-900/20 border border-green-800 text-green-400'
+              ? 'bg-olive-900/20 border border-olive-800 text-olive-400'
               : 'bg-red-900/20 border border-red-800 text-red-400'
           }`}>
             {message.text}
@@ -108,7 +108,7 @@ export function CustomAIPrompt() {
               value={customPrompt}
               onChange={(e) => setCustomPrompt(e.target.value.slice(0, MAX_LENGTH))}
               placeholder='Example: Always use descriptive node names and add error handling...'
-              className='w-full h-32 px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white resize-none'
+              className='w-full h-32 px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 resize-none'
               maxLength={MAX_LENGTH}
             />
             <div className='absolute bottom-3 right-3 text-xs text-gray-500'>

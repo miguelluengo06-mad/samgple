@@ -1,6 +1,12 @@
 @import 'tailwindcss';
 @import '@fontsource/commit-mono/400.css';
 @import '@fontsource-variable/inter';
+@import '@fontsource/oswald/500.css';
+@import '@fontsource/oswald/600.css';
+@import '@fontsource/oswald/700.css';
+@import '@fontsource-variable/unbounded';
+@import '@fontsource/instrument-serif/400.css';
+@import '@fontsource/instrument-serif/400-italic.css';
 
 /* Hide Next.js dev indicator */
 [data-nextjs-dialog-overlay],
@@ -10,21 +16,22 @@ nextjs-portal {
 }
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
-  --muted: #1a1a1a;
-  --muted-foreground: #a3a3a3;
-  --border: #262626;
-  --input: #1a1a1a;
-  --primary: #ffffff;
-  --primary-foreground: #000000;
-  --secondary: #1a1a1a;
+  color-scheme: light dark;
+  --background: light-dark(#ffffff, #0a0a0a);
+  --foreground: light-dark(#0a0a0a, #f5f5f5);
+  --muted: light-dark(#f2f2f2, #1a1a1a);
+  --muted-foreground: light-dark(#666666, #a3a3a3);
+  --border: light-dark(#e2e2e2, #262626);
+  --input: light-dark(#f2f2f2, #1a1a1a);
+  --primary: #8fae1c;
+  --primary-foreground: #0a0a0a;
+  --secondary: #4a6113;
   --secondary-foreground: #ffffff;
-  --accent: #262626;
-  --accent-foreground: #ffffff;
-  --destructive: #ef4444;
+  --accent: light-dark(#e2e2e2, #262626);
+  --accent-foreground: light-dark(#0a0a0a, #f5f5f5);
+  --destructive: #dc4b34;
   --destructive-foreground: #ffffff;
-  --ring: #ffffff;
+  --ring: #8fae1c;
   --radius: 0.5rem;
 }
 
@@ -46,10 +53,50 @@ nextjs-portal {
   --color-ring: var(--ring);
   --font-sans: 'Inter Variable', 'Inter', system-ui;
   --font-mono: 'Commit Mono', monospace;
+  --font-display: 'Unbounded Variable', 'Unbounded', 'Oswald', 'Inter Variable', system-ui;
+
+  /*
+   * Base neutrals: true black/white/gray, mode-aware via light-dark().
+   * `black`/`white` are used throughout as background/foreground pairs
+   * (bg-black = page surface, text-white = primary text), so swapping
+   * them together flips the whole app between white-paper and near-black.
+   */
+  --color-black: light-dark(#ffffff, #0a0a0a);
+  --color-white: light-dark(#0a0a0a, #f5f5f5);
+
+  --color-gray-50: light-dark(#1a1a1a, #fafafa);
+  --color-gray-100: light-dark(#242424, #f0f0f0);
+  --color-gray-200: light-dark(#2e2e2e, #e0e0e0);
+  --color-gray-300: light-dark(#3d3d3d, #c7c7c7);
+  --color-gray-400: light-dark(#575757, #a3a3a3);
+  --color-gray-500: light-dark(#737373, #7a7a7a);
+  --color-gray-600: light-dark(#8f8f8f, #595959);
+  --color-gray-700: light-dark(#b3b3b3, #404040);
+  --color-gray-800: light-dark(#d6d6d6, #292929);
+  --color-gray-900: light-dark(#ededed, #1a1a1a);
+  --color-gray-950: light-dark(#f7f7f7, #0d0d0d);
+
+  /*
+   * "Signal" accent family — the one saturated acid-lime color used across
+   * the whole product (public site + dashboard), kept constant across modes.
+   * Kept the `olive` name so every existing olive-* class in the app just
+   * picks up the new tone with zero component changes.
+   */
+  --color-olive-50: #f6ffe0;
+  --color-olive-100: #eaffb8;
+  --color-olive-200: #d9fb8f;
+  --color-olive-300: #c2ee5e;
+  --color-olive-400: #a8d93f;
+  --color-olive-500: #8fae1c;
+  --color-olive-600: #708a17;
+  --color-olive-700: #566a12;
+  --color-olive-800: #3d4a0d;
+  --color-olive-900: #283109;
+  --color-olive-950: #181e06;
 }
 
 html {
-  background-color: #000000;
+  background-color: var(--background);
   overflow-x: clip;
   width: 100%;
   max-width: 100vw;
@@ -64,6 +111,30 @@ body {
   overflow-x: clip;
   width: 100%;
   max-width: 100vw;
+  /* Faint signal-lime glow for depth instead of a flat fill; softer on the light-mode paper background */
+  background-image:
+    radial-gradient(ellipse 1200px 800px at 15% -10%, light-dark(rgba(143, 174, 28, 0.06), rgba(143, 174, 28, 0.14)), transparent 60%),
+    radial-gradient(ellipse 900px 700px at 100% 10%, light-dark(rgba(86, 106, 18, 0.04), rgba(86, 106, 18, 0.1)), transparent 55%);
+  background-attachment: fixed;
+  position: relative;
+}
+
+/* Film-grain texture, same as the public site, applied app-wide for one consistent feel */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+h1, h2, h3, h4,
+.font-display {
+  font-family: var(--font-display), var(--font-sans), sans-serif;
+  letter-spacing: 0.01em;
 }
 
 /* Hide scrollbar but keep scroll functionality */
@@ -77,10 +148,59 @@ body {
 
 /* Glassmorphism effect */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: light-dark(rgba(10, 10, 10, 0.04), rgba(245, 245, 245, 0.05));
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid light-dark(rgba(10, 10, 10, 0.08), rgba(245, 245, 245, 0.1));
 }
+
+/*
+ * Liquid glass card — the default surface for anything that used to be a flat
+ * bg-gray-900/50 box: frosted translucency, a soft top specular highlight, and
+ * a gentle lift on hover so the whole UI reads as tactile "cards" rather than lists.
+ */
+.card-liquid {
+  position: relative;
+  background: light-dark(
+    linear-gradient(165deg, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.55)),
+    linear-gradient(165deg, rgba(41, 41, 41, 0.55), rgba(26, 26, 26, 0.45))
+  );
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid light-dark(rgba(10, 10, 10, 0.08), rgba(245, 245, 245, 0.08));
+  box-shadow:
+    inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.6), rgba(245, 245, 245, 0.06)),
+    0 1px 2px light-dark(rgba(10, 10, 10, 0.04), rgba(0, 0, 0, 0.2)),
+    0 8px 24px -12px light-dark(rgba(10, 10, 10, 0.12), rgba(0, 0, 0, 0.5));
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card-liquid-interactive {
+  cursor: pointer;
+}
+
+.card-liquid-interactive:hover {
+  transform: translateY(-2px);
+  border-color: light-dark(rgba(107, 122, 69, 0.4), rgba(138, 159, 83, 0.35));
+  box-shadow:
+    inset 0 1px 0 light-dark(rgba(255, 255, 255, 0.7), rgba(245, 245, 245, 0.08)),
+    0 1px 2px light-dark(rgba(10, 10, 10, 0.04), rgba(0, 0, 0, 0.2)),
+    0 16px 32px -14px light-dark(rgba(107, 122, 69, 0.3), rgba(0, 0, 0, 0.6));
+}
+
+/* Icon badge — rounded gradient container for icons, replaces bare/flat icon usage */
+.icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  background: linear-gradient(150deg, var(--badge-a, var(--color-olive-500)), var(--badge-b, var(--color-olive-700)));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 4px 10px -4px light-dark(rgba(10, 10, 10, 0.3), rgba(0, 0, 0, 0.5));
+}
+
+.icon-badge-olive { --badge-a: #8a9f53; --badge-b: #4a5530; }
+.icon-badge-neutral { --badge-a: #6b6b6b; --badge-b: #2b2b2b; }
 
 /* Hide scrollbars while keeping scroll functionality */
 * {
@@ -95,7 +215,7 @@ body {
 /* Custom scrollbar class for specific components that need visible scrollbars */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: #374151 transparent;
+  scrollbar-color: light-dark(#c7c7c7, #404040) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -110,36 +230,36 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #374151;
+  background: light-dark(#c7c7c7, #404040);
   border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #4b5563;
+  background: light-dark(#a3a3a3, #595959);
 }
 
 /* Button styles */
 .btn-minimal {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
+  border: 1px solid light-dark(rgba(10, 10, 10, 0.2), rgba(245, 245, 245, 0.2));
+  color: var(--foreground);
   transition: all 0.3s ease;
 }
 
 .btn-minimal:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: light-dark(rgba(10, 10, 10, 0.06), rgba(245, 245, 245, 0.1));
+  border-color: light-dark(rgba(10, 10, 10, 0.4), rgba(245, 245, 245, 0.4));
 }
 
 .btn-minimal-filled {
-  background: white;
-  color: black;
-  border: 1px solid white;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border: 1px solid var(--primary);
   transition: all 0.3s ease;
 }
 
 .btn-minimal-filled:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: #7d8f52;
   transform: translateY(-1px);
 }
 
@@ -157,7 +277,7 @@ select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   padding-right: 2.5rem;
@@ -180,4 +300,800 @@ select {
 
 .animate-fade-in-up {
   animation: fadeInUp 0.5s ease-out both;
+}
+
+/* ============================================================
+ * "samgple" public site — kinetic/cinematic studio theme.
+ * Scoped additively (home-* / font-kinetic / font-serif-display)
+ * so it never touches the dashboard's existing olive/black system.
+ * ============================================================ */
+
+.font-kinetic {
+  font-family: 'Unbounded Variable', 'Unbounded', var(--font-display), sans-serif;
+}
+
+.font-serif-display {
+  font-family: 'Instrument Serif', Georgia, serif;
+}
+
+:root {
+  /* Same family as the dashboard's olive-* accent — one signature color everywhere */
+  --signal: var(--color-olive-400);
+  --signal-dim: var(--color-olive-600);
+}
+
+.home-root {
+  color: #16210e;
+  /*
+   * Public site = light theme on an animated white ↔ military-green background. The shared
+   * white/black/gray Tailwind tokens are light-dark() pairs, so forcing color-scheme keeps every
+   * text-white / border-white / bg-white utility consistent whatever the visitor's OS mode is
+   * (under "light" they resolve to dark ink on the light glass panels).
+   */
+  color-scheme: light;
+  /* Accent for text and buttons on light panels: a darker, military olive instead of acid lime */
+  --signal: #56741a;
+  --signal-dim: #435a13;
+}
+
+.force-dark {
+  color-scheme: dark;
+}
+
+/*
+ * Animated background: white ↔ military green.
+ *  ::before — one huge linear gradient (white → sage → army green → white) that slowly rotates about the
+ *             viewport centre, so bands of white and green sweep across the screen;
+ *  ::after  — soft white and deep-green blobs drifting on top for depth.
+ * Both are fixed and only transform-animated (GPU-composited: no repaint per frame). The element that
+ * uses it must create a stacking context (isolation) so the layers sit above its background colour
+ * and below its content.
+ */
+.home-root,
+.mil-bg {
+  position: relative;
+  isolation: isolate;
+  background: #dfe7cd;
+}
+
+.home-root::before,
+.mil-bg::before {
+  content: '';
+  position: fixed;
+  z-index: -2;
+  left: 50%;
+  top: 50%;
+  width: 230vmax;
+  height: 230vmax;
+  margin: -115vmax 0 0 -115vmax;
+  pointer-events: none;
+  will-change: transform;
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    #f1f5e6 14%,
+    #b7c596 30%,
+    #6f8244 43%,
+    #4b5d2a 50%,
+    #6f8244 57%,
+    #b7c596 70%,
+    #f1f5e6 86%,
+    #ffffff 100%
+  );
+  animation: mil-sweep 70s linear infinite;
+}
+
+.home-root::after,
+.mil-bg::after {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  pointer-events: none;
+  will-change: transform;
+  background:
+    radial-gradient(32% 32% at 15% 20%, rgba(255, 255, 255, 0.75), transparent 70%),
+    radial-gradient(30% 30% at 85% 30%, rgba(75, 93, 42, 0.5), transparent 70%),
+    radial-gradient(36% 36% at 60% 85%, rgba(255, 255, 255, 0.65), transparent 70%),
+    radial-gradient(28% 28% at 10% 85%, rgba(63, 80, 32, 0.45), transparent 70%);
+  animation: mil-drift 34s ease-in-out infinite alternate;
+}
+
+@keyframes mil-sweep {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes mil-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50%  { transform: translate3d(6%, -5%, 0) scale(1.1) rotate(6deg); }
+  100% { transform: translate3d(-6%, 5%, 0) scale(1.05) rotate(-6deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-root::before,
+  .home-root::after,
+  .mil-bg::before,
+  .mil-bg::after {
+    animation: none;
+  }
+}
+
+/*
+ * Light "glass" panel: content of the public site sits on these so text always has contrast,
+ * whichever part of the moving white/green background is behind it.
+ */
+.home-slab,
+.home-root main > section {
+  /* Translucent enough to let the moving white/green background tint the panel, opaque enough that
+     dark text keeps ≥ 7:1 contrast even over the deepest army green. */
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  backdrop-filter: blur(16px) saturate(1.15);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 32px;
+  box-shadow: 0 24px 60px -34px rgba(35, 50, 15, 0.5);
+}
+
+.home-root main > section {
+  width: calc(100% - clamp(20px, 5vw, 72px));
+  max-width: 1320px;
+  margin: 18px auto;
+}
+
+/* Secondary text was tuned for a near-black page; on tinted glass it needs a little more weight */
+.home-root .text-white\/25 { color: rgba(22, 33, 14, 0.45); }
+.home-root .text-white\/30 { color: rgba(22, 33, 14, 0.58); }
+.home-root .text-white\/40 { color: rgba(22, 33, 14, 0.66); }
+.home-root .text-white\/50 { color: rgba(22, 33, 14, 0.74); }
+.home-root .text-white\/60 { color: rgba(22, 33, 14, 0.82); }
+
+.home-root .home-glow-text {
+  text-shadow: none;
+}
+
+/* Auth form button (shared component) in the site's olive instead of the app's acid lime */
+.home-root .btn-minimal-filled {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: #ffffff;
+}
+
+.home-root .btn-minimal-filled:hover {
+  background: var(--signal-dim);
+}
+
+.home-glow-text {
+  text-shadow: 0 0 40px rgba(215, 255, 63, 0.35);
+}
+
+/* Marquee ticker */
+@keyframes home-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.home-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: home-marquee 28s linear infinite;
+}
+
+.home-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* Logo strip — desaturated until hovered, cinematic restraint */
+.home-logo-item {
+  filter: grayscale(1) brightness(1.6) opacity(0.5);
+  transition: filter 0.3s ease;
+}
+
+.home-logo-item:hover {
+  filter: grayscale(0) brightness(1) opacity(1);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Fichas de producto (packs) — web y landing
+   ══════════════════════════════════════════════════════════════════ */
+
+.pack-cover {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  display: flex;
+  align-items: flex-end;
+  aspect-ratio: 16 / 10;
+  padding: 20px 22px;
+  overflow: hidden;
+  color: #ffffff;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(255, 255, 255, 0.3), transparent 55%),
+    radial-gradient(90% 90% at 0% 100%, rgba(0, 0, 0, 0.3), transparent 60%),
+    linear-gradient(140deg, var(--c1), var(--c2));
+}
+
+.pack-cover--compact {
+  aspect-ratio: 16 / 8;
+  padding: 14px 16px;
+}
+
+.pack-cover::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0 2px, transparent 2px 16px);
+}
+
+.pack-cover__icon {
+  position: absolute;
+  z-index: -1;
+  left: -7%;
+  bottom: -24%;
+  width: 46%;
+  height: auto;
+  color: #ffffff;
+  opacity: 0.1;
+}
+
+.pack-cover__chip {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  max-width: 60%;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.pack-cover__badge {
+  position: absolute;
+  z-index: 5;
+  top: 14px;
+  right: 14px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #2f3a19;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.2;
+  box-shadow: 0 6px 14px -6px rgba(0, 0, 0, 0.45);
+}
+
+.pack-cover__text {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 58%;
+}
+
+.pack-cover__headline {
+  font-family: 'Unbounded Variable', 'Unbounded', system-ui, sans-serif;
+  font-size: clamp(14px, 6.2cqw, 26px);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.pack-cover__headline--num {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pack-cover__num {
+  font-size: clamp(40px, 23cqw, 74px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+}
+
+.pack-cover__unit {
+  font-size: clamp(11px, 4.4cqw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.pack-cover__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.pack-cover__tag {
+  padding: 3px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1.3;
+}
+
+/* Phones showing a vertical video (decorative) */
+.pack-cover__phones {
+  position: absolute;
+  z-index: 2;
+  right: 4%;
+  bottom: -16%;
+  width: 46%;
+  aspect-ratio: 1 / 1.05;
+  pointer-events: none;
+}
+
+.pack-phone {
+  position: absolute;
+  bottom: 0;
+  width: 44%;
+  aspect-ratio: 9 / 18.5;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.55);
+  border-radius: 16% / 8%;
+  background: linear-gradient(170deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.28));
+  box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.55);
+}
+
+.pack-phone--front {
+  right: 22%;
+  z-index: 3;
+  transform: rotate(-5deg);
+}
+
+.pack-phone--mid {
+  right: -2%;
+  z-index: 2;
+  width: 40%;
+  opacity: 0.85;
+  transform: translateY(10%) rotate(9deg);
+}
+
+.pack-phone--back {
+  right: 47%;
+  z-index: 1;
+  width: 36%;
+  opacity: 0.55;
+  transform: translateY(16%) rotate(-14deg);
+}
+
+.pack-phone__screen {
+  position: absolute;
+  inset: 5%;
+  display: grid;
+  place-items: center;
+  border-radius: 12% / 6%;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.08));
+}
+
+.pack-phone__screen svg {
+  width: 34%;
+  height: auto;
+  color: #ffffff;
+}
+
+.pack-phone__sub {
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: 24%;
+  height: 6%;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.pack-phone__sub--short {
+  bottom: 14%;
+  right: 38%;
+  opacity: 0.6;
+}
+
+.pack-phone__bar {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  bottom: 5%;
+  height: 2.4%;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.pack-cover--compact .pack-phone--mid,
+.pack-cover--compact .pack-phone--back {
+  display: none;
+}
+
+.pack-cover--compact .pack-cover__phones {
+  width: 30%;
+  bottom: -22%;
+}
+
+.pack-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 40px -26px rgba(35, 50, 15, 0.55);
+  transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.pack-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 50px -24px rgba(35, 50, 15, 0.6);
+}
+
+.pack-card--featured {
+  box-shadow: 0 0 0 3px var(--signal), 0 24px 46px -24px rgba(35, 50, 15, 0.6);
+}
+
+.pack-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 20px 22px 22px;
+  color: #16210e;
+}
+
+.pack-card__name {
+  font-family: 'Unbounded Variable', 'Unbounded', system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.pack-card__for {
+  margin-top: 6px;
+  color: rgba(22, 33, 14, 0.72);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.pack-card__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(22, 33, 14, 0.2);
+}
+
+.pack-card__amount {
+  font-size: 46px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.pack-card__unit {
+  color: rgba(22, 33, 14, 0.7);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.pack-card__iva {
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(22, 33, 14, 0.08);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pack-card__note {
+  margin-top: 8px;
+  color: var(--signal);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pack-card__list {
+  display: grid;
+  gap: 9px;
+  margin: 18px 0 22px;
+  padding: 0;
+  list-style: none;
+  font-size: 14.5px;
+}
+
+.pack-card__list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.pack-card__list svg {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  color: var(--signal);
+}
+
+.pack-card__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 50px;
+  margin-top: auto;
+  border-radius: 999px;
+  background: var(--signal);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.pack-card__cta:hover {
+  background: var(--signal-dim);
+  transform: translateY(-1px);
+}
+
+.pack-card__cta svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Filtros tipo catálogo */
+.pack-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 16px 6px;
+  margin-inline: -16px; /* horizontal only: vertical spacing comes from the mb-* utilities on the element */
+}
+
+@media (min-width: 768px) {
+  .pack-tabs {
+    flex-wrap: wrap;
+    overflow: visible;
+    margin-inline: 0;
+    padding: 0;
+  }
+}
+
+.pack-tab {
+  flex: none;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(22, 33, 14, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.pack-tab:hover {
+  border-color: var(--signal);
+}
+
+.pack-tab[aria-selected='true'] {
+  border-color: var(--signal);
+  background: var(--signal);
+  color: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pack-card,
+  .pack-card:hover {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Ficha destacada horizontal (Pack de Bienvenida en la web) */
+@media (min-width: 768px) {
+  .pack-card--wide {
+    flex-direction: row;
+  }
+  .pack-card--wide .pack-cover {
+    flex: 0 0 42%;
+    aspect-ratio: auto;
+    min-height: 100%;
+  }
+  .pack-card--wide .pack-card__body {
+    padding: 28px 32px;
+  }
+  .pack-card--wide .pack-card__cta {
+    align-self: flex-start;
+    padding: 0 28px;
+  }
+}
+
+/* ── Ficha de producto v2: textos, compra y confianza ─────────────── */
+.pack-card__lead {
+  margin-top: 8px;
+  font-size: 15.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.pack-card__ideal {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 10px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  background: rgba(22, 33, 14, 0.07);
+  color: rgba(22, 33, 14, 0.78);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.pack-card__terms {
+  margin-top: 8px;
+  color: rgba(22, 33, 14, 0.68);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pack-card__list svg {
+  box-sizing: content-box;
+  width: 12px;
+  height: 12px;
+  padding: 4px;
+  margin-top: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--signal) 16%, transparent);
+}
+
+.pack-card__list li {
+  align-items: center;
+}
+
+.pack-card__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.pack-buy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pack-buy .pack-card__cta {
+  width: 100%;
+  margin-top: 0;
+}
+
+.pack-card__cta--link {
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.pack-card__cta:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.pack-buy__error {
+  color: #b3261e;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.pack-card__secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: rgba(22, 33, 14, 0.62);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pack-card__secure svg {
+  width: 13px;
+  height: 13px;
+}
+
+.pack-card__alt {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  color: var(--signal);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1.5px;
+  cursor: pointer;
+}
+
+.pack-card__alt:hover {
+  color: var(--signal-dim);
+}
+
+.pack-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pack-trust li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid rgba(22, 33, 14, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.pack-trust svg {
+  width: 16px;
+  height: 16px;
+  color: var(--signal);
+}
+
+/* Botón flotante de WhatsApp (web y landing) */
+.wa-float {
+  position: fixed;
+  right: 18px;
+  bottom: 22px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  min-width: 56px;
+  padding: 0 18px 0 16px;
+  border-radius: 999px;
+  background: #25d366;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: 0 10px 28px rgba(18, 140, 70, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.wa-float:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(18, 140, 70, 0.5);
+}
+.wa-float svg {
+  width: 28px;
+  height: 28px;
+  flex: none;
+}
+@media (max-width: 767px) {
+  .wa-float {
+    right: 14px;
+    padding: 0;
+    width: 56px;
+    justify-content: center;
+  }
+  .wa-float__label {
+    display: none;
+  }
+  .wa-float--lift {
+    bottom: 96px; /* por encima de la barra fija de "Quiero mi pack" */
+  }
 }

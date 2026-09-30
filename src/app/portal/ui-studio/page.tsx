@@ -100,7 +100,7 @@ export default function PortalUIStudioPage() {
     return (
       <div className="flex-1 flex items-center justify-center p-6">
         <div className="text-center">
-          <div className="w-16 h-16 bg-gray-900/50 border border-gray-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 card-liquid rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Layers className="w-8 h-8 text-white/40" />
           </div>
           <h3 className="text-lg font-semibold text-white mb-2">
@@ -114,7 +114,7 @@ export default function PortalUIStudioPage() {
           {role !== 'client' && (
             <Link
               href="/portal/ui-studio/editor?editor=new"
-              className="px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors inline-block"
+              className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors inline-block"
             >
               <Plus className="w-4 h-4 inline mr-2" />
               Create Component
@@ -130,7 +130,7 @@ export default function PortalUIStudioPage() {
       <div className="p-4 md:p-6 space-y-4">
         {/* Select Mode Bar */}
         {isSelectMode && (
-          <div className="flex items-center justify-between gap-3 p-4 bg-gray-900/50 border border-gray-800 rounded-xl">
+          <div className="flex items-center justify-between gap-3 p-4 card-liquid rounded-xl">
             <div className="flex items-center gap-3">
               <span className="text-sm text-white font-medium">
                 {selectedIds.size} selected
@@ -168,7 +168,7 @@ export default function PortalUIStudioPage() {
               onClick={() => setSelectedInstanceFilter(null)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 !selectedInstanceFilter
-                  ? 'bg-white text-black'
+                  ? 'bg-olive-500 text-black'
                   : 'bg-gray-900/50 text-gray-400 hover:text-white border border-gray-800'
               }`}
             >
@@ -180,7 +180,7 @@ export default function PortalUIStudioPage() {
                 onClick={() => setSelectedInstanceFilter(inst.id)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
                   selectedInstanceFilter === inst.id
-                    ? 'bg-white text-black'
+                    ? 'bg-olive-500 text-black'
                     : 'bg-gray-900/50 text-gray-400 hover:text-white border border-gray-800'
                 }`}
               >
@@ -198,7 +198,7 @@ export default function PortalUIStudioPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
-                className="w-full pl-10 pr-4 py-2.5 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none"
+                className="w-full pl-10 pr-4 py-2.5 card-liquid rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none"
               />
             </div>
             <button
@@ -206,7 +206,7 @@ export default function PortalUIStudioPage() {
               className={cn(
                 "flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all text-sm",
                 isSelectMode
-                  ? "bg-white text-black font-medium"
+                  ? "bg-olive-500 text-black font-medium"
                   : "text-gray-400 hover:text-white border border-gray-800 hover:border-gray-700"
               )}
             >
@@ -350,7 +350,7 @@ export default function PortalUIStudioPage() {
       {showHelpModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4" onClick={() => setShowHelpModal(false)}>
           <div
-            className="w-full max-w-lg bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden"
+            className="w-full max-w-lg card-liquid rounded-xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 border-b border-gray-800">
@@ -372,7 +372,7 @@ export default function PortalUIStudioPage() {
 
             <div className="p-6 space-y-6">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-bold">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-olive-500 text-black flex items-center justify-center text-sm font-bold">
                   1
                 </div>
                 <div>
@@ -385,7 +385,7 @@ export default function PortalUIStudioPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-bold">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-olive-500 text-black flex items-center justify-center text-sm font-bold">
                   2
                 </div>
                 <div>
@@ -398,7 +398,7 @@ export default function PortalUIStudioPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-bold">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-olive-500 text-black flex items-center justify-center text-sm font-bold">
                   3
                 </div>
                 <div>
@@ -433,7 +433,7 @@ export default function PortalUIStudioPage() {
               </Link>
               <button
                 onClick={() => setShowHelpModal(false)}
-                className="px-5 py-2.5 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
+                className="px-5 py-2.5 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
               >
                 Got it
               </button>

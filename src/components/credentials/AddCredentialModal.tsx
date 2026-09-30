@@ -733,7 +733,7 @@ export default function AddCredentialModal({
           <select
             value={formData[key] || ''}
             onChange={(e) => updateFormField(key, e.target.value)}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-white focus:border-white"
+            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
           >
             <option value="">Select...</option>
             {(prop.options || []).map((opt: any) => (
@@ -758,7 +758,7 @@ export default function AddCredentialModal({
             id={key}
             checked={formData[key] || false}
             onChange={(e) => updateFormField(key, e.target.checked)}
-            className="w-4 h-4 rounded border-gray-700 bg-gray-800 text-white focus:ring-white"
+            className="w-4 h-4 rounded border-gray-700 bg-gray-800 text-white focus:ring-olive-500"
           />
           <label htmlFor={key} className="text-sm text-white">
             {label}
@@ -780,7 +780,7 @@ export default function AddCredentialModal({
             value={formData[key] || ''}
             onChange={(e) => updateFormField(key, e.target.value)}
             placeholder={prop.placeholder || `Enter ${label.toLowerCase()}`}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white pr-10"
+            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 pr-10"
           />
           {isPassword && (
             <button
@@ -913,7 +913,7 @@ export default function AddCredentialModal({
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Search credentials..."
-                      className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                      className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                       autoFocus
                     />
                   </div>
@@ -1142,7 +1142,7 @@ export default function AddCredentialModal({
                       onChange={(e) => setCredentialName(e.target.value)}
                       required
                       placeholder="e.g., My Slack Account"
-                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                      className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                     />
                   </div>
 
@@ -1165,7 +1165,7 @@ export default function AddCredentialModal({
                             value={formData['apiKey'] || ''}
                             onChange={(e) => updateFormField('apiKey', e.target.value)}
                             placeholder="Enter your API key or token"
-                            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white pr-10"
+                            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 pr-10"
                           />
                           <button
                             type="button"
@@ -1221,7 +1221,7 @@ export default function AddCredentialModal({
               {step === 'oauth' && selectedInfo && selectedType && (
                 <div className="space-y-4">
                   <div className="flex flex-col items-center text-center py-4">
-                    <div className="w-16 h-16 rounded-xl bg-gray-900/50 border border-gray-800 flex items-center justify-center mb-4">
+                    <div className="w-16 h-16 rounded-xl card-liquid flex items-center justify-center mb-4">
                       <CredentialIcon type={selectedType} className="h-8 w-8 text-gray-400" />
                     </div>
                     <h3 className="text-lg font-medium text-white mb-2">
@@ -1249,14 +1249,14 @@ export default function AddCredentialModal({
                           value={credentialName}
                           onChange={(e) => setCredentialName(e.target.value)}
                           placeholder={`My ${selectedInfo.name} Account`}
-                          className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                          className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                         />
                       </div>
                       {/* Scope limitation note for specific Google credential types */}
                       {selectedType && GOOGLE_SCOPE_NOTES[selectedType] && (
                         <div className="p-3 rounded-lg bg-gray-800/30 border border-gray-700 text-xs space-y-1.5">
                           <p className="text-gray-300">
-                            <span className="text-green-400 font-medium">Included:</span>{' '}
+                            <span className="text-olive-400 font-medium">Included:</span>{' '}
                             {GOOGLE_SCOPE_NOTES[selectedType].included}
                           </p>
                           <p className="text-gray-400">
@@ -1267,7 +1267,7 @@ export default function AddCredentialModal({
                       )}
                       <button
                         onClick={startOAuth}
-                        className="w-full py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors"
+                        className="w-full py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors"
                       >
                         Connect with {selectedInfo.name}
                       </button>
@@ -1284,7 +1284,7 @@ export default function AddCredentialModal({
                         href={`${instanceUrl}/credentials`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                        className="w-full py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2"
                       >
                         <ExternalLink className="h-4 w-4" />
                         Open n8n Credentials
@@ -1326,7 +1326,7 @@ export default function AddCredentialModal({
                   <div className={cn(
                     'p-3 rounded-lg flex items-center gap-2 text-sm',
                     testResult.success
-                      ? 'bg-green-900/20 border border-green-800/50 text-green-400'
+                      ? 'bg-olive-900/20 border border-olive-800/50 text-olive-400'
                       : 'bg-red-900/20 border border-red-800/50 text-red-400'
                   )}>
                     {testResult.success ? (
@@ -1364,7 +1364,7 @@ export default function AddCredentialModal({
                     className={cn(
                       "flex-[2] py-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2",
                       testResult?.success
-                        ? "bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                        ? "bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         : "bg-gray-700 text-gray-400 cursor-not-allowed"
                     )}
                   >

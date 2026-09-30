@@ -208,7 +208,7 @@ export default function TemplatesPage() {
       <>
         <div className="flex-1 flex items-center justify-center p-6">
           <div className="text-center">
-            <div className="w-16 h-16 bg-gray-900/50 border border-gray-800 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 card-liquid rounded-2xl flex items-center justify-center mx-auto mb-4">
               <FileText className="w-8 h-8 text-white/40" />
             </div>
             <h3 className="text-lg font-semibold text-white mb-2">
@@ -222,7 +222,7 @@ export default function TemplatesPage() {
             {role !== 'client' && (
               <button
                 onClick={() => setShowAddModal(true)}
-                className="px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors cursor-pointer inline-flex items-center gap-2"
+                className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors cursor-pointer inline-flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
                 Add Template
@@ -253,7 +253,7 @@ export default function TemplatesPage() {
                   <button
                     onClick={handleUpload}
                     disabled={uploading || !uploadName.trim() || !uploadWorkflow}
-                    className="px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer"
+                    className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer"
                   >
                     {uploading ? (
                       <>
@@ -281,7 +281,7 @@ export default function TemplatesPage() {
                         value={uploadName}
                         onChange={(e) => setUploadName(e.target.value)}
                         placeholder="e.g., Slack to Notion Sync"
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm"
+                        className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
                       />
                     </div>
                     <div>
@@ -291,7 +291,7 @@ export default function TemplatesPage() {
                         onChange={(e) => setUploadDescription(e.target.value)}
                         placeholder="Brief description..."
                         rows={2}
-                        className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white resize-none text-sm"
+                        className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 resize-none text-sm"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
@@ -310,7 +310,7 @@ export default function TemplatesPage() {
                           <button
                             type="button"
                             onClick={() => setShowIconPicker(!showIconPicker)}
-                            className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white focus:ring-2 focus:ring-white focus:border-white flex items-center justify-between text-sm cursor-pointer"
+                            className="w-full px-4 py-3 card-liquid rounded-lg text-white focus:ring-2 focus:ring-olive-500 focus:border-olive-500 flex items-center justify-between text-sm cursor-pointer"
                           >
                             <span className={uploadIcon ? 'text-xl' : 'text-gray-500'}>{uploadIcon || 'Select'}</span>
                             <ChevronDown className={cn('h-4 w-4 text-gray-400 transition-transform', showIconPicker && 'rotate-180')} />
@@ -318,7 +318,7 @@ export default function TemplatesPage() {
                           {showIconPicker && (
                             <>
                               <div className="fixed inset-0 z-[60]" onClick={() => setShowIconPicker(false)} />
-                              <div className="absolute z-[70] mt-1 w-64 bg-gray-900 border border-gray-800 rounded-lg p-2 shadow-xl">
+                              <div className="absolute z-[70] mt-1 w-64 card-liquid rounded-lg p-2 shadow-xl">
                                 <div className="grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
                                   {WORKFLOW_ICONS.map((icon, idx) => (
                                     <button
@@ -359,10 +359,10 @@ export default function TemplatesPage() {
                           value={jsonText}
                           onChange={(e) => handleJsonPaste(e.target.value)}
                           placeholder={'Paste your workflow JSON here or upload a file...\n\n{"name": "My Workflow", "nodes": [...], "connections": {...}}'}
-                          className="w-full h-52 px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white resize-none font-mono text-sm"
+                          className="w-full h-52 px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 resize-none font-mono text-sm"
                         />
                         {uploadWorkflow && uploadWorkflow.nodes?.length > 0 && (
-                          <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2 py-1 bg-green-900/20 border border-green-800 rounded text-sm text-green-400">
+                          <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2 py-1 bg-olive-900/20 border border-olive-800 rounded text-sm text-olive-400">
                             <CheckCircle className="h-3.5 w-3.5" />
                             Valid - {uploadWorkflow.nodes.length} nodes
                           </div>
@@ -423,7 +423,7 @@ export default function TemplatesPage() {
 
         {toast && (
           <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-lg text-sm font-medium shadow-lg ${
-            toast.type === 'success' ? 'bg-green-900/90 text-green-400 border border-green-800' : 'bg-red-900/90 text-red-400 border border-red-800'
+            toast.type === 'success' ? 'bg-green-900/90 text-olive-400 border border-olive-800' : 'bg-red-900/90 text-red-400 border border-red-800'
           }`}>
             {toast.message}
           </div>
@@ -443,7 +443,7 @@ export default function TemplatesPage() {
               className={cn(
                 'px-3 py-1.5 text-sm font-medium rounded-lg transition-all',
                 selectedCategory === 'all'
-                  ? 'bg-white text-black'
+                  ? 'bg-olive-500 text-black'
                   : 'text-gray-400 hover:text-white bg-gray-800/30 hover:bg-gray-800'
               )}
             >
@@ -458,7 +458,7 @@ export default function TemplatesPage() {
                   className={cn(
                     'px-3 py-1.5 text-sm font-medium rounded-lg transition-all',
                     selectedCategory === cat
-                      ? 'bg-white text-black'
+                      ? 'bg-olive-500 text-black'
                       : 'text-gray-400 hover:text-white bg-gray-800/30 hover:bg-gray-800'
                   )}
                 >
@@ -489,7 +489,7 @@ export default function TemplatesPage() {
               <button
                 key={template.id}
                 onClick={() => router.push(`/portal/templates/${template.id}`)}
-                className="group bg-gray-900/50 border border-gray-800 hover:border-gray-600 rounded-xl p-5 text-left transition-all cursor-pointer"
+                className="group card-liquid hover:border-gray-600 rounded-xl p-5 text-left transition-all cursor-pointer"
               >
                 <div className="flex items-start gap-3 mb-3">
                   <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center text-lg shrink-0">
@@ -531,7 +531,7 @@ export default function TemplatesPage() {
       {showHelpModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4" onClick={() => setShowHelpModal(false)}>
           <div
-            className="w-full max-w-lg bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden"
+            className="w-full max-w-lg card-liquid rounded-xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="p-6 border-b border-gray-800">
@@ -553,7 +553,7 @@ export default function TemplatesPage() {
 
             <div className="p-6 space-y-6">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-bold">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-olive-500 text-black flex items-center justify-center text-sm font-bold">
                   1
                 </div>
                 <div>
@@ -565,7 +565,7 @@ export default function TemplatesPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-bold">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-olive-500 text-black flex items-center justify-center text-sm font-bold">
                   2
                 </div>
                 <div>
@@ -577,7 +577,7 @@ export default function TemplatesPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-white text-black flex items-center justify-center text-sm font-bold">
+                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-olive-500 text-black flex items-center justify-center text-sm font-bold">
                   3
                 </div>
                 <div>
@@ -627,7 +627,7 @@ export default function TemplatesPage() {
                 <button
                   onClick={handleUpload}
                   disabled={uploading || !uploadName.trim() || !uploadWorkflow}
-                  className="px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer"
+                  className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors flex items-center gap-2 cursor-pointer"
                 >
                   {uploading ? (
                     <>
@@ -659,7 +659,7 @@ export default function TemplatesPage() {
                       value={uploadName}
                       onChange={(e) => setUploadName(e.target.value)}
                       placeholder="e.g., Slack to Notion Sync"
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm"
+                      className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm"
                     />
                   </div>
 
@@ -673,7 +673,7 @@ export default function TemplatesPage() {
                       onChange={(e) => setUploadDescription(e.target.value)}
                       placeholder="Brief description..."
                       rows={2}
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white resize-none text-sm"
+                      className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 resize-none text-sm"
                     />
                   </div>
 
@@ -698,7 +698,7 @@ export default function TemplatesPage() {
                         <button
                           type="button"
                           onClick={() => setShowIconPicker(!showIconPicker)}
-                          className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white focus:ring-2 focus:ring-white focus:border-white flex items-center justify-between text-sm cursor-pointer"
+                          className="w-full px-4 py-3 card-liquid rounded-lg text-white focus:ring-2 focus:ring-olive-500 focus:border-olive-500 flex items-center justify-between text-sm cursor-pointer"
                         >
                           <span className={uploadIcon ? 'text-xl' : 'text-gray-500'}>
                             {uploadIcon || 'Select'}
@@ -711,7 +711,7 @@ export default function TemplatesPage() {
                         {showIconPicker && (
                           <>
                             <div className="fixed inset-0 z-[60]" onClick={() => setShowIconPicker(false)} />
-                            <div className="absolute z-[70] mt-1 w-64 bg-gray-900 border border-gray-800 rounded-lg p-2 shadow-xl">
+                            <div className="absolute z-[70] mt-1 w-64 card-liquid rounded-lg p-2 shadow-xl">
                               <div className="grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
                                 {WORKFLOW_ICONS.map((icon, idx) => (
                                   <button
@@ -763,10 +763,10 @@ export default function TemplatesPage() {
                         value={jsonText}
                         onChange={(e) => handleJsonPaste(e.target.value)}
                         placeholder={'Paste your workflow JSON here or upload a file...\n\n{"name": "My Workflow", "nodes": [...], "connections": {...}}'}
-                        className="w-full h-52 px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white resize-none font-mono text-sm"
+                        className="w-full h-52 px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 resize-none font-mono text-sm"
                       />
                       {uploadWorkflow && uploadWorkflow.nodes?.length > 0 && (
-                        <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2 py-1 bg-green-900/20 border border-green-800 rounded text-sm text-green-400">
+                        <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2 py-1 bg-olive-900/20 border border-olive-800 rounded text-sm text-olive-400">
                           <CheckCircle className="h-3.5 w-3.5" />
                           Valid - {uploadWorkflow.nodes.length} nodes
                         </div>
@@ -835,7 +835,7 @@ export default function TemplatesPage() {
       {/* Toast */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-lg text-sm font-medium shadow-lg ${
-          toast.type === 'success' ? 'bg-green-900/90 text-green-400 border border-green-800' : 'bg-red-900/90 text-red-400 border border-red-800'
+          toast.type === 'success' ? 'bg-green-900/90 text-olive-400 border border-olive-800' : 'bg-red-900/90 text-red-400 border border-red-800'
         }`}>
           {toast.message}
         </div>

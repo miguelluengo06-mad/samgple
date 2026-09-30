@@ -245,7 +245,7 @@ export default function WorkflowList({
                 )}>
                   <Zap className={cn(
                     'h-5 w-5',
-                    workflow.active ? 'text-green-400' : 'text-gray-500'
+                    workflow.active ? 'text-olive-400' : 'text-gray-500'
                   )} />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -279,7 +279,7 @@ export default function WorkflowList({
                   <div className="flex items-center gap-2 mt-0.5">
                     <span className={cn(
                       'text-xs',
-                      workflow.active ? 'text-green-400' : 'text-gray-500'
+                      workflow.active ? 'text-olive-400' : 'text-gray-500'
                     )}>
                       {workflow.active ? 'Active' : 'Inactive'}
                     </span>
@@ -312,7 +312,7 @@ export default function WorkflowList({
                       const update = templateUpdates.get(workflowKey);
                       if (update) onUpdateTemplate(update);
                     }}
-                    className="flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 text-sm text-green-400 hover:text-green-300 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 rounded-lg transition-all"
+                    className="flex items-center gap-1.5 p-2 sm:px-3 sm:py-2 text-sm text-olive-400 hover:text-green-300 bg-olive-500/10 hover:bg-green-500/20 border border-green-500/30 rounded-lg transition-all"
                     title={`Update available: v${templateUpdates.get(workflowKey)?.installedVersion} → v${templateUpdates.get(workflowKey)?.latestVersion}`}
                   >
                     <ArrowUpCircle className="h-4 w-4" />
@@ -329,7 +329,7 @@ export default function WorkflowList({
                       href={n8nWorkflowUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 text-gray-400 hover:text-orange-400 bg-gray-800/50 hover:bg-orange-500/10 border border-gray-700 hover:border-orange-500/30 rounded-lg transition-all"
+                      className="p-2 text-gray-400 hover:text-olive-400 bg-gray-800/50 hover:bg-olive-500/10 border border-gray-700 hover:border-olive-500/30 rounded-lg transition-all"
                       title="Open in n8n"
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -468,7 +468,7 @@ export default function WorkflowList({
                                       onConfigureCredential(cred.type, workflow, userCred);
                                     }
                                   }}
-                                  className="flex items-center gap-1 px-2 py-1 bg-green-900/20 border border-green-800/50 rounded text-xs text-green-400 hover:bg-green-900/30 hover:border-green-700/50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                                  className="flex items-center gap-1 px-2 py-1 bg-olive-900/20 border border-olive-800/50 rounded text-xs text-olive-400 hover:bg-green-900/30 hover:border-green-700/50 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                                   title={hasMultiple ? `${cred.name} - ${allCredsOfType.length} accounts available` : `${cred.name} - Click to configure`}
                                 >
                                   <CredentialIcon type={cred.type.replace(/Api$|OAuth2Api$/i, '').toLowerCase()} fallback="none" className="h-3 w-3" />
@@ -500,7 +500,7 @@ export default function WorkflowList({
                                           }}
                                           className="w-full px-3 py-2 text-left text-sm text-white hover:bg-gray-800 flex items-center gap-2"
                                         >
-                                          <CredentialIcon type={cred.type.replace(/Api$|OAuth2Api$/i, '').toLowerCase()} fallback="none" className="h-4 w-4 text-green-400" />
+                                          <CredentialIcon type={cred.type.replace(/Api$|OAuth2Api$/i, '').toLowerCase()} fallback="none" className="h-4 w-4 text-olive-400" />
                                           <span className="truncate">{c.name}</span>
                                         </button>
                                       ))}
@@ -514,7 +514,7 @@ export default function WorkflowList({
                           return (
                             <div
                               key={cred.type}
-                              className="flex items-center gap-1 px-2 py-1 bg-green-900/20 border border-green-800/50 rounded text-xs text-green-400 whitespace-nowrap shrink-0"
+                              className="flex items-center gap-1 px-2 py-1 bg-olive-900/20 border border-olive-800/50 rounded text-xs text-olive-400 whitespace-nowrap shrink-0"
                               title={hasMultiple ? `${cred.name} - ${allCredsOfType.length} accounts` : `${cred.name} - Connected`}
                             >
                               <CredentialIcon type={cred.type.replace(/Api$|OAuth2Api$/i, '').toLowerCase()} fallback="none" className="h-3 w-3" />
@@ -559,25 +559,25 @@ export default function WorkflowList({
                     if (!update) return null;
                     return (
                       <div className="px-4 py-3">
-                        <div className="p-3 bg-green-900/20 border border-green-800/50 rounded-lg">
+                        <div className="p-3 bg-olive-900/20 border border-olive-800/50 rounded-lg">
                           <div className="flex items-center justify-between gap-3">
                             <div className="flex items-center gap-2">
-                              <ArrowUpCircle className="h-4 w-4 text-green-400" />
-                              <span className="text-sm text-green-400 font-medium">
+                              <ArrowUpCircle className="h-4 w-4 text-olive-400" />
+                              <span className="text-sm text-olive-400 font-medium">
                                 Update Available: v{update.installedVersion} → v{update.latestVersion}
                               </span>
                             </div>
                             {onUpdateTemplate && (
                               <button
                                 onClick={() => onUpdateTemplate(update)}
-                                className="px-3 py-1.5 bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 text-green-400 rounded-lg text-xs font-medium transition-colors"
+                                className="px-3 py-1.5 bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 text-olive-400 rounded-lg text-xs font-medium transition-colors"
                               >
                                 Update Now
                               </button>
                             )}
                           </div>
                           {update.changelog && (
-                            <div className="mt-2 pt-2 border-t border-green-800/30">
+                            <div className="mt-2 pt-2 border-t border-olive-800/30">
                               <p className="text-xs text-gray-400 mb-1">What's new:</p>
                               <p className="text-xs text-gray-300 whitespace-pre-wrap">{update.changelog}</p>
                             </div>

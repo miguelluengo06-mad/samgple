@@ -251,7 +251,7 @@ export default function WidgetBuilder({
               <select
                 value={selectedTemplateId}
                 onChange={(e) => handleTemplateSelect(e.target.value)}
-                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+                className="w-full px-4 py-3 card-liquid rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
               >
                 <option value="">Create from scratch...</option>
                 {templates.map((template) => (
@@ -308,7 +308,7 @@ export default function WidgetBuilder({
               <select
                 value={selectedWorkflowId}
                 onChange={(e) => handleWorkflowSelect(e.target.value)}
-                className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white ${
+                className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 ${
                   errors.workflow ? 'border-red-500' : 'border-gray-800'
                 }`}
               >
@@ -335,7 +335,7 @@ export default function WidgetBuilder({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={widgetType === 'button' ? 'e.g., Run Report' : 'e.g., Submit Request'}
-              className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white ${
+              className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 ${
                 errors.name ? 'border-red-500' : 'border-gray-800'
               }`}
             />
@@ -350,7 +350,7 @@ export default function WidgetBuilder({
               value={webhookUrl}
               onChange={(e) => setWebhookUrl(e.target.value)}
               placeholder="https://your-instance.example.com/webhook/..."
-              className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white ${
+              className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 ${
                 errors.webhookUrl ? 'border-red-500' : 'border-gray-800'
               }`}
             />
@@ -423,7 +423,7 @@ export default function WidgetBuilder({
                       value={buttonColor}
                       onChange={(e) => setButtonColor(e.target.value)}
                       placeholder="#FFFFFF"
-                      className="flex-1 px-3 py-1.5 bg-gray-900/50 border border-gray-700 rounded-lg text-white text-sm font-mono focus:outline-none focus:ring-1 focus:ring-white"
+                      className="flex-1 px-3 py-1.5 bg-gray-900/50 border border-gray-700 rounded-lg text-white text-sm font-mono focus:outline-none focus:ring-1 focus:ring-olive-500"
                     />
                   </div>
                 </div>
@@ -441,7 +441,7 @@ export default function WidgetBuilder({
                       value={textColor}
                       onChange={(e) => setTextColor(e.target.value)}
                       placeholder="#000000"
-                      className="flex-1 px-3 py-1.5 bg-gray-900/50 border border-gray-700 rounded-lg text-white text-sm font-mono focus:outline-none focus:ring-1 focus:ring-white"
+                      className="flex-1 px-3 py-1.5 bg-gray-900/50 border border-gray-700 rounded-lg text-white text-sm font-mono focus:outline-none focus:ring-1 focus:ring-olive-500"
                     />
                   </div>
                 </div>
@@ -482,14 +482,14 @@ export default function WidgetBuilder({
                         value={field.name}
                         onChange={(e) => updateField(index, { name: e.target.value })}
                         placeholder="Field name"
-                        className="px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-white"
+                        className="px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-olive-500"
                       />
                       <select
                         value={field.type}
                         onChange={(e) =>
                           updateField(index, { type: e.target.value as FormField['type'] })
                         }
-                        className="px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-1 focus:ring-white"
+                        className="px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:ring-1 focus:ring-olive-500"
                       >
                         <option value="text">Text</option>
                         <option value="email">Email</option>
@@ -534,7 +534,7 @@ export default function WidgetBuilder({
                           options: e.target.value.split(',').map(o => o.trim()).filter(Boolean)
                         })}
                         placeholder="Options (comma separated, e.g., Option 1, Option 2)"
-                        className="w-full px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-white"
+                        className="w-full px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-olive-500"
                       />
                     </div>
                   )}
@@ -547,14 +547,14 @@ export default function WidgetBuilder({
                           value={field.accept || ''}
                           onChange={(e) => updateField(index, { accept: e.target.value })}
                           placeholder="Accepted types (e.g., image/*,.pdf)"
-                          className="px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-white"
+                          className="px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-olive-500"
                         />
                         <input
                           type="number"
                           value={field.maxSize || ''}
                           onChange={(e) => updateField(index, { maxSize: e.target.value ? Number(e.target.value) : undefined })}
                           placeholder="Max size (MB)"
-                          className="px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-white"
+                          className="px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-olive-500"
                         />
                       </div>
                       <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-400 hover:text-white transition-colors">
@@ -562,7 +562,7 @@ export default function WidgetBuilder({
                           type="checkbox"
                           checked={field.multiple || false}
                           onChange={(e) => updateField(index, { multiple: e.target.checked })}
-                          className="w-4 h-4 rounded border-gray-600 bg-gray-900/50 text-white focus:ring-white focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-gray-600 bg-gray-900/50 text-white focus:ring-olive-500 focus:ring-offset-0"
                         />
                         Allow multiple files
                       </label>

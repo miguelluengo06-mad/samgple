@@ -372,7 +372,7 @@ export default function HostingLayout({ children }: { children: React.ReactNode 
                 />
                 <button
                   onClick={() => setDeployOpen(true)}
-                  className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors cursor-pointer"
+                  className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   Deploy
@@ -397,7 +397,7 @@ export default function HostingLayout({ children }: { children: React.ReactNode 
           {selectedInstance && (
             <span className="text-white/20 shrink-0">/</span>
           )}
-          <h1 className="text-lg font-semibold text-white truncate">{headerTitle}</h1>
+          <h1 className="text-lg font-semibold text-white uppercase tracking-wide truncate">{headerTitle}</h1>
         </div>
         {/* Sub-header — instance URL */}
         {headerSublabel && (
@@ -424,7 +424,7 @@ export default function HostingLayout({ children }: { children: React.ReactNode 
         {showSkeleton ? (
           <div className="flex-1 overflow-y-auto">
             <div className="max-w-4xl mx-auto p-6 space-y-4">
-              <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-4">
+              <div className="card-liquid rounded-lg p-6 space-y-4">
                 <div className="h-5 w-32 bg-gray-800/30 rounded animate-pulse" />
                 <div className="grid grid-cols-3 gap-4">
                   {[1, 2, 3].map((i) => (

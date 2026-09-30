@@ -291,7 +291,7 @@ export function InviteAgencyAccess() {
         );
       case 'accepted':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs bg-green-900/20 border border-green-800 text-green-400">
+          <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs bg-olive-900/20 border border-olive-800 text-olive-400">
             <CheckCircle className="w-3 h-3" />
             Active
           </span>
@@ -329,7 +329,7 @@ export function InviteAgencyAccess() {
 
   if (loading) {
     return (
-      <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+      <div className="card-liquid rounded-lg p-6">
         <div className="flex items-center justify-center py-8">
           <RefreshCw className="w-5 h-5 text-gray-400 animate-spin" />
         </div>
@@ -340,7 +340,7 @@ export function InviteAgencyAccess() {
   // Show error state
   if (loadError) {
     return (
-      <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+      <div className="card-liquid rounded-lg p-6">
         <div className="flex items-center gap-3 text-red-400">
           <AlertCircle className="w-5 h-5 flex-shrink-0" />
           <p className="text-sm">{loadError}</p>
@@ -352,7 +352,7 @@ export function InviteAgencyAccess() {
   // Show message if user has no instances
   if (instances.length === 0) {
     return (
-      <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+      <div className="card-liquid rounded-lg p-6">
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-xl bg-gray-800/30 border border-gray-700 flex items-center justify-center">
             <Users className="w-5 h-5 text-gray-400" />
@@ -381,7 +381,7 @@ export function InviteAgencyAccess() {
   const hasPendingOnly = pendingInviteInstanceIds.length > 0 && managedInstances.length === 0 && availableInstances.length === 0;
 
   return (
-    <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-6">
+    <div className="card-liquid rounded-lg p-6 space-y-6">
       {/* Header - changes based on state */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-gray-800/30 border border-gray-700 flex items-center justify-center">
@@ -423,7 +423,7 @@ export function InviteAgencyAccess() {
               <select
                 value={selectedInstanceId}
                 onChange={(e) => setSelectedInstanceId(e.target.value)}
-                className="w-full px-4 py-3 pr-10 bg-gray-900/50 border border-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors appearance-none cursor-pointer"
+                className="w-full px-4 py-3 pr-10 card-liquid rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors appearance-none cursor-pointer"
               >
                 <option value="">Choose an instance...</option>
                 {availableInstances.map((inst) => (
@@ -453,7 +453,7 @@ export function InviteAgencyAccess() {
                 if (emailError) setEmailError('');
               }}
               placeholder="agency@example.com"
-              className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors ${
+              className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors ${
                 emailError ? 'border-red-500/50' : 'border-gray-800'
               }`}
             />
@@ -477,7 +477,7 @@ export function InviteAgencyAccess() {
           <button
             onClick={handleInvite}
             disabled={sending || !selectedInstanceId || !email.trim()}
-            className="w-full py-3 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 transition-all flex items-center justify-center gap-2"
           >
             {sending ? (
               <>
@@ -527,7 +527,7 @@ export function InviteAgencyAccess() {
                   </p>
                 </div>
                 <div className="flex items-center gap-3 ml-4">
-                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs bg-green-900/20 border border-green-800 text-green-400">
+                  <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full text-xs bg-olive-900/20 border border-olive-800 text-olive-400">
                     <CheckCircle className="w-3 h-3" />
                     Active
                   </span>
@@ -574,7 +574,7 @@ export function InviteAgencyAccess() {
                       onClick={() => handleCopyLink(invite)}
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
                         copiedId === invite.id
-                          ? 'border-green-700 bg-green-900/20 text-green-400'
+                          ? 'border-green-700 bg-olive-900/20 text-olive-400'
                           : 'border-blue-800/50 hover:bg-blue-900/20 text-blue-400'
                       }`}
                       title="Copy invitation link"

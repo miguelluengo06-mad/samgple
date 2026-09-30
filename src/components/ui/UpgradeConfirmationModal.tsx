@@ -181,7 +181,7 @@ export function UpgradeConfirmationModal({
                   {preview.proration.credit > 0 && (
                     <div className='flex items-center justify-between'>
                       <span className='text-gray-300'>Credit for unused time</span>
-                      <span className='text-green-400'>
+                      <span className='text-olive-400'>
                         -{formatCurrency(preview.proration.credit, preview.proration.currency)}
                       </span>
                     </div>

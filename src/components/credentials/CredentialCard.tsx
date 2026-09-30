@@ -54,7 +54,7 @@ export default function CredentialCard({ credential, onDelete, index = 0 }: Cred
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
-      className="h-full bg-gray-900/50 border border-gray-800 rounded-xl p-4 hover:border-gray-700 transition-colors flex flex-col"
+      className="h-full card-liquid rounded-xl p-4 hover:border-gray-700 transition-colors flex flex-col"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3 min-w-0 flex-1">

@@ -125,7 +125,7 @@ export function SharePanel({ savedWidgetId, widgetName }: SharePanelProps) {
               disabled={!isSaved}
               className={cn(
                 'px-2 py-1.5 rounded text-xs transition-all',
-                copiedField === 'link' ? 'bg-green-500/20 text-green-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                copiedField === 'link' ? 'bg-green-500/20 text-olive-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
               )}
             >
               {copiedField === 'link' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
@@ -156,7 +156,7 @@ export function SharePanel({ savedWidgetId, widgetName }: SharePanelProps) {
                   onClick={() => copyToClipboard(getEmbedCode(), 'iframe')}
                   className={cn(
                     'px-2 py-1.5 rounded text-xs transition-all self-start',
-                    copiedField === 'iframe' ? 'bg-green-500/20 text-green-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    copiedField === 'iframe' ? 'bg-green-500/20 text-olive-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                   )}
                 >
                   {copiedField === 'iframe' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
@@ -174,7 +174,7 @@ export function SharePanel({ savedWidgetId, widgetName }: SharePanelProps) {
             className="w-full flex items-center justify-between px-3 py-2.5 hover:bg-gray-800/50 transition-colors disabled:opacity-50"
           >
             <div className="flex items-center gap-2">
-              <FileText className="h-3.5 w-3.5 text-orange-400" />
+              <FileText className="h-3.5 w-3.5 text-olive-400" />
               <span className="text-xs text-white font-medium">JavaScript</span>
             </div>
             <ChevronDown className={cn('h-3.5 w-3.5 text-gray-500 transition-transform', expandedEmbed === 'js' && 'rotate-180')} />
@@ -189,7 +189,7 @@ export function SharePanel({ savedWidgetId, widgetName }: SharePanelProps) {
                   onClick={() => copyToClipboard(getScriptCode(), 'js')}
                   className={cn(
                     'px-2 py-1.5 rounded text-xs transition-all self-start',
-                    copiedField === 'js' ? 'bg-green-500/20 text-green-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    copiedField === 'js' ? 'bg-green-500/20 text-olive-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                   )}
                 >
                   {copiedField === 'js' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
@@ -222,7 +222,7 @@ export function SharePanel({ savedWidgetId, widgetName }: SharePanelProps) {
                   onClick={() => copyToClipboard(getHtmlLink(), 'html')}
                   className={cn(
                     'px-2 py-1.5 rounded text-xs transition-all self-start',
-                    copiedField === 'html' ? 'bg-green-500/20 text-green-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    copiedField === 'html' ? 'bg-green-500/20 text-olive-400' : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                   )}
                 >
                   {copiedField === 'html' ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}

@@ -88,7 +88,7 @@ export function AIAssistantPanel({ widgetType, widgetName }: AIAssistantPanelPro
           >
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                message.role === 'ai' ? 'bg-white text-black' : 'bg-gray-700 text-white'
+                message.role === 'ai' ? 'bg-olive-500 text-black' : 'bg-gray-700 text-white'
               }`}
             >
               {message.role === 'ai' ? <Sparkles className="w-4 h-4" /> : '👤'}
@@ -97,7 +97,7 @@ export function AIAssistantPanel({ widgetType, widgetName }: AIAssistantPanelPro
               className={`px-4 py-2.5 rounded-xl max-w-[75%] ${
                 message.role === 'ai'
                   ? 'bg-gray-800/50 text-white'
-                  : 'bg-white text-black'
+                  : 'bg-olive-500 text-black'
               }`}
             >
               <p className="text-sm">{message.content}</p>
@@ -131,12 +131,12 @@ export function AIAssistantPanel({ widgetType, widgetName }: AIAssistantPanelPro
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask AI for design suggestions..."
-            className="flex-1 px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white transition-colors"
+            className="flex-1 px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
           />
           <button
             onClick={handleSend}
             disabled={!inputValue.trim()}
-            className="px-4 py-3 bg-white text-black rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="px-4 py-3 bg-olive-500 text-black rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             <Send className="w-4 h-4" />
           </button>

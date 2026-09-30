@@ -153,7 +153,7 @@ export function InteractiveColorEditor({ config, onChange }: InteractiveColorEdi
   }, [selectedArea]);
 
   return (
-    <div ref={containerRef} className="bg-gray-900/50 border border-gray-800 rounded-xl p-8 relative">
+    <div ref={containerRef} className="card-liquid rounded-xl p-8 relative">
       {/* Header */}
       <div className="mb-6 text-center">
         <div className="flex items-center justify-center gap-2 mb-2">
@@ -379,7 +379,7 @@ export function InteractiveColorEditor({ config, onChange }: InteractiveColorEdi
           {/* Done Button */}
           <button
             onClick={() => setSelectedArea(null)}
-            className="w-full mt-4 px-4 py-2.5 bg-white text-black hover:bg-gray-100 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+            className="w-full mt-4 px-4 py-2.5 bg-olive-500 text-black hover:bg-olive-400 rounded-full font-medium transition-colors flex items-center justify-center gap-2"
           >
             <Check className="w-4 h-4" />
             Done

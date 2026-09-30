@@ -164,7 +164,7 @@ export function CanvasToolbar({
                 className={cn(
                   'px-3 py-1 rounded text-xs font-medium transition-colors',
                   zoomLevel === level
-                    ? 'bg-white text-black'
+                    ? 'bg-olive-500 text-black'
                     : 'text-gray-400 hover:text-white'
                 )}
               >
@@ -195,7 +195,7 @@ export function CanvasToolbar({
             className={cn(
               'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-2',
               viewMode === 'desktop'
-                ? 'bg-white text-black'
+                ? 'bg-olive-500 text-black'
                 : 'text-gray-400 hover:text-white'
             )}
           >
@@ -207,7 +207,7 @@ export function CanvasToolbar({
             className={cn(
               'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-2',
               viewMode === 'mobile'
-                ? 'bg-white text-black'
+                ? 'bg-olive-500 text-black'
                 : 'text-gray-400 hover:text-white'
             )}
           >
@@ -236,12 +236,12 @@ export function CanvasToolbar({
         {isSaving ? (
           <span className="text-xs text-gray-400">Saving...</span>
         ) : savedWidgetId && !hasUnsavedChanges ? (
-          <span className="text-xs text-green-400">Saved</span>
+          <span className="text-xs text-olive-400">Saved</span>
         ) : (
           <button
             onClick={() => onSave()}
             disabled={!widgetName.trim()}
-            className="h-7 px-3 bg-white text-black hover:bg-gray-100 rounded text-xs font-medium disabled:opacity-50"
+            className="h-7 px-3 bg-olive-500 text-black hover:bg-olive-400 rounded text-xs font-medium disabled:opacity-50"
           >
             Save
           </button>
@@ -261,7 +261,7 @@ export function CanvasToolbar({
               isActive ? "left-[14px]" : "left-0.5"
             )} />
           </div>
-          <span className={cn("text-xs", isActive ? "text-green-400" : "text-gray-400")}>
+          <span className={cn("text-xs", isActive ? "text-olive-400" : "text-gray-400")}>
             {isActive ? 'Live' : 'Draft'}
           </span>
         </button>

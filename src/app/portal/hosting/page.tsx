@@ -66,14 +66,14 @@ export default function HostingPage() {
     return (
       <div className="flex-1 overflow-y-auto">
         <div className="flex flex-col items-center justify-center py-20 text-center">
-          <div className="w-16 h-16 bg-gray-900/50 border border-gray-800 rounded-2xl flex items-center justify-center mb-4">
+          <div className="w-16 h-16 card-liquid rounded-2xl flex items-center justify-center mb-4">
             <Server className="w-8 h-8 text-gray-400" />
           </div>
           <h3 className="text-lg font-semibold text-white mb-2">No instances yet</h3>
           <p className="text-white/60 text-base mb-6 max-w-sm">Deploy your first instance to get started.</p>
           <button
             onClick={() => openDeployModal()}
-            className="px-4 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors cursor-pointer flex items-center gap-2"
+            className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors cursor-pointer flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             Deploy Instance
@@ -102,8 +102,8 @@ export default function HostingPage() {
     }
     const s = liveStatus[inst.id] || inst.status;
     if (s === 'running' || s === 'active') return (
-      <span className="px-2 py-0.5 text-xs rounded-full bg-green-500/10 text-green-400 border border-green-500/20 inline-flex items-center gap-1.5 shrink-0">
-        <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse" />
+      <span className="px-2 py-0.5 text-xs rounded-full bg-olive-500/10 text-olive-400 border border-olive-500/20 inline-flex items-center gap-1.5 shrink-0">
+        <span className="w-1.5 h-1.5 bg-olive-400 rounded-full animate-pulse" />
         Active
       </span>
     );
@@ -128,7 +128,7 @@ export default function HostingPage() {
     <button
       key={inst.id}
       onClick={() => router.push(`/portal/hosting/${inst.id}`)}
-      className="group bg-gray-900/50 border border-gray-800 hover:border-gray-600 rounded-xl p-4 text-left transition-all cursor-pointer w-full"
+      className="group card-liquid hover:border-gray-600 rounded-xl p-4 text-left transition-all cursor-pointer w-full"
     >
       <div className="flex items-center gap-3">
         <div className="w-9 h-9 rounded-lg bg-gray-800/30 flex items-center justify-center shrink-0">

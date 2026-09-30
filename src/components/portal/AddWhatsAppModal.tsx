@@ -133,7 +133,7 @@ export default function AddWhatsAppModal({ isOpen, onClose, accessToken }: AddWh
               <div className="flex items-center justify-between px-6 py-5 border-b border-gray-800">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
-                    <MessageSquare className="w-5 h-5 text-green-400" />
+                    <MessageSquare className="w-5 h-5 text-olive-400" />
                   </div>
                   <div>
                     <h2 className="text-lg font-medium text-white">Add WhatsApp Number</h2>
@@ -161,7 +161,7 @@ export default function AddWhatsAppModal({ isOpen, onClose, accessToken }: AddWh
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     placeholder="e.g., Sales WhatsApp"
-                    className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none text-sm"
+                    className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none text-sm"
                     disabled={loading}
                     maxLength={50}
                   />
@@ -196,7 +196,7 @@ export default function AddWhatsAppModal({ isOpen, onClose, accessToken }: AddWh
                           : 'border-gray-700 hover:border-gray-600 bg-gray-800/30'
                       )}
                     >
-                      <span className="absolute -top-2 right-3 px-2 py-0.5 bg-green-500/20 border border-green-800 text-green-400 text-sm rounded-full font-medium">
+                      <span className="absolute -top-2 right-3 px-2 py-0.5 bg-green-500/20 border border-olive-800 text-olive-400 text-sm rounded-full font-medium">
                         Save
                       </span>
                       <p className="text-sm font-medium text-white">Annual</p>
@@ -240,7 +240,7 @@ export default function AddWhatsAppModal({ isOpen, onClose, accessToken }: AddWh
                   <button
                     onClick={handleAdd}
                     disabled={loading || checkingCard}
-                    className="px-4 py-2.5 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                    className="px-4 py-2.5 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors flex items-center gap-2"
                   >
                     {loading ? (
                       <>

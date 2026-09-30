@@ -96,7 +96,7 @@ export default function CredentialsTab({
         animate={{ opacity: 1, y: 0 }}
         className="space-y-6"
       >
-        <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-8 text-center">
+        <div className="card-liquid rounded-2xl p-8 text-center">
           <div className="w-16 h-16 rounded-2xl bg-gray-800/30 flex items-center justify-center mx-auto mb-4">
             <Lock className="h-8 w-8 text-gray-500" />
           </div>
@@ -150,7 +150,7 @@ export default function CredentialsTab({
           {onNavigateToSettings && (
             <button
               onClick={onNavigateToSettings}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors"
             >
               <Settings className="h-4 w-4" />
               Go to Settings
@@ -189,7 +189,7 @@ export default function CredentialsTab({
           <button
             onClick={() => handleAddCredential(null)}
             disabled={loadingCredentialType === '__general__'}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-black hover:bg-gray-100 disabled:bg-gray-300 rounded-lg text-sm font-medium transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-300 rounded-full text-sm font-medium transition-colors"
           >
             {loadingCredentialType === '__general__' ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -306,7 +306,7 @@ export default function CredentialsTab({
                     <button
                       onClick={() => handleAddCredential(missing.type)}
                       disabled={loadingCredentialType === missing.type}
-                      className="w-full mt-3 px-3 py-2 bg-white text-black hover:bg-gray-100 disabled:bg-gray-300 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                      className="w-full mt-3 px-3 py-2 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-300 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2"
                     >
                       {loadingCredentialType === missing.type ? (
                         <Loader2 className="h-4 w-4 animate-spin" />
@@ -334,7 +334,7 @@ export default function CredentialsTab({
                   return (
                     <div
                       key={template.id}
-                      className="flex items-center justify-between p-3 bg-gray-900/50 border border-gray-800 rounded-lg"
+                      className="flex items-center justify-between p-3 card-liquid rounded-lg"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <span className="text-lg shrink-0">{template.icon || '⚡'}</span>
@@ -404,7 +404,7 @@ export default function CredentialsTab({
                   <button
                     onClick={() => handleAddCredential(null)}
                     disabled={loadingCredentialType === '__general__'}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-300 rounded-lg text-sm font-medium transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-300 rounded-full text-sm font-medium transition-colors"
                   >
                     {loadingCredentialType === '__general__' ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -423,7 +423,7 @@ export default function CredentialsTab({
                   {onNavigateToTemplates && (
                     <button
                       onClick={onNavigateToTemplates}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors"
                     >
                       Go to Templates
                     </button>

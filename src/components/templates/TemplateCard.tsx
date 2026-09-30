@@ -68,7 +68,7 @@ export default function TemplateCard({ template, onClick, index = 0, disabled = 
       onClick={() => !disabled && onClick(template)}
       disabled={disabled}
       className={cn(
-        "group bg-gray-900/50 border border-gray-800 rounded-xl p-4 text-left transition-all w-full h-[200px] flex flex-col",
+        "group card-liquid rounded-xl p-4 text-left transition-all w-full h-[200px] flex flex-col",
         disabled
           ? "opacity-50 cursor-not-allowed"
           : "hover:border-gray-700 hover:bg-gray-800/30"
@@ -94,7 +94,7 @@ export default function TemplateCard({ template, onClick, index = 0, disabled = 
           </div>
         </div>
         {template.can_import ? (
-          <span className="flex items-center gap-1 px-2 py-0.5 bg-green-500/20 text-green-400 text-[10px] font-medium rounded-full shrink-0">
+          <span className="flex items-center gap-1 px-2 py-0.5 bg-green-500/20 text-olive-400 text-[10px] font-medium rounded-full shrink-0">
             <CheckCircle className="h-3 w-3" />
           </span>
         ) : hasCredentials && (
@@ -119,7 +119,7 @@ export default function TemplateCard({ template, onClick, index = 0, disabled = 
                 className={cn(
                   'w-7 h-7 rounded-lg flex items-center justify-center shrink-0',
                   cred.status === 'available'
-                    ? 'bg-green-900/30 border border-green-800/50'
+                    ? 'bg-green-900/30 border border-olive-800/50'
                     : 'bg-red-900/30 border border-red-800/50'
                 )}
                 title={`${cred.name}: ${cred.status === 'available' ? 'Connected' : 'Missing'}`}
@@ -128,7 +128,7 @@ export default function TemplateCard({ template, onClick, index = 0, disabled = 
                   type={cred.icon}
                   className={cn(
                     'h-4 w-4',
-                    cred.status === 'available' ? 'text-green-400' : 'text-red-400'
+                    cred.status === 'available' ? 'text-olive-400' : 'text-red-400'
                   )}
                 />
               </div>
@@ -150,7 +150,7 @@ export default function TemplateCard({ template, onClick, index = 0, disabled = 
           'w-full h-10 rounded-lg text-sm font-medium flex items-center justify-center gap-2 transition-colors mt-auto',
           loading
             ? 'bg-gray-400 text-gray-600'
-            : 'bg-white text-black group-hover:bg-gray-100'
+            : 'bg-olive-500 text-black group-hover:bg-olive-400'
         )}
       >
         {loading ? (

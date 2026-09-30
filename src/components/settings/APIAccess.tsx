@@ -16,7 +16,7 @@ function CopyButton({ text, size = 'sm' }: { text: string; size?: 'xs' | 'sm' })
     : 'flex items-center gap-1.5 px-2.5 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white rounded-md text-xs font-medium transition-colors border border-gray-700';
   return (
     <button onClick={copy} className={cls}>
-      {copied ? <><Check className="w-3 h-3 text-green-400" /><span className="text-green-400">Copied</span></> : <><Copy className="w-3 h-3" />Copy</>}
+      {copied ? <><Check className="w-3 h-3 text-olive-400" /><span className="text-olive-400">Copied</span></> : <><Copy className="w-3 h-3" />Copy</>}
     </button>
   );
 }
@@ -120,7 +120,7 @@ export function APIAccess() {
 
   if (loading) {
     return (
-      <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 animate-pulse">
+      <div className="card-liquid rounded-xl p-6 animate-pulse">
         <div className="h-4 bg-gray-800 rounded w-1/4 mb-6" />
         <div className="h-3 bg-gray-800 rounded w-2/3 mb-2" />
         <div className="h-3 bg-gray-800 rounded w-1/2" />
@@ -130,7 +130,7 @@ export function APIAccess() {
 
   return (
     <div id="api-access" className="scroll-mt-24">
-      <div className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden">
+      <div className="card-liquid rounded-xl overflow-hidden">
 
         {/* ── Header ── */}
         <div className="px-6 py-5 border-b border-gray-800">
@@ -242,7 +242,7 @@ export function APIAccess() {
                   onClick={() => copyText(mcpConfig('YOUR_API_KEY_HERE'), setMcpCopied)}
                   className="flex items-center gap-1.5 px-2.5 py-1 bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white rounded text-xs font-medium transition-colors border border-gray-700"
                 >
-                  {mcpCopied ? <><Check className="w-3 h-3 text-green-400" /><span className="text-green-400">Copied</span></> : <><Copy className="w-3 h-3" />Copy</>}
+                  {mcpCopied ? <><Check className="w-3 h-3 text-olive-400" /><span className="text-olive-400">Copied</span></> : <><Copy className="w-3 h-3" />Copy</>}
                 </button>
               </div>
               <pre className="p-4 text-xs text-gray-300 overflow-x-auto font-mono leading-relaxed">{`{
@@ -271,10 +271,10 @@ export function APIAccess() {
           className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
           onClick={(e) => { if (e.target === e.currentTarget) { setShowNewKeyModal(false); setNewApiKey(''); } }}
         >
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-6 max-w-lg w-full shadow-2xl">
+          <div className="card-liquid rounded-xl p-6 max-w-lg w-full shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-8 h-8 rounded-full bg-green-900/40 border border-green-700/50 flex items-center justify-center flex-shrink-0">
-                <Check className="w-4 h-4 text-green-400" />
+                <Check className="w-4 h-4 text-olive-400" />
               </div>
               <div>
                 <h3 className="text-white text-base font-semibold">API Key Generated</h3>
@@ -286,7 +286,7 @@ export function APIAccess() {
             <div className="bg-gray-950 border border-gray-800 rounded-lg p-3 mb-4">
               <p className="text-gray-500 text-xs mb-2 font-medium">Your API Key</p>
               <div className="flex items-center gap-2">
-                <code className="text-green-400 text-sm break-all select-all flex-1 font-mono">{newApiKey}</code>
+                <code className="text-olive-400 text-sm break-all select-all flex-1 font-mono">{newApiKey}</code>
                 <button
                   onClick={() => copyText(newApiKey, setKeyCopied)}
                   className="px-3 py-1.5 text-xs bg-white hover:bg-gray-200 text-black rounded font-medium whitespace-nowrap transition-colors flex-shrink-0"
@@ -304,7 +304,7 @@ export function APIAccess() {
                   onClick={() => copyText(mcpConfig(newApiKey), setMcpCopied)}
                   className="flex items-center gap-1 px-2 py-1 bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white rounded text-xs font-medium transition-colors border border-gray-700"
                 >
-                  {mcpCopied ? <><Check className="w-3 h-3 text-green-400" /><span className="text-green-400">Copied</span></> : <><Copy className="w-3 h-3" />Copy</>}
+                  {mcpCopied ? <><Check className="w-3 h-3 text-olive-400" /><span className="text-olive-400">Copied</span></> : <><Copy className="w-3 h-3" />Copy</>}
                 </button>
               </div>
               <pre className="p-3 text-xs text-gray-300 overflow-x-auto font-mono leading-relaxed">{mcpConfig(newApiKey)}</pre>

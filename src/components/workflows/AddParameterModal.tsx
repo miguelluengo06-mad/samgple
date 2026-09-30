@@ -176,7 +176,7 @@ export default function AddParameterModal({
             value={value}
             onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
             disabled={isLoading}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-white focus:border-white disabled:opacity-50"
+            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-olive-500 focus:border-olive-500 disabled:opacity-50"
           >
             {isLoading ? (
               <option value="">Loading options...</option>
@@ -206,7 +206,7 @@ export default function AddParameterModal({
             id={field.name}
             checked={formData[field.name] || false}
             onChange={(e) => setFormData({ ...formData, [field.name]: e.target.checked })}
-            className="w-4 h-4 rounded border-gray-700 bg-gray-800 text-white focus:ring-white"
+            className="w-4 h-4 rounded border-gray-700 bg-gray-800 text-white focus:ring-olive-500"
           />
           <label htmlFor={field.name} className="text-sm text-white">
             {field.displayName}
@@ -228,7 +228,7 @@ export default function AddParameterModal({
             value={value}
             onChange={(e) => setFormData({ ...formData, [field.name]: parseFloat(e.target.value) || 0 })}
             placeholder={field.placeholder}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
           />
           {field.description && (
             <p className="text-xs text-gray-500">{field.description}</p>
@@ -252,7 +252,7 @@ export default function AddParameterModal({
             onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
             placeholder={field.placeholder}
             className={cn(
-              'w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white',
+              'w-full px-4 py-3 bg-gray-800/50 border rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500',
               !isValidUrl ? 'border-red-500' : 'border-gray-700'
             )}
           />
@@ -278,7 +278,7 @@ export default function AddParameterModal({
           value={value}
           onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
           placeholder={field.placeholder}
-          className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+          className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
         />
         {field.description && (
           <p className="text-xs text-gray-500">{field.description}</p>
@@ -363,7 +363,7 @@ export default function AddParameterModal({
               <button
                 onClick={handleSubmit}
                 disabled={isSaving}
-                className="w-full py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2"
               >
                 {isSaving ? (
                   <>

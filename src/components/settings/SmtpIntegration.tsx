@@ -185,7 +185,7 @@ export function SmtpIntegration() {
       {message && (
         <div className={`mb-4 p-3 rounded-lg ${
           message.type === 'success'
-            ? 'bg-green-900/20 border border-green-800 text-green-400'
+            ? 'bg-olive-900/20 border border-olive-800 text-olive-400'
             : 'bg-red-900/20 border border-red-800 text-red-400'
         }`}>
           {message.text}
@@ -241,7 +241,7 @@ export function SmtpIntegration() {
                   value={settings.host}
                   onChange={(e) => setSettings(prev => ({ ...prev, host: e.target.value }))}
                   placeholder="smtp.gmail.com"
-                  className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                  className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                 />
               </div>
               <div>
@@ -251,7 +251,7 @@ export function SmtpIntegration() {
                   value={settings.port}
                   onChange={(e) => setSettings(prev => ({ ...prev, port: parseInt(e.target.value) || 587 }))}
                   placeholder="587"
-                  className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                  className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                 />
               </div>
             </div>
@@ -263,7 +263,7 @@ export function SmtpIntegration() {
                 value={settings.user}
                 onChange={(e) => setSettings(prev => ({ ...prev, user: e.target.value }))}
                 placeholder="your@email.com"
-                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
               />
             </div>
 
@@ -277,7 +277,7 @@ export function SmtpIntegration() {
                   value={settings.password}
                   onChange={(e) => setSettings(prev => ({ ...prev, password: e.target.value }))}
                   placeholder={isEnabled ? 'Leave blank to keep current password' : 'Enter password'}
-                  className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white pr-12"
+                  className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 pr-12"
                 />
                 <button
                   type="button"
@@ -301,7 +301,7 @@ export function SmtpIntegration() {
                 value={settings.sender}
                 onChange={(e) => setSettings(prev => ({ ...prev, sender: e.target.value }))}
                 placeholder="noreply@youragency.com"
-                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
               />
               <p className="mt-1 text-xs text-white/40">
                 This is the "From" address your clients will see
@@ -311,7 +311,7 @@ export function SmtpIntegration() {
             <button
               onClick={handleSave}
               disabled={saving || !settings.host || !settings.user || !settings.sender || (!isEnabled && !settings.password)}
-              className="w-full px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors"
+              className="w-full px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors"
             >
               {saving ? (
                 <span className="flex items-center justify-center gap-2">

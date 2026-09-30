@@ -142,12 +142,12 @@ export function TeamMembers() {
             value={email}
             onChange={e => { setEmail(e.target.value); setError(null); setSuccess(null); }}
             placeholder='team@example.com'
-            className='flex-1 px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white text-sm'
+            className='flex-1 px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 text-sm'
           />
           <select
             value={role}
             onChange={e => setRole(e.target.value)}
-            className='px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white text-sm focus:ring-2 focus:ring-white focus:border-white'
+            className='px-4 py-3 card-liquid rounded-lg text-white text-sm focus:ring-2 focus:ring-olive-500 focus:border-olive-500'
           >
             <option value='member'>Member (read-only)</option>
             <option value='manager'>Manager (no billing)</option>
@@ -156,14 +156,14 @@ export function TeamMembers() {
           <button
             type='submit'
             disabled={inviting || !email.trim()}
-            className='px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors whitespace-nowrap'
+            className='px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors whitespace-nowrap'
           >
             {inviting ? <Loader2 className='h-4 w-4 animate-spin mx-auto' /> : 'Send Invite'}
           </button>
         </div>
 
         {error && <p className='mt-2 text-sm text-red-400'>{error}</p>}
-        {success && <p className='mt-2 text-sm text-green-400'>{success}</p>}
+        {success && <p className='mt-2 text-sm text-olive-400'>{success}</p>}
       </form>
 
       {/* Members Table */}
@@ -204,14 +204,14 @@ export function TeamMembers() {
                   <select
                     value={member.role}
                     onChange={e => handleRoleChange(member.id, e.target.value)}
-                    className='px-2 py-1 bg-gray-900/50 border border-gray-800 rounded text-xs text-white focus:ring-1 focus:ring-white'
+                    className='px-2 py-1 card-liquid rounded text-xs text-white focus:ring-1 focus:ring-olive-500'
                   >
                     <option value='member'>Member</option>
                     <option value='manager'>Manager</option>
                     <option value='admin'>Admin</option>
                   </select>
 
-                  <span className={`text-xs ${member.status === 'accepted' ? 'text-green-400' : 'text-white/50'}`}>
+                  <span className={`text-xs ${member.status === 'accepted' ? 'text-olive-400' : 'text-white/50'}`}>
                     {member.status === 'accepted' ? 'Active' : 'Pending'}
                   </span>
 

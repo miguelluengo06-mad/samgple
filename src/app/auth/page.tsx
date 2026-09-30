@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/components/AuthContext';
 import Auth from '@/components/Auth';
 import { supabase } from '@/lib/supabase';
+import KineticWordmark from '@/components/home/KineticWordmark';
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 const DEMO_EMAIL = process.env.NEXT_PUBLIC_DEMO_EMAIL || '';
@@ -35,6 +37,9 @@ interface AuthConfig {
 export default function AuthPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  // /auth?mode=signup — the "Registrarse" links on the public site land here
+  const signupRequested = searchParams?.get('mode') === 'signup';
   const [demoLoading, setDemoLoading] = useState(false);
   const [isInviteFlow, setIsInviteFlow] = useState(false);
 
@@ -88,7 +93,7 @@ export default function AuthPage() {
 
   if (loading || !authConfig) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="home-root min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
       </div>
     );
@@ -96,23 +101,32 @@ export default function AuthPage() {
 
   if (user) return null;
 
+  const signupClosed = signupRequested && !isInviteFlow && !authConfig.allow_signup;
+
   return (
-    <div className="min-h-screen bg-black flex flex-col items-center justify-center px-4">
-      {/* Logo + Agency name */}
+    <div className="home-root min-h-screen flex flex-col items-center justify-center px-4 py-16">
+      <Link
+        href="/"
+        className="home-slab absolute top-5 left-5 !rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-colors"
+      >
+        ← Volver a la web
+      </Link>
+      <div className="home-slab w-full max-w-md px-6 sm:px-10 py-10 flex flex-col items-center">
+      {/* Agency logo (when set) or the wordmark used on the public site */}
       <div className="mb-8 flex flex-col items-center gap-3">
-        <img src={logoUrl || '/logo.svg'} alt="Portal" className="w-20 h-20 object-contain" />
-        <span className="text-lg font-semibold text-white">
-          {authConfig?.agency_name || 'FlowEngine'}
-        </span>
+        {logoUrl && <img src={logoUrl} alt="" className="w-16 h-16 object-contain" />}
+        <Link href="/" aria-label="Ir a la web">
+          <KineticWordmark name={authConfig?.agency_name || 'samgple'} className="text-2xl" />
+        </Link>
       </div>
       {DEMO_MODE && DEMO_EMAIL ? (
         <div className="w-full max-w-sm flex flex-col gap-4">
           <button
             onClick={enterDemo}
             disabled={demoLoading}
-            className="w-full py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
+            className="w-full py-3 bg-olive-500 text-black font-semibold rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50"
           >
-            {demoLoading ? 'Signing in...' : 'Enter demo'}
+            {demoLoading ? 'Entrando...' : 'Entrar a la demo'}
           </button>
           <div className="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/60 space-y-1">
             <p className="text-white/30 text-xs uppercase tracking-wide mb-2">Demo credentials</p>
@@ -121,13 +135,39 @@ export default function AuthPage() {
           </div>
           <p className="text-center text-xs text-white/30">Read-only live demo</p>
         </div>
+      ) : signupClosed ? (
+        <div className="w-full max-w-md text-center space-y-4">
+          <h2 className="text-2xl font-bold text-white">El registro está cerrado</h2>
+          <p className="text-sm text-white/60">
+            Ahora mismo no se admiten cuentas nuevas. Si ya tienes una, accede; si quieres hablar con nosotros, agenda una llamada desde la web.
+          </p>
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <Link
+              href="/auth"
+              className="px-5 py-2.5 rounded-full bg-[var(--signal)] text-black text-sm font-medium hover:bg-[var(--signal-dim)] transition-colors"
+            >
+              Acceder
+            </Link>
+            <Link href="/" className="px-5 py-2.5 rounded-full border border-white/15 text-sm text-white/70 hover:text-white transition-colors">
+              Volver a la web
+            </Link>
+          </div>
+        </div>
       ) : (
+        <>
+        {authConfig.first_run && !isInviteFlow && (
+          <p className="w-full max-w-md mb-6 rounded-lg border border-[var(--signal)]/30 bg-[var(--signal)]/[0.06] px-4 py-3 text-sm text-white/70">
+            Primera configuración: la cuenta que crees ahora será la <strong className="text-white">administradora</strong> del panel.
+          </p>
+        )}
         <Auth
           onSuccess={() => router.replace('/portal')}
-          initialMode={(authConfig?.first_run || isInviteFlow) ? 'signup' : 'signin'}
+          initialMode={(authConfig?.first_run || isInviteFlow || signupRequested) ? 'signup' : 'signin'}
           authConfig={isInviteFlow ? { ...authConfig, allow_signup: true } : authConfig}
         />
+        </>
       )}
+      </div>
     </div>
   );
 }

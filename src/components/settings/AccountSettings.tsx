@@ -1,14 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { User } from 'lucide-react';
 
 export function AccountSettings() {
-  const router = useRouter();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   // Form states
@@ -121,7 +119,7 @@ export function AccountSettings() {
         <div className='p-6 pb-0'>
           <div className={`mb-4 p-3 rounded-lg ${
             message.type === 'success'
-              ? 'bg-green-900/20 border border-green-800 text-green-400'
+              ? 'bg-olive-900/20 border border-olive-800 text-olive-400'
               : 'bg-red-900/20 border border-red-800 text-red-400'
           }`}>
             {message.text}
@@ -149,7 +147,7 @@ export function AccountSettings() {
                   type='email'
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className='w-full px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500'
+                  className='w-full px-4 py-2 card-liquid rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500'
                   required
                 />
               </div>
@@ -163,7 +161,7 @@ export function AccountSettings() {
                   type='text'
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  className='w-full px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500'
+                  className='w-full px-4 py-2 card-liquid rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500'
                   placeholder='Your full name'
                 />
               </div>
@@ -188,7 +186,7 @@ export function AccountSettings() {
                   type='password'
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  className='w-full px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500'
+                  className='w-full px-4 py-2 card-liquid rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500'
                   placeholder='Min. 6 characters'
                   minLength={6}
                 />
@@ -203,7 +201,7 @@ export function AccountSettings() {
                   type='password'
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className='w-full px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500'
+                  className='w-full px-4 py-2 card-liquid rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500'
                   placeholder='Confirm password'
                   minLength={6}
                 />
@@ -223,7 +221,7 @@ export function AccountSettings() {
         {/* Footer Actions */}
         <div className='pt-4 border-t border-gray-800 flex items-center justify-end'>
           <button
-            onClick={() => supabase.auth.signOut().then(() => router.push('/'))}
+            onClick={async () => { await signOut(); window.location.href = '/auth'; }}
             className='text-sm text-gray-400 hover:text-white transition-colors cursor-pointer'
           >
             Log Out

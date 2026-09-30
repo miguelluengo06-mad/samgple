@@ -355,7 +355,7 @@ export function AIPanel({ widgetType, widgetName, selectedElement, widgetContext
           >
             <div
               className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
-                message.role === 'ai' ? 'bg-white text-black' : 'bg-gray-700 text-white'
+                message.role === 'ai' ? 'bg-olive-500 text-black' : 'bg-gray-700 text-white'
               }`}
             >
               {message.role === 'ai' ? <Bot className="w-3.5 h-3.5" /> : '👤'}
@@ -364,7 +364,7 @@ export function AIPanel({ widgetType, widgetName, selectedElement, widgetContext
               className={`px-3 py-2 rounded-xl max-w-[75%] ${
                 message.role === 'ai'
                   ? 'bg-gray-800/30 text-white'
-                  : 'bg-white text-black'
+                  : 'bg-olive-500 text-black'
               }`}
             >
               <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
@@ -373,7 +373,7 @@ export function AIPanel({ widgetType, widgetName, selectedElement, widgetContext
         ))}
         {isLoading && (
           <div className="flex gap-2">
-            <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 bg-white text-black">
+            <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 bg-olive-500 text-black">
               <Loader2 className="w-3.5 h-3.5 animate-spin" />
             </div>
             <div className="px-3 py-2 rounded-xl bg-gray-800/30 text-white">
@@ -410,7 +410,7 @@ export function AIPanel({ widgetType, widgetName, selectedElement, widgetContext
             onKeyDown={(e) => e.key === 'Enter' && !isLoading && handleSend()}
             placeholder={selectedElement ? `Describe changes for ${ELEMENT_LABELS[selectedElement]}...` : "Ask AI for suggestions..."}
             disabled={isLoading}
-            className="flex-1 px-4 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white transition-colors disabled:opacity-50"
+            className="flex-1 px-4 py-2 card-liquid rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors disabled:opacity-50"
           />
           {isLoading ? (
             <button
@@ -424,7 +424,7 @@ export function AIPanel({ widgetType, widgetName, selectedElement, widgetContext
             <button
               onClick={handleSend}
               disabled={!inputValue.trim()}
-              className="px-3 py-2 bg-white text-black rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-3 py-2 bg-olive-500 text-black rounded-lg hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               <Send className="w-3.5 h-3.5" />
             </button>

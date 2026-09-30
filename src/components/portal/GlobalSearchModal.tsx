@@ -67,7 +67,7 @@ export default function GlobalSearchModal({ open, onClose }: GlobalSearchModalPr
           }
           if (inst.instance_id && !seenInstances.has(inst.instance_id)) {
             seenInstances.add(inst.instance_id);
-            items.push({ id: inst.instance_id, label: inst.instance_name || inst.instance_id, sublabel: inst.client_email, type: 'instance', href: `/portal?instance=${inst.instance_id}` });
+            items.push({ id: inst.instance_id, label: inst.instance_name || inst.instance_id, sublabel: inst.client_email, type: 'instance', href: `/portal/manage?instance=${inst.instance_id}` });
           }
         }
       }

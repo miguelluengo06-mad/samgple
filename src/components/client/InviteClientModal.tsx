@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, RefreshCw, CheckCircle, Check, Server } from 'lucide-react';
 import { useEscapeKey } from '@/hooks/useEscapeKey';
 
@@ -10,6 +10,9 @@ interface InviteClientModalProps {
   onInvite: (config: InviteConfig) => Promise<string | null>;
   isSending?: boolean;
   agencyInstances?: { id: string; name: string; storage_limit_gb: number }[];
+  /** Pre-fill name/email when opened — e.g. converting a won lead into a client */
+  initialName?: string;
+  initialEmail?: string;
 }
 
 export interface InviteConfig {
@@ -27,9 +30,11 @@ export default function InviteClientModal({
   onInvite,
   isSending = false,
   agencyInstances = [],
+  initialName = '',
+  initialEmail = '',
 }: InviteClientModalProps) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [name, setName] = useState(initialName);
+  const [email, setEmail] = useState(initialEmail);
   const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [apiError, setApiError] = useState('');
@@ -37,6 +42,15 @@ export default function InviteClientModal({
   const [successInvited, setSuccessInvited] = useState(false);
 
   const [selectedInstanceIds, setSelectedInstanceIds] = useState<string[]>([]);
+
+  // Re-sync the pre-fill each time the modal is opened (it stays mounted between opens)
+  useEffect(() => {
+    if (isOpen) {
+      setName(initialName);
+      setEmail(initialEmail);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   useEscapeKey(isOpen && !isSending && !successName, onClose);
 
@@ -121,14 +135,14 @@ export default function InviteClientModal({
       <div className="w-full max-w-md bg-gray-900/70 border border-gray-800 rounded-xl overflow-hidden shadow-2xl max-h-[90vh] overflow-y-auto">
         {successName ? (
           <div className="px-6 py-12 text-center">
-            <div className="w-14 h-14 rounded-full bg-green-900/30 border border-green-800 flex items-center justify-center mx-auto mb-5">
-              <CheckCircle className="w-7 h-7 text-green-400" />
+            <div className="w-14 h-14 rounded-full bg-green-900/30 border border-olive-800 flex items-center justify-center mx-auto mb-5">
+              <CheckCircle className="w-7 h-7 text-olive-400" />
             </div>
             <h2 className="text-lg font-semibold text-white mb-2">Client Added</h2>
             <p className="text-white/60 text-sm mb-6">
               <span className="text-white font-medium">{successName}</span>{successInvited ? ' has been added and will receive an invite email' : ' has been added as a client'}
             </p>
-            <button onClick={handleClose} className="px-6 py-3 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
+            <button onClick={handleClose} className="px-6 py-3 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors">
               Done
             </button>
           </div>
@@ -157,7 +171,7 @@ export default function InviteClientModal({
                   onKeyDown={(e) => { if (e.key === 'Enter') handleInvite(); }}
                   placeholder="Acme Corp"
                   autoFocus
-                  className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors ${
+                  className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors ${
                     nameError ? 'border-red-500/50' : 'border-gray-800'
                   }`}
                 />
@@ -177,7 +191,7 @@ export default function InviteClientModal({
                   }}
                   onKeyDown={(e) => { if (e.key === 'Enter') handleInvite(); }}
                   placeholder="client@example.com"
-                  className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white transition-colors ${
+                  className={`w-full px-4 py-3 bg-gray-900/50 border rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors ${
                     emailError ? 'border-red-500/50' : 'border-gray-800'
                   }`}
                 />
@@ -227,7 +241,7 @@ export default function InviteClientModal({
               <button
                 onClick={handleInvite}
                 disabled={isSending || !name.trim()}
-                className="flex-1 py-3 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 transition-all flex items-center justify-center gap-2"
+                className="flex-1 py-3 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 transition-all flex items-center justify-center gap-2"
               >
                 {isSending ? (
                   <><RefreshCw className="w-4 h-4 animate-spin" /> Adding...</>

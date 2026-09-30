@@ -70,7 +70,7 @@ function SelectRow({ label, value, options, onChange, hint }: {
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="px-3 py-1.5 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:ring-1 focus:ring-white appearance-none bg-no-repeat bg-[length:14px_14px] bg-[position:right_8px_center] pr-8 cursor-pointer"
+          className="px-3 py-1.5 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:ring-1 focus:ring-olive-500 appearance-none bg-no-repeat bg-[length:14px_14px] bg-[position:right_8px_center] pr-8 cursor-pointer"
           style={selectArrowStyle}
         >
           {options.map((opt) => (

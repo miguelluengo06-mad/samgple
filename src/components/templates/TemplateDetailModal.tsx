@@ -196,10 +196,10 @@ export default function TemplateDetailModal({
                     {availableCredentials.map((cred) => (
                       <div
                         key={cred.type}
-                        className="flex items-center justify-between p-3 rounded-lg bg-green-900/20 border border-green-800/50"
+                        className="flex items-center justify-between p-3 rounded-lg bg-olive-900/20 border border-olive-800/50"
                       >
                         <div className="flex items-center gap-3">
-                          <CredentialIcon type={cred.icon} fallback="key" className="w-5 h-5 text-green-400" />
+                          <CredentialIcon type={cred.icon} fallback="key" className="w-5 h-5 text-olive-400" />
                           <span className="text-white">{cred.name}</span>
                         </div>
                         <div className="flex items-center gap-2">
@@ -208,7 +208,7 @@ export default function TemplateDetailModal({
                             <select
                               value={credentialSelections[cred.type] || cred.existingCredentialId}
                               onChange={(e) => handleCredentialSelect(cred.type, e.target.value)}
-                              className="bg-green-900/30 border border-green-800 rounded px-2 py-1 text-xs text-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
+                              className="bg-green-900/30 border border-olive-800 rounded px-2 py-1 text-xs text-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                               onClick={(e) => e.stopPropagation()}
                             >
                               {cred.availableCredentials.map((opt) => (
@@ -219,8 +219,8 @@ export default function TemplateDetailModal({
                             </select>
                           ) : (
                             <>
-                              <CheckCircle className="w-5 h-5 text-green-400" />
-                              <span className="text-xs text-green-400">Connected</span>
+                              <CheckCircle className="w-5 h-5 text-olive-400" />
+                              <span className="text-xs text-olive-400">Connected</span>
                             </>
                           )}
                         </div>
@@ -267,7 +267,7 @@ export default function TemplateDetailModal({
               <button
                 onClick={handleImport}
                 disabled={isImporting}
-                className="w-full py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:cursor-not-allowed rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2"
               >
                 {isImporting ? (
                   <>

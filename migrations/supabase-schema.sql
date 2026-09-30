@@ -932,5 +932,117 @@ ALTER TABLE team_members ALTER COLUMN owner_id DROP NOT NULL;
 ALTER TABLE team_members ADD COLUMN IF NOT EXISTS pending_client_invite_id UUID REFERENCES client_invites(id) ON DELETE CASCADE;
 
 -- ============================================
+-- 21. products - Agency products/services sold via the public store
+-- ============================================
+CREATE TABLE IF NOT EXISTS products (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  owner_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  description TEXT,
+  price_cents INTEGER NOT NULL CHECK (price_cents >= 0),
+  currency TEXT NOT NULL DEFAULT 'usd',
+  image_url TEXT,
+  active BOOLEAN NOT NULL DEFAULT true,
+  display_order INTEGER NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_products_owner_id ON products(owner_id);
+CREATE INDEX IF NOT EXISTS idx_products_active ON products(active);
+
+ALTER TABLE products ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Service role full access products" ON products FOR ALL TO service_role USING (true);
+CREATE POLICY "Owners manage their own products" ON products FOR ALL TO authenticated
+  USING (owner_id = auth.uid()) WITH CHECK (owner_id = auth.uid());
+CREATE POLICY "Public can view active products" ON products FOR SELECT TO anon USING (active = true);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON products TO authenticated;
+GRANT SELECT ON products TO anon;
+GRANT ALL ON products TO service_role;
+
+-- ============================================
+-- 22. leads - Proposal requests from the public contact form
+-- ============================================
+CREATE TABLE IF NOT EXISTS leads (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  owner_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  company TEXT,
+  message TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'won', 'lost')),
+  source TEXT NOT NULL DEFAULT 'website',
+  notes TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_leads_owner_id ON leads(owner_id);
+CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
+
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Service role full access leads" ON leads FOR ALL TO service_role USING (true);
+CREATE POLICY "Owners manage their own leads" ON leads FOR ALL TO authenticated
+  USING (owner_id = auth.uid()) WITH CHECK (owner_id = auth.uid());
+
+GRANT SELECT, UPDATE, DELETE ON leads TO authenticated;
+GRANT ALL ON leads TO service_role;
+
+-- Call booking columns (see migrations/add-call-booking.sql)
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS kind TEXT NOT NULL DEFAULT 'proposal';
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS phone TEXT;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS call_at TIMESTAMPTZ;
+ALTER TABLE leads ADD COLUMN IF NOT EXISTS answers JSONB;
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'leads_kind_check') THEN
+    ALTER TABLE leads ADD CONSTRAINT leads_kind_check CHECK (kind IN ('proposal', 'call'));
+  END IF;
+END $$;
+CREATE INDEX IF NOT EXISTS idx_leads_call_at ON leads(call_at) WHERE call_at IS NOT NULL;
+CREATE UNIQUE INDEX IF NOT EXISTS uq_leads_call_slot
+  ON leads(owner_id, call_at)
+  WHERE kind = 'call' AND call_at IS NOT NULL AND status <> 'lost';
+
+-- ============================================
+-- Registration hardening (see migrations/harden-registration.sql)
+-- ============================================
+-- Hardening for public registration.
+--
+-- The original policies assume every account belongs to the agency. With a public
+-- "Registrarse" link that is no longer true: any registered visitor could read the
+-- agency's keys, rewrite its settings, or join someone else's team. Idempotent.
+
+-- 1) portal_settings holds the agency's n8n / Coolify / AI / SMTP / OAuth secrets.
+--    The app only touches it through server routes using the service role (which bypasses
+--    RLS), so no policy for `authenticated` is needed at all.
+DROP POLICY IF EXISTS "Authenticated users can read portal settings" ON portal_settings;
+DROP POLICY IF EXISTS "Admin can update portal settings" ON portal_settings;
+REVOKE ALL ON portal_settings FROM anon, authenticated;
+
+-- 2) profiles.team_id decides which team's data a user can see (client_instances,
+--    credentials, templates, widgets...). The "update own profile" policy let anyone
+--    set their own team_id to any value. Only the server (service role) may change it.
+CREATE OR REPLACE FUNCTION public.protect_profile_team_id()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF NEW.team_id IS DISTINCT FROM OLD.team_id
+     AND coalesce(auth.role(), '') <> 'service_role'
+     AND current_user NOT IN ('postgres', 'supabase_admin', 'service_role') THEN
+    RAISE EXCEPTION 'team_id can only be changed by the server' USING ERRCODE = '42501';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS protect_profile_team_id ON profiles;
+CREATE TRIGGER protect_profile_team_id
+  BEFORE UPDATE ON profiles
+  FOR EACH ROW EXECUTE FUNCTION public.protect_profile_team_id();
+
+-- ============================================
 -- Done! Your FlowEngine Portal database is ready.
 -- ============================================

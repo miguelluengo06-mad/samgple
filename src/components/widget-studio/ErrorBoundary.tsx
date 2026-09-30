@@ -39,7 +39,7 @@ export class WidgetStudioErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center h-full p-8 bg-gray-900/50 border border-gray-800 rounded-lg">
+        <div className="flex flex-col items-center justify-center h-full p-8 card-liquid rounded-lg">
           <div className="p-4 rounded-full bg-red-900/20 border border-red-800 mb-4">
             <AlertTriangle className="w-8 h-8 text-red-400" />
           </div>
@@ -56,7 +56,7 @@ export class WidgetStudioErrorBoundary extends Component<Props, State> {
           )}
           <button
             onClick={this.handleReset}
-            className="flex items-center gap-2 px-4 py-2 bg-white text-black hover:bg-gray-100 rounded-lg text-sm font-medium transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-olive-500 text-black hover:bg-olive-400 rounded-full text-sm font-medium transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
             Try Again

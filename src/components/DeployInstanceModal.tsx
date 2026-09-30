@@ -235,7 +235,7 @@ export default function DeployInstanceModal({
                 value={instanceName}
                 onChange={(e) => setInstanceName(e.target.value)}
                 placeholder="e.g., Production Workflows"
-                className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+                className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                 maxLength={50}
               />
             </div>
@@ -293,7 +293,7 @@ export default function DeployInstanceModal({
                     value={instanceUrl}
                     onChange={(e) => setInstanceUrl(e.target.value)}
                     placeholder={serviceType === 'n8n' ? 'https://n8n.example.com' : 'https://openclaw.example.com'}
-                    className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+                    className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                   />
                 </div>
               )}
@@ -305,7 +305,7 @@ export default function DeployInstanceModal({
                     value={instanceUrl}
                     onChange={(e) => setInstanceUrl(e.target.value)}
                     placeholder="https://service.example.com"
-                    className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+                    className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                   />
                 </div>
               )}
@@ -321,7 +321,7 @@ export default function DeployInstanceModal({
                     value={apiKey}
                     onChange={(e) => setApiKey(e.target.value)}
                     placeholder="n8n API key for management"
-                    className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+                    className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                   />
                   <p className="text-gray-500 text-sm mt-1.5">
                     Required for workflow management, executions, and credentials
@@ -365,7 +365,7 @@ export default function DeployInstanceModal({
                   <Link
                     href="/portal/settings?tab=connections#flowengine"
                     onClick={onClose}
-                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
                   >
                     <Settings className="w-4 h-4" />
                     Go to Settings
@@ -404,7 +404,7 @@ export default function DeployInstanceModal({
                           }`}
                         >
                           {tier.badge && (
-                            <span className="absolute -top-2 right-3 px-2 py-0.5 bg-white text-black text-[10px] font-bold rounded-full">
+                            <span className="absolute -top-2 right-3 px-2 py-0.5 bg-olive-500 text-black text-[10px] font-bold rounded-full">
                               {tier.badge}
                             </span>
                           )}
@@ -444,7 +444,7 @@ export default function DeployInstanceModal({
                             : 'border-gray-700 bg-gray-800/30 hover:border-gray-600'
                         }`}
                       >
-                        <span className="absolute -top-2 right-3 px-2 py-0.5 bg-white text-black text-[10px] font-bold rounded-full">
+                        <span className="absolute -top-2 right-3 px-2 py-0.5 bg-olive-500 text-black text-[10px] font-bold rounded-full">
                           SAVE 20%
                         </span>
                         <div className="text-white font-medium">Annual</div>

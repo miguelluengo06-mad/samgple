@@ -127,7 +127,7 @@ export default function TimezoneModal({
           <select
             value={selectedTimezone}
             onChange={(e) => setSelectedTimezone(e.target.value)}
-            className='w-full px-4 py-3 pr-10 bg-gray-900/50 border border-gray-800 rounded-lg text-white focus:ring-2 focus:ring-white focus:border-white transition-colors appearance-none bg-no-repeat'
+            className='w-full px-4 py-3 pr-10 card-liquid rounded-lg text-white focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors appearance-none bg-no-repeat'
             style={{
               backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`,
               backgroundSize: '1.5rem 1.5rem',
@@ -160,7 +160,7 @@ export default function TimezoneModal({
           <button
             onClick={handleSave}
             disabled={loading || selectedTimezone === currentTimezone}
-            className='flex-1 px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2'
+            className='flex-1 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2'
           >
             {loading ? (
               <>

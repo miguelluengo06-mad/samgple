@@ -4,8 +4,8 @@ import { AuthProvider } from '@/components/AuthContext';
 import { Suspense } from 'react';
 
 export const metadata: Metadata = {
-  title: 'FlowEngine Portal',
-  description: 'Open-source client portal for automation agencies. Manage teams, invite clients, build templates, connect your own n8n.',
+  title: 'samgple — Agencia de contenido y marketing',
+  description: 'Agencia de creación de contenido y estrategia de marketing para empresas.',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -25,7 +25,10 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#000000',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
 };
 
 export default function RootLayout({
@@ -34,17 +37,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' className='dark' suppressHydrationWarning style={{ backgroundColor: '#000000' }}>
+    <html lang='es' suppressHydrationWarning>
       <head>
         <style dangerouslySetInnerHTML={{__html: `
           html, body {
-            background-color: #000000;
+            background-color: light-dark(#ffffff, #0a0a0a);
+            color-scheme: light dark;
             margin: 0;
             padding: 0;
           }
         `}} />
       </head>
-      <body className='antialiased' style={{ backgroundColor: '#000000' }}>
+      <body className='antialiased'>
         <AuthProvider>
           <Suspense fallback={null}>
             {children}

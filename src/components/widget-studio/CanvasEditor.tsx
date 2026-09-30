@@ -135,7 +135,7 @@ export function CanvasEditor({ config, onChange }: CanvasEditorProps) {
           onClick={() => setActiveTab('design')}
           className={`p-3 rounded-lg transition-colors ${
             activeTab === 'design'
-              ? 'bg-white text-black'
+              ? 'bg-olive-500 text-black'
               : 'text-gray-400 hover:text-white hover:bg-gray-800'
           }`}
           title="Design"
@@ -146,7 +146,7 @@ export function CanvasEditor({ config, onChange }: CanvasEditorProps) {
           onClick={() => setActiveTab('content')}
           className={`p-3 rounded-lg transition-colors ${
             activeTab === 'content'
-              ? 'bg-white text-black'
+              ? 'bg-olive-500 text-black'
               : 'text-gray-400 hover:text-white hover:bg-gray-800'
           }`}
           title="Content"
@@ -157,7 +157,7 @@ export function CanvasEditor({ config, onChange }: CanvasEditorProps) {
           onClick={() => setActiveTab('settings')}
           className={`p-3 rounded-lg transition-colors ${
             activeTab === 'settings'
-              ? 'bg-white text-black'
+              ? 'bg-olive-500 text-black'
               : 'text-gray-400 hover:text-white hover:bg-gray-800'
           }`}
           title="Settings"
@@ -209,7 +209,7 @@ export function CanvasEditor({ config, onChange }: CanvasEditorProps) {
           <div className="relative" style={{ width: '380px', height: '580px' }}>
             {/* Selection Indicator */}
             {selectedElement && (
-              <div className="absolute -top-12 left-0 bg-white text-black px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-2">
+              <div className="absolute -top-12 left-0 bg-olive-500 text-black px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                 Editing: {selectedElement.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </div>
@@ -459,7 +459,7 @@ export function CanvasEditor({ config, onChange }: CanvasEditorProps) {
                   value={config.chatbotName || ''}
                   onChange={(e) => updateConfig({ chatbotName: e.target.value })}
                   placeholder="AI Assistant"
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                 />
               </div>
 
@@ -520,7 +520,7 @@ export function CanvasEditor({ config, onChange }: CanvasEditorProps) {
                   onChange={(e) => updateConfig({ welcomeMessage: e.target.value })}
                   placeholder="Hi! How can I help you today?"
                   rows={3}
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white resize-none"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500 resize-none"
                 />
               </div>
 
@@ -550,7 +550,7 @@ export function CanvasEditor({ config, onChange }: CanvasEditorProps) {
                   value={config.placeholder || ''}
                   onChange={(e) => updateConfig({ placeholder: e.target.value })}
                   placeholder="Type a message..."
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                 />
               </div>
             </div>

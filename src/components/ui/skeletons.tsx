@@ -19,7 +19,7 @@ export function UnifiedSkeleton({ count = 5 }: SkeletonProps) {
   return (
     <div className="space-y-3">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="bg-gray-900/50 border border-gray-800 rounded-xl p-4">
+        <div key={i} className="card-liquid rounded-xl p-4">
           <div className="flex items-center justify-between gap-4">
             <div className="space-y-2 flex-1">
               <div className="h-4 w-48 bg-gray-700/50 rounded animate-pulse" />
@@ -41,7 +41,7 @@ export function PortalAllViewSkeleton() {
   return (
     <div className="space-y-6">
       {/* Filter Bar Skeleton */}
-      <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-3">
+      <div className="card-liquid rounded-xl p-3">
         <div className="flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-2">
             <div className="h-7 w-32 bg-gray-700/50 rounded-lg animate-pulse" />
@@ -58,7 +58,7 @@ export function PortalAllViewSkeleton() {
       {/* Metrics Cards Skeleton - 4 cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="bg-gray-900/50 border border-gray-800 rounded-lg p-3">
+          <div key={i} className="card-liquid rounded-lg p-3">
             <div className="flex items-center gap-2 mb-1">
               <div className="h-4 w-4 bg-gray-700/50 rounded animate-pulse" />
               <div className="h-3 w-12 bg-gray-700/50 rounded animate-pulse" />
@@ -97,7 +97,7 @@ export function MetricsCardSkeleton() {
       {[1, 2, 3, 4].map((i) => (
         <div
           key={i}
-          className="bg-gray-900/50 border border-gray-800 rounded-lg p-3"
+          className="card-liquid rounded-lg p-3"
         >
           {/* Icon + label */}
           <div className="flex items-center gap-2 mb-1">
@@ -122,7 +122,7 @@ export function WorkflowListSkeleton({ count = 3 }: SkeletonProps) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="bg-gray-900/50 border border-gray-800 rounded-lg p-4"
+          className="card-liquid rounded-lg p-4"
         >
           {/* Header row: workflow name + toggle */}
           <div className="flex items-center justify-between mb-3">
@@ -185,7 +185,7 @@ export function GenericCardSkeleton({ count = 4 }: SkeletonProps) {
       {Array.from({ length: count }).map((_, i) => (
         <div
           key={i}
-          className="bg-gray-900/50 border border-gray-800 rounded-xl p-6"
+          className="card-liquid rounded-xl p-6"
         >
           {/* Card title */}
           <div className="h-5 w-32 bg-gray-800/30 rounded animate-pulse mb-4" />
@@ -210,7 +210,7 @@ export function CardGridSkeleton({ count = 6 }: SkeletonProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="bg-gray-900/50 border border-gray-800 rounded-xl p-5">
+        <div key={i} className="card-liquid rounded-xl p-5">
           <div className="flex items-center gap-3 mb-4">
             {/* Icon skeleton */}
             <div className="w-10 h-10 rounded-xl bg-gray-700/50 animate-pulse flex-shrink-0" />
@@ -271,7 +271,7 @@ export function ChatSkeleton() {
 
         {/* Input area */}
         <div className="p-4 border-t border-gray-800">
-          <div className="h-12 w-full bg-gray-900/50 border border-gray-800 rounded-xl animate-pulse" />
+          <div className="h-12 w-full card-liquid rounded-xl animate-pulse" />
         </div>
       </div>
     </div>
@@ -296,7 +296,7 @@ export function PartnersSkeleton() {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Sidebar categories - desktop */}
           <div className="hidden lg:block lg:w-52 flex-shrink-0">
-            <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4">
+            <div className="card-liquid rounded-xl p-4">
               <div className="h-4 w-24 bg-gray-700/50 rounded animate-pulse mb-4" />
               <div className="space-y-1">
                 {Array.from({ length: 7 }).map((_, i) => (
@@ -308,7 +308,7 @@ export function PartnersSkeleton() {
 
           {/* Table */}
           <div className="flex-1">
-            <div className="bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+            <div className="card-liquid rounded-lg overflow-hidden">
               {/* Table header */}
               <div className="border-b border-gray-800 bg-gray-800/30 px-3 py-3 flex gap-4">
                 {['w-20', 'w-32', 'w-24', 'w-28', 'w-24', 'w-28'].map((w, i) => (
@@ -363,7 +363,7 @@ export function TemplatesSkeleton() {
 
       {/* Search */}
       <div className="mb-6">
-        <div className="h-11 w-full max-w-md bg-gray-900/50 border border-gray-800 rounded-lg animate-pulse" />
+        <div className="h-11 w-full max-w-md card-liquid rounded-lg animate-pulse" />
       </div>
 
       {/* Card grid */}
@@ -395,7 +395,7 @@ export function UIStudioSkeleton() {
       {/* Filter tabs */}
       <div className="flex items-center gap-2 mb-6 overflow-hidden">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className={`h-9 ${i === 0 ? 'w-16' : 'w-24'} bg-gray-900/50 border border-gray-800 rounded-lg animate-pulse`} />
+          <div key={i} className={`h-9 ${i === 0 ? 'w-16' : 'w-24'} card-liquid rounded-lg animate-pulse`} />
         ))}
       </div>
 
@@ -415,7 +415,7 @@ export function TwoColumnSkeleton() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
       {/* Left Column */}
       <div className="lg:col-span-1 space-y-6">
-        <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+        <div className="card-liquid rounded-xl p-6">
           <div className="h-6 w-32 bg-gray-700/50 rounded animate-pulse mb-4" />
           <div className="space-y-2">
             <div className="h-4 w-full bg-gray-700/50 rounded animate-pulse" />
@@ -426,7 +426,7 @@ export function TwoColumnSkeleton() {
 
       {/* Right Column */}
       <div className="lg:col-span-2">
-        <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+        <div className="card-liquid rounded-xl p-6">
           <div className="h-6 w-40 bg-gray-700/50 rounded animate-pulse mb-6" />
           <div className="space-y-4">
             {Array.from({ length: 4 }).map((_, i) => (

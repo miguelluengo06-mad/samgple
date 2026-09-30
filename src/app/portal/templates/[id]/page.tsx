@@ -216,7 +216,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
     return (
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto p-6 space-y-4">
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6 space-y-4">
+          <div className="card-liquid rounded-lg p-6 space-y-4">
             <div className="h-5 w-48 bg-gray-800/30 rounded animate-pulse" />
             <div className="h-24 bg-gray-800/30 rounded-lg animate-pulse" />
             <div className="h-64 bg-gray-800/30 rounded-lg animate-pulse" />
@@ -243,7 +243,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
     <div className="flex-1 overflow-y-auto">
       <div className="max-w-4xl mx-auto p-6 space-y-6">
         {/* Info card */}
-        <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-6">
+        <div className="card-liquid rounded-lg p-6">
           {isEditing ? (
             /* ── Edit Mode ── */
             <div className="space-y-4">
@@ -260,14 +260,14 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                   value={editIcon}
                   onChange={e => setEditIcon(e.target.value)}
                   placeholder="⚡"
-                  className="w-20 px-3 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-white text-center focus:ring-2 focus:ring-white focus:border-white outline-none"
+                  className="w-20 px-3 py-2 card-liquid rounded-lg text-sm text-white text-center focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none"
                 />
                 <label className="text-sm text-white/60 pt-2.5">Name</label>
                 <input
                   type="text"
                   value={editName}
                   onChange={e => setEditName(e.target.value)}
-                  className="px-4 py-2.5 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none"
+                  className="px-4 py-2.5 card-liquid rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none"
                 />
                 <label className="text-sm text-white/60 pt-2.5">Description</label>
                 <textarea
@@ -275,7 +275,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                   onChange={e => setEditDescription(e.target.value)}
                   placeholder="What does this template do?"
                   rows={2}
-                  className="px-4 py-2.5 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none resize-none"
+                  className="px-4 py-2.5 card-liquid rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none resize-none"
                 />
                 <label className="text-sm text-white/60 pt-2.5">Category</label>
                 <input
@@ -283,7 +283,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                   value={editCategory}
                   onChange={e => setEditCategory(e.target.value)}
                   placeholder="e.g. Marketing, Sales, Support"
-                  className="px-4 py-2.5 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none"
+                  className="px-4 py-2.5 card-liquid rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none"
                 />
               </div>
               <div className="flex items-center gap-3 pt-2">
@@ -296,7 +296,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                 <button
                   onClick={handleSaveMeta}
                   disabled={savingMeta || !editName.trim()}
-                  className="px-4 py-2.5 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors"
+                  className="px-4 py-2.5 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors"
                 >
                   {savingMeta ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Save'}
                 </button>
@@ -401,7 +401,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                   onChange={(e) => setUpdateChangelog(e.target.value)}
                   placeholder="Describe the changes in this version..."
                   rows={3}
-                  className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none resize-none"
+                  className="w-full px-4 py-3 card-liquid rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none resize-none"
                 />
               </div>
 
@@ -411,7 +411,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
                   type="checkbox"
                   checked={notifyUsersOnUpdate}
                   onChange={(e) => setNotifyUsersOnUpdate(e.target.checked)}
-                  className="w-4 h-4 rounded border-gray-700 bg-gray-900/50 text-white focus:ring-white accent-white"
+                  className="w-4 h-4 rounded border-gray-700 bg-gray-900/50 text-white focus:ring-olive-500 accent-white"
                 />
                 <span className="text-sm text-white/60">Notify clients about this update</span>
               </label>
@@ -420,7 +420,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
               <button
                 onClick={handleUpdateVersion}
                 disabled={!updateFile || !updateChangelog.trim() || updating}
-                className="w-full px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors"
+                className="w-full px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors"
               >
                 {updating ? (
                   <span className="flex items-center justify-center gap-2">
@@ -460,7 +460,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
 
         {/* Workflow preview */}
         {template.workflow_json && (
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg overflow-hidden">
+          <div className="card-liquid rounded-lg overflow-hidden">
             <div className="px-4 py-3 border-b border-gray-800 flex items-center gap-2">
               <FileText className="w-4 h-4 text-white/40" />
               <span className="text-sm font-medium text-white">Workflow Preview</span>
@@ -507,7 +507,7 @@ export default function TemplateDetailPage({ params }: { params: Promise<{ id: s
       {/* Toast */}
       {toast && (
         <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-lg text-sm font-medium shadow-lg ${
-          toast.type === 'success' ? 'bg-green-900/90 text-green-400 border border-green-800' : 'bg-red-900/90 text-red-400 border border-red-800'
+          toast.type === 'success' ? 'bg-green-900/90 text-olive-400 border border-olive-800' : 'bg-red-900/90 text-red-400 border border-red-800'
         }`}>
           {toast.message}
         </div>

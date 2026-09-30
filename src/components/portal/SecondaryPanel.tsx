@@ -55,7 +55,7 @@ function StatusDot({ status }: { status?: SecondaryPanelItem['status'] }) {
     return <Loader2 className="w-3 h-3 text-gray-400 animate-spin flex-shrink-0" />;
   }
   const colors: Record<string, string> = {
-    active: 'bg-green-400',
+    active: 'bg-olive-400',
     inactive: 'bg-gray-500',
     error: 'bg-red-400',
     external: 'bg-gray-400',
@@ -203,7 +203,7 @@ export default function SecondaryPanel({ sections, selectedId, onSelect, action,
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search everything..."
-              className="w-full pl-9 pr-7 py-2 bg-gray-900/50 border border-gray-800 rounded-lg text-base text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white outline-none"
+              className="w-full pl-9 pr-7 py-2 card-liquid rounded-lg text-base text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 outline-none"
             />
             {isSearching && (
               <button
@@ -325,13 +325,20 @@ export default function SecondaryPanel({ sections, selectedId, onSelect, action,
                                 key={item.id}
                                 onClick={() => onSelect(item.id)}
                                 className={cn(
-                                  'w-full flex items-center gap-3 px-3 py-3 rounded-lg text-left transition-colors cursor-pointer',
+                                  'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all cursor-pointer border',
                                   selectedId === item.id
-                                    ? 'bg-gray-800/30 text-white'
-                                    : 'text-white/60 hover:bg-gray-800/30 hover:text-white'
+                                    ? 'bg-olive-500/15 text-olive-300 border-olive-500/30'
+                                    : 'text-white/60 border-transparent hover:bg-gray-800/30 hover:text-white'
                                 )}
                               >
-                                {item.icon && <div className="flex-shrink-0 w-5 h-5 text-white/60">{item.icon}</div>}
+                                {item.icon && (
+                                  <div className={cn(
+                                    'icon-badge w-8 h-8 flex-shrink-0',
+                                    selectedId === item.id ? 'icon-badge-olive' : 'icon-badge-neutral'
+                                  )}>
+                                    <div className="w-4 h-4 text-white/90 [&>svg]:w-4 [&>svg]:h-4">{item.icon}</div>
+                                  </div>
+                                )}
                                 <div className="flex-1 min-w-0">
                                   <div className="text-base font-medium truncate">{item.label}</div>
                                   {item.sublabel && <div className="text-sm text-white/60 truncate mt-0.5">{item.sublabel}</div>}

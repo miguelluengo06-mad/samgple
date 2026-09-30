@@ -100,7 +100,7 @@ export function InfoPanel({
           value={widgetName}
           onChange={(e) => onWidgetNameChange(e.target.value)}
           placeholder="My Awesome Component"
-          className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white transition-colors"
+          className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
         />
         <p className="text-xs text-gray-500">Give your component a descriptive name</p>
       </div>
@@ -113,7 +113,7 @@ export function InfoPanel({
           onChange={(e) => onWidgetDescriptionChange(e.target.value)}
           placeholder="Describe what this component does..."
           rows={3}
-          className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white transition-colors resize-none"
+          className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors resize-none"
         />
         <p className="text-xs text-gray-500">Optional description for internal reference</p>
       </div>
@@ -131,7 +131,7 @@ export function InfoPanel({
             ? "https://your-n8n.com/webhook/abc123/chat"
             : "https://your-n8n.com/webhook/abc123"
           }
-          className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white transition-colors"
+          className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
         />
         <p className="text-xs text-gray-500">
           {isChatbot
@@ -154,7 +154,7 @@ export function InfoPanel({
                   onClick={() => toggleInstance(instance.id)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     isSelected
-                      ? 'bg-white text-black'
+                      ? 'bg-olive-500 text-black'
                       : 'bg-gray-800/30 border border-gray-700 text-gray-400 hover:text-white hover:bg-gray-700'
                   }`}
                 >

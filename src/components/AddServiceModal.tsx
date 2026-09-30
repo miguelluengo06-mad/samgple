@@ -196,8 +196,8 @@ export default function AddServiceModal({
               className="w-full p-4 rounded-lg border text-left transition-all bg-gray-800/30 border-gray-800 hover:border-gray-700 hover:bg-gray-800/30 cursor-pointer"
             >
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-lg bg-green-900/30 border border-green-800/50 flex items-center justify-center shrink-0">
-                  <MessageSquare className="w-4 h-4 text-green-400" />
+                <div className="w-9 h-9 rounded-lg bg-green-900/30 border border-olive-800/50 flex items-center justify-center shrink-0">
+                  <MessageSquare className="w-4 h-4 text-olive-400" />
                 </div>
                 <div>
                   <p className="text-sm font-medium text-white">WhatsApp</p>
@@ -261,7 +261,7 @@ export default function AddServiceModal({
               <Link
                 href="/portal/settings?tab=connections#flowengine"
                 onClick={onClose}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-white text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-olive-500 text-black rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors"
               >
                 <Settings className="w-4 h-4" />
                 Go to Settings
@@ -292,7 +292,7 @@ export default function AddServiceModal({
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   placeholder="e.g., Support Line"
-                  className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-white"
+                  className="w-full px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                   maxLength={50}
                 />
               </div>

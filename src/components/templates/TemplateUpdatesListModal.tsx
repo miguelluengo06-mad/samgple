@@ -142,13 +142,13 @@ export default function TemplateUpdatesListModal({
   const getStatusIcon = (importId: string) => {
     const status = updateStatuses.get(importId);
     if (!status || status.status === 'pending') {
-      return <ArrowUpCircle className="h-4 w-4 text-green-400" />;
+      return <ArrowUpCircle className="h-4 w-4 text-olive-400" />;
     }
     if (status.status === 'updating') {
       return <Loader2 className="h-4 w-4 text-gray-400 animate-spin" />;
     }
     if (status.status === 'success') {
-      return <CheckCircle className="h-4 w-4 text-green-400" />;
+      return <CheckCircle className="h-4 w-4 text-olive-400" />;
     }
     return <AlertCircle className="h-4 w-4 text-red-400" />;
   };
@@ -184,8 +184,8 @@ export default function TemplateUpdatesListModal({
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-800">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-green-500/10 border border-green-500/30 flex items-center justify-center">
-                <ArrowUpCircle className="h-5 w-5 text-green-400" />
+              <div className="w-10 h-10 rounded-xl bg-olive-500/10 border border-green-500/30 flex items-center justify-center">
+                <ArrowUpCircle className="h-5 w-5 text-olive-400" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-white">Available Updates</h3>
@@ -218,7 +218,7 @@ export default function TemplateUpdatesListModal({
                   className={cn(
                     'p-3 rounded-lg border transition-colors',
                     isSuccess
-                      ? 'bg-green-900/20 border-green-800'
+                      ? 'bg-olive-900/20 border-olive-800'
                       : isError
                       ? 'bg-red-900/20 border-red-800'
                       : 'bg-gray-800/30 border-gray-700'
@@ -261,7 +261,7 @@ export default function TemplateUpdatesListModal({
                           'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5',
                           isUpdating || isUpdatingAll
                             ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                            : 'bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 text-green-400'
+                            : 'bg-green-500/20 hover:bg-green-500/30 border border-green-500/30 text-olive-400'
                         )}
                       >
                         {isUpdating ? (
@@ -275,7 +275,7 @@ export default function TemplateUpdatesListModal({
                       </button>
                     )}
                     {isSuccess && (
-                      <span className="text-xs text-green-400 font-medium">Updated</span>
+                      <span className="text-xs text-olive-400 font-medium">Updated</span>
                     )}
                   </div>
                 </div>
@@ -300,7 +300,7 @@ export default function TemplateUpdatesListModal({
                   'flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2',
                   isUpdatingAll
                     ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                    : 'bg-white text-black hover:bg-gray-100'
+                    : 'bg-olive-500 text-black hover:bg-olive-400'
                 )}
               >
                 {isUpdatingAll ? (

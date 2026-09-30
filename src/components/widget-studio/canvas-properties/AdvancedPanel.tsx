@@ -213,7 +213,7 @@ export function AdvancedPanel({
   /* Hover state styles */
 }`
               }
-              className="w-full h-40 px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white font-mono text-xs placeholder:text-gray-600 focus:ring-2 focus:ring-white focus:border-white resize-none"
+              className="w-full h-40 px-3 py-2 bg-gray-900/50 border border-gray-700 rounded-lg text-white font-mono text-xs placeholder:text-gray-600 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 resize-none"
               spellCheck={false}
             />
             <div className="flex justify-between items-center">

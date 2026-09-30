@@ -277,9 +277,9 @@ export function MigrationImportSection({
           )}
 
           {success && (
-            <div className="bg-green-900/20 border border-green-800 rounded-lg p-3 flex items-center gap-2">
-              <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
-              <p className="text-green-400 text-sm">{success}</p>
+            <div className="bg-olive-900/20 border border-olive-800 rounded-lg p-3 flex items-center gap-2">
+              <CheckCircle className="w-4 h-4 text-olive-400 flex-shrink-0" />
+              <p className="text-olive-400 text-sm">{success}</p>
             </div>
           )}
 
@@ -309,7 +309,7 @@ export function MigrationImportSection({
                       value={selectedTargetId}
                       onChange={(e) => setSelectedTargetId(e.target.value)}
                       disabled={migrating}
-                      className="flex-1 px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white text-sm focus:ring-2 focus:ring-white focus:border-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex-1 px-4 py-3 card-liquid rounded-lg text-white text-sm focus:ring-2 focus:ring-olive-500 focus:border-olive-500 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <option value="">Choose an instance...</option>
                       {instances.map((inst) => (
@@ -323,7 +323,7 @@ export function MigrationImportSection({
                       type="button"
                       onClick={handleMigrate}
                       disabled={!selectedTargetId || migrating}
-                      className="flex-1 px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
+                      className="flex-1 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
                     >
                       {migrating ? (
                         <div className="flex items-center justify-center gap-2">
@@ -402,7 +402,7 @@ export function MigrationImportSection({
                       onChange={(e) => setS3Url(e.target.value)}
                       disabled={importing}
                       placeholder="https://s3.amazonaws.com/bucket/backup.dump"
-                      className="w-full px-4 py-3 bg-gray-900/50 border border-gray-800 rounded-lg text-white text-sm placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white disabled:opacity-50"
+                      className="w-full px-4 py-3 card-liquid rounded-lg text-white text-sm placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 disabled:opacity-50"
                     />
                     <p className="text-gray-500 text-xs mt-1">
                       Enter a publicly accessible URL to your backup file
@@ -463,7 +463,7 @@ export function MigrationImportSection({
                     (importMethod === 'url' && !s3Url) ||
                     (importMethod === 'upload' && !selectedFile)
                   }
-                  className="w-full px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
                 >
                   {importing ? (
                     <div className="flex items-center justify-center gap-2">
@@ -522,7 +522,7 @@ export function MigrationImportSection({
                 type="button"
                 onClick={confirmMigration}
                 disabled={migrating}
-                className="flex-1 px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
               >
                 {migrating ? 'Migrating...' : 'Confirm Migration'}
               </button>
@@ -575,7 +575,7 @@ export function MigrationImportSection({
                 type="button"
                 onClick={confirmImport}
                 disabled={importing}
-                className="flex-1 px-4 py-3 bg-white text-black hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 rounded-lg text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
               >
                 {importing ? 'Importing...' : 'Confirm Import'}
               </button>

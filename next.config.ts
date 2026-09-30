@@ -52,7 +52,11 @@ const nextConfig: NextConfig = {
       { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
       { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
       { key: 'X-DNS-Prefetch-Control', value: 'on' },
-      // Next.js inline scripts require 'unsafe-inline'; this still blocks external script injection
+      // Next.js inline scripts require 'unsafe-inline'; this still blocks external script injection.
+      // connect-src must allow the Supabase project directly: the browser client (src/lib/supabase.ts)
+      // is initialized with NEXT_PUBLIC_SUPABASE_URL and calls it cross-origin (auth, REST, storage,
+      // realtime) — without this, every supabase-js call (signUp, signInWithPassword, etc.) is silently
+      // blocked by the browser itself and surfaces as a generic "Failed to fetch".
       {
         key: 'Content-Security-Policy',
         value: [
@@ -61,7 +65,8 @@ const nextConfig: NextConfig = {
           "style-src 'self' 'unsafe-inline'",
           "img-src 'self' data: blob: https:",
           "font-src 'self' data:",
-          "connect-src 'self'",
+          "media-src 'self' https://pub-e87160a916994231bb484c99e8e7ef01.r2.dev",
+          "connect-src 'self' https://*.supabase.co wss://*.supabase.co",
           "frame-src 'self'",
           "object-src 'none'",
           "base-uri 'self'",
@@ -79,7 +84,7 @@ const nextConfig: NextConfig = {
         source: '/w/:path*',
         headers: [
           ...securityHeaders.filter(h => h.key !== 'X-Frame-Options' && h.key !== 'Content-Security-Policy'),
-          { key: 'Content-Security-Policy', value: "frame-ancestors *; default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'" },
+          { key: 'Content-Security-Policy', value: "frame-ancestors *; default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'" },
         ],
       },
     ];

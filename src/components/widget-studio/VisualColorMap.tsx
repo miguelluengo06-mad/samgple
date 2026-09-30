@@ -55,7 +55,7 @@ export function VisualColorMap({ config, onAreaClick }: VisualColorMapProps) {
   };
 
   return (
-    <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
+    <div className="card-liquid rounded-xl p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-medium text-white">Visual Color Guide</h3>
         <span className="text-xs text-gray-500">Click on any area to edit</span>

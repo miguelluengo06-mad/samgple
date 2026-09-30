@@ -64,7 +64,7 @@ function ValidatedInput({
               ? 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
               : isValid
                 ? 'border-green-600 focus:ring-2 focus:ring-green-500 focus:border-green-500'
-                : 'border-gray-700 focus:ring-2 focus:ring-white focus:border-white'
+                : 'border-gray-700 focus:ring-2 focus:ring-olive-500 focus:border-olive-500'
           } ${className}`}
           {...props}
         />
@@ -74,7 +74,7 @@ function ValidatedInput({
             {hasError ? (
               <AlertCircle className="w-4 h-4 text-red-400" />
             ) : isValid ? (
-              <CheckCircle2 className="w-4 h-4 text-green-400" />
+              <CheckCircle2 className="w-4 h-4 text-olive-400" />
             ) : null}
           </div>
         )}
@@ -146,7 +146,7 @@ function ValidatedTextarea({
               ? 'border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
               : isValid
                 ? 'border-green-600 focus:ring-2 focus:ring-green-500 focus:border-green-500'
-                : 'border-gray-700 focus:ring-2 focus:ring-white focus:border-white'
+                : 'border-gray-700 focus:ring-2 focus:ring-olive-500 focus:border-olive-500'
           } ${className}`}
           {...props}
         />
@@ -314,7 +314,7 @@ export function ContentPanel({
                 onClick={() => updateChatbotConfig({ position: option.id })}
                 className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors truncate ${
                   chatbotConfig.position === option.id
-                    ? 'bg-white text-black'
+                    ? 'bg-olive-500 text-black'
                     : 'bg-gray-800/30 border border-gray-700 text-gray-400 hover:text-white hover:bg-gray-700'
                 }`}
               >
@@ -334,7 +334,7 @@ export function ContentPanel({
                 onClick={() => updateChatbotConfig({ displayMode: mode.id })}
                 className={`w-full p-4 rounded-lg text-left transition-colors ${
                   chatbotConfig.displayMode === mode.id
-                    ? 'bg-white text-black'
+                    ? 'bg-olive-500 text-black'
                     : 'bg-gray-800/30 border border-gray-700 hover:bg-gray-700'
                 }`}
               >
@@ -366,7 +366,7 @@ export function ContentPanel({
                   onClick={() => updateChatbotConfig({ bubbleIcon: iconOption.id, bubbleIconCustom: undefined })}
                   className={`p-2 rounded-lg flex items-center justify-center transition-colors ${
                     isSelected
-                      ? 'bg-white text-black'
+                      ? 'bg-olive-500 text-black'
                       : 'bg-gray-800/30 border border-gray-700 text-gray-400 hover:text-white hover:bg-gray-700'
                   }`}
                   title={iconOption.label}
@@ -394,7 +394,7 @@ export function ContentPanel({
                   });
                 }}
                 placeholder="🚀 or https://..."
-                className="flex-1 px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                className="flex-1 px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
               />
               {chatbotConfig.bubbleIconCustom && (
                 <button
@@ -435,7 +435,7 @@ export function ContentPanel({
                 type="text"
                 value={chatbotConfig.allowedFileMimeTypes || ''}
                 onChange={(e) => updateChatbotConfig({ allowedFileMimeTypes: e.target.value })}
-                className="w-full px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white"
+                className="w-full px-3 py-2 bg-gray-800/30 border border-gray-700 rounded-lg text-sm text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
                 placeholder="image/*,application/pdf,.doc,.docx"
               />
               <p className="text-[10px] text-gray-600">
@@ -619,7 +619,7 @@ export function ContentPanel({
                           onClick={() => updateField(index, { width: w.value as FormField['width'] })}
                           className={`px-2 py-1.5 rounded text-xs font-medium transition-colors ${
                             (field.width || '100') === w.value
-                              ? 'bg-white text-black'
+                              ? 'bg-olive-500 text-black'
                               : 'bg-gray-800/50 border border-gray-700 text-gray-400 hover:text-white'
                           }`}
                         >
@@ -645,7 +645,7 @@ export function ContentPanel({
                             onClick={() => updateField(index, { alignment: a.value as FormField['alignment'] })}
                             className={`px-2 py-1.5 rounded text-xs font-medium transition-colors ${
                               (field.alignment || 'left') === a.value
-                                ? 'bg-white text-black'
+                                ? 'bg-olive-500 text-black'
                                 : 'bg-gray-800/50 border border-gray-700 text-gray-400 hover:text-white'
                             }`}
                           >
@@ -734,7 +734,7 @@ export function ContentPanel({
           value={chatbotConfig.buttonText || 'Click Me'}
           onChange={(e) => updateChatbotConfig({ buttonText: e.target.value })}
           placeholder="Click Me"
-          className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-white focus:border-white transition-colors"
+          className="w-full px-4 py-3 bg-gray-800/30 border border-gray-700 rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500 transition-colors"
         />
       </div>
 
@@ -752,7 +752,7 @@ export function ContentPanel({
               onClick={() => updateChatbotConfig({ buttonSize: size.id })}
               className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                 (chatbotConfig.buttonSize || 'medium') === size.id
-                  ? 'bg-white text-black'
+                  ? 'bg-olive-500 text-black'
                   : 'bg-gray-800/30 border border-gray-700 text-gray-400 hover:text-white hover:bg-gray-700'
               }`}
             >
@@ -775,7 +775,7 @@ export function ContentPanel({
               onClick={() => updateChatbotConfig({ buttonWidth: width.id })}
               className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors truncate ${
                 (chatbotConfig.buttonWidth || 'auto') === width.id
-                  ? 'bg-white text-black'
+                  ? 'bg-olive-500 text-black'
                   : 'bg-gray-800/30 border border-gray-700 text-gray-400 hover:text-white hover:bg-gray-700'
               }`}
             >
@@ -812,7 +812,7 @@ export function ContentPanel({
               onClick={() => updateChatbotConfig({ buttonHoverEffect: effect.id })}
               className={`w-full p-3 rounded-lg text-left transition-colors ${
                 (chatbotConfig.buttonHoverEffect || 'scale') === effect.id
-                  ? 'bg-white text-black'
+                  ? 'bg-olive-500 text-black'
                   : 'bg-gray-800/30 border border-gray-700 hover:bg-gray-700'
               }`}
             >

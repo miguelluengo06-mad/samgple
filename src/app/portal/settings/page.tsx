@@ -7,8 +7,6 @@ import { AuthenticationSettings } from '@/components/settings/AuthenticationSett
 import { TeamMembers } from '@/components/settings/TeamMembers';
 import { PlatformSettings } from '@/components/settings/PlatformSettings';
 import { OAuthSettings } from '@/components/settings/OAuthSettings';
-import { APIAccess } from '@/components/settings/APIAccess';
-import { APIDocsSection } from '@/components/settings/APIDocsSection';
 import { useSettingsContext } from './context';
 
 export default function PortalSettingsPage() {
@@ -67,13 +65,6 @@ export default function PortalSettingsPage() {
         {activeTab === 'oauth' && (
           <div className='space-y-8'>
             <OAuthSettings />
-          </div>
-        )}
-
-        {activeTab === 'api' && (
-          <div className='space-y-8'>
-            <APIAccess />
-            <APIDocsSection />
           </div>
         )}
       </div>
