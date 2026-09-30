@@ -24,6 +24,8 @@ export interface LeadAnswers {
     subscription_id?: string | null;
     payment_intent_id?: string | null;
     invoice_id?: string | null;
+    /** Importe reembolsado hasta ahora (la compra original no cambia) */
+    refunded_eur?: number;
   };
 }
 

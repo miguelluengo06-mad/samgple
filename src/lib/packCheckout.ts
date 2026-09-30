@@ -82,7 +82,10 @@ export function buildCheckoutParams(pack: PurchasablePack, ctx: CheckoutContext)
       ? `${ctx.siteUrl}${ctx.returnPath}${cancelSep}pago=cancelado`
       : `${ctx.siteUrl}${ctx.returnPath.slice(0, hashIndex)}${cancelSep}pago=cancelado${ctx.returnPath.slice(hashIndex)}`;
 
-  const notes = [VAT_LABEL, pack.commitment].filter(Boolean).join(' · ');
+  const notes = [
+    [VAT_LABEL, pack.commitment].filter(Boolean).join(' · '),
+    `Al pagar aceptas los [términos y condiciones](${ctx.siteUrl}/terminos) y la [política de privacidad](${ctx.siteUrl}/privacidad).`,
+  ].join('\n\n');
 
   const params: Stripe.Checkout.SessionCreateParams = {
     mode: pack.mode,
@@ -245,6 +248,44 @@ export async function recordOrder(ownerId: string, session: Stripe.Checkout.Sess
 
   await notifyPurchase(ownerId, order, details, created.id);
   return { leadId: created.id, created: true, duplicate: false };
+}
+
+export type OrderEventKey = 'payment_intent_id' | 'subscription_id';
+
+/**
+ * Anota en la solicitud de una compra un evento posterior (reembolso, cobro fallido…).
+ * Se localiza por el id de Stripe guardado en el pedido; si no es una compra de packs, no hace nada.
+ * Idempotente: la misma nota (con su id de evento) no se añade dos veces.
+ */
+export async function noteOrderEvent(
+  ownerId: string,
+  key: OrderEventKey,
+  stripeId: string,
+  eventId: string,
+  note: string,
+  orderPatch?: Record<string, unknown>
+): Promise<boolean> {
+  const { data: lead } = await supabaseAdmin
+    .from('leads')
+    .select('id, notes, answers')
+    .eq('owner_id', ownerId)
+    .eq(`answers->order->>${key}`, stripeId)
+    .maybeSingle();
+  if (!lead) return false;
+
+  const line = `${note} · ${eventId}`;
+  if ((lead.notes || '').includes(eventId)) return false;
+
+  const { error } = await supabaseAdmin
+    .from('leads')
+    .update({
+      notes: [lead.notes, line].filter(Boolean).join('\n'),
+      ...(orderPatch ? { answers: { ...(lead.answers || {}), order: { ...(lead.answers?.order || {}), ...orderPatch } } } : {}),
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', lead.id);
+  if (error) throw new Error(`Could not update lead: ${error.message}`);
+  return true;
 }
 
 /** Aviso por email de una compra (best-effort: la compra ya está guardada). */

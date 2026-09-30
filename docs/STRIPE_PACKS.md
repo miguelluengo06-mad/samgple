@@ -20,7 +20,7 @@ Garantiza que la compra se registre aunque el cliente cierre la pestaña antes d
 
 1. Stripe → **Desarrolladores → Webhooks → Añadir endpoint**.
 2. URL: `https://TU-DOMINIO/api/webhooks/pack-payments`
-3. Eventos: `checkout.session.completed` y `checkout.session.async_payment_succeeded`.
+3. Eventos: `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.async_payment_failed`, `charge.refunded` e `invoice.payment_failed`. Los reembolsos y cobros fallidos de suscripción quedan anotados en la solicitud.
 4. Copia el **secreto de firma** (`whsec_…`) a la variable `STRIPE_PACKS_WEBHOOK_SECRET` y reinicia el servidor.
 
 El registro es idempotente: si llegan a la vez el webhook y la página de gracias, la compra se guarda una sola vez.
@@ -32,7 +32,7 @@ En local puedes usar `stripe listen --forward-to localhost:3001/api/webhooks/pac
 - Precios con IVA incluido (`tax_behavior: inclusive`): el cliente paga la cifra de la web; el IVA se desglosa dentro.
 - El cliente puede indicar el NIF de su empresa en el pago para que salga en la factura.
 - En Stripe → **Ajustes → Facturación**, rellena los datos fiscales de la empresa (nombre, NIF, dirección) y activa el envío de recibos por email.
-- Opcional: `STRIPE_AUTOMATIC_TAX=true` si prefieres que Stripe Tax calcule el IVA (hay que activarlo antes en la cuenta). Normalmente no hace falta.
+- Recomendado para vender a empresas de otros países de la UE: `STRIPE_AUTOMATIC_TAX=true` (Stripe Tax calcula el IVA y aplica la inversión del sujeto pasivo con NIF intracomunitario). Antes hay que completar **Stripe → Tax → Ajustes** (dirección de la sede y registros fiscales); si no, Checkout dará error.
 
 ## 4. Probar antes de cobrar
 

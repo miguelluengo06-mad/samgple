@@ -29,6 +29,8 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange }
   const [deleting, setDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [inviting, setInviting] = useState(false);
+  const [inviteMsg, setInviteMsg] = useState<string | null>(null);
 
   useEscapeKey(!!lead, onClose);
 
@@ -36,6 +38,7 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange }
     setNotes(lead?.notes || '');
     setConfirmDelete(false);
     setError(null);
+    setInviteMsg(null);
   }, [lead?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!lead) return null;
@@ -51,6 +54,29 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange }
   const phoneDigits = whatsappDigits(lead.phone);
   const hasAnswers = !!lead.answers && (!!lead.answers.needs?.length || !!lead.answers.budget || !!lead.answers.timeline);
   const utmEntries = Object.entries(lead.answers?.utm || {});
+
+  const inviteToAccount = async () => {
+    if (!accessToken || !lead.email) return;
+    setInviting(true);
+    setInviteMsg(null);
+    try {
+      const res = await fetch('/api/agency/invite-customer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+        body: JSON.stringify({ email: lead.email, name: lead.name }),
+      });
+      const data = await res.json().catch(() => ({}));
+      setInviteMsg(
+        !res.ok ? data.error || 'No se pudo enviar la invitación'
+          : data.alreadyRegistered ? 'Este cliente ya tiene cuenta.'
+          : 'Invitación enviada por email.'
+      );
+    } catch {
+      setInviteMsg('No se pudo enviar la invitación');
+    } finally {
+      setInviting(false);
+    }
+  };
 
   const updateLead = async (updates: Record<string, any>) => {
     if (!accessToken) return;
@@ -176,6 +202,20 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange }
               <UserPlus className="w-4 h-4" />
               Convertir en cliente
             </button>
+          )}
+
+          {lead.status === 'won' && lead.email && (
+            <div>
+              <button
+                onClick={inviteToAccount}
+                disabled={inviting}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full border border-white/15 text-white/80 hover:text-white hover:border-white/40 transition-colors text-sm font-medium cursor-pointer disabled:opacity-50"
+              >
+                {inviting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
+                Dar acceso a su cuenta (compras y soporte)
+              </button>
+              {inviteMsg && <p className="mt-2 text-xs text-white/50 text-center">{inviteMsg}</p>}
+            </div>
           )}
 
           <div className="space-y-2 text-sm">

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { getAgencyStripe, isPaidSession, recordOrder } from '@/lib/packCheckout';
+import { getAgencyStripe, isPaidSession, noteOrderEvent, recordOrder } from '@/lib/packCheckout';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -10,7 +10,8 @@ export const dynamic = 'force-dynamic';
  *
  * Es la red de seguridad: si el cliente cierra la ventana antes de volver a /gracias, la compra se registra igual.
  * En Stripe → Developers → Webhooks, apunta un endpoint a  https://TU-DOMINIO/api/webhooks/pack-payments
- * con los eventos checkout.session.completed y checkout.session.async_payment_succeeded, y guarda su
+ * con los eventos checkout.session.completed, checkout.session.async_payment_succeeded,
+ * checkout.session.async_payment_failed, charge.refunded e invoice.payment_failed, y guarda su
  * "Signing secret" (whsec_…) en la variable STRIPE_PACKS_WEBHOOK_SECRET.
  * (No es el mismo webhook que /api/webhooks/stripe, que es el de la plataforma.)
  */
@@ -38,7 +39,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
 
-  if (event.type !== 'checkout.session.completed' && event.type !== 'checkout.session.async_payment_succeeded') {
+  const handled = [
+    'checkout.session.completed',
+    'checkout.session.async_payment_succeeded',
+    'checkout.session.async_payment_failed',
+    'charge.refunded',
+    'invoice.payment_failed',
+  ];
+  if (!handled.includes(event.type)) {
     return NextResponse.json({ received: true, ignored: event.type });
   }
 
@@ -48,9 +56,31 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    if (event.type === 'charge.refunded') {
+      const charge = event.data.object as Stripe.Charge;
+      const pi = typeof charge.payment_intent === 'string' ? charge.payment_intent : charge.payment_intent?.id;
+      if (!pi) return NextResponse.json({ received: true, ignored: 'no payment intent' });
+      const total = charge.amount_refunded / 100;
+      const noted = await noteOrderEvent(ctx.ownerId, 'payment_intent_id', pi, event.id, `Reembolsado ${total.toLocaleString('es-ES')} € en Stripe`, { refunded_eur: total });
+      return NextResponse.json({ received: true, noted });
+    }
+
+    if (event.type === 'invoice.payment_failed') {
+      const invoice = event.data.object as Stripe.Invoice;
+      const sub = invoice.parent?.subscription_details?.subscription;
+      const subId = typeof sub === 'string' ? sub : sub?.id;
+      if (!subId) return NextResponse.json({ received: true, ignored: 'not a subscription invoice' });
+      const noted = await noteOrderEvent(ctx.ownerId, 'subscription_id', subId, event.id, 'Cobro de la suscripción fallido en Stripe');
+      return NextResponse.json({ received: true, noted });
+    }
+
     const session = event.data.object as Stripe.Checkout.Session;
     // Only handle payments started by this feature (pack_id is set in the session metadata)
     if (!session.metadata?.pack_id) return NextResponse.json({ received: true, ignored: 'not a pack purchase' });
+    if (event.type === 'checkout.session.async_payment_failed') {
+      console.error(`Pack payments webhook: async payment failed for session ${session.id}`);
+      return NextResponse.json({ received: true, ignored: 'async payment failed' });
+    }
     if (!isPaidSession(session)) return NextResponse.json({ received: true, ignored: 'not paid yet' });
 
     const result = await recordOrder(ctx.ownerId, session);
