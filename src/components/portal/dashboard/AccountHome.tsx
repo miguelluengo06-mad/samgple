@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, CalendarPlus, LifeBuoy, Loader2, Package, PhoneCall, Receipt } from 'lucide-react';
+import { ArrowUpRight, BellRing, CalendarPlus, LifeBuoy, Loader2, Package, PhoneCall, Receipt } from 'lucide-react';
 import { useAuth } from '@/components/AuthContext';
 import { cn } from '@/lib/utils';
 import { formatCallDate, formatCallTime } from '@/lib/booking';
@@ -15,6 +15,15 @@ interface AccountCall {
   call_at: string | null;
   status: 'new' | 'contacted' | 'won' | 'lost';
   created_at: string;
+}
+
+interface AccountNotice {
+  lead_id: string;
+  id: string;
+  title: string;
+  body: string;
+  created_at: string;
+  read_at: string | null;
 }
 
 interface AccountPurchase {
@@ -32,6 +41,7 @@ export default function AccountHome() {
   const { user, session } = useAuth();
   const [calls, setCalls] = useState<AccountCall[] | null>(null);
   const [purchases, setPurchases] = useState<AccountPurchase[] | null>(null);
+  const [notices, setNotices] = useState<AccountNotice[]>([]);
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
@@ -70,11 +80,25 @@ export default function AccountHome() {
       .then((r) => (r.ok ? r.json() : { calls: [] }))
       .then((d) => setCalls(d.calls || []))
       .catch(() => setCalls([]));
+    fetch('/api/account/notices', { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => (r.ok ? r.json() : { notices: [] }))
+      .then((d) => setNotices(d.notices || []))
+      .catch(() => setNotices([]));
     fetch('/api/account/purchases', { headers: { Authorization: `Bearer ${token}` } })
       .then((r) => (r.ok ? r.json() : { purchases: [] }))
       .then((d) => setPurchases(d.purchases || []))
       .catch(() => setPurchases([]));
   }, [token]);
+
+  const markRead = (n: AccountNotice) => {
+    if (n.read_at || !token) return;
+    setNotices((all) => all.map((x) => (x.id === n.id ? { ...x, read_at: new Date().toISOString() } : x)));
+    fetch('/api/account/notices', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ leadId: n.lead_id, noticeId: n.id }),
+    }).catch(() => {});
+  };
 
   const now = Date.now();
   const upcoming = (calls || []).filter((c) => c.kind === 'call' && c.call_at && c.status !== 'lost' && new Date(c.call_at).getTime() + 30 * 60000 >= now)
@@ -93,7 +117,7 @@ export default function AccountHome() {
               <p className="text-sm text-white/50 max-w-md">Desde aquí sigues tus llamadas con nosotros. ¿Hablamos de tu próximo proyecto?</p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Link href="/#contacto" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[var(--signal)] text-black text-sm font-medium hover:bg-[var(--signal-dim)] transition-colors">
+              <Link href="/#contacto" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full portal-cta text-sm transition-colors">
                 <CalendarPlus className="w-4 h-4" /> Agendar llamada
               </Link>
               <Link href="/store" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/15 text-sm text-white/70 hover:text-white hover:border-white/40 transition-colors">
@@ -106,6 +130,39 @@ export default function AccountHome() {
             <p className="text-sm text-yellow-400/90 card-liquid rounded-xl p-4">
               Confirma tu email para ver aquí tus llamadas y compras. Te hemos enviado un enlace al registrarte.
             </p>
+          )}
+
+          {notices.length > 0 && (
+            <section className="card-liquid rounded-2xl p-5 md:p-6" aria-label="Avisos">
+              <h2 className="font-kinetic uppercase text-base mb-3 flex items-center gap-2">
+                <BellRing className="w-4 h-4 text-[var(--signal)]" /> Avisos
+                {notices.some((n) => !n.read_at) && (
+                  <span className="min-w-[20px] h-5 px-1.5 rounded-full bg-[var(--signal)] text-black text-[11px] font-bold flex items-center justify-center">
+                    {notices.filter((n) => !n.read_at).length}
+                  </span>
+                )}
+              </h2>
+              <ul className="space-y-2.5">
+                {notices.map((n) => (
+                  <li key={n.id}>
+                    <button
+                      onClick={() => markRead(n)}
+                      className={cn(
+                        'w-full text-left rounded-xl border p-4 transition-colors',
+                        n.read_at ? 'border-white/10 bg-white/[0.02]' : 'border-[var(--portal-line-strong)] bg-[var(--signal)]/[0.07] cursor-pointer'
+                      )}
+                    >
+                      <div className="flex items-start justify-between gap-3">
+                        <span className="text-sm font-semibold">{n.title}</span>
+                        {!n.read_at && <span className="w-2 h-2 mt-1.5 rounded-full bg-[var(--signal)] shadow-[0_0_8px_var(--signal)] shrink-0" aria-label="Sin leer" />}
+                      </div>
+                      <p className="text-sm text-white/60 mt-1 whitespace-pre-wrap">{n.body}</p>
+                      <div className="text-[11px] text-white/30 mt-2">{new Date(n.created_at).toLocaleString('es-ES')}</div>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
           )}
 
           <section className="card-liquid rounded-2xl p-5 md:p-6">

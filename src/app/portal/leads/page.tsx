@@ -181,7 +181,7 @@ export default function LeadsPage() {
                 aria-pressed={status === f.value}
                 className={cn(
                   'px-3 py-1.5 rounded-full text-sm font-medium transition-colors cursor-pointer whitespace-nowrap border',
-                  status === f.value ? 'bg-[var(--signal)] text-black border-[var(--portal-line-strong)]' : 'bg-white text-white/60 hover:text-white border-[var(--portal-line)]'
+                  status === f.value ? 'bg-[var(--signal)] text-black border-[var(--portal-line-strong)]' : 'bg-white/[0.04] text-white/60 hover:text-white border-[var(--portal-line)]'
                 )}
               >
                 {f.label}
@@ -197,7 +197,7 @@ export default function LeadsPage() {
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar nombre, email, teléfono…"
               aria-label="Buscar solicitudes"
-              className="w-full lg:w-72 pl-9 pr-3 py-2 bg-white border border-[var(--portal-line-strong)] rounded-full text-sm text-white placeholder:text-white/30 outline-none focus:ring-2 focus:ring-[var(--signal)]"
+              className="w-full lg:w-72 pl-9 pr-3 py-2 bg-white/[0.04] border border-[var(--portal-line-strong)] rounded-full text-sm text-white placeholder:text-white/30 outline-none focus:ring-2 focus:ring-[var(--signal)]"
             />
           </div>
         </div>
@@ -228,7 +228,7 @@ export default function LeadsPage() {
                   <div className="flex items-stretch">
                     <button
                       onClick={() => setSelectedId(lead.id)}
-                      className="flex-1 min-w-0 text-left px-4 py-3.5 hover:bg-black/[0.03] transition-colors cursor-pointer"
+                      className="flex-1 min-w-0 text-left px-4 py-3.5 hover:bg-white/[0.03] transition-colors cursor-pointer"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
@@ -268,17 +268,17 @@ export default function LeadsPage() {
                     {(lead.phone || lead.email) && (
                       <div className="flex flex-col border-l border-[var(--portal-line)] divide-y divide-[var(--portal-line)] shrink-0 w-12">
                         {lead.phone && (
-                          <a href={`tel:${lead.phone}`} aria-label={`Llamar a ${lead.name}`} className="flex-1 flex items-center justify-center hover:bg-black/[0.05] text-white/70">
+                          <a href={`tel:${lead.phone}`} aria-label={`Llamar a ${lead.name}`} className="flex-1 flex items-center justify-center hover:bg-white/[0.06] text-white/70">
                             <Phone className="w-4 h-4" />
                           </a>
                         )}
                         {wa && (
-                          <a href={wa} target="_blank" rel="noopener noreferrer" aria-label={`WhatsApp a ${lead.name}`} className="flex-1 flex items-center justify-center hover:bg-black/[0.05] text-green-400">
+                          <a href={wa} target="_blank" rel="noopener noreferrer" aria-label={`WhatsApp a ${lead.name}`} className="flex-1 flex items-center justify-center hover:bg-white/[0.06] text-green-400">
                             <MessageCircle className="w-4 h-4" />
                           </a>
                         )}
                         {lead.email && (
-                          <a href={`mailto:${lead.email}`} aria-label={`Email a ${lead.name}`} className="flex-1 flex items-center justify-center hover:bg-black/[0.05] text-white/70">
+                          <a href={`mailto:${lead.email}`} aria-label={`Email a ${lead.name}`} className="flex-1 flex items-center justify-center hover:bg-white/[0.06] text-white/70">
                             <Mail className="w-4 h-4" />
                           </a>
                         )}
@@ -292,7 +292,7 @@ export default function LeadsPage() {
         )}
       </div>
 
-      <LeadDetailModal lead={selected} onClose={closeModal} accessToken={session?.access_token} onChange={refetch} />
+      <LeadDetailModal lead={selected} onClose={closeModal} accessToken={session?.access_token} onChange={refetch} allLeads={leads} onOpenLead={setSelectedId} />
     </div>
   );
 }

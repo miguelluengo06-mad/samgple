@@ -207,7 +207,7 @@ export default function CallsPage() {
         </div>
       </div>
 
-      <LeadDetailModal lead={selected} onClose={closeModal} accessToken={session?.access_token} onChange={refetch} />
+      <LeadDetailModal lead={selected} onClose={closeModal} accessToken={session?.access_token} onChange={refetch} allLeads={leads} onOpenLead={setSelectedId} />
     </div>
   );
 }

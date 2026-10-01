@@ -1083,62 +1083,98 @@ select {
 }
 
 /*
- * Panel de administración: tema claro con bordes oscuros.
- * Los tokens white/black/gray son pares light-dark(): forzar color-scheme claro invierte todo el panel
- * (texto oscuro sobre fondos claros) sin tocar cada componente. Aquí solo se refuerzan los bordes y el contraste.
+ * Panel de administración: tema oscuro futurista (neón lima sobre negro azulado, cristal y rejilla técnica).
+ * Los tokens white/black/gray son pares light-dark(): con color-scheme oscuro todo el panel hereda texto claro
+ * sobre fondo oscuro. Aquí solo se define el fondo, los bordes con brillo, las tarjetas de cristal y la tipografía.
  */
-.portal-light {
-  color-scheme: light;
-  --signal: #56741a;
-  --signal-dim: #435a13;
-  --portal-ink: #1b2412;
-  --portal-line: rgba(27, 36, 18, 0.38);
-  --portal-line-strong: #1b2412;
-  background: #f3f5ee;
-  color: var(--portal-ink);
+.portal-neon {
+  color-scheme: dark;
+  --signal: #c8ff3e;
+  --signal-dim: #a3e01c;
+  --portal-line: rgba(200, 255, 62, 0.16);
+  --portal-line-strong: rgba(200, 255, 62, 0.42);
+  --portal-glow: rgba(200, 255, 62, 0.22);
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(1100px 560px at 88% -12%, rgba(200, 255, 62, 0.11), transparent 60%),
+    radial-gradient(900px 520px at -12% 112%, rgba(56, 232, 255, 0.08), transparent 55%),
+    #05080b;
+  color: #eef3e6;
 }
-.portal-light [class*='border-white/'],
-.portal-light [class*='border-gray-'],
-.portal-light [class*='border-t-white'],
-.portal-light [class*='border-b-white'] {
+/* Rejilla técnica muy tenue, desvanecida hacia abajo */
+.portal-neon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(200, 255, 62, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200, 255, 62, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: linear-gradient(180deg, #000 0%, transparent 70%);
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 70%);
+}
+.portal-neon [class*='border-white/'],
+.portal-neon [class*='border-gray-'] {
   border-color: var(--portal-line);
 }
-.portal-light [class*='divide-white/'] > *,
-.portal-light [class*='divide-gray-'] > * {
+.portal-neon [class*='divide-white/'] > *,
+.portal-neon [class*='divide-gray-'] > * {
   border-color: var(--portal-line);
 }
-.portal-light .card-liquid {
-  background: #ffffff;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border: 1.5px solid var(--portal-line-strong);
-  box-shadow: 0 2px 0 rgba(27, 36, 18, 0.12);
+.portal-neon .card-liquid {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.02));
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--portal-line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 14px 40px -20px var(--portal-glow);
 }
-.portal-light .card-liquid-interactive:hover {
+.portal-neon .card-liquid-interactive:hover,
+.portal-neon button.card-liquid:hover {
   transform: none;
-  box-shadow: 0 3px 0 rgba(27, 36, 18, 0.22);
+  border-color: var(--portal-line-strong);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 0 0 1px rgba(200, 255, 62, 0.12),
+    0 16px 46px -16px var(--portal-glow);
 }
-.portal-light input,
-.portal-light select,
-.portal-light textarea {
+.portal-neon input,
+.portal-neon select,
+.portal-neon textarea {
+  background-color: rgba(255, 255, 255, 0.04);
   border-color: var(--portal-line);
 }
-/* Texto atenuado: algo más de contraste sobre fondo claro */
-.portal-light [class*='text-white/30'],
-.portal-light [class*='text-white/40'] {
-  color: rgba(27, 36, 18, 0.62);
+.portal-neon input:focus,
+.portal-neon textarea:focus,
+.portal-neon select:focus {
+  border-color: var(--portal-line-strong);
+  box-shadow: 0 0 0 3px rgba(200, 255, 62, 0.14);
 }
-.portal-light [class*='text-white/50'],
-.portal-light [class*='text-white/55'],
-.portal-light [class*='text-white/60'] {
-  color: rgba(27, 36, 18, 0.74);
+/* Tipografía técnica: títulos en display, etiquetas y cifras en monoespaciada */
+.portal-neon h1 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
 }
-/* Colores de estado legibles sobre claro */
-.portal-light .text-green-400 { color: #2b6a1d; }
-.portal-light .text-yellow-400 { color: #8a5d00; }
-.portal-light .text-blue-400 { color: #1b4f9c; }
-.portal-light .text-red-400 { color: #a4281a; }
-.portal-light .text-olive-400 { color: #4a6513; }
-.portal-light .fixed.inset-0[class*='bg-black/'] {
-  background: rgba(27, 36, 18, 0.55);
+.portal-neon [class*='uppercase'][class*='tracking-'],
+.portal-neon .tabular-nums {
+  font-family: var(--font-mono);
 }
+.portal-neon .fixed.inset-0[class*='bg-black/'] {
+  background: rgba(2, 4, 6, 0.74);
+  backdrop-filter: blur(6px);
+}
+.portal-neon ::-webkit-scrollbar { width: 8px; height: 8px; }
+.portal-neon ::-webkit-scrollbar-thumb { background: rgba(200, 255, 62, 0.22); border-radius: 8px; }
+.portal-neon ::-webkit-scrollbar-track { background: transparent; }
+/* Botón principal con brillo */
+.portal-neon .portal-cta {
+  background: var(--signal);
+  color: #0a1002;
+  font-weight: 700;
+  box-shadow: 0 0 22px -4px rgba(200, 255, 62, 0.55);
+}
+.portal-neon .portal-cta:hover { background: #d8ff6b; }

@@ -29,6 +29,8 @@ export interface LeadAnswers {
     /** Packs comprados con su cantidad y precio cobrado */
     items?: { pack_id: string; name: string; qty: number; unit_eur: number; total_eur: number }[];
   };
+  /** Avisos que la agencia ha dejado al cliente (los ve en su cuenta) */
+  notices?: { id: string; title: string; body: string; created_at: string; read_at?: string | null }[];
   /** Carrito sin pagar (posible compra) */
   cart?: { items: { pack_id: string; name: string; qty: number; unit_eur: number; total_eur: number }[]; total_eur: number };
 }

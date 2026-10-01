@@ -83,7 +83,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   return (
     <PortalRoleContext.Provider value={{ role, agencyId, allowFullAccess, loading: roleLoading }}>
       <LeadsProvider enabled={role === 'agency'}>
-        <div className="portal-light h-[100dvh] flex flex-col">
+        <div className="portal-neon h-[100dvh] flex flex-col">
           {IS_DEMO && (
             <div className="flex-shrink-0 bg-yellow-500/10 border-b border-yellow-500/20 px-4 py-2 flex items-center justify-center gap-3 text-xs text-yellow-400">
               <span>{switchError ? 'Login failed — client user not set up yet.' : 'This is a live demo — changes are disabled.'}</span>
