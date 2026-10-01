@@ -2,7 +2,6 @@
 
 import { whatsappDigits } from '@/lib/contact';
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import {
   BellRing,
   Building2,
@@ -19,7 +18,6 @@ import {
   Send,
   ShoppingCart,
   Trash2,
-  UserPlus,
   UserRound,
   X,
   Check,
@@ -66,7 +64,6 @@ const initials = (name: string) =>
 const isPaid = (l: Lead) => !!l.answers?.order && l.answers.order.livemode !== false;
 
 export default function LeadDetailModal({ lead, onClose, accessToken, onChange, allLeads, onOpenLead }: LeadDetailModalProps) {
-  const router = useRouter();
   const [tab, setTab] = useState<Tab>('resumen');
   const [notes, setNotes] = useState('');
   const [saving, setSaving] = useState(false);
@@ -385,16 +382,6 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange, 
                   ))}
                 </div>
               </div>
-
-              {lead.status === 'won' && (
-                <button
-                  onClick={() => router.push(`/portal/clients?inviteName=${encodeURIComponent(lead.name)}${lead.email ? `&inviteEmail=${encodeURIComponent(lead.email)}` : ''}`)}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-full portal-cta transition-colors text-sm cursor-pointer"
-                >
-                  <UserPlus className="w-4 h-4" />
-                  Convertir en cliente
-                </button>
-              )}
 
               {hasAnswers && lead.answers && (
                 <div>

@@ -1178,3 +1178,81 @@ select {
   box-shadow: 0 0 22px -4px rgba(200, 255, 62, 0.55);
 }
 .portal-neon .portal-cta:hover { background: #d8ff6b; }
+
+/* ── Panel: sistema de diseño premium ───────────────────────────────────────── */
+@keyframes pn-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pn-shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+@keyframes pn-pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(200, 255, 62, 0.45); }
+  100% { box-shadow: 0 0 0 12px rgba(200, 255, 62, 0); }
+}
+.portal-neon .pn-in { animation: pn-fade-up 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.portal-neon .pn-skeleton {
+  border-radius: 14px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: 200% 100%;
+  animation: pn-shimmer 1.4s linear infinite;
+}
+.portal-neon .pn-live { animation: pn-pulse-ring 1.8s ease-out infinite; }
+/* Tarjeta destacada: degradado lima con halo */
+.portal-neon .pn-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid var(--portal-line-strong);
+  background:
+    radial-gradient(600px 220px at 100% 0%, rgba(200, 255, 62, 0.20), transparent 65%),
+    radial-gradient(420px 200px at 0% 100%, rgba(56, 232, 255, 0.10), transparent 70%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  box-shadow: 0 30px 80px -40px var(--portal-glow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.portal-neon .pn-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--portal-line);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(238, 243, 230, 0.7);
+  white-space: nowrap;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.portal-neon button.pn-chip { cursor: pointer; min-height: 34px; }
+.portal-neon button.pn-chip:hover { color: #fff; border-color: var(--portal-line-strong); }
+.portal-neon .pn-chip[aria-pressed='true'],
+.portal-neon .pn-chip[aria-selected='true'] {
+  background: var(--signal);
+  border-color: transparent;
+  color: #0a1002;
+  font-weight: 700;
+  box-shadow: 0 0 18px -4px rgba(200, 255, 62, 0.6);
+}
+.portal-neon .pn-title {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(238, 243, 230, 0.42);
+  font-family: var(--font-mono);
+}
+.portal-neon .pn-row {
+  transition: background 0.15s, border-color 0.15s;
+}
+.portal-neon .pn-row:hover { background: rgba(255, 255, 255, 0.035); }
+@media (prefers-reduced-motion: reduce) {
+  .portal-neon .pn-in, .portal-neon .pn-skeleton, .portal-neon .pn-live { animation: none; }
+}
+/* Zonas táctiles cómodas en móvil */
+@media (max-width: 767px) {
+  .portal-neon button, .portal-neon a[role='button'] { min-height: 40px; }
+  .portal-neon input, .portal-neon textarea, .portal-neon select { font-size: 16px; }
+}

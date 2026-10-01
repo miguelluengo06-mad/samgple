@@ -8,13 +8,12 @@ import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 /**
  * /portal — what you land on after signing in, by role:
  *   agency → Resumen dashboard
- *   client → redirected to /portal/manage by the layout
- *   anyone else (registered visitor) → their own account page
+ *   anyone else (registered visitor or invited customer) → their own account page
  */
 export default function PortalHomePage() {
   const { role, loading } = usePortalRoleContext();
 
-  if (loading || role === 'client') return null;
+  if (loading) return null;
 
   return (
     <ErrorBoundary fallbackTitle="Error en el panel" fallbackMessage="Algo ha fallado al cargar el panel. Inténtalo de nuevo.">

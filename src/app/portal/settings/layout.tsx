@@ -23,10 +23,8 @@ function SettingsLayoutInner({ children }: { children: React.ReactNode }) {
     const hash = window.location.hash.replace('#', '');
     if (hash === 'branding' || hash === 'team-members' || hash === 'authentication') {
       if (activeTab !== 'company') router.replace('/portal/settings?tab=company#' + hash);
-    } else if (hash === 'flowengine' || hash === 'ai' || hash === 'stripe' || hash === 'smtp') {
+    } else if (hash === 'stripe' || hash === 'smtp') {
       if (activeTab !== 'connections') router.replace('/portal/settings?tab=connections#' + hash);
-    } else if (hash === 'google' || hash === 'microsoft' || hash === 'slack' || hash === 'linkedin' || hash === 'reddit' || hash === 'twitter') {
-      if (activeTab !== 'oauth') router.replace('/portal/settings?tab=oauth#' + hash);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -58,26 +56,14 @@ function SettingsLayoutInner({ children }: { children: React.ReactNode }) {
   ];
 
   const connectionsSubItems = [
-    { id: 'flowengine', label: 'FlowEngine API' },
-    { id: 'ai', label: 'AI Provider' },
     { id: 'stripe', label: 'Stripe' },
-    { id: 'smtp', label: 'Email SMTP (avisos)' },
-  ];
-
-  const oauthSubItems = [
-    { id: 'google', label: 'Google' },
-    { id: 'microsoft', label: 'Microsoft' },
-    { id: 'slack', label: 'Slack' },
-    { id: 'linkedin', label: 'LinkedIn' },
-    { id: 'reddit', label: 'Reddit' },
-    { id: 'twitter', label: 'Twitter/X' },
+    { id: 'smtp', label: 'Email (avisos)' },
   ];
 
   const tabs: { id: SettingsTab; label: string; subItems: { id: string; label: string }[] }[] = [
     { id: 'account', label: 'Cuenta', subItems: accountSubItems },
     { id: 'company', label: 'Empresa', subItems: companySubItems },
-    { id: 'connections', label: 'Conexiones', subItems: connectionsSubItems },
-    { id: 'oauth', label: 'OAuth', subItems: oauthSubItems },
+    { id: 'connections', label: 'Pagos y email', subItems: connectionsSubItems },
   ];
 
   // Only the agency sees company/connection settings; clients and registered visitors just get their own account
@@ -87,43 +73,39 @@ function SettingsLayoutInner({ children }: { children: React.ReactNode }) {
   return (
     <SettingsContext.Provider value={{ activeTab, isTeams, loading }}>
       <div className="flex-1 overflow-hidden flex flex-col">
-        {/* Header + Apple-style two-tier tab nav */}
-        <div className="flex-shrink-0 border-b border-gray-800 px-6 pt-6">
-          <h1 className="text-lg font-semibold text-white uppercase tracking-wide mb-5">Ajustes</h1>
+        <header className="flex-shrink-0 px-4 md:px-8 pt-4 md:pt-6 pb-3">
+          <h1 className="text-xl md:text-2xl font-semibold tracking-tight">Ajustes</h1>
+          <p className="text-xs md:text-sm text-white/45 mt-0.5">Tu cuenta, tu equipo, los cobros y los avisos.</p>
           {visibleTabs.length > 1 && (
-            <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide -mb-px">
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide mt-4 -mx-1 px-1" role="tablist">
               {visibleTabs.map((tab) => (
                 <button
                   key={tab.id}
+                  role="tab"
+                  aria-selected={activeTab === tab.id}
                   onClick={() => goToAnchor(tab.id)}
-                  className={cn(
-                    'px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap cursor-pointer',
-                    activeTab === tab.id
-                      ? 'border-[var(--signal)] text-white'
-                      : 'border-transparent text-white/50 hover:text-white'
-                  )}
+                  className="pn-chip"
+                  style={{ fontSize: 13, padding: '6px 14px' }}
                 >
                   {tab.label}
                 </button>
               ))}
             </div>
           )}
-        </div>
-
-        {/* Sub-item chip row for the active tab */}
-        {activeSubItems.length > 1 && (
-          <div className="flex-shrink-0 px-6 py-3 border-b border-gray-800 flex items-center gap-2 overflow-x-auto scrollbar-hide">
-            {activeSubItems.map((sub) => (
-              <button
-                key={sub.id}
-                onClick={() => goToAnchor(activeTab, sub.id)}
-                className="px-3 py-1.5 rounded-full text-xs card-liquid text-white/60 hover:text-white transition-colors whitespace-nowrap cursor-pointer"
-              >
-                {sub.label}
-              </button>
-            ))}
-          </div>
-        )}
+          {activeSubItems.length > 1 && (
+            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide mt-3 -mx-1 px-1">
+              {activeSubItems.map((sub) => (
+                <button
+                  key={sub.id}
+                  onClick={() => goToAnchor(activeTab, sub.id)}
+                  className="text-xs text-white/50 hover:text-[var(--signal)] px-2.5 py-1 rounded-lg hover:bg-white/[0.04] transition-colors whitespace-nowrap cursor-pointer"
+                >
+                  {sub.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </header>
 
         {/* Content */}
         {children}

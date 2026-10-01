@@ -5,25 +5,19 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  Boxes,
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
   ExternalLink,
-  FileStack,
   Inbox,
-  Layers,
   LayoutDashboard,
   LineChart,
   LogOut,
   Menu,
-  Package,
   PhoneCall,
-  Server,
+  Search,
   Settings as SettingsIcon,
   UserRound,
-  Users,
-  Wrench,
   X,
   type LucideIcon,
 } from 'lucide-react';
@@ -32,6 +26,7 @@ import KineticWordmark from '@/components/home/KineticWordmark';
 import { useAuth } from '@/components/AuthContext';
 import { useLeadsContext, newRequests, upcomingCalls } from '@/app/portal/leads/context';
 import type { PortalRole } from '@/components/portal/usePortalRole';
+import { OPEN_SEARCH_EVENT } from '@/components/portal/CommandPalette';
 
 interface NavItem {
   label: string;
@@ -61,38 +56,17 @@ const AGENCY_GROUPS: NavGroup[] = [
   },
   {
     label: 'Negocio',
-    items: [
-      { label: 'Clientes', href: '/portal/clients', icon: Users },
-      { label: 'Productos', href: '/portal/services', icon: Package },
-      { label: 'Finanzas', href: '/portal/finance', icon: LineChart },
-    ],
-  },
-  {
-    label: 'Herramientas',
-    collapsible: true,
-    icon: Wrench,
-    items: [
-      { label: 'Instancias', href: '/portal/manage', icon: Boxes },
-      { label: 'Hosting', href: '/portal/hosting', icon: Server },
-      { label: 'Templates', href: '/portal/templates', icon: FileStack },
-      { label: 'Embeds', href: '/portal/ui-studio', icon: Layers },
-    ],
+    items: [{ label: 'Finanzas', href: '/portal/finance', icon: LineChart }],
   },
 ];
 
-const CLIENT_GROUPS: NavGroup[] = [
-  { items: [{ label: 'Mis instancias', href: '/portal/manage', icon: Boxes }] },
-];
-
-// Registered visitors (not the agency, not an invited client) only get their own account area.
+// Customers (registered visitors) only get their own account area.
 const ACCOUNT_GROUPS: NavGroup[] = [
   { items: [{ label: 'Mi cuenta', href: '/portal', icon: UserRound, exact: true }] },
 ];
 
 export function groupsForRole(role: PortalRole): NavGroup[] {
-  if (role === 'agency') return AGENCY_GROUPS;
-  if (role === 'client') return CLIENT_GROUPS;
-  return ACCOUNT_GROUPS;
+  return role === 'agency' ? AGENCY_GROUPS : ACCOUNT_GROUPS;
 }
 
 const OPEN_MENU_EVENT = 'portal-open-menu';
@@ -213,7 +187,7 @@ function SidebarFooter({ role, collapsed, onNavigate }: { role: PortalRole; coll
         {!collapsed && (
           <div className="min-w-0 flex-1">
             <div className="text-xs text-white/85 truncate">{user?.email}</div>
-            <div className="text-[10px] uppercase tracking-widest text-white/35">{role === 'agency' ? 'Administrador' : role === 'client' ? 'Cliente' : 'Cuenta'}</div>
+            <div className="text-[10px] uppercase tracking-widest text-white/35">{role === 'agency' ? 'Administrador' : 'Cliente'}</div>
           </div>
         )}
         <button onClick={logout} className="text-white/40 hover:text-white transition-colors cursor-pointer" aria-label="Cerrar sesión" title="Cerrar sesión">
@@ -304,6 +278,20 @@ export default function PortalSidebar({ role }: { role: PortalRole }) {
               <ChevronsRight className="w-4 h-4" />
             </button>
           )}
+          {role === 'agency' && (
+            <button
+              onClick={() => window.dispatchEvent(new Event(OPEN_SEARCH_EVENT))}
+              className={cn(
+                'flex items-center rounded-xl border border-white/10 bg-white/[0.04] text-white/50 hover:text-white hover:border-[var(--portal-line-strong)] transition-colors cursor-pointer',
+                collapsed ? 'justify-center h-11 w-11 mx-auto' : 'gap-2.5 px-3 py-2.5 text-sm'
+              )}
+              aria-label="Buscar"
+              title="Buscar (⌘K)"
+            >
+              <Search className="w-4 h-4 shrink-0" />
+              {!collapsed && <><span className="flex-1 text-left">Buscar…</span><kbd className="text-[10px] border border-white/15 rounded px-1.5 py-0.5">⌘K</kbd></>}
+            </button>
+          )}
           <NavList role={role} collapsed={collapsed} />
         </div>
         <SidebarFooter role={role} collapsed={collapsed} />
@@ -312,6 +300,16 @@ export default function PortalSidebar({ role }: { role: PortalRole }) {
       {/* Móvil: cabecera fina */}
       <header className="md:hidden flex-shrink-0 h-14 px-4 flex items-center justify-between border-b border-white/10 bg-black/40 backdrop-blur-xl">
         {brand()}
+        <div className="flex items-center gap-2">
+        {role === 'agency' && (
+          <button
+            onClick={() => window.dispatchEvent(new Event(OPEN_SEARCH_EVENT))}
+            className="w-9 h-9 rounded-xl border border-white/10 bg-white/[0.04] text-white/70 hover:text-white flex items-center justify-center cursor-pointer"
+            aria-label="Buscar"
+          >
+            <Search className="w-[18px] h-[18px]" />
+          </button>
+        )}
         <button
           onClick={() => setOpen(true)}
           className="w-9 h-9 rounded-xl border border-white/10 bg-white/[0.04] text-white/70 hover:text-white flex items-center justify-center cursor-pointer"
@@ -319,6 +317,7 @@ export default function PortalSidebar({ role }: { role: PortalRole }) {
         >
           <Menu className="w-[18px] h-[18px]" />
         </button>
+        </div>
       </header>
 
       <AnimatePresence>
@@ -368,7 +367,7 @@ export function PortalBottomNav({ role }: { role: PortalRole }) {
     { label: 'Resumen', href: '/portal', icon: LayoutDashboard, exact: true },
     { label: 'Llamadas', href: '/portal/calls', icon: PhoneCall, badge: 'calls' },
     { label: 'Solicitudes', href: '/portal/leads', icon: Inbox, badge: 'leads' },
-    { label: 'Clientes', href: '/portal/clients', icon: Users },
+    { label: 'Finanzas', href: '/portal/finance', icon: LineChart },
   ];
 
   return (

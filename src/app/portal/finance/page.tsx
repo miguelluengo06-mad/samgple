@@ -6,7 +6,7 @@ import { ArrowDownRight, ArrowUpRight, Repeat, Table2, BarChart3 } from 'lucide-
 import { useAuth } from '@/components/AuthContext';
 import { usePortalRoleContext } from '@/app/portal/context';
 import { useLeadsContext } from '@/app/portal/leads/context';
-import PageHeader from '@/components/portal/PageHeader';
+import { Page, Skeleton } from '@/components/portal/ui';
 import type { MonthRow, PackRow } from '@/lib/finance';
 import { cn } from '@/lib/utils';
 
@@ -60,7 +60,7 @@ function RevenueChart({ months }: { months: MonthRow[] }) {
             <span
               className={cn(
                 'block w-full max-w-[28px] rounded-t-[6px] transition-colors',
-                m.net <= 0 ? 'h-[2px] bg-white/10' : active === i ? 'bg-[var(--signal)]' : 'bg-[var(--signal)]/70'
+                m.net <= 0 ? 'h-[2px] bg-white/10' : active === i ? 'bg-[var(--signal)] shadow-[0_0_14px_var(--signal)]' : 'bg-gradient-to-t from-[var(--signal-dim)]/60 to-[var(--signal)]/90'
               )}
               style={m.net > 0 ? { height: `${Math.max(3, (m.net / max) * 100)}%` } : undefined}
             />
@@ -148,8 +148,8 @@ function BarList({ rows, format }: { rows: { label: string; value: number; hint?
 
 function Kpi({ label, value, delta, hint }: { label: string; value: string; delta?: number | null; hint?: string }) {
   return (
-    <div className="card-liquid rounded-2xl p-5">
-      <div className="text-[11px] uppercase tracking-widest text-white/40 mb-2">{label}</div>
+    <div className="card-liquid rounded-3xl p-5">
+      <div className="pn-title mb-2">{label}</div>
       <div className="text-3xl font-semibold tracking-tight tabular-nums">{value}</div>
       <div className="mt-1 text-xs text-white/40 flex items-center gap-1.5 min-h-4">
         {delta != null && (
@@ -203,21 +203,24 @@ export default function FinancePage() {
   const possible = leads.filter((l) => !l.answers?.order && (l.status === 'new' || l.status === 'contacted')).length;
 
   return (
-    <div className="flex-1 min-w-0 overflow-hidden flex flex-col">
-      <PageHeader
-        title="Finanzas"
-        subtitle={data?.livemode === false ? 'Modo de pruebas de Stripe — importes no reales' : 'Ingresos netos de IVA, desde Stripe'}
-      />
-      <div className="flex-1 overflow-y-auto">
-        <div className="p-4 md:p-6 space-y-5 max-w-[1200px] mx-auto">
+    <Page
+      title="Finanzas"
+      subtitle={data?.livemode === false ? 'Modo de pruebas de Stripe — importes no reales' : 'Ingresos netos de IVA, desde Stripe'}
+      width="max-w-[1200px]"
+    >
+      {
+        <>
           {data === null ? (
-            <p className="text-sm text-white/40">Cargando…</p>
+            <>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">{[0, 1, 2, 3].map((i) => <Skeleton key={i} className="h-28" />)}</div>
+              <Skeleton className="h-72" />
+            </>
           ) : !data.connected ? (
-            <div className="card-liquid rounded-2xl p-6 text-sm text-white/60">
-              Conecta tu clave de Stripe en Ajustes → Conexiones → Cobros con Stripe para ver las finanzas.
+            <div className="card-liquid rounded-3xl p-6 text-sm text-white/60">
+              Conecta tu clave de Stripe en Ajustes → Pagos y email para ver las finanzas.
             </div>
           ) : data.error ? (
-            <div className="card-liquid rounded-2xl p-6 text-sm text-red-400">{data.error}</div>
+            <div className="card-liquid rounded-3xl p-6 text-sm text-red-400">{data.error}</div>
           ) : (
             <>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -231,9 +234,9 @@ export default function FinancePage() {
                 <Kpi label="Posibles compras" value={String(possible)} hint="solicitudes sin pagar" />
               </div>
 
-              <section className="card-liquid rounded-2xl p-5 md:p-6">
+              <section className="card-liquid rounded-3xl p-5 md:p-6">
                 <div className="flex items-center justify-between gap-3 mb-5">
-                  <h2 className="text-sm font-semibold uppercase tracking-wide">Ingresos netos por mes</h2>
+                  <h2 className="pn-title">Ingresos netos por mes</h2>
                   <button
                     onClick={() => setTable((t) => !t)}
                     className="inline-flex items-center gap-1.5 text-xs text-white/50 hover:text-white transition-colors cursor-pointer"
@@ -247,8 +250,8 @@ export default function FinancePage() {
               </section>
 
               <div className="grid lg:grid-cols-2 gap-5">
-                <section className="card-liquid rounded-2xl p-5 md:p-6">
-                  <h2 className="text-sm font-semibold uppercase tracking-wide mb-5">Del interés a la compra</h2>
+                <section className="card-liquid rounded-3xl p-5 md:p-6">
+                  <h2 className="pn-title mb-5">Del interés a la compra</h2>
                   <BarList
                     format={(v) => String(v)}
                     rows={[
@@ -260,8 +263,8 @@ export default function FinancePage() {
                   />
                 </section>
 
-                <section className="card-liquid rounded-2xl p-5 md:p-6">
-                  <h2 className="text-sm font-semibold uppercase tracking-wide mb-5">Ingresos por pack (12 meses)</h2>
+                <section className="card-liquid rounded-3xl p-5 md:p-6">
+                  <h2 className="pn-title mb-5">Ingresos por pack (12 meses)</h2>
                   {(data.packs || []).length === 0 ? (
                     <p className="text-sm text-white/40">Todavía no hay facturas pagadas.</p>
                   ) : (
@@ -278,8 +281,8 @@ export default function FinancePage() {
               </p>
             </>
           )}
-        </div>
-      </div>
-    </div>
+        </>
+      }
+    </Page>
   );
 }

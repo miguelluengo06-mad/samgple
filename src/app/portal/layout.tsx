@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthContext';
 import { BrandedLoadingSpinner } from '@/components/ui/loading-logo';
@@ -8,14 +8,8 @@ import { useAgencyLogo } from '@/hooks/useAgencyLogo';
 import { usePortalRole } from '@/components/portal/usePortalRole';
 import PortalSidebar, { PortalBottomNav } from '@/components/portal/PortalSidebar';
 import LeadsProvider from '@/components/portal/LeadsProvider';
+import CommandPalette from '@/components/portal/CommandPalette';
 import { PortalRoleContext } from './context';
-import { supabase } from '@/lib/supabase';
-
-const IS_DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
-const DEMO_EMAIL = process.env.NEXT_PUBLIC_DEMO_EMAIL || '';
-const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_PASSWORD || '';
-const DEMO_CLIENT_EMAIL = process.env.NEXT_PUBLIC_DEMO_CLIENT_EMAIL || '';
-const DEMO_CLIENT_PASSWORD = process.env.NEXT_PUBLIC_DEMO_CLIENT_PASSWORD || '';
 
 export default function PortalLayout({ children }: { children: React.ReactNode }) {
   const { user, loading: authLoading } = useAuth();
@@ -23,8 +17,6 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const router = useRouter();
   const pathname = usePathname();
   const { role, agencyId, allowFullAccess, loading: roleLoading } = usePortalRole();
-  const [switching, setSwitching] = useState(false);
-  const [switchError, setSwitchError] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -45,36 +37,12 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     }
   }, [authLoading, user, router]);
 
-  // Role-based routing: invited clients live in /portal/manage; registered visitors only get
-  // their account page and account settings — the rest of the admin is for the agency.
+  // Role-based routing: customers only get their account page and account settings —
+  // the rest of the admin is for the agency.
   useEffect(() => {
     if (authLoading || roleLoading || !user) return;
-    if (role === 'client' && pathname === '/portal') router.replace('/portal/manage');
-    if (role === 'free' && pathname !== '/portal' && !pathname?.startsWith('/portal/settings')) router.replace('/portal');
+    if (role !== 'agency' && pathname !== '/portal' && !pathname?.startsWith('/portal/settings')) router.replace('/portal');
   }, [authLoading, roleLoading, user, role, pathname, router]);
-
-  const isClientView = IS_DEMO && DEMO_CLIENT_EMAIL && user?.email === DEMO_CLIENT_EMAIL;
-  const canSwitchToClient = IS_DEMO && DEMO_CLIENT_EMAIL && DEMO_CLIENT_PASSWORD && !isClientView;
-  const canSwitchToAdmin = IS_DEMO && DEMO_EMAIL && DEMO_PASSWORD && isClientView;
-
-  const switchDemo = async (email: string, password: string) => {
-    setSwitching(true);
-    setSwitchError(false);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setSwitchError(true);
-      setTimeout(() => setSwitchError(false), 3000);
-    } else {
-      // Clear cached role and instances so the new user's role is detected fresh
-      try {
-        sessionStorage.removeItem('portal-role');
-        sessionStorage.removeItem('portal-hosting-instances-v3');
-        localStorage.removeItem('flowengine_agency_logo');
-      } catch {}
-      window.location.href = '/portal';
-    }
-    setSwitching(false);
-  };
 
   if (authLoading || !user || roleLoading) {
     return <BrandedLoadingSpinner logoUrl={logoUrl} />;
@@ -84,37 +52,14 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     <PortalRoleContext.Provider value={{ role, agencyId, allowFullAccess, loading: roleLoading }}>
       <LeadsProvider enabled={role === 'agency'}>
         <div className="portal-neon h-[100dvh] flex flex-col">
-          {IS_DEMO && (
-            <div className="flex-shrink-0 bg-yellow-500/10 border-b border-yellow-500/20 px-4 py-2 flex items-center justify-center gap-3 text-xs text-yellow-400">
-              <span>{switchError ? 'Login failed — client user not set up yet.' : 'This is a live demo — changes are disabled.'}</span>
-              {canSwitchToClient && (
-                <button
-                  onClick={() => switchDemo(DEMO_CLIENT_EMAIL, DEMO_CLIENT_PASSWORD)}
-                  disabled={switching}
-                  className="text-white underline underline-offset-2 hover:text-white/70 disabled:opacity-50 transition-colors"
-                >
-                  {switching ? 'Switching…' : 'View as client →'}
-                </button>
-              )}
-              {canSwitchToAdmin && (
-                <button
-                  onClick={() => switchDemo(DEMO_EMAIL, DEMO_PASSWORD)}
-                  disabled={switching}
-                  className="text-white underline underline-offset-2 hover:text-white/70 disabled:opacity-50 transition-colors"
-                >
-                  {switching ? 'Switching…' : '← View as admin'}
-                </button>
-              )}
-            </div>
-          )}
-
           <div className="flex-1 min-h-0 flex flex-col md:flex-row">
             <PortalSidebar role={role} />
-            {/* Content area (secondary panel + main content handled by each page) */}
+            {/* Content area (each page renders its own header) */}
             <main className="flex-1 min-w-0 min-h-0 overflow-hidden flex flex-col md:flex-row">
               {children}
             </main>
             <PortalBottomNav role={role} />
+            {role === 'agency' && <CommandPalette />}
           </div>
         </div>
       </LeadsProvider>

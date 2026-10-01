@@ -1,13 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowUpRight, BellRing, CalendarPlus, LifeBuoy, Loader2, Package, PhoneCall, Receipt } from 'lucide-react';
+import {
+  ArrowUpRight,
+  BellRing,
+  CalendarPlus,
+  CalendarDays,
+  Check,
+  LifeBuoy,
+  Loader2,
+  Package,
+  PhoneCall,
+  Receipt,
+  Sparkles,
+} from 'lucide-react';
 import { useAuth } from '@/components/AuthContext';
 import { cn } from '@/lib/utils';
-import { formatCallDate, formatCallTime } from '@/lib/booking';
-import { statusMeta } from '@/components/portal/leadMeta';
-import PageHeader from '@/components/portal/PageHeader';
+import { buildIcs, formatCallDate, formatCallTime } from '@/lib/booking';
+import { statusMeta, timeAgo } from '@/components/portal/leadMeta';
+import { CountUp, EmptyState, Page, Panel, Skeleton, untilLabel } from '@/components/portal/ui';
 
 interface AccountCall {
   id: string;
@@ -36,17 +48,54 @@ interface AccountPurchase {
   invoice_url: string | null;
 }
 
-/** What a registered visitor sees: their own bookings and the next steps — no admin tools. */
+/** Descarga un archivo .ics para añadir la llamada al calendario del cliente. */
+function downloadIcs(call: AccountCall) {
+  if (!call.call_at) return;
+  const ics = buildIcs({ uid: `${call.id}@samgple`, start: new Date(call.call_at), title: 'Llamada con samgple', description: 'Llamada de 30 minutos (horario de Madrid).' });
+  const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'llamada-samgple.ics';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/** Lo que ve un cliente: sus avisos, su próxima llamada, sus compras y un canal directo con la agencia. */
 export default function AccountHome() {
   const { user, session } = useAuth();
   const [calls, setCalls] = useState<AccountCall[] | null>(null);
   const [purchases, setPurchases] = useState<AccountPurchase[] | null>(null);
-  const [notices, setNotices] = useState<AccountNotice[]>([]);
+  const [notices, setNotices] = useState<AccountNotice[] | null>(null);
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
   const [supportMsg, setSupportMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [now, setNow] = useState(() => Date.now());
   const token = session?.access_token;
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 30000);
+    return () => clearInterval(t);
+  }, []);
+
+  useEffect(() => {
+    if (!token) return;
+    const headers = { Authorization: `Bearer ${token}` };
+    fetch('/api/account/calls', { headers })
+      .then((r) => (r.ok ? r.json() : { calls: [] }))
+      .then((d) => setCalls(d.calls || []))
+      .catch(() => setCalls([]));
+    fetch('/api/account/notices', { headers })
+      .then((r) => (r.ok ? r.json() : { notices: [] }))
+      .then((d) => setNotices(d.notices || []))
+      .catch(() => setNotices([]));
+    fetch('/api/account/purchases', { headers })
+      .then((r) => (r.ok ? r.json() : { purchases: [] }))
+      .then((d) => setPurchases(d.purchases || []))
+      .catch(() => setPurchases([]));
+  }, [token]);
 
   const sendSupport = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,25 +123,9 @@ export default function AccountHome() {
     }
   };
 
-  useEffect(() => {
-    if (!token) return;
-    fetch('/api/account/calls', { headers: { Authorization: `Bearer ${token}` } })
-      .then((r) => (r.ok ? r.json() : { calls: [] }))
-      .then((d) => setCalls(d.calls || []))
-      .catch(() => setCalls([]));
-    fetch('/api/account/notices', { headers: { Authorization: `Bearer ${token}` } })
-      .then((r) => (r.ok ? r.json() : { notices: [] }))
-      .then((d) => setNotices(d.notices || []))
-      .catch(() => setNotices([]));
-    fetch('/api/account/purchases', { headers: { Authorization: `Bearer ${token}` } })
-      .then((r) => (r.ok ? r.json() : { purchases: [] }))
-      .then((d) => setPurchases(d.purchases || []))
-      .catch(() => setPurchases([]));
-  }, [token]);
-
   const markRead = (n: AccountNotice) => {
     if (n.read_at || !token) return;
-    setNotices((all) => all.map((x) => (x.id === n.id ? { ...x, read_at: new Date().toISOString() } : x)));
+    setNotices((all) => (all || []).map((x) => (x.id === n.id ? { ...x, read_at: new Date().toISOString() } : x)));
     fetch('/api/account/notices', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -100,93 +133,168 @@ export default function AccountHome() {
     }).catch(() => {});
   };
 
-  const now = Date.now();
-  const upcoming = (calls || []).filter((c) => c.kind === 'call' && c.call_at && c.status !== 'lost' && new Date(c.call_at).getTime() + 30 * 60000 >= now)
-    .sort((a, b) => new Date(a.call_at!).getTime() - new Date(b.call_at!).getTime());
-  const past = (calls || []).filter((c) => !upcoming.includes(c));
+  const { upcoming, past } = useMemo(() => {
+    const up = (calls || [])
+      .filter((c) => c.kind === 'call' && c.call_at && c.status !== 'lost' && new Date(c.call_at).getTime() + 30 * 60000 >= now)
+      .sort((a, b) => new Date(a.call_at!).getTime() - new Date(b.call_at!).getTime());
+    return { upcoming: up, past: (calls || []).filter((c) => !up.includes(c)) };
+  }, [calls, now]);
+
   const unconfirmed = !!user && !user.email_confirmed_at;
+  const unread = (notices || []).filter((n) => !n.read_at).length;
+  const spent = (purchases || []).reduce((a, p) => a + p.amount_eur, 0);
+  const name = (user?.email || '').split('@')[0].split(/[._-]/)[0];
+  const next = upcoming[0];
+  const loading = calls === null || purchases === null || notices === null;
 
   return (
-    <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
-      <PageHeader title="Mi cuenta" subtitle={user?.email} />
-      <div className="flex-1 overflow-y-auto">
-        <div className="p-4 md:p-6 space-y-5 max-w-3xl">
-          <section className="card-liquid rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <h2 className="font-kinetic uppercase text-xl mb-1">Bienvenido</h2>
-              <p className="text-sm text-white/50 max-w-md">Desde aquí sigues tus llamadas con nosotros. ¿Hablamos de tu próximo proyecto?</p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Link href="/#contacto" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full portal-cta text-sm transition-colors">
-                <CalendarPlus className="w-4 h-4" /> Agendar llamada
-              </Link>
-              <Link href="/store" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/15 text-sm text-white/70 hover:text-white hover:border-white/40 transition-colors">
-                <Package className="w-4 h-4" /> Ver packages
-              </Link>
-            </div>
-          </section>
+    <Page title={name ? `Hola, ${name}` : 'Mi cuenta'} subtitle={user?.email} width="max-w-5xl">
+      {unconfirmed && (
+        <p className="text-sm text-yellow-400/90 card-liquid rounded-2xl p-4 pn-in">
+          Confirma tu email para ver aquí tus avisos, llamadas y compras. Te hemos enviado un enlace al registrarte.
+        </p>
+      )}
 
-          {unconfirmed && (
-            <p className="text-sm text-yellow-400/90 card-liquid rounded-xl p-4">
-              Confirma tu email para ver aquí tus llamadas y compras. Te hemos enviado un enlace al registrarte.
-            </p>
-          )}
-
-          {notices.length > 0 && (
-            <section className="card-liquid rounded-2xl p-5 md:p-6" aria-label="Avisos">
-              <h2 className="font-kinetic uppercase text-base mb-3 flex items-center gap-2">
-                <BellRing className="w-4 h-4 text-[var(--signal)]" /> Avisos
-                {notices.some((n) => !n.read_at) && (
-                  <span className="min-w-[20px] h-5 px-1.5 rounded-full bg-[var(--signal)] text-black text-[11px] font-bold flex items-center justify-center">
-                    {notices.filter((n) => !n.read_at).length}
+      {/* Lo más importante ahora */}
+      <section className="pn-hero p-5 md:p-7 pn-in">
+        {loading ? (
+          <Skeleton className="h-32" />
+        ) : (
+          <div className="grid gap-6 md:grid-cols-[1.5fr_1fr] items-center">
+            <div className="min-w-0">
+              {next ? (
+                <>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-3 py-1 bg-[var(--signal)] text-black mb-3">
+                    <PhoneCall className="w-3.5 h-3.5" /> Tu próxima llamada · {untilLabel(next.call_at!, now)}
                   </span>
-                )}
-              </h2>
+                  <h2 className="text-2xl md:text-3xl font-semibold tracking-tight capitalize">{formatCallDate(next.call_at!)}</h2>
+                  <p className="text-sm text-white/55 mt-1">{formatCallTime(next.call_at!)} · horario de Madrid · 30 min</p>
+                  <button onClick={() => downloadIcs(next)} className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/15 text-sm hover:border-[var(--portal-line-strong)] cursor-pointer">
+                    <CalendarDays className="w-4 h-4" /> Añadir al calendario
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-3 py-1 border border-[var(--portal-line-strong)] text-[var(--signal)] mb-3">
+                    <Sparkles className="w-3.5 h-3.5" /> Tu espacio
+                  </span>
+                  <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">¿Hablamos de tu próximo vídeo?</h2>
+                  <p className="text-sm text-white/55 mt-1 max-w-md">Agenda una llamada de 30 minutos o elige directamente el pack que mejor encaje con tu negocio.</p>
+                  <div className="flex flex-wrap gap-2 mt-5">
+                    <Link href="/#contacto" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full portal-cta text-sm">
+                      <CalendarPlus className="w-4 h-4" /> Agendar llamada
+                    </Link>
+                    <Link href="/#precios" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/15 text-sm hover:border-[var(--portal-line-strong)]">
+                      <Package className="w-4 h-4" /> Ver packs
+                    </Link>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <dl className="grid grid-cols-3 md:grid-cols-1 gap-2">
+              {[
+                { label: 'Avisos sin leer', value: <CountUp value={unread} />, accent: unread > 0, icon: <BellRing className="w-4 h-4" /> },
+                { label: 'Compras', value: <CountUp value={(purchases || []).length} />, accent: false, icon: <Receipt className="w-4 h-4" /> },
+                { label: 'Invertido', value: <CountUp value={spent} format={(n) => `${n.toLocaleString('es-ES')} €`} />, accent: false, icon: <Package className="w-4 h-4" /> },
+              ].map((s) => (
+                <div key={s.label} className="rounded-2xl border border-white/10 bg-white/[0.04] px-3.5 py-3 flex md:items-center md:justify-between gap-1 flex-col md:flex-row">
+                  <dt className="pn-title flex items-center gap-1.5">{s.icon}<span className="hidden sm:inline">{s.label}</span></dt>
+                  <dd className={cn('text-xl font-semibold tabular-nums', s.accent && 'text-[var(--signal)]')}>{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )}
+      </section>
+
+      <div className="grid gap-4 md:gap-5 lg:grid-cols-[1.4fr_1fr] items-start">
+        <div className="space-y-4 md:space-y-5 min-w-0">
+          {/* Avisos */}
+          <Panel delay={80}>
+            <h2 className="pn-title mb-4 flex items-center gap-2">
+              <BellRing className="w-3.5 h-3.5 text-[var(--signal)]" /> Avisos
+              {unread > 0 && <span className="min-w-[20px] h-5 px-1.5 rounded-md bg-[var(--signal)] text-black text-[11px] font-bold font-mono flex items-center justify-center">{unread}</span>}
+            </h2>
+            {notices === null ? (
+              <Skeleton className="h-20" />
+            ) : notices.length === 0 ? (
+              <EmptyState icon={<BellRing className="w-6 h-6" />} title="Sin avisos por ahora" text="Aquí te avisaremos cuando tu guion esté listo para revisar o tus vídeos estén terminados." />
+            ) : (
               <ul className="space-y-2.5">
                 {notices.map((n) => (
                   <li key={n.id}>
                     <button
                       onClick={() => markRead(n)}
                       className={cn(
-                        'w-full text-left rounded-xl border p-4 transition-colors',
-                        n.read_at ? 'border-white/10 bg-white/[0.02]' : 'border-[var(--portal-line-strong)] bg-[var(--signal)]/[0.07] cursor-pointer'
+                        'w-full text-left rounded-2xl border p-4 transition-colors',
+                        n.read_at ? 'border-white/10 bg-white/[0.02]' : 'border-[var(--portal-line-strong)] bg-[var(--signal)]/[0.07] cursor-pointer shadow-[0_0_30px_-12px_var(--portal-glow)]'
                       )}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <span className="text-sm font-semibold">{n.title}</span>
-                        {!n.read_at && <span className="w-2 h-2 mt-1.5 rounded-full bg-[var(--signal)] shadow-[0_0_8px_var(--signal)] shrink-0" aria-label="Sin leer" />}
+                        {!n.read_at ? (
+                          <span className="w-2 h-2 mt-1.5 rounded-full bg-[var(--signal)] shadow-[0_0_8px_var(--signal)] shrink-0" aria-label="Sin leer" />
+                        ) : (
+                          <Check className="w-3.5 h-3.5 mt-0.5 text-white/30 shrink-0" aria-label="Leído" />
+                        )}
                       </div>
                       <p className="text-sm text-white/60 mt-1 whitespace-pre-wrap">{n.body}</p>
-                      <div className="text-[11px] text-white/30 mt-2">{new Date(n.created_at).toLocaleString('es-ES')}</div>
+                      <div className="text-[11px] text-white/35 mt-2">{timeAgo(n.created_at)}</div>
                     </button>
                   </li>
                 ))}
               </ul>
-            </section>
-          )}
+            )}
+          </Panel>
 
-          <section className="card-liquid rounded-2xl p-5 md:p-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wide mb-5">Tus llamadas</h2>
+          {/* Compras */}
+          <Panel title="Tus compras" delay={140}>
+            {purchases === null ? (
+              <Skeleton className="h-20" />
+            ) : purchases.length === 0 ? (
+              <EmptyState icon={<Receipt className="w-6 h-6" />} title="Todavía no hay compras" text="Cuando compres un pack con este email, lo verás aquí con su factura." />
+            ) : (
+              <ul className="divide-y divide-white/10 -my-2">
+                {purchases.map((p) => (
+                  <li key={p.id} className="flex items-center gap-3 md:gap-4 py-3.5">
+                    <div className="min-w-0 flex-1">
+                      {p.items.length > 1 ? (
+                        <ul className="text-sm font-medium space-y-0.5">
+                          {p.items.map((it) => <li key={it.name} className="truncate">{it.qty > 1 ? `${it.qty} × ` : ''}{it.name}</li>)}
+                        </ul>
+                      ) : (
+                        <div className="text-sm font-medium truncate">{p.pack_name || 'Pack'}</div>
+                      )}
+                      <div className="text-xs text-white/45 mt-0.5">
+                        {p.paid_at ? new Date(p.paid_at).toLocaleDateString('es-ES') : ''}{p.monthly ? ' · mensual' : ''}
+                      </div>
+                    </div>
+                    <div className="text-sm font-semibold tabular-nums shrink-0">{p.amount_eur.toLocaleString('es-ES')} €</div>
+                    {p.invoice_url && (
+                      <a href={p.invoice_url} target="_blank" rel="noopener noreferrer" className="pn-chip shrink-0">Factura</a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Panel>
+
+          {/* Llamadas */}
+          <Panel title="Tus llamadas" delay={200}>
             {calls === null ? (
-              <p className="text-sm text-white/40">Cargando…</p>
+              <Skeleton className="h-20" />
             ) : calls.length === 0 ? (
-              <div className="text-center py-6">
-                <PhoneCall className="w-8 h-8 mx-auto text-white/20 mb-3" />
-                <p className="text-sm text-white/40">Todavía no tienes llamadas agendadas con este email.</p>
-              </div>
+              <EmptyState icon={<PhoneCall className="w-6 h-6" />} title="Aún no has agendado llamadas" text="Reserva un hueco de 30 minutos cuando quieras." action={<Link href="/#contacto" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full portal-cta text-sm"><CalendarPlus className="w-4 h-4" /> Agendar llamada</Link>} />
             ) : (
               <ul className="divide-y divide-white/10 -my-2">
                 {[...upcoming, ...past].map((c) => {
                   const meta = statusMeta(c.status, c.kind);
                   return (
-                    <li key={c.id} className="flex items-center gap-4 py-3">
+                    <li key={c.id} className="flex items-center gap-4 py-3.5">
                       <div className="min-w-0 flex-1">
-                        <div className="text-sm font-medium truncate">
-                          {c.call_at ? formatCallDate(c.call_at, { withYear: true }) : 'Solicitud de propuesta'}
-                        </div>
-                        <div className="text-xs text-white/40">
-                          {c.call_at ? `${formatCallTime(c.call_at)} · horario de Madrid` : new Date(c.created_at).toLocaleDateString('es-ES')}
-                        </div>
+                        <div className="text-sm font-medium truncate capitalize">{c.call_at ? formatCallDate(c.call_at, { withYear: true }) : 'Solicitud de propuesta'}</div>
+                        <div className="text-xs text-white/45 mt-0.5">{c.call_at ? `${formatCallTime(c.call_at)} · horario de Madrid` : new Date(c.created_at).toLocaleDateString('es-ES')}</div>
                       </div>
                       <span className={cn('px-2.5 py-0.5 text-xs rounded-full inline-flex items-center gap-1.5 shrink-0', meta.badgeClass)}>
                         <span className={cn('w-1.5 h-1.5 rounded-full', meta.dotColor)} />
@@ -197,92 +305,48 @@ export default function AccountHome() {
                 })}
               </ul>
             )}
-          </section>
+          </Panel>
+        </div>
 
-          <section className="card-liquid rounded-2xl p-5 md:p-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wide mb-5">Tus compras</h2>
-            {purchases === null ? (
-              <p className="text-sm text-white/40">Cargando…</p>
-            ) : purchases.length === 0 ? (
-              <div className="text-center py-6">
-                <Receipt className="w-8 h-8 mx-auto text-white/20 mb-3" />
-                <p className="text-sm text-white/40">Todavía no hay compras con este email.</p>
-              </div>
-            ) : (
-              <ul className="divide-y divide-white/10 -my-2">
-                {purchases.map((p) => (
-                  <li key={p.id} className="flex items-center gap-4 py-3">
-                    <div className="min-w-0 flex-1">
-                      {p.items.length > 1 ? (
-                        <ul className="text-sm font-medium space-y-0.5">
-                          {p.items.map((it) => (
-                            <li key={it.name} className="truncate">{it.qty > 1 ? `${it.qty} × ` : ''}{it.name}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <div className="text-sm font-medium truncate">{p.pack_name || 'Pack'}</div>
-                      )}
-                      <div className="text-xs text-white/40">
-                        {p.paid_at ? new Date(p.paid_at).toLocaleDateString('es-ES') : ''}
-                        {p.monthly ? ' · mensual' : ''}
-                      </div>
-                    </div>
-                    <div className="text-sm shrink-0">{p.amount_eur.toLocaleString('es-ES')} €</div>
-                    {p.invoice_url && (
-                      <a href={p.invoice_url} target="_blank" rel="noopener noreferrer" className="text-xs text-white/50 hover:text-white underline underline-offset-2 shrink-0">
-                        Factura
-                      </a>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-
-          <section className="card-liquid rounded-2xl p-5 md:p-6">
-            <h2 className="text-sm font-semibold uppercase tracking-wide mb-1 flex items-center gap-2">
-              <LifeBuoy className="w-4 h-4" /> Atención al cliente
-            </h2>
-            <p className="text-xs text-white/40 mb-4">Escríbenos y te respondemos por email.</p>
-            <form onSubmit={sendSupport} className="space-y-3">
-              <input
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                maxLength={150}
-                required
-                placeholder="Asunto"
-                aria-label="Asunto"
-                className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2.5 text-sm outline-none focus:border-white/40"
-              />
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                maxLength={4000}
-                required
-                rows={5}
-                placeholder="¿En qué podemos ayudarte?"
-                aria-label="Mensaje"
-                className="w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2.5 text-sm outline-none focus:border-white/40 resize-y"
-              />
-              <div className="flex items-center gap-3">
-                <button
-                  type="submit"
-                  disabled={sending || unconfirmed}
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[var(--signal)] text-black text-sm font-medium hover:bg-[var(--signal-dim)] transition-colors disabled:opacity-50 cursor-pointer"
-                >
-                  {sending && <Loader2 className="w-4 h-4 animate-spin" />}
-                  Enviar mensaje
-                </button>
-                {supportMsg && <p className={cn('text-xs', supportMsg.ok ? 'text-green-400' : 'text-red-400')}>{supportMsg.text}</p>}
-              </div>
-            </form>
-          </section>
-
-          <Link href="/portal/settings" className="inline-flex items-center gap-1 text-sm text-white/40 hover:text-white transition-colors">
+        {/* Atención al cliente */}
+        <Panel delay={120} className="lg:sticky lg:top-2">
+          <h2 className="pn-title mb-1 flex items-center gap-2"><LifeBuoy className="w-3.5 h-3.5 text-[var(--signal)]" /> Habla con nosotros</h2>
+          <p className="text-xs text-white/45 mb-4">Escríbenos y te respondemos por email.</p>
+          <form onSubmit={sendSupport} className="space-y-3">
+            <input
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              maxLength={150}
+              required
+              placeholder="Asunto"
+              aria-label="Asunto"
+              className="w-full rounded-2xl border px-4 py-3 text-sm outline-none"
+            />
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              maxLength={4000}
+              required
+              rows={6}
+              placeholder="¿En qué podemos ayudarte?"
+              aria-label="Mensaje"
+              className="w-full rounded-2xl border px-4 py-3 text-sm outline-none resize-y"
+            />
+            <button
+              type="submit"
+              disabled={sending || unconfirmed}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-full portal-cta text-sm disabled:opacity-50 cursor-pointer"
+            >
+              {sending && <Loader2 className="w-4 h-4 animate-spin" />}
+              Enviar mensaje
+            </button>
+            {supportMsg && <p role="status" className={cn('text-xs text-center', supportMsg.ok ? 'text-green-400' : 'text-red-400')}>{supportMsg.text}</p>}
+          </form>
+          <Link href="/portal/settings" className="mt-5 inline-flex items-center gap-1 text-xs text-white/45 hover:text-white transition-colors">
             Ajustes de la cuenta <ArrowUpRight className="w-3.5 h-3.5" />
           </Link>
-        </div>
+        </Panel>
       </div>
-    </div>
+    </Page>
   );
 }

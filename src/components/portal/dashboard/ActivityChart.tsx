@@ -47,7 +47,7 @@ export default function ActivityChart({ leads }: { leads: Lead[] }) {
           >
             <span
               className={`block w-full max-w-[14px] rounded-t-[4px] transition-colors ${
-                s.count === 0 ? 'h-[2px] bg-white/10' : active === i ? 'bg-[var(--signal)]' : 'bg-[var(--signal)]/70'
+                s.count === 0 ? 'h-[2px] bg-white/10' : active === i ? 'bg-[var(--signal)] shadow-[0_0_14px_var(--signal)]' : 'bg-gradient-to-t from-[var(--signal-dim)]/60 to-[var(--signal)]/90'
               }`}
               style={s.count > 0 ? { height: `${Math.max(8, (s.count / max) * 100)}%` } : undefined}
             />

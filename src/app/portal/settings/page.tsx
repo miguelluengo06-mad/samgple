@@ -6,7 +6,6 @@ import { AgencyBranding } from '@/components/settings/AgencyBranding';
 import { AuthenticationSettings } from '@/components/settings/AuthenticationSettings';
 import { TeamMembers } from '@/components/settings/TeamMembers';
 import { PlatformSettings } from '@/components/settings/PlatformSettings';
-import { OAuthSettings } from '@/components/settings/OAuthSettings';
 import { useSettingsContext } from './context';
 
 export default function PortalSettingsPage() {
@@ -25,11 +24,11 @@ export default function PortalSettingsPage() {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="max-w-5xl mx-auto p-6">
+      <div className="max-w-5xl mx-auto px-4 md:px-8 pb-10 pt-2">
         {activeTab === 'account' && (
           <div className='space-y-8'>
             <section id='account-settings' className='scroll-mt-24'>
-              <h2 className='text-xl font-semibold text-white mb-4'>Account Settings</h2>
+              <h2 className='pn-title mb-4'>Cuenta</h2>
               <AccountSettings />
             </section>
           </div>
@@ -38,19 +37,19 @@ export default function PortalSettingsPage() {
         {activeTab === 'company' && (
           <>
             <section id="team-members" className='scroll-mt-24 mb-8'>
-              <h2 className='text-xl font-semibold text-white mb-4'>Team Members</h2>
+              <h2 className='pn-title mb-4'>Equipo</h2>
               <TeamMembers />
             </section>
 
             <div className='space-y-8'>
               <section id="branding" className='scroll-mt-24'>
-                <h2 className='text-xl font-semibold text-white mb-4'>Name and Logo</h2>
+                <h2 className='pn-title mb-4'>Nombre y logo</h2>
                 <AgencyBranding />
               </section>
             </div>
 
             <section id="authentication" className='scroll-mt-24 mt-8'>
-              <h2 className='text-xl font-semibold text-white mb-4'>Authentication</h2>
+              <h2 className='pn-title mb-4'>Acceso y autenticación</h2>
               <AuthenticationSettings />
             </section>
           </>
@@ -62,11 +61,6 @@ export default function PortalSettingsPage() {
           </div>
         )}
 
-        {activeTab === 'oauth' && (
-          <div className='space-y-8'>
-            <OAuthSettings />
-          </div>
-        )}
       </div>
     </div>
   );
