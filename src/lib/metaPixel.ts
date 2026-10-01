@@ -2,12 +2,10 @@
  * Meta Pixel. Solo se carga si hay ID y la persona ha aceptado las cookies de publicidad
  * (ver src/lib/cookieConsent.ts y src/components/MetaPixel.tsx).
  *
- * ┌────────────────────────────────────────────────────────────────────────────┐
- * │  PEGA AQUÍ EL ID DE TU PÍXEL (Meta → Administrador de eventos → Orígenes    │
- * │  de datos → tu píxel → el número de 15-16 dígitos). Vacío = píxel apagado.  │
- * └────────────────────────────────────────────────────────────────────────────┘
+ * El ID va en la variable de entorno NEXT_PUBLIC_META_PIXEL_ID (Vercel → Settings → Environment Variables).
+ * Vacío = píxel apagado. Al ser NEXT_PUBLIC_, hay que volver a desplegar tras cambiarla.
  */
-export const META_PIXEL_ID = '';
+export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
 
 /** Rutas donde nunca se carga (panel de administración y acceso). */
 export const PIXEL_EXCLUDED_PREFIXES = ['/portal', '/auth', '/invite', '/w/'];

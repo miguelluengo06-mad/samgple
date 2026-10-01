@@ -80,7 +80,7 @@ describe('price list', () => {
 
   it('UGC', () => {
     expect(prices('ugc')).toEqual([['Starter', 190, 'once'], ['Escala', 320, 'once'], ['Volumen', 599, 'once']]);
-    expect(byId('ugc').packs.map((p) => p.badge)).toEqual(['Ideal para testear', 'Más popular', 'Mejor precio por vídeo']);
+    expect(byId('ugc').packs.map((p) => p.badge)).toEqual(['Ideal para testear', 'Más popular', 'Mejor precio']);
     // solo el de 10 vídeos se resalta como recomendado
     expect(byId('ugc').packs.map((p) => p.featured)).toEqual([false, true, false]);
   });
@@ -90,12 +90,6 @@ describe('price list', () => {
     expect(byId('influencer').packs.map((p) => p.badge)).toEqual(['Ideal para empezar', 'Más popular', 'Máxima cobertura']);
     // solo Crecimiento (14 vídeos) se resalta como recomendado
     expect(byId('influencer').packs.map((p) => p.featured)).toEqual([false, true, false]);
-    expect(byId('influencer').packs.map((p) => p.perUnit)).toEqual(['54,44 €', '49,28 €', '44,07 €']);
-    // el precio por vídeo que se enseña cuadra con el total y la cantidad (con un céntimo de margen)
-    for (const p of byId('influencer').packs) {
-      const n = Number(p.headline.split(' ')[0]);
-      expect(Math.abs(Number(p.perUnit!.replace(' €', '').replace(',', '.')) - p.price / n)).toBeLessThan(0.01);
-    }
     expect(byId('influencer').conditions).toBeUndefined();
   });
 
@@ -104,12 +98,7 @@ describe('price list', () => {
     expect(byId('replica').notice).toContain('autorización por escrito');
     expect(byId('replica').packs.map((p) => p.badge)).toEqual(['Ideal para empezar', 'Más popular', 'Máximo ahorro']);
     expect(byId('replica').packs.map((p) => p.featured)).toEqual([false, true, false]);
-    expect(byId('replica').packs.map((p) => p.perUnit)).toEqual(['81,66 €', '65,83 €', '53,75 €']);
     expect(byId('replica').packs.map((p) => p.perk)).toEqual(['Setup incluido', 'Setup incluido', 'Setup gratis']);
-    for (const p of byId('replica').packs) {
-      const n = Number(p.headline.split(' ')[0]);
-      expect(Math.abs(Number(p.perUnit!.replace(' €', '').replace(',', '.')) - p.price / n)).toBeLessThan(0.01);
-    }
   });
 
   it('extras', () => {

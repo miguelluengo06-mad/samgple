@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit, isValidEmail, sanitizeString } from '@/lib/validation';
 import { resolveLeadMailer, sendLeadMail } from '@/lib/leadMailer';
+import { leadAlertText, sendTelegram } from '@/lib/telegram';
 import { leadEmail } from '@/lib/emailTemplates';
 import { VAT_LABEL, WELCOME_PACK, welcomeSpots } from '@/lib/packs';
 import { validateSlot, sanitizeAnswers } from '@/lib/booking';
@@ -154,6 +155,13 @@ export async function POST(req: NextRequest) {
       console.error('Contact form: failed to save lead:', insertError);
       return NextResponse.json({ error: 'No se pudo enviar. Inténtalo de nuevo.' }, { status: 500 });
     }
+
+    // Best-effort Telegram alert (needs TELEGRAM_BOT_TOKEN + TELEGRAM_CHAT_ID) — never blocks the lead.
+    const siteBase = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || new URL(req.url).origin;
+    await sendTelegram(
+      leadAlertText({ id: lead?.id, name, email: email || null, phone: phone || null, company: company || null, message, kind, source, callAt, packName: pack ? 'Bienvenida' : null, utmSource: utm?.utm_source || null }),
+      { label: 'Abrir en el panel', url: `${siteBase}/portal/${callAt ? 'calls' : 'leads'}${lead?.id ? `?open=${lead.id}` : ''}` }
+    );
 
     // Best-effort email notification — the lead is already saved regardless of this.
     const mailer = await resolveLeadMailer(supabaseAdmin, owner.id).catch(() => null);

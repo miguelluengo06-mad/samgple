@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit, isValidUUID } from '@/lib/validation';
 import { WELCOME_PACK, getPurchasable, welcomeSpots } from '@/lib/packs';
+import { trackingFromCookies } from '@/lib/metaCapi';
 import { buildCheckoutParams, getAgencyStripe, safeReturnPath } from '@/lib/packCheckout';
 
 export const runtime = 'nodejs';
@@ -64,7 +65,7 @@ export async function POST(req: NextRequest) {
     const returnPath = safeReturnPath(body.returnPath, pack.id === WELCOME_PACK.id ? '/landing#pack' : '/#precios');
 
     const session = await stripeCtx.stripe.checkout.sessions.create(
-      buildCheckoutParams(pack, { siteUrl, returnPath, leadId })
+      buildCheckoutParams(pack, { siteUrl, returnPath, leadId, tracking: trackingFromCookies((n) => req.cookies.get(n)?.value) })
     );
     if (!session.url) throw new Error('Stripe did not return a checkout URL');
 

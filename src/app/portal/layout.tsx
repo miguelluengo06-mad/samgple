@@ -6,7 +6,7 @@ import { useAuth } from '@/components/AuthContext';
 import { BrandedLoadingSpinner } from '@/components/ui/loading-logo';
 import { useAgencyLogo } from '@/hooks/useAgencyLogo';
 import { usePortalRole } from '@/components/portal/usePortalRole';
-import PortalSidebar from '@/components/portal/PortalSidebar';
+import PortalSidebar, { PortalBottomNav } from '@/components/portal/PortalSidebar';
 import LeadsProvider from '@/components/portal/LeadsProvider';
 import { PortalRoleContext } from './context';
 import { supabase } from '@/lib/supabase';
@@ -83,7 +83,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   return (
     <PortalRoleContext.Provider value={{ role, agencyId, allowFullAccess, loading: roleLoading }}>
       <LeadsProvider enabled={role === 'agency'}>
-        <div className="h-screen bg-black flex flex-col">
+        <div className="portal-light h-[100dvh] flex flex-col">
           {IS_DEMO && (
             <div className="flex-shrink-0 bg-yellow-500/10 border-b border-yellow-500/20 px-4 py-2 flex items-center justify-center gap-3 text-xs text-yellow-400">
               <span>{switchError ? 'Login failed — client user not set up yet.' : 'This is a live demo — changes are disabled.'}</span>
@@ -114,6 +114,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
             <main className="flex-1 min-w-0 min-h-0 overflow-hidden flex flex-col md:flex-row">
               {children}
             </main>
+            <PortalBottomNav role={role} />
           </div>
         </div>
       </LeadsProvider>

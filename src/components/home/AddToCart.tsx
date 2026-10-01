@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Check, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/lib/useCart';
+import { metaTrack } from '@/lib/metaPixel';
 
 /** Botón «Añadir al carrito» de las fichas de pack. Tras añadir, enseña un acceso directo al carrito. */
-export function AddToCartButton({ packId, className }: { packId: string; className?: string }) {
+export function AddToCartButton({ packId, name, value, className }: { packId: string; name?: string; value?: number; className?: string }) {
   const { add, items } = useCart();
   const [justAdded, setJustAdded] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -16,6 +17,7 @@ export function AddToCartButton({ packId, className }: { packId: string; classNa
 
   const onClick = () => {
     add(packId);
+    metaTrack('AddToCart', { content_ids: [packId], content_name: name, content_type: 'product', value, currency: 'EUR' });
     setJustAdded(true);
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => setJustAdded(false), 2200);

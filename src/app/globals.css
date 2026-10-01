@@ -779,24 +779,6 @@ select {
   line-height: 1;
 }
 
-.pack-card__per {
-  align-self: flex-start;
-  margin-top: 10px;
-  padding: 6px 12px;
-  border-radius: 14px;
-  background: rgba(22, 33, 14, 0.08);
-  color: rgba(22, 33, 14, 0.78);
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.3;
-}
-.pack-card__per strong {
-  color: #16210e;
-  font-size: 16px;
-  font-weight: 800;
-  font-variant-numeric: tabular-nums;
-}
-
 .pack-card__perk {
   display: inline-flex;
   align-items: center;
@@ -1098,4 +1080,65 @@ select {
   width: 16px;
   height: 16px;
   color: var(--signal);
+}
+
+/*
+ * Panel de administración: tema claro con bordes oscuros.
+ * Los tokens white/black/gray son pares light-dark(): forzar color-scheme claro invierte todo el panel
+ * (texto oscuro sobre fondos claros) sin tocar cada componente. Aquí solo se refuerzan los bordes y el contraste.
+ */
+.portal-light {
+  color-scheme: light;
+  --signal: #56741a;
+  --signal-dim: #435a13;
+  --portal-ink: #1b2412;
+  --portal-line: rgba(27, 36, 18, 0.38);
+  --portal-line-strong: #1b2412;
+  background: #f3f5ee;
+  color: var(--portal-ink);
+}
+.portal-light [class*='border-white/'],
+.portal-light [class*='border-gray-'],
+.portal-light [class*='border-t-white'],
+.portal-light [class*='border-b-white'] {
+  border-color: var(--portal-line);
+}
+.portal-light [class*='divide-white/'] > *,
+.portal-light [class*='divide-gray-'] > * {
+  border-color: var(--portal-line);
+}
+.portal-light .card-liquid {
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1.5px solid var(--portal-line-strong);
+  box-shadow: 0 2px 0 rgba(27, 36, 18, 0.12);
+}
+.portal-light .card-liquid-interactive:hover {
+  transform: none;
+  box-shadow: 0 3px 0 rgba(27, 36, 18, 0.22);
+}
+.portal-light input,
+.portal-light select,
+.portal-light textarea {
+  border-color: var(--portal-line);
+}
+/* Texto atenuado: algo más de contraste sobre fondo claro */
+.portal-light [class*='text-white/30'],
+.portal-light [class*='text-white/40'] {
+  color: rgba(27, 36, 18, 0.62);
+}
+.portal-light [class*='text-white/50'],
+.portal-light [class*='text-white/55'],
+.portal-light [class*='text-white/60'] {
+  color: rgba(27, 36, 18, 0.74);
+}
+/* Colores de estado legibles sobre claro */
+.portal-light .text-green-400 { color: #2b6a1d; }
+.portal-light .text-yellow-400 { color: #8a5d00; }
+.portal-light .text-blue-400 { color: #1b4f9c; }
+.portal-light .text-red-400 { color: #a4281a; }
+.portal-light .text-olive-400 { color: #4a6513; }
+.portal-light .fixed.inset-0[class*='bg-black/'] {
+  background: rgba(27, 36, 18, 0.55);
 }

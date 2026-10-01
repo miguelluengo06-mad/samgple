@@ -221,7 +221,7 @@ export default function PortalSidebar({ role }: { role: PortalRole }) {
   return (
     <>
       {/* Desktop */}
-      <aside className="hidden md:flex w-60 shrink-0 flex-col justify-between gap-6 border-r border-white/10 bg-white/[0.015] px-3 py-5 overflow-y-auto">
+      <aside className="hidden md:flex w-60 shrink-0 flex-col justify-between gap-6 border-r border-white/10 bg-white px-3 py-5 overflow-y-auto">
         <div className="flex flex-col gap-8">
           <div className="px-3">{brand}</div>
           <NavList role={role} />
@@ -272,5 +272,52 @@ export default function PortalSidebar({ role }: { role: PortalRole }) {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+/** Móvil: barra inferior con lo que más se usa (resumen, llamadas, solicitudes y menú), con avisos de pendientes. */
+export function PortalBottomNav({ role }: { role: PortalRole }) {
+  const pathname = usePathname();
+  const { leads } = useLeadsContext();
+  if (role !== 'agency') return null;
+
+  const counts = { calls: upcomingCalls(leads).length, leads: newRequests(leads).length };
+  const items: { label: string; href: string; icon: LucideIcon; exact?: boolean; badge?: 'calls' | 'leads' }[] = [
+    { label: 'Resumen', href: '/portal', icon: LayoutDashboard, exact: true },
+    { label: 'Llamadas', href: '/portal/calls', icon: PhoneCall, badge: 'calls' },
+    { label: 'Solicitudes', href: '/portal/leads', icon: Inbox, badge: 'leads' },
+    { label: 'Finanzas', href: '/portal/finance', icon: LineChart },
+  ];
+
+  return (
+    <nav
+      aria-label="Navegación rápida"
+      className="md:hidden flex-shrink-0 grid grid-cols-4 border-t-2 border-[var(--portal-line-strong)] bg-white"
+      style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+    >
+      {items.map((item) => {
+        const active = item.exact ? pathname === item.href : pathname?.startsWith(item.href) ?? false;
+        const n = item.badge ? counts[item.badge] : 0;
+        const Icon = item.icon;
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            aria-current={active ? 'page' : undefined}
+            className={cn('relative flex flex-col items-center justify-center gap-0.5 py-2 text-[11px] font-semibold', active ? 'text-[var(--signal)]' : 'text-white/60')}
+          >
+            <span className="relative">
+              <Icon className="w-5 h-5" />
+              {n > 0 && (
+                <span className="absolute -top-1.5 -right-2.5 min-w-[16px] h-4 px-1 rounded-full bg-[var(--signal)] text-black text-[10px] font-bold flex items-center justify-center">
+                  {n > 99 ? '99+' : n}
+                </span>
+              )}
+            </span>
+            {item.label}
+          </Link>
+        );
+      })}
+    </nav>
   );
 }

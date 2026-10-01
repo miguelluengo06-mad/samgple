@@ -5,6 +5,8 @@ import { getSiteOwnerId } from '@/lib/agencyAccess';
 import { resolveLeadMailer, sendLeadMail } from '@/lib/leadMailer';
 import { purchaseEmail } from '@/lib/emailTemplates';
 import { isValidUUID } from '@/lib/validation';
+import { sendMetaPurchase } from '@/lib/metaCapi';
+import { purchaseAlertText, sendTelegram } from '@/lib/telegram';
 import { VAT_LABEL, type PurchasablePack } from '@/lib/packs';
 import { cartLines, cartSummary, cartTotalCents, compactItems, parseCompactItems, type CartItem, type OrderItem } from '@/lib/cart';
 
@@ -65,6 +67,8 @@ export interface CheckoutContext {
   returnPath: string;
   /** Solicitud creada por el formulario del Pack de Bienvenida */
   leadId?: string;
+  /** Consentimiento de publicidad y cookies de Meta del cliente (ver metaCapi.ts), para enviar la compra a Meta */
+  tracking?: Record<string, string>;
 }
 
 /** Texto bajo el botón de pago: IVA incluido, compromiso (si lo hay) y enlaces a términos y privacidad. */
@@ -83,6 +87,7 @@ export function buildCheckoutParams(pack: PurchasablePack, ctx: CheckoutContext)
     price_eur_incl_vat: String(pack.price),
   };
   if (ctx.leadId) metadata.lead_id = ctx.leadId;
+  Object.assign(metadata, ctx.tracking);
 
   const cancelSep = ctx.returnPath.includes('?') ? '&' : '?';
   const hashIndex = ctx.returnPath.indexOf('#');
@@ -159,6 +164,7 @@ export function buildCartCheckoutParams(items: CartItem[], ctx: CartCheckoutCont
     cart_items: compactItems(lines),
   };
   if (ctx.leadId) metadata.lead_id = ctx.leadId;
+  Object.assign(metadata, ctx.tracking);
 
   // Parte común (idioma, facturación, NIF, teléfono, urls…): la misma que un pack suelto
   const base = buildCheckoutParams(lines[0].pack, ctx);
@@ -283,6 +289,7 @@ export async function recordOrder(ownerId: string, session: Stripe.Checkout.Sess
         .eq('id', lead.id);
       if (error) throw new Error(`Could not update lead: ${error.message}`);
       await notifyPurchase(ownerId, order, details, lead.id);
+      await sendMetaPurchase(session);
       return { leadId: lead.id, created: false, duplicate: false };
     }
   }
@@ -308,6 +315,7 @@ export async function recordOrder(ownerId: string, session: Stripe.Checkout.Sess
   if (error || !created) throw new Error(`Could not create lead: ${error?.message}`);
 
   await notifyPurchase(ownerId, order, details, created.id);
+  await sendMetaPurchase(session);
   return { leadId: created.id, created: true, duplicate: false };
 }
 
@@ -356,6 +364,10 @@ async function notifyPurchase(
   details: Stripe.Checkout.Session.CustomerDetails | null | undefined,
   leadId: string
 ) {
+  await sendTelegram(
+    purchaseAlertText({ packName: order.pack_name, amountEur: order.amount_eur, customer: details?.name, email: details?.email, phone: details?.phone, livemode: order.livemode }),
+    { label: 'Abrir en el panel', url: `${process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || ''}/portal/leads?open=${leadId}` }
+  );
   try {
     const mailer = await resolveLeadMailer(supabaseAdmin, ownerId);
     if (!mailer) return;

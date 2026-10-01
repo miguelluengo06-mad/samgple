@@ -6,6 +6,7 @@ import { ArrowUpRight, BadgeCheck, Check, Lock, Receipt } from 'lucide-react';
 import { BookCallButton } from './BookCall';
 import { AddToCartButton } from './AddToCart';
 import PackCover from './PackCover';
+import TrackView from './TrackView';
 import {
   EXTRAS,
   PACK_GROUPS,
@@ -57,11 +58,6 @@ function ProductCard({ pack, kind, chip, group, variant }: { pack: Pack; kind: s
           <span className="pack-card__amount">{formatAmount(pack.price)} €</span>
           {unit && <span className="pack-card__unit">{unit}</span>}
         </div>
-        {pack.perUnit && (
-          <p className="pack-card__per">
-            <strong>{pack.perUnit}</strong> por vídeo{pack.perUnitNote ? ` · ${pack.perUnitNote}` : ''}
-          </p>
-        )}
         {pack.perk && (
           <p className="pack-card__perk">
             <Check aria-hidden="true" /> {pack.perk}
@@ -80,7 +76,7 @@ function ProductCard({ pack, kind, chip, group, variant }: { pack: Pack; kind: s
         </ul>
 
         <div className="pack-card__actions">
-          <AddToCartButton packId={pack.id} className="pack-card__cta" />
+          <AddToCartButton packId={pack.id} name={`${group} · ${pack.name}`} value={pack.price} className="pack-card__cta" />
           <p className="pack-card__secure">
             <Lock aria-hidden="true" /> Pago seguro con Stripe · Factura incluida
           </p>
@@ -132,6 +128,7 @@ export default function Pricing({ variant = 'web' }: { variant?: Variant }) {
       {...(isLanding ? {} : { 'aria-labelledby': 'precios-title' })}
     >
       <div className={isLanding ? '' : 'max-w-6xl mx-auto'}>
+        <TrackView name="Packs" />
         <div className="mb-8 md:mb-10 max-w-3xl">
           <span className="text-xs tracking-[0.25em] uppercase text-[var(--signal)]">Servicios y precios</span>
           <h2 id="precios-title" className={h2Class} {...(isLanding ? { style: { marginTop: 16 } } : {})}>

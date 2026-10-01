@@ -16,7 +16,6 @@ import Pricing from '@/components/home/Pricing';
 import PaymentNotice from '@/components/home/PaymentNotice';
 import CaseStudies from '@/components/home/CaseStudies';
 import Process from '@/components/home/Process';
-import Testimonials from '@/components/home/Testimonials';
 import BookCallForm from '@/components/home/BookCallForm';
 import { BookCallProvider, BookCallButton } from '@/components/home/BookCall';
 
@@ -92,7 +91,6 @@ export default async function HomePage() {
         <Pricing />
         <CaseStudies />
         <Process />
-        <Testimonials />
 
         {/* Contact */}
         <section id="contacto" className="px-4 md:px-6 py-24 md:py-32 border-t border-white/10">

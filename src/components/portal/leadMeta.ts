@@ -40,3 +40,20 @@ export function timeAgo(dateStr: string): string {
   if (days < 7) return `Hace ${days} días`;
   return new Date(dateStr).toLocaleDateString('es-ES');
 }
+
+/** Teléfono → enlace de WhatsApp (sin + ni espacios; añade el prefijo de España a números de 9 cifras). */
+export function whatsappUrl(phone: string | null | undefined): string | null {
+  const digits = (phone || '').replace(/\D/g, '');
+  if (digits.length < 9) return null;
+  return `https://wa.me/${digits.length === 9 ? `34${digits}` : digits}`;
+}
+
+/** Clave para reconocer a la misma persona en varias solicitudes: email en minúsculas o últimas 9 cifras del teléfono. */
+export function contactKeys(l: { email?: string | null; phone?: string | null }): string[] {
+  const keys: string[] = [];
+  const email = (l.email || '').trim().toLowerCase();
+  const phone = (l.phone || '').replace(/\D/g, '').slice(-9);
+  if (email) keys.push(`e:${email}`);
+  if (phone.length === 9) keys.push(`p:${phone}`);
+  return keys;
+}

@@ -2442,3 +2442,10 @@ button.lp-video:hover {
   width: 22px;
   height: 22px;
 }
+
+@media (min-width: 1000px) {
+  .lp-steps--4 {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+  }
+}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit } from '@/lib/validation';
 import { cartLines, cartSummary, cartTotalCents, sanitizeCart } from '@/lib/cart';
+import { trackingFromCookies } from '@/lib/metaCapi';
 import { buildCartCheckoutParams, getAgencyStripe } from '@/lib/packCheckout';
 
 export const runtime = 'nodejs';
@@ -94,7 +95,7 @@ export async function POST(req: NextRequest) {
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${req.nextUrl.protocol}//${req.nextUrl.host}`;
     const session = await stripeCtx.stripe.checkout.sessions.create(
-      buildCartCheckoutParams(items, { siteUrl, returnPath: '/carrito', leadId, email })
+      buildCartCheckoutParams(items, { siteUrl, returnPath: '/carrito', leadId, email, tracking: trackingFromCookies((n) => req.cookies.get(n)?.value) })
     );
     if (!session.url) throw new Error('Stripe did not return a checkout URL');
 

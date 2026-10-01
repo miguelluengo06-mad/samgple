@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import { Bricolage_Grotesque, DM_Sans, Instrument_Serif } from 'next/font/google';
-import { ShieldCheck, Smartphone, Target, VideoOff, Wallet, Zap, type LucideIcon } from 'lucide-react';
 import LandingScripts from './LandingScripts';
 import CookieSettingsLink from '@/components/legal/CookieSettingsLink';
 import CartLink from '@/components/home/CartLink';
@@ -12,9 +11,6 @@ import './landing.css';
 
 /*
  * Landing: vídeos, influencers y anuncios con IA para negocios y ecommerce.
- *
- * Los textos entre [CORCHETES] son placeholders a rellenar: [PRECIO], [Nº], [X días],
- * [X horas], [AÑO], [Ventaja extra], los testimonios y las condiciones de permanencia.
  *
  * Fuentes: next/font descarga las fuentes de Google en build y las sirve desde este mismo dominio
  * (la CSP del proyecto solo permite font-src 'self', así que un <link> a fonts.googleapis.com se bloquearía).
@@ -95,63 +91,9 @@ const CheckCircle = () => (
   </Icon>
 );
 
-/**
- * Por qué trabajar con nosotros. Solo hechos de la oferta: nada de cifras de clientes ni años de experiencia inventados.
- */
-const WHY: { icon: LucideIcon; title: string; text: string }[] = [
-  {
-    icon: VideoOff,
-    title: 'Sin cámaras ni actores',
-    text: 'No grabas, no sales en cámara y no organizas nada. Nos cuentas tu negocio y tú solo recibes los vídeos.',
-  },
-  {
-    icon: Target,
-    title: 'Hechos para vender',
-    text: 'Cada vídeo lleva un guion pensado para vender y varios ganchos, para que compruebes cuál funciona mejor.',
-  },
-  {
-    icon: Wallet,
-    title: 'Precio claro',
-    text: 'Precio cerrado con IVA incluido y sin sorpresas. Pagas online y recibes tu factura. Empiezas con 2 vídeos por 30 €.',
-  },
-  {
-    icon: Zap,
-    title: 'Rápido',
-    text: 'Recibes tu Pack de Bienvenida en 72 h. Un vídeo suelto, en 5 días.',
-  },
-  {
-    icon: Smartphone,
-    title: 'Listos para publicar',
-    text: 'Vertical 9:16 con subtítulos, y 1:1 para tu tienda. Para Instagram, TikTok, Facebook y anuncios en Meta y TikTok.',
-  },
-  {
-    icon: ShieldCheck,
-    title: 'Siempre la misma cara',
-    text: 'Tu influencer es siempre el mismo, con su voz y su estilo. Y tu réplica digital, solo con tu autorización por escrito.',
-  },
-];
-
-const HERO_CHECKS = ['Ideas y guiones incluidos', 'No tienes que salir en cámara', 'Listos para publicar'];
+const HERO_CHECKS = ['Guiones que apruebas antes de producir', 'No tienes que salir en cámara', 'Listos para publicar'];
 
 const EXAMPLES = EXAMPLE_VIDEOS;
-
-const INCLUDES = [
-  { title: 'Ideas y guiones', text: 'Sabemos qué contar para que tu cliente se pare a mirar.' },
-  { title: 'Personas y escenas realistas', text: 'Presentadores y ambientes creados con IA, sin cámaras ni actores.' },
-  { title: 'Voz y subtítulos', text: 'Voz natural en tu idioma y subtítulos para verlo sin sonido.' },
-  { title: 'Formato para cada red', text: 'Vertical para Reels y TikTok, cuadrado y horizontal cuando haga falta.' },
-  { title: 'Revisiones incluidas', text: '[Nº] rondas de cambios hasta que te encante.' },
-  { title: 'Constancia sin esfuerzo', text: 'Contenido nuevo cada mes para que tus redes no se paren.' },
-];
-
-const COMPARISON = [
-  ['Ideas', 'Te toca pensarlas cada semana', 'Te las damos hechas'],
-  ['Grabación', 'Tú delante de la cámara', 'Ni cámara ni actores'],
-  ['Creadores', 'Buscar, negociar y esperar entregas', 'Tu influencer IA, siempre disponible'],
-  ['Edición', 'Horas aprendiendo programas', 'Lo recibes terminado'],
-  ['Constancia', 'Publicas cuando puedes', 'Vídeos nuevos cada mes'],
-  ['Tu tiempo', 'Se va en el contenido', 'Vuelve a tu negocio'],
-];
 
 const FAQ = [
   {
@@ -162,13 +104,23 @@ const FAQ = [
     q: '¿Tengo que salir yo en los vídeos?',
     a: 'No. Puedes aparecer si quieres, pero no hace falta que te pongas delante de la cámara.',
   },
-  { q: '¿Cuánto tardáis en entregar?', a: 'Los primeros vídeos llegan en [X días] desde la llamada inicial.' },
-  { q: '¿Y si un vídeo no me gusta?', a: 'Lo cambiamos. Cada vídeo incluye [Nº] rondas de revisión.' },
+  {
+    q: '¿Quién decide qué se cuenta en los vídeos?',
+    a: 'Tú. Escribimos los guiones tras un brief contigo, te los enviamos y no producimos nada hasta que das el visto bueno.',
+  },
+  {
+    q: '¿Y si no me convence un guion o un vídeo?',
+    a: 'Lo cambiamos. Puedes pedir cambios en el guion antes de producir y, después, una ronda de ajustes sobre el vídeo. Las rondas de cada pack están en su ficha.',
+  },
+  {
+    q: '¿Cuánto tardáis en entregar?',
+    a: 'Cada pack indica su plazo en su ficha. En los packs con guion a medida, el plazo cuenta desde que apruebas el guion. Un vídeo suelto, en 5 días.',
+  },
   {
     q: '¿Puedo tener un influencer propio para mi marca?',
     a: 'Sí. Creamos un personaje con IA con la misma cara y estilo en todos tus vídeos y anuncios, para que tu tienda tenga su propia imagen.',
   },
-  { q: '¿Hay permanencia?', a: '[Explica tus condiciones: mensual, trimestral, cancelación…]' },
+  { q: '¿Hay permanencia?', a: 'No. Los packs son de pago único, sin suscripción ni permanencia.' },
 ];
 
 export default function LandingPage() {
@@ -179,16 +131,6 @@ export default function LandingPage() {
 
   return (
     <div className={`lp mil-bg ${bricolage.variable} ${instrument.variable} ${dmSans.variable}`}>
-      {/*
-        META PIXEL (opcional). Pega aquí el código base de tu píxel cuando lo tengas — y, como la CSP de
-        next.config.ts solo permite scripts propios, añade https://connect.facebook.net a script-src y
-        https://www.facebook.com a connect-src / img-src:
-
-          <script dangerouslySetInnerHTML={{ __html: `!function(f,b,e,v,n,t,s){...}(window,document,'script',
-            'https://connect.facebook.net/en_US/fbevents.js'); fbq('init','[PIXEL_ID]'); fbq('track','PageView');` }} />
-
-        El evento Lead ya se dispara desde LandingScripts.tsx al enviar el formulario (si window.fbq existe).
-      */}
 
       {/* Barra de progreso de scroll (LandingScripts.tsx actualiza --lp-progress) */}
       <div className="lp-progress" aria-hidden="true" />
@@ -201,10 +143,10 @@ export default function LandingPage() {
             samgple
           </a>
           <nav className="lp-nav" aria-label="Principal">
-            <a href="#por-que">Por qué nosotros</a>
             <a href="#ejemplos">Ejemplos</a>
+            <a href="#como">Cómo trabajamos</a>
             <a href="#packs">Packs</a>
-            <a href="#como">Cómo funciona</a>
+            <a href="#faq">Preguntas</a>
           </nav>
           <CartLink className="lp-cart" />
           <a className="lp-btn lp-btn--primary" href={packCtaHref}>
@@ -221,11 +163,11 @@ export default function LandingPage() {
             <div>
               <p className="lp-eyebrow">Vídeos con IA para negocios y ecommerce</p>
               <h1 id="hero-title">
-                Tu negocio en vídeo. <em className="is-accent">Sin grabar,</em> sin editar, sin pensar ideas.
+                Tu negocio en vídeo. <em className="is-accent">Sin grabar,</em> sin editar y con guiones que tú apruebas.
               </h1>
               <p className="lp-hero__lead">
                 Vídeos, influencers y anuncios creados con IA, tan reales que parecen grabados. Listos para Instagram,
-                TikTok y tus campañas de Meta. Tú vendes; nosotros ponemos el contenido.
+                TikTok y tus campañas de Meta. Escribimos los guiones contigo y no producimos nada sin tu visto bueno.
               </p>
               <div className="lp-hero__actions">
                 <a className="lp-btn lp-btn--primary lp-btn--lg" href={packCtaHref}>
@@ -341,58 +283,40 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Por qué trabajar con nosotros */}
-        <section className="lp-section" id="por-que" aria-labelledby="por-que-title">
+        {/* Cómo trabajamos: el cliente aprueba el guion antes de producir */}
+        <section className="lp-section" id="como" aria-labelledby="como-title">
           <div className="lp-container">
             <div className="lp-head" data-reveal>
-              <h2 className="lp-head__title" id="por-que-title">
-                Por qué trabajar <em className="is-accent">con nosotros</em>
+              <h2 className="lp-head__title" id="como-title">
+                Tú das el visto bueno. <em className="is-accent">Nada se produce sin él.</em>
               </h2>
               <p className="lp-head__side">
-                Sabes que necesitas vídeo. El problema es todo lo demás. De todo lo demás nos ocupamos nosotros.
+                Los guiones los escribimos contigo y los apruebas antes de producir. Así los vídeos dicen lo que tu
+                marca quiere decir.
               </p>
             </div>
-
-            <ul className="lp-why">
-              {WHY.map(({ icon: WhyIcon, title, text }) => (
-                <li className="lp-card lp-why__item" key={title} data-reveal>
-                  <span className="lp-card__icon">
-                    <WhyIcon strokeWidth={2} aria-hidden="true" />
-                  </span>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                </li>
-              ))}
-            </ul>
-
-            {/* Precio ancla */}
-            <div className="lp-anchor" data-reveal>
-              <div className="lp-anchor__side lp-anchor__side--them">
-                <span className="lp-anchor__label">Con un creador humano</span>
-                <span className="lp-anchor__price">100–400 €</span>
-                <span className="lp-anchor__note">por vídeo</span>
-              </div>
-              <span className="lp-anchor__vs" aria-hidden="true">
-                vs
-              </span>
-              <div className="lp-anchor__side lp-anchor__side--us">
-                <span className="lp-anchor__label">Con nosotros · {WELCOME_PACK.name}</span>
-                <span className="lp-anchor__price">{WELCOME_PACK.price} €</span>
-                <span className="lp-anchor__note">2 vídeos · IVA incluido</span>
-              </div>
-            </div>
-            <p className="lp-anchor__caption">
-              {WELCOME_PACK.anchor}. Aquí tienes 2 por {WELCOME_PACK.price} € (IVA incluido).
-            </p>
-
-            <p className="lp-why__cta" data-reveal>
-              <a className="lp-btn lp-btn--primary lp-btn--lg" href={packCtaHref}>
-                {packCtaLabel} <ArrowRight />
-              </a>
-              <a className="lp-btn lp-btn--secondary lp-btn--lg" href="#packs">
-                Ver todos los packs
-              </a>
-            </p>
+            <ol className="lp-steps lp-steps--4">
+              <li className="lp-step" data-reveal>
+                <div className="lp-step__num" aria-hidden="true">01</div>
+                <h3>Nos cuentas tu negocio</h3>
+                <p>Un brief corto: qué vendes, a quién y cómo hablas. Con eso escribimos tus guiones.</p>
+              </li>
+              <li className="lp-step" data-reveal>
+                <div className="lp-step__num" aria-hidden="true">02</div>
+                <h3>Revisas y apruebas el guion</h3>
+                <p>Te enviamos los guiones, pides los cambios que quieras y no producimos hasta que los apruebes.</p>
+              </li>
+              <li className="lp-step" data-reveal>
+                <div className="lp-step__num" aria-hidden="true">03</div>
+                <h3>Producimos tus vídeos</h3>
+                <p>Con el guion aprobado, creamos los vídeos con IA, con voz, subtítulos y el formato de cada red.</p>
+              </li>
+              <li className="lp-step" data-reveal>
+                <div className="lp-step__num" aria-hidden="true">04</div>
+                <h3>Ajustamos y publicas</h3>
+                <p>Revisas los vídeos, te los ajustamos y los recibes listos para publicar.</p>
+              </li>
+            </ol>
           </div>
         </section>
 
@@ -556,105 +480,6 @@ export default function LandingPage() {
           <Pricing variant="landing" />
         </section>
 
-        {/* Comparativa */}
-        <section className="lp-section" id="comparativa" aria-labelledby="comparativa-title">
-          <div className="lp-container">
-            <div className="lp-head" data-reveal>
-              <h2 className="lp-head__title" id="comparativa-title">
-                Hacerlo tú <em className="is-soft">vs.</em> dejárnoslo a nosotros
-              </h2>
-            </div>
-            <div className="lp-table-wrap" data-reveal>
-              <table className="lp-table">
-                <colgroup>
-                  <col className="lp-table__concept" />
-                  <col />
-                  <col />
-                </colgroup>
-                <thead>
-                  <tr>
-                    <th scope="col" className="lp-table__concept">
-                      <span className="lp-sr-only">Concepto</span>
-                    </th>
-                    <th scope="col">Hacerlo tú</th>
-                    <th scope="col" className="lp-table__us">
-                      Con samgple
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {COMPARISON.map(([concept, you, us]) => (
-                    <tr key={concept}>
-                      <th scope="row" className="lp-table__concept">
-                        {concept}
-                      </th>
-                      <td>{you}</td>
-                      <td className="lp-table__us">{us}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        {/* Cómo funciona */}
-        <section className="lp-section" id="como" aria-labelledby="como-title">
-          <div className="lp-container">
-            <div className="lp-head" data-reveal>
-              <h2 className="lp-head__title" id="como-title">
-                De cero a vídeos publicados en <em className="is-accent">3 pasos</em>
-              </h2>
-              <p className="lp-head__side">Tu única tarea es contarnos cómo es tu negocio y dar el visto bueno.</p>
-            </div>
-            <ol className="lp-steps">
-              <li className="lp-step" data-reveal>
-                <div className="lp-step__num" aria-hidden="true">01</div>
-                <h3>Nos cuentas tu negocio</h3>
-                <p>Una llamada corta para entender qué vendes, a quién y cómo hablas.</p>
-              </li>
-              <li className="lp-step" data-reveal>
-                <div className="lp-step__num" aria-hidden="true">02</div>
-                <h3>Creamos ideas, guiones y vídeos</h3>
-                <p>Pensamos qué contar y producimos los vídeos con IA hiperrealista.</p>
-              </li>
-              <li className="lp-step" data-reveal>
-                <div className="lp-step__num" aria-hidden="true">03</div>
-                <h3>Los recibes y publicas</h3>
-                <p>Te llegan listos, con subtítulos y en el formato de cada red.</p>
-              </li>
-            </ol>
-          </div>
-        </section>
-
-        {/* Testimonios */}
-        <section className="lp-section" id="testimonios" aria-labelledby="testimonios-title">
-          <div className="lp-container">
-            <div className="lp-head" data-reveal>
-              <h2 className="lp-head__title" id="testimonios-title">
-                Lo que dicen nuestros clientes
-              </h2>
-            </div>
-            <div className="lp-testimonials">
-              {[0, 1, 2].map((i) => (
-                <figure className="lp-testimonial" key={i} data-reveal>
-                  <blockquote className="lp-quote">
-                    «[Testimonio real de un cliente: qué problema tenía y qué cambió.]»
-                  </blockquote>
-                  <figcaption className="lp-person">
-                    <span className="lp-avatar" aria-hidden="true" />
-                    <span>
-                      <span className="lp-person__name">[Nombre]</span>
-                      <br />
-                      <span className="lp-person__meta">[Negocio · Ciudad]</span>
-                    </span>
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* FAQ general */}
         <section className="lp-section" id="faq" aria-labelledby="faq-title">
           <div className="lp-container lp-faq">
@@ -683,10 +508,10 @@ export default function LandingPage() {
           <div className="lp-container lp-cta">
             <div data-reveal>
               <h2 id="empezar-title">
-                Tus próximos vídeos <em className="is-accent">ya no dependen de ti.</em>
+                Tus próximos vídeos, <em className="is-accent">con tu visto bueno.</em>
               </h2>
               <p className="lp-cta__lead">
-                Déjanos tus datos y te llamamos para ver qué vídeos necesita tu negocio. Sin compromiso.
+                Déjanos tus datos y te llamamos para ver qué vídeos necesita tu negocio y escribir los guiones contigo. Sin compromiso.
               </p>
             </div>
 
