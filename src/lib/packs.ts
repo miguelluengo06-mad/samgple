@@ -140,12 +140,12 @@ export const PACK_GROUPS: PackGroup[] = [
     title: 'Anuncios UGC con IA',
     tagline: 'Anuncios que parecen de un cliente real, listos para TikTok, Reels, Shorts y Ads. Sin grabar y sin pagar a creadores.',
     summary: 'Vídeos UGC con IA en vertical 9:16, con guion, voz y subtítulos, para testear y escalar tus anuncios.',
-    from: 'Desde 249 €',
+    from: 'Desde 190 €',
     packs: [
       {
         id: 'ugc-starter',
         name: 'Starter',
-        price: 249,
+        price: 190,
         unit: 'once',
         headline: '5 vídeos',
         badge: 'Ideal para testear',
@@ -164,7 +164,7 @@ export const PACK_GROUPS: PackGroup[] = [
       {
         id: 'ugc-escala',
         name: 'Escala',
-        price: 399,
+        price: 320,
         unit: 'once',
         headline: '10 vídeos',
         badge: 'Más popular',

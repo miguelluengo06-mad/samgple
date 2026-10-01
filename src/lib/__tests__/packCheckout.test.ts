@@ -92,7 +92,7 @@ describe('buildCheckoutParams', () => {
     expect(p.locale).toBe('es');
     const price = (p.line_items![0] as any).price_data;
     expect(price.currency).toBe('eur');
-    expect(price.unit_amount).toBe(39900);
+    expect(price.unit_amount).toBe(32000);
     expect(price.tax_behavior).toBe('inclusive');
     expect(price.recurring).toBeUndefined();
     expect(price.product_data.name).toBe('Anuncios UGC con IA · Escala');
@@ -101,7 +101,7 @@ describe('buildCheckoutParams', () => {
     expect(p.tax_id_collection?.enabled).toBe(true);
     expect(p.billing_address_collection).toBe('required');
     expect(p.subscription_data).toBeUndefined();
-    expect(p.metadata).toMatchObject({ pack_id: 'ugc-escala', price_eur_incl_vat: '399' });
+    expect(p.metadata).toMatchObject({ pack_id: 'ugc-escala', price_eur_incl_vat: '320' });
   });
 
   it('monthly plan: subscription with a monthly recurring price', () => {
@@ -193,8 +193,8 @@ describe('isPaidSession / orderFromSession', () => {
 
 describe('cart checkout and order items', () => {
   it('a single-pack session keeps its pack as the only order item', () => {
-    const order = orderFromSession(session({ metadata: { pack_id: 'ugc-escala', pack_name: 'Anuncios UGC con IA · Escala' }, amount_total: 39900 }));
-    expect(order.items).toEqual([{ pack_id: 'ugc-escala', name: 'Anuncios UGC con IA · Escala', qty: 1, unit_eur: 399, total_eur: 399 }]);
+    const order = orderFromSession(session({ metadata: { pack_id: 'ugc-escala', pack_name: 'Anuncios UGC con IA · Escala' }, amount_total: 32000 }));
+    expect(order.items).toEqual([{ pack_id: 'ugc-escala', name: 'Anuncios UGC con IA · Escala', qty: 1, unit_eur: 320, total_eur: 320 }]);
   });
 
   it('a cart session saves every pack with its quantity and the price charged', () => {
@@ -202,7 +202,7 @@ describe('cart checkout and order items', () => {
     const order = orderFromSession(session({ metadata: p.metadata as any, amount_total: 79800 + 18000 }));
     expect(order.pack_id).toBe('cart');
     expect(order.items.map((i) => [i.pack_id, i.qty, i.unit_eur, i.total_eur])).toEqual([
-      ['ugc-escala', 2, 399, 798],
+      ['ugc-escala', 2, 320, 640],
       ['video-suelto', 3, 60, 180],
     ]);
     expect(order.amount_eur).toBe(978);
@@ -267,7 +267,7 @@ describe('recordOrder', () => {
   });
 
   it('direct purchase without a form: creates a won lead from the Stripe customer data', async () => {
-    const res = await recordOrder(OWNER, session({ metadata: { pack_id: 'ugc-escala', pack_name: 'Anuncios UGC con IA · Escala' }, amount_total: 39900 }));
+    const res = await recordOrder(OWNER, session({ metadata: { pack_id: 'ugc-escala', pack_name: 'Anuncios UGC con IA · Escala' }, amount_total: 32000 }));
     expect(res).toMatchObject({ created: true, duplicate: false });
     expect(db.inserts[0]).toMatchObject({
       owner_id: OWNER,
@@ -278,6 +278,6 @@ describe('recordOrder', () => {
       status: 'won',
     });
     expect(db.inserts[0].message).toContain('Anuncios UGC con IA · Escala');
-    expect(db.inserts[0].answers.order.amount_eur).toBe(399);
+    expect(db.inserts[0].answers.order.amount_eur).toBe(320);
   });
 });

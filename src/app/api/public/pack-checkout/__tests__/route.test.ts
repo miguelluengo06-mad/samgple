@@ -62,12 +62,12 @@ describe('POST /api/public/pack-checkout', () => {
     expect((await res.json()).url).toBe('https://checkout.stripe.com/c/pay/cs_test_1');
     const params = createSession.mock.calls[0][0];
     expect(params.mode).toBe('payment');
-    expect(params.line_items[0].price_data.unit_amount).toBe(39900);
+    expect(params.line_items[0].price_data.unit_amount).toBe(32000);
   });
 
   it('takes the price from the catalog, never from the browser', async () => {
     await post({ packId: 'ugc-starter', price: 1, amount: 1, unit_amount: 1, cents: 1 });
-    expect(createSession.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(24900);
+    expect(createSession.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(19000);
   });
 
   it('404 for a pack that does not exist', async () => {
