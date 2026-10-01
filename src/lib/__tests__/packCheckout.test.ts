@@ -91,7 +91,7 @@ describe('buildCheckoutParams', () => {
     expect(p.locale).toBe('es');
     const price = (p.line_items![0] as any).price_data;
     expect(price.currency).toBe('eur');
-    expect(price.unit_amount).toBe(49000);
+    expect(price.unit_amount).toBe(39900);
     expect(price.tax_behavior).toBe('inclusive');
     expect(price.recurring).toBeUndefined();
     expect(price.product_data.name).toBe('Anuncios UGC con IA · Escala');
@@ -100,7 +100,7 @@ describe('buildCheckoutParams', () => {
     expect(p.tax_id_collection?.enabled).toBe(true);
     expect(p.billing_address_collection).toBe('required');
     expect(p.subscription_data).toBeUndefined();
-    expect(p.metadata).toMatchObject({ pack_id: 'ugc-escala', price_eur_incl_vat: '490' });
+    expect(p.metadata).toMatchObject({ pack_id: 'ugc-escala', price_eur_incl_vat: '399' });
   });
 
   it('monthly plan: subscription with a monthly recurring price', () => {
@@ -228,7 +228,7 @@ describe('recordOrder', () => {
   });
 
   it('direct purchase without a form: creates a won lead from the Stripe customer data', async () => {
-    const res = await recordOrder(OWNER, session({ metadata: { pack_id: 'ugc-escala', pack_name: 'Anuncios UGC con IA · Escala' }, amount_total: 49000 }));
+    const res = await recordOrder(OWNER, session({ metadata: { pack_id: 'ugc-escala', pack_name: 'Anuncios UGC con IA · Escala' }, amount_total: 39900 }));
     expect(res).toMatchObject({ created: true, duplicate: false });
     expect(db.inserts[0]).toMatchObject({
       owner_id: OWNER,
@@ -239,6 +239,6 @@ describe('recordOrder', () => {
       status: 'won',
     });
     expect(db.inserts[0].message).toContain('Anuncios UGC con IA · Escala');
-    expect(db.inserts[0].answers.order.amount_eur).toBe(490);
+    expect(db.inserts[0].answers.order.amount_eur).toBe(399);
   });
 });
