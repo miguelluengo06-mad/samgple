@@ -6,6 +6,7 @@ import { resolveLeadMailer, sendLeadMail } from '@/lib/leadMailer';
 import { purchaseEmail } from '@/lib/emailTemplates';
 import { isValidUUID } from '@/lib/validation';
 import { VAT_LABEL, type PurchasablePack } from '@/lib/packs';
+import { cartLines, cartSummary, cartTotalCents, compactItems, parseCompactItems, type CartItem, type OrderItem } from '@/lib/cart';
 
 /**
  * Cobro de los packs con Stripe Checkout.
@@ -66,6 +67,14 @@ export interface CheckoutContext {
   leadId?: string;
 }
 
+/** Texto bajo el botón de pago: IVA incluido, compromiso (si lo hay) y enlaces a términos y privacidad. */
+function checkoutNotes(siteUrl: string, commitment?: string): string {
+  return [
+    [VAT_LABEL, commitment].filter(Boolean).join(' · '),
+    `Al pagar aceptas los [términos y condiciones](${siteUrl}/terminos) y la [política de privacidad](${siteUrl}/privacidad).`,
+  ].join('\n\n');
+}
+
 /** Parámetros de la sesión de Stripe Checkout para un pack (precio con IVA incluido). */
 export function buildCheckoutParams(pack: PurchasablePack, ctx: CheckoutContext): Stripe.Checkout.SessionCreateParams {
   const metadata: Record<string, string> = {
@@ -82,10 +91,7 @@ export function buildCheckoutParams(pack: PurchasablePack, ctx: CheckoutContext)
       ? `${ctx.siteUrl}${ctx.returnPath}${cancelSep}pago=cancelado`
       : `${ctx.siteUrl}${ctx.returnPath.slice(0, hashIndex)}${cancelSep}pago=cancelado${ctx.returnPath.slice(hashIndex)}`;
 
-  const notes = [
-    [VAT_LABEL, pack.commitment].filter(Boolean).join(' · '),
-    `Al pagar aceptas los [términos y condiciones](${ctx.siteUrl}/terminos) y la [política de privacidad](${ctx.siteUrl}/privacidad).`,
-  ].join('\n\n');
+  const notes = checkoutNotes(ctx.siteUrl, pack.commitment);
 
   const params: Stripe.Checkout.SessionCreateParams = {
     mode: pack.mode,
@@ -131,6 +137,50 @@ export function buildCheckoutParams(pack: PurchasablePack, ctx: CheckoutContext)
   return params;
 }
 
+export interface CartCheckoutContext extends CheckoutContext {
+  /** Email que dejó en /carrito: Stripe lo rellena en el pago */
+  email?: string;
+}
+
+/**
+ * Sesión de Stripe Checkout para un carrito: una línea por pack con su cantidad, todo con IVA incluido.
+ * Lo que se compró queda guardado en metadata.cart_items para registrarlo después en el pedido.
+ * Lanza si el carrito queda vacío (hay que validarlo antes con sanitizeCart).
+ */
+export function buildCartCheckoutParams(items: CartItem[], ctx: CartCheckoutContext): Stripe.Checkout.SessionCreateParams {
+  const lines = cartLines(items);
+  if (lines.length === 0) throw new Error('Empty cart');
+
+  const summary = cartSummary(lines);
+  const metadata: Record<string, string> = {
+    pack_id: lines.length === 1 ? lines[0].pack.id : 'cart',
+    pack_name: summary.slice(0, 200),
+    price_eur_incl_vat: String(cartTotalCents(items) / 100),
+    cart_items: compactItems(lines),
+  };
+  if (ctx.leadId) metadata.lead_id = ctx.leadId;
+
+  // Parte común (idioma, facturación, NIF, teléfono, urls…): la misma que un pack suelto
+  const base = buildCheckoutParams(lines[0].pack, ctx);
+
+  return {
+    ...base,
+    line_items: lines.map(({ pack, qty }) => ({
+      quantity: qty,
+      price_data: {
+        currency: 'eur',
+        unit_amount: pack.cents,
+        tax_behavior: 'inclusive' as const,
+        product_data: { name: pack.name, description: pack.description, metadata: { pack_id: pack.id } },
+      },
+    })),
+    metadata,
+    custom_text: { submit: { message: checkoutNotes(ctx.siteUrl) } },
+    invoice_creation: { enabled: true, invoice_data: { description: summary.slice(0, 300), metadata } },
+    ...(ctx.email ? { customer_email: ctx.email } : {}),
+  };
+}
+
 /* ──────────────────────────────────────────────────────────────────────────
  *  Registro del pedido
  * ────────────────────────────────────────────────────────────────────────── */
@@ -148,6 +198,8 @@ export interface OrderRecord {
   subscription_id?: string | null;
   payment_intent_id?: string | null;
   invoice_id?: string | null;
+  /** Qué se compró: un elemento por pack, con cantidad y precio cobrado */
+  items: OrderItem[];
 }
 
 /** ¿La sesión está pagada? (suscripciones: la primera factura pagada) */
@@ -156,6 +208,14 @@ export function isPaidSession(session: Stripe.Checkout.Session): boolean {
 }
 
 const idOf = (v: unknown): string | null => (typeof v === 'string' ? v : v && typeof v === 'object' && 'id' in v ? String((v as { id: string }).id) : null);
+
+/** Packs comprados: los de metadata.cart_items; si falta (compra de un solo pack), uno con el importe de la sesión. */
+function itemsFromSession(session: Stripe.Checkout.Session): OrderItem[] {
+  const fromCart = parseCompactItems(session.metadata?.cart_items);
+  if (fromCart.length > 0) return fromCart;
+  const amount = (session.amount_total ?? 0) / 100;
+  return [{ pack_id: session.metadata?.pack_id || '', name: session.metadata?.pack_name || '', qty: 1, unit_eur: amount, total_eur: amount }];
+}
 
 export function orderFromSession(session: Stripe.Checkout.Session): OrderRecord {
   return {
@@ -171,6 +231,7 @@ export function orderFromSession(session: Stripe.Checkout.Session): OrderRecord 
     subscription_id: idOf(session.subscription),
     payment_intent_id: idOf(session.payment_intent),
     invoice_id: idOf(session.invoice),
+    items: itemsFromSession(session),
   };
 }
 

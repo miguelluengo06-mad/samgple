@@ -62,6 +62,7 @@ vi.mock('@/lib/leadMailer', () => ({
 vi.mock('nodemailer', () => ({ default: { createTransport: () => ({ sendMail }) } }));
 
 import {
+  buildCartCheckoutParams,
   buildCheckoutParams,
   isPaidSession,
   orderFromSession,
@@ -187,6 +188,44 @@ describe('isPaidSession / orderFromSession', () => {
       invoice_id: 'in_1',
       livemode: false,
     });
+  });
+});
+
+describe('cart checkout and order items', () => {
+  it('a single-pack session keeps its pack as the only order item', () => {
+    const order = orderFromSession(session({ metadata: { pack_id: 'ugc-escala', pack_name: 'Anuncios UGC con IA · Escala' }, amount_total: 39900 }));
+    expect(order.items).toEqual([{ pack_id: 'ugc-escala', name: 'Anuncios UGC con IA · Escala', qty: 1, unit_eur: 399, total_eur: 399 }]);
+  });
+
+  it('a cart session saves every pack with its quantity and the price charged', () => {
+    const p = buildCartCheckoutParams([{ id: 'ugc-escala', qty: 2 }, { id: 'video-suelto', qty: 3 }], ctx);
+    const order = orderFromSession(session({ metadata: p.metadata as any, amount_total: 79800 + 18000 }));
+    expect(order.pack_id).toBe('cart');
+    expect(order.items.map((i) => [i.pack_id, i.qty, i.unit_eur, i.total_eur])).toEqual([
+      ['ugc-escala', 2, 399, 798],
+      ['video-suelto', 3, 60, 180],
+    ]);
+    expect(order.amount_eur).toBe(978);
+  });
+
+  it('buildCartCheckoutParams: one line per pack, VAT included, invoice with the whole summary', () => {
+    const p = buildCartCheckoutParams([{ id: 'ugc-escala', qty: 2 }], { ...ctx, email: 'a@b.es' });
+    expect(p.line_items).toHaveLength(1);
+    expect((p.line_items![0] as any).quantity).toBe(2);
+    expect(p.metadata?.pack_id).toBe('ugc-escala'); // un solo pack: se identifica por su id
+    expect(p.customer_email).toBe('a@b.es');
+    expect(p.custom_text?.submit?.message).toContain('IVA incluido');
+    expect(p.invoice_creation?.enabled).toBe(true);
+    expect(() => buildCartCheckoutParams([], ctx)).toThrow();
+  });
+
+  it('recordOrder stores the items on the won lead', async () => {
+    const p = buildCartCheckoutParams([{ id: 'ugc-escala', qty: 2 }, { id: 'video-suelto', qty: 1 }], ctx);
+    const res = await recordOrder(OWNER, session({ metadata: p.metadata as any, amount_total: 85800 }));
+    expect(res?.created).toBe(true);
+    const saved = db.inserts[db.inserts.length - 1].answers.order;
+    expect(saved.items.map((i: any) => [i.pack_id, i.qty])).toEqual([['ugc-escala', 2], ['video-suelto', 1]]);
+    expect(saved.amount_eur).toBe(858);
   });
 });
 

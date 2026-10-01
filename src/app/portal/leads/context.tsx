@@ -26,7 +26,11 @@ export interface LeadAnswers {
     invoice_id?: string | null;
     /** Importe reembolsado hasta ahora (la compra original no cambia) */
     refunded_eur?: number;
+    /** Packs comprados con su cantidad y precio cobrado */
+    items?: { pack_id: string; name: string; qty: number; unit_eur: number; total_eur: number }[];
   };
+  /** Carrito sin pagar (posible compra) */
+  cart?: { items: { pack_id: string; name: string; qty: number; unit_eur: number; total_eur: number }[]; total_eur: number };
 }
 
 export interface Lead {

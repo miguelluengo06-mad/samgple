@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { CheckCircle2, Clock, Loader2, TriangleAlert } from 'lucide-react';
 import { metaTrackOnce } from '@/lib/metaPixel';
+import { clearCart } from '@/lib/useCart';
 
 interface Confirmation {
   paid: boolean;
@@ -31,6 +32,7 @@ function Confirm() {
       .then((data: Confirmation) => {
         if (cancelled) return;
         setState({ kind: 'done', data });
+        if (data.paid) clearCart(); // el pedido ya está pagado: el carrito se vacía
         // Purchase para Meta: solo pagos reales y una vez por pedido (el eventID evita duplicados al recargar)
         if (data.paid && !data.testMode) {
           metaTrackOnce(sessionId, 'Purchase', { value: data.amount, currency: 'EUR', content_name: data.pack, content_type: 'product' });

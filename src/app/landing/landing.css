@@ -2422,3 +2422,23 @@ button.lp-video:hover {
 .lp-footer__btn:hover {
   text-decoration: underline;
 }
+
+/* Icono de carrito de la cabecera */
+.lp-cart {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  margin-right: 8px;
+  color: var(--text);
+  border-radius: 50%;
+}
+.lp-cart:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+.lp-cart svg {
+  width: 22px;
+  height: 22px;
+}

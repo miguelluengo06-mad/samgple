@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, BadgeCheck, Check, Lock, Receipt } from 'lucide-react';
 import { BookCallButton } from './BookCall';
-import { BuyButton } from './BuyPack';
+import { AddToCartButton } from './AddToCart';
 import PackCover from './PackCover';
 import {
   EXTRAS,
@@ -44,7 +44,6 @@ function terms(pack: Pack): string {
 function ProductCard({ pack, kind, chip, group, variant }: { pack: Pack; kind: string; chip: string; group: string; variant: Variant }) {
   const unit = unitLabel(pack.unit);
   const choice = `${group} · ${pack.name}`;
-  const returnPath = variant === 'landing' ? '/landing#packs' : '/#precios';
 
   return (
     <article className={`pack-card${pack.featured ?? !!pack.badge ? ' pack-card--featured' : ''}`}>
@@ -81,7 +80,7 @@ function ProductCard({ pack, kind, chip, group, variant }: { pack: Pack; kind: s
         </ul>
 
         <div className="pack-card__actions">
-          <BuyButton packId={pack.id} returnPath={returnPath} className="pack-card__cta" />
+          <AddToCartButton packId={pack.id} className="pack-card__cta" />
           <p className="pack-card__secure">
             <Lock aria-hidden="true" /> Pago seguro con Stripe · Factura incluida
           </p>

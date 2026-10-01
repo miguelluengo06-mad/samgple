@@ -241,7 +241,7 @@ export default function LeadsPage() {
                             <span>{formatCallDate(lead.call_at!).split(',')[0]} {formatCallTime(lead.call_at!)}</span>
                           </span>
                         ) : (
-                          <span className={lead.answers?.order ? 'text-green-400' : 'text-white/50'}>{lead.answers?.order ? `Pagado · ${lead.answers.order.amount_eur.toLocaleString('es-ES')} €${lead.answers.order.livemode === false ? ' (prueba)' : ''}` : lead.answers?.pack?.id === 'welcome' ? 'Pack Bienvenida' : lead.source === 'landing' ? 'Landing' : 'Propuesta'}</span>
+                          <span className={lead.answers?.order ? 'text-green-400' : 'text-white/50'}>{lead.answers?.order ? `Pagado · ${lead.answers.order.amount_eur.toLocaleString('es-ES')} €${lead.answers.order.livemode === false ? ' (prueba)' : ''}` : lead.answers?.pack?.id === 'welcome' ? 'Pack Bienvenida' : lead.source === 'cart' ? 'Carrito sin pagar' : lead.source === 'landing' ? 'Landing' : 'Propuesta'}</span>
                         )}
                       </div>
                       <p className="md:col-span-3 text-sm text-white/50 line-clamp-1">{lead.message}</p>

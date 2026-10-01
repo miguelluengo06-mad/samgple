@@ -42,4 +42,12 @@ describe('finance', () => {
     expect(rows.map((r) => r.name)).toEqual(['B', 'A']);
     expect(rows[1]).toMatchObject({ net: 2000, invoices: 2 });
   });
+
+  it('splits a multi-pack invoice across its lines by weight', () => {
+    const rows = byPack([
+      { paidAt: 1, total: 12100, tax: 2100, packName: 'A + B', lines: [{ name: 'A', gross: 6050 }, { name: 'B', gross: 6050 }] },
+      { paidAt: 1, total: 6050, tax: 1050, packName: 'A', lines: [{ name: 'A', gross: 6050 }] },
+    ]);
+    expect(rows.map((r) => [r.name, Math.round(r.net)])).toEqual([['A', 10000], ['B', 5000]]);
+  });
 });

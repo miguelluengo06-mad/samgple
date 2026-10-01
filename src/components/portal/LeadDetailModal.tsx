@@ -148,6 +148,20 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange }
         </div>
 
         <div className="p-6 space-y-5">
+          {!order && lead.answers?.cart && (
+            <div className="rounded-xl border border-yellow-400/30 bg-yellow-400/[0.06] p-4">
+              <div className="text-sm font-medium">Carrito sin pagar · {lead.answers.cart.total_eur.toLocaleString('es-ES')} € (IVA incluido)</div>
+              <ul className="mt-1 space-y-0.5 text-xs text-white/60">
+                {lead.answers.cart.items.map((it) => (
+                  <li key={it.pack_id} className="flex justify-between gap-3">
+                    <span className="min-w-0">{it.qty > 1 ? `${it.qty} × ` : ''}{it.name}</span>
+                    <span className="tabular-nums shrink-0">{it.total_eur.toLocaleString('es-ES')} €</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           {order && (
             <div className="rounded-xl border border-[var(--signal)]/30 bg-[var(--signal)]/[0.06] p-4 flex items-start gap-3">
               <CreditCard className="w-5 h-5 text-[var(--signal)] shrink-0 mt-0.5" />
@@ -155,10 +169,19 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange }
                 <div className="text-sm font-medium">
                   Pagado · {order.amount_eur.toLocaleString('es-ES')} € (IVA incluido){order.mode === 'subscription' ? ' al mes' : ''}
                 </div>
-                <div className="text-xs text-white/50 mt-0.5">
-                  {order.pack_name}
-                  {!order.livemode && ' · modo prueba'}
-                </div>
+                {order.items && order.items.length > 0 ? (
+                  <ul className="mt-1 space-y-0.5 text-xs text-white/60">
+                    {order.items.map((it) => (
+                      <li key={it.pack_id} className="flex justify-between gap-3">
+                        <span className="min-w-0">{it.qty > 1 ? `${it.qty} × ` : ''}{it.name}</span>
+                        <span className="tabular-nums shrink-0">{it.total_eur.toLocaleString('es-ES')} €</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="text-xs text-white/50 mt-0.5">{order.pack_name}</div>
+                )}
+                {!order.livemode && <div className="text-xs text-white/40 mt-0.5">Modo prueba</div>}
                 {stripeUrl && (
                   <a href={stripeUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs text-[var(--signal)] hover:underline">
                     Ver en Stripe <ExternalLink className="w-3 h-3" />

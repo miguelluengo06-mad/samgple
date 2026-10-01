@@ -7,6 +7,19 @@ Los packs de la web (`/#precios`) y de la landing (`/landing`) se pagan con **St
 **Todos los precios llevan el IVA incluido.** Lo que ve el cliente en la web es exactamente lo que paga. Los
 precios y textos se cambian en un solo sitio: `src/lib/packs.ts`.
 
+## Carrito
+
+Cada pack de la web tiene «Añadir al carrito». El carrito vive en el navegador del cliente y se revisa en `/carrito`
+(cantidades, email, aceptar términos); de ahí pasa al pago de Stripe, con una línea por pack y su cantidad.
+
+- El servidor vuelve a validar el carrito y toma los precios de `src/lib/packs.ts`; el navegador solo manda ids y cantidades.
+- Máximo 10 unidades por pack y 8 packs distintos. El Pack de Bienvenida no va al carrito: se compra desde su formulario.
+- Al pulsar «Pagar» con su email, el carrito queda en **Solicitudes** como *posible compra* («Carrito sin pagar»). Si paga,
+  esa misma solicitud pasa a *Ganada* con el pedido; si no, sigue como posible compra.
+- Cada compra guarda en la solicitud qué packs, cuántos y a qué precio (`answers.order.items`). Se ve en la ficha de
+  Solicitudes, en «Mi cuenta» del cliente y en el ranking de packs de Finanzas.
+- No hace falta ningún evento nuevo en el webhook: usa los mismos.
+
 ## 1. Conectar la cuenta
 
 1. En Stripe → **Desarrolladores → Claves API**, copia la **clave secreta** (`sk_test_…` para probar, `sk_live_…` para cobrar).

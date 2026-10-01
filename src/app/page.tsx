@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import SiteFooter from '@/components/home/SiteFooter';
+import CartLink from '@/components/home/CartLink';
 import type { Metadata } from 'next';
 import { ArrowUpRight } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
@@ -73,6 +74,7 @@ export default async function HomePage() {
             <Link href="/auth" className="px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
               Acceder
             </Link>
+            <CartLink />
             <BookCallButton className="ml-1 px-4 py-2 min-h-10 inline-flex items-center rounded-full bg-[var(--signal)] text-black text-sm font-medium hover:bg-[var(--signal-dim)] transition-colors whitespace-nowrap">
               <span className="sm:hidden">Agendar</span>
               <span className="hidden sm:inline">Agendar llamada</span>

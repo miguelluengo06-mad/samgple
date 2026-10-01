@@ -1023,6 +1023,15 @@ select {
   cursor: progress;
 }
 
+.pack-buy__status {
+  min-height: 20px;
+  margin-top: 8px;
+  color: rgba(22, 33, 14, 0.7);
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
 .pack-buy__error {
   color: #b3261e;
   font-size: 13px;

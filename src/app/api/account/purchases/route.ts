@@ -48,6 +48,9 @@ export async function GET(req: NextRequest) {
       return {
         id,
         pack_name: String(order.pack_name || ''),
+        items: Array.isArray(order.items)
+          ? order.items.map((it: any) => ({ name: String(it.name || ''), qty: Number(it.qty) || 1, total_eur: Number(it.total_eur) || 0 }))
+          : [],
         amount_eur: Number(order.amount_eur) || 0,
         monthly: order.mode === 'subscription',
         paid_at: order.paid_at || null,

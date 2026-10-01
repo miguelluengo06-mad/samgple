@@ -44,6 +44,7 @@ export async function GET(req: NextRequest) {
         total: inv.total,
         tax,
         packName: inv.metadata?.pack_name || inv.lines?.data?.[0]?.description || '',
+        lines: (inv.lines?.data || []).map((l) => ({ name: l.description || '', gross: l.amount })),
       });
     }
 

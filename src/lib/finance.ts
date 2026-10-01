@@ -8,6 +8,8 @@ export interface FinanceInvoice {
   /** IVA incluido en el total */
   tax: number;
   packName: string;
+  /** Líneas de la factura (carritos con varios packs): importe cobrado de cada una */
+  lines?: { name: string; gross: number }[];
 }
 
 export interface FinanceRefund {
@@ -75,12 +77,21 @@ export interface PackRow {
 /** Ingresos netos de IVA por pack, de mayor a menor. */
 export function byPack(invoices: FinanceInvoice[]): PackRow[] {
   const map = new Map<string, PackRow>();
-  for (const inv of invoices) {
-    const name = inv.packName || 'Otros';
-    const row = map.get(name) || { name, net: 0, invoices: 0 };
-    row.net += inv.total - inv.tax;
+  const add = (name: string, net: number) => {
+    const key = name || 'Otros';
+    const row = map.get(key) || { name: key, net: 0, invoices: 0 };
+    row.net += net;
     row.invoices += 1;
-    map.set(name, row);
+    map.set(key, row);
+  };
+  for (const inv of invoices) {
+    const net = inv.total - inv.tax;
+    const lines = (inv.lines || []).filter((l) => l.gross > 0);
+    const gross = lines.reduce((sum, l) => sum + l.gross, 0);
+    if (lines.length > 1 && gross > 0) {
+      // Factura con varios packs: el neto de la factura se reparte según lo que pesa cada línea
+      for (const l of lines) add(l.name, net * (l.gross / gross));
+    } else add(inv.packName || lines[0]?.name || '', net);
   }
   return [...map.values()].sort((a, b) => b.net - a.net);
 }

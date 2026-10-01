@@ -20,6 +20,7 @@ interface AccountCall {
 interface AccountPurchase {
   id: string;
   pack_name: string;
+  items: { name: string; qty: number; total_eur: number }[];
   amount_eur: number;
   monthly: boolean;
   paid_at: string | null;
@@ -155,7 +156,15 @@ export default function AccountHome() {
                 {purchases.map((p) => (
                   <li key={p.id} className="flex items-center gap-4 py-3">
                     <div className="min-w-0 flex-1">
-                      <div className="text-sm font-medium truncate">{p.pack_name || 'Pack'}</div>
+                      {p.items.length > 1 ? (
+                        <ul className="text-sm font-medium space-y-0.5">
+                          {p.items.map((it) => (
+                            <li key={it.name} className="truncate">{it.qty > 1 ? `${it.qty} × ` : ''}{it.name}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <div className="text-sm font-medium truncate">{p.pack_name || 'Pack'}</div>
+                      )}
                       <div className="text-xs text-white/40">
                         {p.paid_at ? new Date(p.paid_at).toLocaleDateString('es-ES') : ''}
                         {p.monthly ? ' · mensual' : ''}
