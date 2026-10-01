@@ -28,8 +28,8 @@ export async function GET() {
         .limit(1)
         .single(),
       sb.from('profiles')
-        .select('business_name, full_name')
-        .or('business_name.not.is.null,full_name.not.is.null')
+        .select('business_name')
+        .or('business_name.not.is.null')
         .limit(1)
         .maybeSingle(),
       sb.from('profiles').select('id', { count: 'exact', head: true }),
@@ -42,7 +42,8 @@ export async function GET() {
       enable_google_auth: data?.enable_google_auth ?? false,
       enable_linkedin_auth: data?.enable_linkedin_auth ?? false,
       enable_github_auth: data?.enable_github_auth ?? false,
-      agency_name: profile?.business_name || profile?.full_name || null,
+      // Solo el nombre de empresa: nunca el nombre personal de quien creó la cuenta
+      agency_name: profile?.business_name || null,
       first_run: firstRun,
     });
   } catch {

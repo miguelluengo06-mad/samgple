@@ -21,6 +21,8 @@ import {
   UserRound,
   X,
   Check,
+  Copy,
+  KeyRound,
 } from 'lucide-react';
 import type { Lead } from '@/app/portal/leads/context';
 import { useEscapeKey } from '@/hooks/useEscapeKey';
@@ -70,8 +72,10 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange, 
   const [deleting, setDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [inviting, setInviting] = useState(false);
-  const [inviteMsg, setInviteMsg] = useState<string | null>(null);
+  const [accessBusy, setAccessBusy] = useState(false);
+  const [access, setAccess] = useState<{ email: string; password: string; loginUrl: string; reset: boolean } | null>(null);
+  const [accessMsg, setAccessMsg] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const [noticeTitle, setNoticeTitle] = useState('');
   const [noticeBody, setNoticeBody] = useState('');
   const [sendingNotice, setSendingNotice] = useState(false);
@@ -84,7 +88,9 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange, 
     setNotes(lead?.notes || '');
     setConfirmDelete(false);
     setError(null);
-    setInviteMsg(null);
+    setAccess(null);
+    setAccessMsg(null);
+    setCopied(false);
     setNoticeTitle('');
     setNoticeBody('');
     setNoticeMsg(null);
@@ -135,26 +141,38 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange, 
   const utmEntries = Object.entries(lead.answers?.utm || {});
   const unread = notices.filter((n) => !n.read_at).length;
 
-  const inviteToAccount = async () => {
+  const createAccess = async (reset = false) => {
     if (!accessToken || !lead.email) return;
-    setInviting(true);
-    setInviteMsg(null);
+    setAccessBusy(true);
+    setAccessMsg(null);
     try {
-      const res = await fetch('/api/agency/invite-customer', {
+      const res = await fetch('/api/agency/create-customer-access', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
-        body: JSON.stringify({ email: lead.email, name: lead.name }),
+        body: JSON.stringify({ email: lead.email, name: lead.name, reset }),
       });
       const data = await res.json().catch(() => ({}));
-      setInviteMsg(
-        !res.ok ? data.error || 'No se pudo enviar la invitación'
-          : data.alreadyRegistered ? 'Este cliente ya tiene cuenta.'
-          : 'Invitación enviada por email.'
-      );
+      if (!res.ok) setAccessMsg(data.error || 'No se pudo crear el acceso');
+      else if (data.alreadyRegistered) setAccessMsg('Este cliente ya tiene acceso. Si ha perdido la contraseña, genera una nueva.');
+      else setAccess({ email: data.email, password: data.password, loginUrl: data.loginUrl || `${window.location.origin}/auth`, reset: !!data.reset });
     } catch {
-      setInviteMsg('No se pudo enviar la invitación');
+      setAccessMsg('No se pudo crear el acceso');
     } finally {
-      setInviting(false);
+      setAccessBusy(false);
+    }
+  };
+
+  const accessText = access
+    ? `Hola ${lead.name.split(' ')[0]}, ya tienes tu acceso a samgple para ver tus avisos, compras y llamadas:\n\n🔗 ${access.loginUrl}\n📧 ${access.email}\n🔑 ${access.password}\n\nPuedes cambiar la contraseña desde Ajustes cuando quieras.`
+    : '';
+
+  const copyAccess = async () => {
+    try {
+      await navigator.clipboard.writeText(accessText);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      setAccessMsg('No se pudo copiar. Selecciona el texto y cópialo a mano.');
     }
   };
 
@@ -550,17 +568,40 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange, 
                 {noticeMsg && <p role="status" className={cn('text-xs text-center', noticeMsg.ok ? 'text-green-400' : 'text-red-400')}>{noticeMsg.text}</p>}
               </form>
 
-              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3.5 text-xs text-white/55 space-y-2">
-                <p>El cliente ve los avisos en <b className="text-white/80">Mi cuenta</b> al entrar en el panel con su email{lead.email ? ` (${lead.email})` : ''}. Si todavía no tiene cuenta, invítalo para que pueda verlos.</p>
-                {lead.email ? (
-                  <button onClick={inviteToAccount} disabled={inviting} className="inline-flex items-center gap-1.5 text-[var(--signal)] hover:underline cursor-pointer disabled:opacity-50">
-                    {inviting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Mail className="w-3.5 h-3.5" />}
-                    Invitar a su cuenta por email
-                  </button>
+              <div className="rounded-2xl border border-[var(--portal-line-strong)] bg-[var(--signal)]/[0.05] p-4 space-y-3">
+                <div className="flex items-center gap-2 text-sm font-semibold"><KeyRound className="w-4 h-4 text-[var(--signal)]" /> Acceso del cliente</div>
+                <p className="text-xs text-white/55">El registro está cerrado: tú creas su acceso y se lo pasas. Con él ve sus avisos, compras y llamadas en <b className="text-white/80">Mi cuenta</b>{lead.email ? <> (<span className="text-white/80">{lead.email}</span>)</> : null}.</p>
+                {!lead.email ? (
+                  <p className="text-xs text-yellow-400">Esta solicitud no tiene email, así que no se puede crear un acceso.</p>
+                ) : access ? (
+                  <div className="space-y-3">
+                    <pre className="whitespace-pre-wrap break-words rounded-xl border border-white/10 bg-black/30 p-3 text-xs leading-relaxed font-mono">{accessText}</pre>
+                    <p className="text-[11px] text-yellow-400">Guarda o envía esta contraseña ahora: no se vuelve a mostrar. Si se pierde, genera otra.</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      <button onClick={copyAccess} className="flex items-center justify-center gap-1.5 rounded-xl portal-cta py-2.5 text-xs cursor-pointer">
+                        {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />} {copied ? 'Copiado' : 'Copiar'}
+                      </button>
+                      {phoneDigits.length >= 8 ? (
+                        <a href={`https://wa.me/${phoneDigits}?text=${encodeURIComponent(accessText)}`} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1.5 rounded-xl border border-white/15 hover:border-[var(--portal-line-strong)] py-2.5 text-xs text-green-400">
+                          <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
+                        </a>
+                      ) : <span className="rounded-xl border border-white/5 py-2.5 text-xs text-white/25 flex items-center justify-center gap-1.5"><MessageCircle className="w-3.5 h-3.5" />WhatsApp</span>}
+                      <a href={`mailto:${access.email}?subject=${encodeURIComponent('Tu acceso a samgple')}&body=${encodeURIComponent(accessText)}`} className="flex items-center justify-center gap-1.5 rounded-xl border border-white/15 hover:border-[var(--portal-line-strong)] py-2.5 text-xs">
+                        <Mail className="w-3.5 h-3.5" /> Email
+                      </a>
+                    </div>
+                  </div>
                 ) : (
-                  <p className="text-yellow-400">Esta solicitud no tiene email, así que no se pueden mostrar avisos en una cuenta.</p>
+                  <div className="flex flex-wrap gap-2">
+                    <button onClick={() => createAccess(false)} disabled={accessBusy} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full portal-cta text-xs cursor-pointer disabled:opacity-50">
+                      {accessBusy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <KeyRound className="w-3.5 h-3.5" />} Crear acceso
+                    </button>
+                    <button onClick={() => createAccess(true)} disabled={accessBusy} className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/15 hover:border-[var(--portal-line-strong)] text-xs cursor-pointer disabled:opacity-50">
+                      Generar nueva contraseña
+                    </button>
+                  </div>
                 )}
-                {inviteMsg && <p>{inviteMsg}</p>}
+                {accessMsg && <p role="status" className="text-xs text-white/70">{accessMsg}</p>}
               </div>
 
               <div>

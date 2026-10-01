@@ -15,6 +15,7 @@ import {
   LogOut,
   Menu,
   PhoneCall,
+  Puzzle,
   Search,
   Settings as SettingsIcon,
   UserRound,
@@ -56,7 +57,10 @@ const AGENCY_GROUPS: NavGroup[] = [
   },
   {
     label: 'Negocio',
-    items: [{ label: 'Finanzas', href: '/portal/finance', icon: LineChart }],
+    items: [
+      { label: 'Finanzas', href: '/portal/finance', icon: LineChart },
+      { label: 'Prompts', href: '/portal/prompts', icon: Puzzle },
+    ],
   },
 ];
 

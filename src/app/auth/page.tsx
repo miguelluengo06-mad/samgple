@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthContext';
 import Auth from '@/components/Auth';
 import { supabase } from '@/lib/supabase';
@@ -37,9 +37,6 @@ interface AuthConfig {
 export default function AuthPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  // /auth?mode=signup — the "Registrarse" links on the public site land here
-  const signupRequested = searchParams?.get('mode') === 'signup';
   const [demoLoading, setDemoLoading] = useState(false);
   const [isInviteFlow, setIsInviteFlow] = useState(false);
 
@@ -101,7 +98,6 @@ export default function AuthPage() {
 
   if (user) return null;
 
-  const signupClosed = signupRequested && !isInviteFlow && !authConfig.allow_signup;
 
   return (
     <div className="home-root min-h-screen flex flex-col items-center justify-center px-4 py-16">
@@ -135,24 +131,6 @@ export default function AuthPage() {
           </div>
           <p className="text-center text-xs text-white/30">Read-only live demo</p>
         </div>
-      ) : signupClosed ? (
-        <div className="w-full max-w-md text-center space-y-4">
-          <h2 className="text-2xl font-bold text-white">El registro está cerrado</h2>
-          <p className="text-sm text-white/60">
-            Ahora mismo no se admiten cuentas nuevas. Si ya tienes una, accede; si quieres hablar con nosotros, agenda una llamada desde la web.
-          </p>
-          <div className="flex items-center justify-center gap-3 pt-2">
-            <Link
-              href="/auth"
-              className="px-5 py-2.5 rounded-full bg-[var(--signal)] text-black text-sm font-medium hover:bg-[var(--signal-dim)] transition-colors"
-            >
-              Acceder
-            </Link>
-            <Link href="/" className="px-5 py-2.5 rounded-full border border-white/15 text-sm text-white/70 hover:text-white transition-colors">
-              Volver a la web
-            </Link>
-          </div>
-        </div>
       ) : (
         <>
         {authConfig.first_run && !isInviteFlow && (
@@ -162,8 +140,10 @@ export default function AuthPage() {
         )}
         <Auth
           onSuccess={() => router.replace('/portal')}
-          initialMode={(authConfig?.first_run || isInviteFlow || signupRequested) ? 'signup' : 'signin'}
-          authConfig={isInviteFlow ? { ...authConfig, allow_signup: true } : authConfig}
+          initialMode={authConfig?.first_run || isInviteFlow ? 'signup' : 'signin'}
+          // Solo acceso: las cuentas de cliente las crea la agencia. El alta solo se abre en la primera
+          // configuración (para crear al administrador) y con una invitación de equipo.
+          authConfig={{ ...authConfig, allow_signup: authConfig.first_run || isInviteFlow }}
         />
         </>
       )}
