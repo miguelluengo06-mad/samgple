@@ -43,7 +43,7 @@ describe('price table (exactly as agreed — do not round or change)', () => {
   });
 
   it('single video and extras', () => {
-    expect([SINGLE_VIDEO.name, SINGLE_VIDEO.price, SINGLE_VIDEO.unit]).toEqual(['Vídeo suelto', 40, 'video']);
+    expect([SINGLE_VIDEO.name, SINGLE_VIDEO.price, SINGLE_VIDEO.unit]).toEqual(['Vídeo suelto', 60, 'video']);
     expect(SINGLE_VIDEO.includes).toEqual(['1 vídeo', '1 revisión', 'Entrega en 5 días']);
     expect(EXTRAS.map((e) => [e.name, e.price])).toEqual([
       ['Gancho adicional', '15 €'],
@@ -75,7 +75,7 @@ describe('price list', () => {
 
   it('has the three service lines in order', () => {
     expect(PACK_GROUPS.map((g) => g.id)).toEqual(['ugc', 'influencer', 'replica']);
-    expect(SINGLE_VIDEO.price).toBe(40);
+    expect(SINGLE_VIDEO.price).toBe(60);
   });
 
   it('UGC', () => {
