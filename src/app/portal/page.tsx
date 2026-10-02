@@ -1,23 +1,27 @@
 'use client';
 
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { usePortalRoleContext } from './context';
 import AdminDashboard from '@/components/portal/dashboard/AdminDashboard';
-import AccountHome from '@/components/portal/dashboard/AccountHome';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 /**
- * /portal — what you land on after signing in, by role:
- *   agency → Resumen dashboard
- *   anyone else (registered visitor or invited customer) → their own account page
+ * /portal — el panel de la agencia (Resumen). Los clientes tienen el suyo en /cuenta.
  */
 export default function PortalHomePage() {
-  const { role, loading } = usePortalRoleContext();
+  const { role, passkeyRequired, loading } = usePortalRoleContext();
+  const router = useRouter();
 
-  if (loading) return null;
+  useEffect(() => {
+    if (!loading && role !== 'agency' && !passkeyRequired) router.replace('/cuenta');
+  }, [loading, role, passkeyRequired, router]);
+
+  if (loading || role !== 'agency') return null;
 
   return (
     <ErrorBoundary fallbackTitle="Error en el panel" fallbackMessage="Algo ha fallado al cargar el panel. Inténtalo de nuevo.">
-      {role === 'agency' ? <AdminDashboard /> : <AccountHome />}
+      <AdminDashboard />
     </ErrorBoundary>
   );
 }

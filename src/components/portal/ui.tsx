@@ -21,12 +21,14 @@ export function Page({
 }) {
   return (
     <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
-      <header className="flex-shrink-0 px-4 md:px-8 pt-4 md:pt-6 pb-3 flex items-end justify-between gap-3">
-        <div className="min-w-0">
-          <h1 className="text-xl md:text-2xl font-semibold tracking-tight truncate">{title}</h1>
-          {subtitle && <p className="text-xs md:text-sm text-white/45 mt-0.5 truncate capitalize-first">{subtitle}</p>}
+      <header className="flex-shrink-0 px-4 md:px-8 pt-4 md:pt-6 pb-3">
+        <div className={cn('mx-auto w-full flex items-end justify-between gap-3', width)}>
+          <div className="min-w-0">
+            <h1 className="text-xl md:text-2xl font-semibold tracking-tight truncate">{title}</h1>
+            {subtitle && <p className="text-xs md:text-sm text-white/45 mt-0.5 truncate capitalize-first">{subtitle}</p>}
+          </div>
+          {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
         </div>
-        {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
       </header>
       <div className="flex-1 overflow-y-auto overscroll-contain">
         <div className={cn('px-4 md:px-8 pb-8 pt-2 mx-auto space-y-4 md:space-y-5', width)}>{children}</div>
@@ -50,7 +52,7 @@ export function Panel({
   delay?: number;
 }) {
   return (
-    <section className={cn('card-liquid rounded-3xl p-4 md:p-6 pn-in', className)} style={{ animationDelay: `${delay}ms` }}>
+    <section className={cn('card-liquid rounded-3xl p-4 md:p-6 pn-in min-w-0', className)} style={{ animationDelay: `${delay}ms` }}>
       {title && (
         <div className="flex items-center justify-between gap-3 mb-4">
           <h2 className="pn-title">{title}</h2>

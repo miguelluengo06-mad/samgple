@@ -38,21 +38,21 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     }
   }, [authLoading, user, router]);
 
-  // Role-based routing: customers only get their account page and account settings —
-  // the rest of the admin is for the agency.
+  // Los clientes tienen su propio panel (/cuenta); /portal es solo para la agencia.
+  // (Si es del equipo pero entró sin passkey, se queda aquí para ver el aviso.)
   useEffect(() => {
     if (authLoading || roleLoading || !user) return;
-    if (role !== 'agency' && pathname !== '/portal' && !pathname?.startsWith('/portal/settings')) router.replace('/portal');
-  }, [authLoading, roleLoading, user, role, pathname, router]);
+    if (role !== 'agency' && !passkeyRequired) router.replace('/cuenta');
+  }, [authLoading, roleLoading, user, role, passkeyRequired, pathname, router]);
 
-  if (authLoading || !user || roleLoading) {
+  if (authLoading || !user || roleLoading || (role !== 'agency' && !passkeyRequired)) {
     return <BrandedLoadingSpinner logoUrl={logoUrl} />;
   }
 
   // Persona del equipo con la sesión abierta sin passkey: solo se le pide que vuelva a entrar con él
   if (passkeyRequired) {
     return (
-      <div className="portal-neon min-h-[100dvh] flex items-center justify-center px-4">
+      <div className="portal-ui min-h-[100dvh] flex items-center justify-center px-4">
         <div className="card-liquid rounded-3xl p-8 max-w-md text-center space-y-4">
           <h1 className="text-xl font-semibold">Entra con tu passkey</h1>
           <p className="text-sm text-white/65">Tu cuenta de administración se protege con huella, cara o PIN del móvil. Cierra esta sesión y entra con «Entrar con huella o passkey».</p>
@@ -73,7 +73,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   return (
     <PortalRoleContext.Provider value={{ role, passkeyRequired, loading: roleLoading }}>
       <LeadsProvider enabled={role === 'agency'}>
-        <div className="portal-neon h-[100dvh] flex flex-col">
+        <div className="portal-ui h-[100dvh] flex flex-col">
           <div className="flex-1 min-h-0 flex flex-col md:flex-row">
             <PortalSidebar role={role} />
             {/* Content area (each page renders its own header) */}

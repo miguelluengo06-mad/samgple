@@ -8,7 +8,7 @@
 export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
 
 /** Rutas donde nunca se carga (panel de administración y acceso). */
-export const PIXEL_EXCLUDED_PREFIXES = ['/portal', '/auth', '/invite'];
+export const PIXEL_EXCLUDED_PREFIXES = ['/portal', '/cuenta', '/vista-cliente', '/auth', '/invite'];
 
 type Fbq = (...args: unknown[]) => void;
 

@@ -1083,103 +1083,102 @@ select {
 }
 
 /*
- * Panel de administración: tema oscuro futurista (neón lima sobre negro azulado, cristal y rejilla técnica).
- * Los tokens white/black/gray son pares light-dark(): con color-scheme oscuro todo el panel hereda texto claro
- * sobre fondo oscuro. Aquí solo se define el fondo, los bordes con brillo, las tarjetas de cristal y la tipografía.
+ * Paneles (administración y cliente): tema CLARO.
+ * Los tokens white/black son pares light-dark() que se invierten según color-scheme: con el esquema claro,
+ * «text-white» es tinta oscura y «bg-black» es papel blanco. Aquí se define la paleta, las tarjetas, los bordes
+ * y la tipografía; los componentes siguen usando las mismas clases.
  */
-.portal-neon {
-  color-scheme: dark;
-  --signal: #c8ff3e;
-  --signal-dim: #a3e01c;
-  --portal-line: rgba(200, 255, 62, 0.16);
-  --portal-line-strong: rgba(200, 255, 62, 0.42);
-  --portal-glow: rgba(200, 255, 62, 0.22);
+.portal-ui {
+  color-scheme: light;
+  --signal: #4f7a10;
+  --signal-dim: #3f6309;
+  --portal-ink: #16210e;
+  --portal-line: rgba(22, 33, 14, 0.13);
+  --portal-line-strong: rgba(22, 33, 14, 0.3);
+  --portal-glow: rgba(79, 122, 16, 0.16);
   position: relative;
   isolation: isolate;
   background:
-    radial-gradient(1100px 560px at 88% -12%, rgba(200, 255, 62, 0.11), transparent 60%),
-    radial-gradient(900px 520px at -12% 112%, rgba(56, 232, 255, 0.08), transparent 55%),
-    #05080b;
-  color: #eef3e6;
+    radial-gradient(900px 480px at 92% -10%, rgba(120, 170, 30, 0.13), transparent 62%),
+    radial-gradient(760px 420px at -8% 108%, rgba(56, 160, 200, 0.07), transparent 58%),
+    #f5f7f0;
+  color: var(--portal-ink);
 }
-/* Rejilla técnica muy tenue, desvanecida hacia abajo */
-.portal-neon::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(200, 255, 62, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(200, 255, 62, 0.05) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: linear-gradient(180deg, #000 0%, transparent 70%);
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 70%);
-}
-.portal-neon [class*='border-white/'],
-.portal-neon [class*='border-gray-'] {
+.portal-ui [class*='border-white/'],
+.portal-ui [class*='border-gray-'] {
   border-color: var(--portal-line);
 }
-.portal-neon [class*='divide-white/'] > *,
-.portal-neon [class*='divide-gray-'] > * {
+.portal-ui [class*='divide-white/'] > *,
+.portal-ui [class*='divide-gray-'] > * {
   border-color: var(--portal-line);
 }
-.portal-neon .card-liquid {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.02));
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
+/* Tarjetas: papel blanco con borde fino y una sombra suave */
+.portal-ui .card-liquid {
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border: 1px solid var(--portal-line);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
-    0 14px 40px -20px var(--portal-glow);
+  box-shadow: 0 1px 2px rgba(22, 33, 14, 0.05), 0 14px 34px -22px rgba(22, 33, 14, 0.25);
 }
-.portal-neon .card-liquid-interactive:hover,
-.portal-neon button.card-liquid:hover {
+.portal-ui .card-liquid-interactive:hover,
+.portal-ui button.card-liquid:hover,
+.portal-ui a.card-liquid:hover {
   transform: none;
   border-color: var(--portal-line-strong);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.09),
-    0 0 0 1px rgba(200, 255, 62, 0.12),
-    0 16px 46px -16px var(--portal-glow);
+  box-shadow: 0 1px 2px rgba(22, 33, 14, 0.06), 0 18px 38px -20px rgba(22, 33, 14, 0.3);
 }
-.portal-neon input,
-.portal-neon select,
-.portal-neon textarea {
-  background-color: rgba(255, 255, 255, 0.04);
-  border-color: var(--portal-line);
-}
-.portal-neon input:focus,
-.portal-neon textarea:focus,
-.portal-neon select:focus {
+.portal-ui input,
+.portal-ui select,
+.portal-ui textarea {
+  background-color: #ffffff;
   border-color: var(--portal-line-strong);
-  box-shadow: 0 0 0 3px rgba(200, 255, 62, 0.14);
 }
-/* Tipografía técnica: títulos en display, etiquetas y cifras en monoespaciada */
-.portal-neon h1 {
+.portal-ui input:focus,
+.portal-ui textarea:focus,
+.portal-ui select:focus {
+  border-color: var(--signal);
+  box-shadow: 0 0 0 3px rgba(79, 122, 16, 0.16);
+}
+/* Títulos en display; etiquetas y cifras en monoespaciada */
+.portal-ui h1 {
   font-family: var(--font-display);
   letter-spacing: -0.01em;
 }
-.portal-neon [class*='uppercase'][class*='tracking-'],
-.portal-neon .tabular-nums {
+.portal-ui [class*='uppercase'][class*='tracking-'],
+.portal-ui .tabular-nums {
   font-family: var(--font-mono);
 }
-.portal-neon .fixed.inset-0[class*='bg-black/'] {
-  background: rgba(2, 4, 6, 0.74);
-  backdrop-filter: blur(6px);
+/* Fondo de las ventanas emergentes */
+.portal-ui .fixed.inset-0[class*='bg-black/'] {
+  background: rgba(22, 33, 14, 0.5);
+  backdrop-filter: blur(5px);
 }
-.portal-neon ::-webkit-scrollbar { width: 8px; height: 8px; }
-.portal-neon ::-webkit-scrollbar-thumb { background: rgba(200, 255, 62, 0.22); border-radius: 8px; }
-.portal-neon ::-webkit-scrollbar-track { background: transparent; }
-/* Botón principal con brillo */
-.portal-neon .portal-cta {
+.portal-ui ::-webkit-scrollbar { width: 8px; height: 8px; }
+.portal-ui ::-webkit-scrollbar-thumb { background: rgba(22, 33, 14, 0.2); border-radius: 8px; }
+.portal-ui ::-webkit-scrollbar-track { background: transparent; }
+/* Botón principal: verde oliva con texto blanco */
+.portal-ui .portal-cta {
   background: var(--signal);
-  color: #0a1002;
-  font-weight: 700;
-  box-shadow: 0 0 22px -4px rgba(200, 255, 62, 0.55);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(22, 33, 14, 0.2), 0 8px 18px -8px rgba(79, 122, 16, 0.55);
+  transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
 }
-.portal-neon .portal-cta:hover { background: #d8ff6b; }
+.portal-ui .portal-cta:hover { background: var(--signal-dim); }
+.portal-ui .portal-cta:active { transform: translateY(1px); }
+/* Colores de estado legibles sobre claro */
+.portal-ui .text-green-400 { color: #1f7a3a; }
+.portal-ui .text-yellow-400 { color: #9a6700; }
+.portal-ui .text-blue-400, .portal-ui .text-blue-300 { color: #1b55b5; }
+.portal-ui .text-red-400 { color: #b42318; }
+.portal-ui .bg-green-400\/10 { background-color: rgba(31, 122, 58, 0.1); }
+.portal-ui .bg-yellow-400\/10, .portal-ui .bg-yellow-400\/\[0\.06\] { background-color: rgba(154, 103, 0, 0.09); }
+.portal-ui .bg-blue-400\/10, .portal-ui .bg-blue-500\/10, .portal-ui .bg-blue-400\/\[0\.06\] { background-color: rgba(27, 85, 181, 0.09); }
+.portal-ui .border-green-400\/30, .portal-ui .border-green-400\/25 { border-color: rgba(31, 122, 58, 0.35); }
+.portal-ui .border-yellow-400\/30 { border-color: rgba(154, 103, 0, 0.35); }
+.portal-ui .border-blue-400\/30, .portal-ui .border-blue-400\/25, .portal-ui .border-blue-500\/30, .portal-ui .border-blue-400\/40 { border-color: rgba(27, 85, 181, 0.35); }
 
-/* ── Panel: sistema de diseño premium ───────────────────────────────────────── */
+/* ── Sistema de diseño de los paneles ─────────────────────────────────────── */
 @keyframes pn-fade-up {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -1189,70 +1188,67 @@ select {
   to { background-position: 200% 0; }
 }
 @keyframes pn-pulse-ring {
-  0% { box-shadow: 0 0 0 0 rgba(200, 255, 62, 0.45); }
-  100% { box-shadow: 0 0 0 12px rgba(200, 255, 62, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(79, 122, 16, 0.4); }
+  100% { box-shadow: 0 0 0 12px rgba(79, 122, 16, 0); }
 }
-.portal-neon .pn-in { animation: pn-fade-up 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
-.portal-neon .pn-skeleton {
+.portal-ui .pn-in { animation: pn-fade-up 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+.portal-ui .pn-skeleton {
   border-radius: 14px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.09) 50%, rgba(255, 255, 255, 0.04) 75%);
+  background: linear-gradient(90deg, rgba(22, 33, 14, 0.05) 25%, rgba(22, 33, 14, 0.1) 50%, rgba(22, 33, 14, 0.05) 75%);
   background-size: 200% 100%;
   animation: pn-shimmer 1.4s linear infinite;
 }
-.portal-neon .pn-live { animation: pn-pulse-ring 1.8s ease-out infinite; }
-/* Tarjeta destacada: degradado lima con halo */
-.portal-neon .pn-hero {
+.portal-ui .pn-live { animation: pn-pulse-ring 1.8s ease-out infinite; }
+/* Tarjeta destacada: blanco con un toque de verde */
+.portal-ui .pn-hero {
   position: relative;
   overflow: hidden;
   border-radius: 24px;
   border: 1px solid var(--portal-line-strong);
   background:
-    radial-gradient(600px 220px at 100% 0%, rgba(200, 255, 62, 0.20), transparent 65%),
-    radial-gradient(420px 200px at 0% 100%, rgba(56, 232, 255, 0.10), transparent 70%),
-    linear-gradient(160deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
-  box-shadow: 0 30px 80px -40px var(--portal-glow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    radial-gradient(520px 200px at 100% 0%, rgba(120, 170, 30, 0.18), transparent 65%),
+    linear-gradient(160deg, #ffffff, #f3f8e8);
+  box-shadow: 0 1px 2px rgba(22, 33, 14, 0.06), 0 26px 60px -34px rgba(79, 122, 16, 0.45);
 }
-.portal-neon .pn-chip {
+.portal-ui .pn-chip {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 4px 11px;
   border-radius: 999px;
-  border: 1px solid var(--portal-line);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--portal-line-strong);
+  background: #ffffff;
   font-size: 12px;
   font-weight: 500;
-  color: rgba(238, 243, 230, 0.7);
+  color: rgba(22, 33, 14, 0.72);
   white-space: nowrap;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
 }
-.portal-neon button.pn-chip { cursor: pointer; min-height: 34px; }
-.portal-neon button.pn-chip:hover { color: #fff; border-color: var(--portal-line-strong); }
-.portal-neon .pn-chip[aria-pressed='true'],
-.portal-neon .pn-chip[aria-selected='true'] {
+.portal-ui button.pn-chip { cursor: pointer; min-height: 34px; }
+.portal-ui button.pn-chip:hover { color: var(--portal-ink); border-color: var(--signal); }
+.portal-ui .pn-chip[aria-pressed='true'],
+.portal-ui .pn-chip[aria-selected='true'] {
   background: var(--signal);
   border-color: transparent;
-  color: #0a1002;
-  font-weight: 700;
-  box-shadow: 0 0 18px -4px rgba(200, 255, 62, 0.6);
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 6px 14px -8px rgba(79, 122, 16, 0.6);
 }
-.portal-neon .pn-title {
+.portal-ui .pn-title {
   font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(238, 243, 230, 0.42);
+  color: rgba(22, 33, 14, 0.52);
   font-family: var(--font-mono);
 }
-.portal-neon .pn-row {
-  transition: background 0.15s, border-color 0.15s;
-}
-.portal-neon .pn-row:hover { background: rgba(255, 255, 255, 0.035); }
+.portal-ui .pn-row { transition: background 0.15s, border-color 0.15s; }
+.portal-ui .pn-row:hover { background: rgba(22, 33, 14, 0.035); }
 @media (prefers-reduced-motion: reduce) {
-  .portal-neon .pn-in, .portal-neon .pn-skeleton, .portal-neon .pn-live { animation: none; }
+  .portal-ui .pn-in, .portal-ui .pn-skeleton, .portal-ui .pn-live { animation: none; }
 }
 /* Zonas táctiles cómodas en móvil */
 @media (max-width: 767px) {
-  .portal-neon button, .portal-neon a[role='button'] { min-height: 40px; }
-  .portal-neon input, .portal-neon textarea, .portal-neon select { font-size: 16px; }
+  .portal-ui button, .portal-ui a[role='button'] { min-height: 40px; }
+  .portal-ui input, .portal-ui textarea, .portal-ui select { font-size: 16px; }
 }

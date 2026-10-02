@@ -503,7 +503,7 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange, 
                 const current = l.id === lead.id;
                 return (
                   <li key={l.id} className="relative">
-                    <span className={cn('absolute -left-5 top-3 w-3.5 h-3.5 rounded-full border-2 bg-[#05080b]', current ? 'border-[var(--signal)] shadow-[0_0_10px_var(--signal)]' : 'border-white/30')} />
+                    <span className={cn('absolute -left-5 top-3 w-3.5 h-3.5 rounded-full border-2 bg-black', current ? 'border-[var(--signal)] shadow-[0_0_10px_var(--signal)]' : 'border-white/30')} />
                     <button
                       onClick={() => (current ? setTab('resumen') : onOpenLead?.(l.id))}
                       className="w-full text-left rounded-xl border border-white/10 bg-white/[0.03] hover:border-[var(--portal-line-strong)] px-3.5 py-3 cursor-pointer transition-colors"
@@ -604,7 +604,7 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange, 
                   </div>
                 )}
                 {accessMsg && <p role="status" className="text-xs text-white/70">{accessMsg}</p>}
-                <Link href={`/portal/preview?lead=${lead.id}`} onClick={onClose} className="inline-flex items-center gap-2 text-xs text-[var(--signal)] hover:underline">
+                <Link href={`/vista-cliente?lead=${lead.id}`} onClick={onClose} className="inline-flex items-center gap-2 text-xs text-[var(--signal)] hover:underline">
                   <Eye className="w-3.5 h-3.5" /> Ver su panel tal como lo ve {lead.name.split(' ')[0]}
                 </Link>
               </div>

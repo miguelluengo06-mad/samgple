@@ -138,6 +138,6 @@ export async function provisionCustomer(
 export async function announceVideoUpdate(ownerId: string, email: string, title: string, body: string, opts: { mail?: boolean } = {}): Promise<void> {
   await notifyCustomer(ownerId, email, title, body);
   if (opts.mail) {
-    await emailCustomer(ownerId, email, customerUpdateEmail({ title, body, ctaLabel: 'Ver mi pedido', ctaUrl: `${siteUrl()}/portal` }));
+    await emailCustomer(ownerId, email, customerUpdateEmail({ title, body, ctaLabel: 'Ver mi pedido', ctaUrl: `${siteUrl()}/cuenta/videos` }));
   }
 }

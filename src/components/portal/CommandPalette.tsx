@@ -27,7 +27,7 @@ const PAGES: Item[] = [
   { id: 'p-fin', label: 'Finanzas', icon: LineChart, href: '/portal/finance', group: 'Ir a' },
   { id: 'p-prompts', label: 'Prompts', icon: Puzzle, href: '/portal/prompts', group: 'Ir a' },
   { id: 'p-sec', label: 'Seguridad', icon: ShieldCheck, href: '/portal/security', group: 'Ir a' },
-  { id: 'p-preview', label: 'Ver como cliente', icon: Eye, href: '/portal/preview', group: 'Ir a' },
+  { id: 'p-preview', label: 'Ver como cliente', icon: Eye, href: '/vista-cliente', group: 'Ir a' },
   { id: 'p-set', label: 'Ajustes', icon: Settings, href: '/portal/settings', group: 'Ir a' },
 ];
 

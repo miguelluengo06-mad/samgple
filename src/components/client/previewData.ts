@@ -1,15 +1,6 @@
-'use client';
-
-import { useEffect, useMemo, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useAuth } from '@/components/AuthContext';
-import { usePortalRoleContext } from '@/app/portal/context';
-import { useLeadsContext } from '@/app/portal/leads/context';
 import type { Lead } from '@/app/portal/leads/context';
-import AccountHome from '@/components/portal/dashboard/AccountHome';
-import type { AccountPreview } from '@/components/portal/dashboard/AccountHome';
 import { contactKeys } from '@/components/portal/leadMeta';
-import type { StudioAvatar, StudioData, StudioRequest } from '@/components/portal/dashboard/VideoStudio';
+import type { ClientPreviewData, StudioAvatar } from './types';
 
 /** Retrato de ejemplo: degradado con iniciales (no depende de ningún archivo externo). */
 const face = (a: string, b: string, letter: string) =>
@@ -29,7 +20,7 @@ const HOUR = 3600_000;
 const DAY = 24 * HOUR;
 
 /** Datos inventados para ver el diseño aunque todavía no tengas clientes. */
-function sample(): AccountPreview {
+export function sample(): ClientPreviewData {
   const call = new Date(Date.now() + DAY);
   call.setUTCHours(16, 0, 0, 0);
   return {
@@ -61,13 +52,14 @@ function sample(): AccountPreview {
 }
 
 /** Datos reales de un cliente, sacados de las solicitudes que ya tienes cargadas. */
-function fromLead(lead: Lead, all: Lead[]): AccountPreview {
+export function fromLead(lead: Lead, all: Lead[]): ClientPreviewData {
   const mine = new Set(contactKeys(lead));
   const related = [lead, ...all.filter((l) => l.id !== lead.id && contactKeys(l).some((k) => mine.has(k)))];
   return {
     name: lead.name,
     email: lead.email || lead.name,
     sample: false,
+    studio: { balance: 0, granted: 0, requests: [], avatars: [] },
     calls: related
       .filter((l) => l.kind === 'call' || l.kind === 'proposal')
       .map((l) => ({ id: l.id, kind: l.kind, call_at: l.call_at, status: l.status, created_at: l.created_at })),
@@ -91,44 +83,3 @@ function fromLead(lead: Lead, all: Lead[]): AccountPreview {
   };
 }
 
-export default function PreviewPage() {
-  const { session } = useAuth();
-  const { role, loading } = usePortalRoleContext();
-  const { leads, loading: leadsLoading } = useLeadsContext();
-  const router = useRouter();
-  const params = useSearchParams();
-  const leadId = params?.get('lead');
-
-  useEffect(() => {
-    if (!loading && role !== 'agency') router.replace('/portal');
-  }, [role, loading, router]);
-
-  const base = useMemo(() => {
-    const lead = leadId ? leads.find((l) => l.id === leadId) : undefined;
-    return lead ? fromLead(lead, leads) : sample();
-  }, [leadId, leads]);
-
-  // Con un cliente real, el estudio de vídeos se rellena con sus pedidos y su saldo de verdad
-  const [studio, setStudio] = useState<StudioData | null>(base.sample ? base.studio ?? null : null);
-  const token = session?.access_token;
-  useEffect(() => {
-    if (base.sample) {
-      setStudio(base.studio ?? null);
-      return;
-    }
-    if (!token) return;
-    const headers = { Authorization: `Bearer ${token}` };
-    Promise.all([fetch('/api/videos', { headers }).then((r) => r.json()), fetch('/api/avatars', { headers }).then((r) => r.json())])
-      .then(([v, a]) => {
-        const email = base.email.toLowerCase();
-        const mine = ((v.requests || []) as (StudioRequest & { customer_email: string })[]).filter((r) => r.customer_email === email);
-        const balance = Number(v.balances?.[email] || 0);
-        const avatars = ((a.avatars || []) as (StudioAvatar & { active: boolean })[]).filter((x) => x.active);
-        setStudio({ balance, granted: Math.max(balance, balance + mine.filter((r) => r.status !== 'cancelled').length), requests: mine, avatars, unavailable: !!(v.setup || a.setup) });
-      })
-      .catch(() => setStudio({ balance: 0, granted: 0, requests: [], avatars: [], unavailable: true }));
-  }, [base, token]);
-
-  if (role !== 'agency' || leadsLoading || !studio) return <div className="flex-1" />;
-  return <AccountHome key={base.email} preview={{ ...base, studio }} />;
-}

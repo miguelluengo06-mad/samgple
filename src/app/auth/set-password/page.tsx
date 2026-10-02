@@ -39,7 +39,7 @@ export default function SetPasswordPage() {
       setSaving(false);
       return setError(/same|different/i.test(err.message) ? 'Elige una contraseña distinta a la anterior.' : 'No se pudo guardar la contraseña. Inténtalo de nuevo.');
     }
-    router.replace('/portal');
+    router.replace('/cuenta');
   };
 
   if (loading || !user) return <div className="home-root min-h-screen" />;

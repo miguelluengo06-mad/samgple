@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   ArrowLeft,
@@ -18,50 +18,16 @@ import {
   UserRound,
   X,
 } from 'lucide-react';
+import { useMemo } from 'react';
 import { LEGAL } from '@/lib/legal';
-import { CLIENT_CANCELLABLE, MAX_VIDEO_SECONDS, MAX_WORDS, STATUS_HINT, STATUS_LABEL, STATUS_ORDER, TONES, estimateSeconds, type VideoStatus } from '@/lib/videos';
+import { CLIENT_CANCELLABLE, MAX_VIDEO_SECONDS, MAX_WORDS, STATUS_HINT, STATUS_LABEL, STATUS_ORDER, TONES, estimateSeconds } from '@/lib/videos';
 import { timeAgo } from '@/components/portal/leadMeta';
-import { CountUp, EmptyState, Panel, Skeleton } from '@/components/portal/ui';
+import { CountUp, EmptyState } from '@/components/portal/ui';
 import { cn } from '@/lib/utils';
+import { useClient } from './ClientProvider';
+import { EMPTY_DRAFT, type StudioRequest, type VideoDraft } from './types';
 
-export interface StudioAvatar {
-  id: string;
-  name: string;
-  style: string;
-  gender: string;
-  tags: string[];
-  image_url: string;
-  preview_url: string | null;
-}
-
-export interface StudioRequest {
-  id: string;
-  avatar_id: string | null;
-  avatar_name: string;
-  avatar_image_url: string | null;
-  script_notes: string;
-  est_seconds: number;
-  product: string | null;
-  tone: string | null;
-  cta: string | null;
-  drive_url: string | null;
-  status: VideoStatus;
-  script_text: string | null;
-  client_feedback: string | null;
-  delivery_url: string | null;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface StudioData {
-  balance: number;
-  granted: number;
-  requests: StudioRequest[];
-  avatars: StudioAvatar[];
-  unavailable?: boolean;
-}
-
-function AvatarImage({ src, name, className }: { src: string | null; name: string; className?: string }) {
+export function AvatarImage({ src, name, className }: { src: string | null; name: string; className?: string }) {
   const [broken, setBroken] = useState(false);
   return (
     <div className={cn('overflow-hidden bg-white/[0.05] flex items-center justify-center shrink-0', className)}>
@@ -76,7 +42,7 @@ function AvatarImage({ src, name, className }: { src: string | null; name: strin
 }
 
 /** Anillo con el saldo: vídeos que quedan sobre los que ha recibido. */
-function Ring({ left, total }: { left: number; total: number }) {
+export function Ring({ left, total }: { left: number; total: number }) {
   const r = 52;
   const c = 2 * Math.PI * r;
   const pct = total > 0 ? Math.min(1, left / total) : 0;
@@ -107,30 +73,15 @@ function Ring({ left, total }: { left: number; total: number }) {
 
 /* ── Asistente de pedido ─────────────────────────────────────────────────── */
 
-interface Draft {
-  avatarId: string;
-  scriptNotes: string;
-  product: string;
-  tone: string;
-  cta: string;
-  driveUrl: string;
-}
-
-const EMPTY: Draft = { avatarId: '', scriptNotes: '', product: '', tone: '', cta: '', driveUrl: '' };
-
-function Wizard({
-  avatars,
-  balance,
-  onClose,
-  onSubmit,
-}: {
-  avatars: StudioAvatar[];
-  balance: number;
-  onClose: () => void;
-  onSubmit: (d: Draft) => Promise<string | null>;
-}) {
-  const [step, setStep] = useState(0);
-  const [d, setD] = useState<Draft>(EMPTY);
+/** Asistente de 3 pasos para pedir un vídeo. Se abre desde cualquier página con `openWizard()`. */
+export function Wizard() {
+  const c = useClient();
+  const { avatars, balance } = c.studio;
+  const onClose = c.closeWizard;
+  const onSubmit = c.submitVideo;
+  const initial = c.wizard.avatarId && avatars.some((a) => a.id === c.wizard.avatarId) ? c.wizard.avatarId : '';
+  const [step, setStep] = useState(initial ? 1 : 0);
+  const [d, setD] = useState<VideoDraft>({ ...EMPTY_DRAFT, avatarId: initial });
   const [query, setQuery] = useState('');
   const [facet, setFacet] = useState<string>('all');
   const [sending, setSending] = useState(false);
@@ -323,7 +274,7 @@ function Wizard({
 
 /* ── Seguimiento de un pedido ────────────────────────────────────────────── */
 
-function RequestCard({ r, busy, onAction }: { r: StudioRequest; busy: boolean; onAction: (id: string, action: 'approve' | 'changes' | 'cancel', feedback?: string) => Promise<string | null> }) {
+export function RequestCard({ r, busy, onAction }: { r: StudioRequest; busy: boolean; onAction: (id: string, action: 'approve' | 'changes' | 'cancel', feedback?: string) => Promise<string | null> }) {
   const [open, setOpen] = useState(r.status === 'script_review');
   const [asking, setAsking] = useState(false);
   const [feedback, setFeedback] = useState('');
@@ -421,120 +372,3 @@ function RequestCard({ r, busy, onAction }: { r: StudioRequest; busy: boolean; o
   );
 }
 
-/* ── Estudio completo: saldo + pedir + mis pedidos ───────────────────────── */
-
-export default function VideoStudio({ token, preview }: { token?: string; preview?: StudioData }) {
-  const [data, setData] = useState<StudioData | null>(preview || null);
-  const [wizard, setWizard] = useState(false);
-  const [busyId, setBusyId] = useState<string | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
-
-  const load = useCallback(async () => {
-    if (!token) return;
-    try {
-      const res = await fetch('/api/account/videos', { headers: { Authorization: `Bearer ${token}` } });
-      const d = await res.json();
-      setData({ balance: d.balance || 0, granted: d.granted || 0, requests: d.requests || [], avatars: d.avatars || [], unavailable: d.unavailable });
-    } catch {
-      setData({ balance: 0, granted: 0, requests: [], avatars: [], unavailable: true });
-    }
-  }, [token]);
-
-  useEffect(() => {
-    if (!preview) load();
-  }, [preview, load]);
-
-  const flash = (t: string) => {
-    setToast(t);
-    setTimeout(() => setToast(null), 4000);
-  };
-
-  const submit = async (draft: Draft): Promise<string | null> => {
-    if (preview) {
-      // Vista previa de la agencia: se simula, no se envía nada
-      const av = data?.avatars.find((a) => a.id === draft.avatarId);
-      const req: StudioRequest = {
-        id: `preview-${Date.now()}`, avatar_id: draft.avatarId, avatar_name: av?.name || 'Avatar', avatar_image_url: av?.image_url || null, script_notes: draft.scriptNotes,
-        est_seconds: estimateSeconds(draft.scriptNotes), product: draft.product || null, tone: draft.tone || null, cta: draft.cta || null, drive_url: draft.driveUrl || null,
-        status: 'requested', script_text: null, client_feedback: null, delivery_url: null, created_at: new Date().toISOString(), updated_at: new Date().toISOString(),
-      };
-      setData((cur) => cur && { ...cur, balance: Math.max(0, cur.balance - 1), requests: [req, ...cur.requests] });
-      setWizard(false);
-      flash('Vista previa: así se vería tu pedido enviado.');
-      return null;
-    }
-    const res = await fetch('/api/account/videos', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(draft) });
-    const d = await res.json().catch(() => ({}));
-    if (!res.ok) return d.error || 'No se pudo enviar el pedido.';
-    setWizard(false);
-    flash('¡Pedido enviado! Te avisamos en cuanto el guion esté listo.');
-    await load();
-    return null;
-  };
-
-  const act = async (id: string, action: 'approve' | 'changes' | 'cancel', feedback?: string): Promise<string | null> => {
-    setBusyId(id);
-    try {
-      if (preview) {
-        const next: VideoStatus = action === 'approve' ? 'production' : action === 'changes' ? 'scripting' : 'cancelled';
-        setData((cur) => cur && { ...cur, balance: action === 'cancel' ? cur.balance + 1 : cur.balance, requests: cur.requests.map((r) => (r.id === id ? { ...r, status: next, client_feedback: action === 'changes' ? feedback || null : r.client_feedback } : r)) });
-        return null;
-      }
-      const res = await fetch(`/api/account/videos/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ action, feedback }) });
-      const d = await res.json().catch(() => ({}));
-      if (!res.ok) return d.error || 'No se pudo completar.';
-      flash(action === 'approve' ? 'Guion aprobado. Nos ponemos con tu vídeo.' : action === 'changes' ? 'Cambios enviados. Te avisamos con el guion nuevo.' : 'Pedido cancelado: el vídeo vuelve a tu saldo.');
-      await load();
-      return null;
-    } finally {
-      setBusyId(null);
-    }
-  };
-
-  if (!data) return <Skeleton className="h-56" />;
-
-  const waiting = data.requests.filter((r) => r.status === 'script_review').length;
-
-  return (
-    <>
-      <section className="pn-hero p-5 md:p-7 pn-in" aria-label="Tus vídeos">
-        <div className="flex flex-col sm:flex-row items-center gap-6 md:gap-8">
-          <Ring left={data.balance} total={Math.max(data.granted, data.balance)} />
-          <div className="min-w-0 text-center sm:text-left flex-1">
-            <span className="inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-3 py-1 border border-[var(--portal-line-strong)] text-[var(--signal)]"><Clapperboard className="w-3.5 h-3.5" /> Tus vídeos</span>
-            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mt-3">
-              {data.balance > 0 ? `Te ${data.balance === 1 ? 'queda' : 'quedan'} ${data.balance} ${data.balance === 1 ? 'vídeo' : 'vídeos'}` : data.granted > 0 ? 'Has usado todos tus vídeos' : 'Aún no tienes vídeos'}
-            </h2>
-            <p className="text-sm text-white/55 mt-1.5 max-w-md">
-              {data.balance > 0 ? 'Elige un avatar, cuéntanos qué quieres que diga (hasta 45 segundos) y nosotros nos encargamos. Tú apruebas el guion antes de producir.' : 'Consigue más vídeos con cualquiera de nuestros packs y vuelve a pedir cuando quieras.'}
-            </p>
-            <div className="flex flex-wrap gap-2 mt-5 justify-center sm:justify-start">
-              {data.balance > 0 ? (
-                <button onClick={() => setWizard(true)} className="inline-flex items-center gap-2 px-6 h-12 rounded-full portal-cta text-sm cursor-pointer"><Sparkles className="w-4 h-4" /> Pedir un vídeo</button>
-              ) : (
-                <Link href="/#precios" className="inline-flex items-center gap-2 px-6 h-12 rounded-full portal-cta text-sm">Ver packs <ArrowRight className="w-4 h-4" /></Link>
-              )}
-              {waiting > 0 && <span className="inline-flex items-center gap-1.5 px-4 h-12 rounded-full border border-blue-400/40 text-blue-300 text-sm"><PenLine className="w-4 h-4" /> {waiting} {waiting === 1 ? 'guion espera' : 'guiones esperan'} tu visto bueno</span>}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {toast && <p role="status" className="rounded-2xl border border-[var(--portal-line-strong)] bg-[var(--signal)]/[0.08] px-4 py-3 text-sm pn-in">{toast}</p>}
-
-      {data.unavailable && <p className="text-sm text-white/50">El estudio de vídeos todavía no está activado. Escríbenos si ves este mensaje.</p>}
-
-      <Panel title="Mis pedidos" delay={60}>
-        {data.requests.length === 0 ? (
-          <EmptyState icon={<Clapperboard className="w-6 h-6" />} title="Todavía no has pedido ningún vídeo" text={data.balance > 0 ? 'Pulsa «Pedir un vídeo» para empezar. Son tres pasos.' : 'Cuando tengas vídeos disponibles, tus pedidos aparecerán aquí con su seguimiento.'} />
-        ) : (
-          <ul className="space-y-3">
-            {data.requests.map((r) => <RequestCard key={r.id} r={r} busy={busyId === r.id} onAction={act} />)}
-          </ul>
-        )}
-      </Panel>
-
-      {wizard && <Wizard avatars={data.avatars} balance={data.balance} onClose={() => setWizard(false)} onSubmit={submit} />}
-    </>
-  );
-}

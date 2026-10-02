@@ -9,7 +9,7 @@ Cómo funciona el saldo de vídeos y el pedido de cada cliente.
    La compra solo cuenta una vez, aunque el webhook y `/gracias` lleguen a la vez.
 2. **Cuenta** → si el cliente no tiene cuenta, se crea y recibe un correo con un botón para elegir su contraseña
    (`/auth/confirm` → `/auth/set-password`). Nunca se envía una contraseña por correo.
-3. **Pedido** → en su panel el cliente elige un avatar, cuenta qué quiere que diga (máx. 45 s, ≈ 112 palabras),
+3. **Pedido** → en su panel (`/cuenta`: Inicio, Mis vídeos, Avatares, Avisos, Compras, Llamadas, Ayuda y Ajustes) el cliente elige un avatar, cuenta qué quiere que diga (máx. 45 s, ≈ 112 palabras),
    y opcionalmente producto o web, tono, llamada a la acción y un enlace de Google Drive con sus archivos.
    Al enviarlo se descuenta 1 vídeo.
 4. **Seguimiento** → Solicitado → Preparando el guion → Guion para su visto bueno → En producción → Entregado.
