@@ -160,6 +160,27 @@ describe('PATCH /api/account/videos/[id]', () => {
     expect(refund?.args[0]).toMatchObject({ customer_email: 'ana@example.com', delta: 1, reason: 'refund', ref: REQ_ID });
   });
 
+  it('can cancel while the script is being prepared or waiting for review, and gets the video back', async () => {
+    for (const status of ['scripting', 'script_review']) {
+      h.calls.length = 0;
+      h.queues.video_requests = [
+        { data: { id: REQ_ID, status, customer_name: 'Ana', avatar_name: 'Lucía' }, error: null },
+        { data: { id: REQ_ID, status: 'cancelled' }, error: null },
+      ];
+      expect((await patch({ action: 'cancel' })).status).toBe(200);
+      expect(h.calls.find((c) => c.table === 'video_credit_ledger' && c.op === 'insert')?.args[0]).toMatchObject({ delta: 1, reason: 'refund', ref: REQ_ID });
+    }
+  });
+
+  it('cannot cancel once production has started or the video is delivered', async () => {
+    for (const status of ['production', 'delivered']) {
+      h.calls.length = 0;
+      h.queues.video_requests = [{ data: { id: REQ_ID, status, customer_name: 'Ana', avatar_name: 'Lucía' }, error: null }];
+      expect((await patch({ action: 'cancel' })).status).toBe(409);
+      expect(h.calls.some((c) => c.table === 'video_credit_ledger')).toBe(false);
+    }
+  });
+
   it('a double click does not apply the change twice', async () => {
     h.queues.video_requests = [
       { data: { id: REQ_ID, status: 'requested', customer_name: 'Ana', avatar_name: 'Lucía' }, error: null },

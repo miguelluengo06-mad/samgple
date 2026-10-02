@@ -13,7 +13,7 @@ Cómo funciona el saldo de vídeos y el pedido de cada cliente.
    y opcionalmente producto o web, tono, llamada a la acción y un enlace de Google Drive con sus archivos.
    Al enviarlo se descuenta 1 vídeo.
 4. **Seguimiento** → Solicitado → Preparando el guion → Guion para su visto bueno → En producción → Entregado.
-   El cliente aprueba el guion o pide cambios; cancela solo antes de empezar (el vídeo vuelve al saldo).
+   El cliente aprueba el guion o pide cambios, y puede cancelar en cualquier momento antes de que pase a producción (el vídeo vuelve al saldo).
 5. **Agencia** → `/portal/videos`: bandeja de pedidos, guion, enlace del vídeo terminado, notas internas,
    ajuste del saldo, y el catálogo de avatares (se pegan enlaces de imagen).
 

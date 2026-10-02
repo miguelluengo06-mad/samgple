@@ -61,11 +61,14 @@ export function creditsForItems(items: { pack_id: string; qty: number }[]): numb
   return items.reduce((sum, it) => sum + creditsForPackId(it.pack_id) * Math.max(1, Math.floor(it.qty || 1)), 0);
 }
 
+/** Estados en los que el cliente aún puede cancelar: cualquiera antes de pasar a producción. */
+export const CLIENT_CANCELLABLE: VideoStatus[] = ['requested', 'scripting', 'script_review'];
+
 /** Qué cambios de estado puede hacer el cliente por su cuenta. */
 export function clientCanDo(status: VideoStatus, action: 'approve' | 'changes' | 'cancel'): VideoStatus | null {
   if (action === 'approve' && status === 'script_review') return 'production';
   if (action === 'changes' && status === 'script_review') return 'scripting';
-  if (action === 'cancel' && status === 'requested') return 'cancelled';
+  if (action === 'cancel' && CLIENT_CANCELLABLE.includes(status)) return 'cancelled';
   return null;
 }
 

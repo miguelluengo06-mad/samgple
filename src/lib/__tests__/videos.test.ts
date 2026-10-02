@@ -34,11 +34,15 @@ describe('credits per pack', () => {
 });
 
 describe('what the customer may do', () => {
-  it('approves or asks for changes only on a script waiting for review, cancels only before work starts', () => {
+  it('approves or asks for changes only on a script waiting for review, cancels any time before production', () => {
     expect(clientCanDo('script_review', 'approve')).toBe('production');
     expect(clientCanDo('script_review', 'changes')).toBe('scripting');
     expect(clientCanDo('requested', 'cancel')).toBe('cancelled');
+    expect(clientCanDo('scripting', 'cancel')).toBe('cancelled');
+    expect(clientCanDo('script_review', 'cancel')).toBe('cancelled');
     expect(clientCanDo('production', 'cancel')).toBeNull();
+    expect(clientCanDo('delivered', 'cancel')).toBeNull();
+    expect(clientCanDo('cancelled', 'cancel')).toBeNull();
     expect(clientCanDo('scripting', 'approve')).toBeNull();
     expect(clientCanDo('delivered', 'changes')).toBeNull();
   });

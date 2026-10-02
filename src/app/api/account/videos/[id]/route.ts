@@ -51,7 +51,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (error || !updated) return NextResponse.json({ error: 'No se pudo completar. Inténtalo de nuevo.' }, { status: 409 });
 
   if (action === 'cancel') {
-    // Si se cancela antes de empezar, el vídeo vuelve al saldo (una sola vez por pedido)
+    // Cancelar antes de pasar a producción devuelve el vídeo al saldo (una sola vez por pedido)
     await supabaseAdmin.from('video_credit_ledger').insert({ customer_email: customer.email, delta: 1, reason: 'refund', ref: id, note: 'Pedido cancelado por el cliente' });
   }
 

@@ -19,7 +19,7 @@ import {
   X,
 } from 'lucide-react';
 import { LEGAL } from '@/lib/legal';
-import { MAX_VIDEO_SECONDS, MAX_WORDS, STATUS_HINT, STATUS_LABEL, STATUS_ORDER, TONES, estimateSeconds, type VideoStatus } from '@/lib/videos';
+import { CLIENT_CANCELLABLE, MAX_VIDEO_SECONDS, MAX_WORDS, STATUS_HINT, STATUS_LABEL, STATUS_ORDER, TONES, estimateSeconds, type VideoStatus } from '@/lib/videos';
 import { timeAgo } from '@/components/portal/leadMeta';
 import { CountUp, EmptyState, Panel, Skeleton } from '@/components/portal/ui';
 import { cn } from '@/lib/utils';
@@ -283,7 +283,7 @@ function Wizard({
           {step === 2 && avatar && (
             <div>
               <h3 className="text-base font-semibold">Revisa tu pedido</h3>
-              <p className="text-sm text-white/55 mt-1">Al enviarlo se descuenta <b className="text-white/80">1 vídeo</b> de tu saldo (te quedarán {Math.max(0, balance - 1)}). Si lo cancelas antes de que empecemos, vuelve a tu saldo.</p>
+              <p className="text-sm text-white/55 mt-1">Al enviarlo se descuenta <b className="text-white/80">1 vídeo</b> de tu saldo (te quedarán {Math.max(0, balance - 1)}). Puedes cancelarlo mientras no esté en producción y el vídeo vuelve a tu saldo.</p>
               <div className="mt-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 flex gap-4">
                 <AvatarImage src={avatar.image_url} name={avatar.name} className="w-20 h-28 rounded-xl" />
                 <div className="min-w-0 flex-1 space-y-2">
@@ -410,8 +410,8 @@ function RequestCard({ r, busy, onAction }: { r: StudioRequest; busy: boolean; o
 
           <div className="flex items-center justify-between text-[11px] text-white/35">
             <span>Pedido {timeAgo(r.created_at)}</span>
-            {r.status === 'requested' && (
-              <button onClick={() => confirm('¿Cancelar el pedido? El vídeo volverá a tu saldo.') && run('cancel')} disabled={busy} className="text-white/50 hover:text-red-400 cursor-pointer">Cancelar pedido</button>
+            {CLIENT_CANCELLABLE.includes(r.status) && (
+              <button onClick={() => confirm('¿Cancelar el pedido? El vídeo volverá a tu saldo. Solo se puede cancelar hasta que pasa a producción.') && run('cancel')} disabled={busy} className="text-white/50 hover:text-red-400 cursor-pointer">Cancelar pedido</button>
             )}
           </div>
           {err && <p role="alert" className="text-sm text-red-400">{err}</p>}
