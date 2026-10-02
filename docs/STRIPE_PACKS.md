@@ -23,7 +23,7 @@ Cada pack de la web tiene «Añadir al carrito». El carrito vive en el navegado
 ## 1. Conectar la cuenta
 
 1. En Stripe → **Desarrolladores → Claves API**, copia la **clave secreta** (`sk_test_…` para probar, `sk_live_…` para cobrar).
-2. En el panel: **Ajustes → Conexiones → Cobros con Stripe**, pégala y pulsa *Conectar Stripe*. Se guarda cifrada.
+2. En el panel: **Ajustes → Pagos y email → Stripe**, pégala y pulsa *Conectar Stripe*. Se guarda cifrada.
    - Alternativa: variable de entorno `STRIPE_PACKS_SECRET_KEY` (solo se usa si no hay clave en el panel).
 3. Define `NEXT_PUBLIC_SITE_URL` con la URL pública de la web (Stripe vuelve a ella tras el pago).
 

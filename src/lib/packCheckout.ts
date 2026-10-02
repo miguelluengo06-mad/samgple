@@ -14,7 +14,7 @@ import { cartLines, cartSummary, cartTotalCents, compactItems, parseCompactItems
  * Cobro de los packs con Stripe Checkout.
  *
  *  - Se cobra en la cuenta de Stripe de la agencia: la clave que el propietario guarda en el panel
- *    (Ajustes → Conexiones → Stripe). Como alternativa, la variable STRIPE_PACKS_SECRET_KEY.
+ *    (Ajustes → Pagos y email → Stripe). Como alternativa, la variable STRIPE_PACKS_SECRET_KEY.
  *  - Los precios llevan IVA incluido (tax_behavior: 'inclusive'): el cliente paga exactamente la cifra de la web.
  *  - Pagos únicos → Checkout en modo "payment" con factura automática; planes mensuales → "subscription".
  *  - Cada compra se registra como una solicitud ganada en el panel (Solicitudes), sin tocar la base de datos.

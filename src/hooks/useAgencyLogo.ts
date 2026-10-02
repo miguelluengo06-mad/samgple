@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/AuthContext';
 
-const AGENCY_LOGO_KEY = 'flowengine_agency_logo';
+const AGENCY_LOGO_KEY = 'samgple_agency_logo';
 
 interface CachedLogo {
   url: string | null;

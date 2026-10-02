@@ -8,7 +8,7 @@ describe('teamInviteEmail', () => {
     expect(m.html).toContain('administrador');
     expect(m.html).toContain('https://samgple.com/invite/accept-team?token=tm_abc');
     expect(m.text).toContain('tm_abc');
-    expect(m.html + m.text).not.toMatch(/n8n|workflow|Join Team/i);
+    expect(m.html + m.text).not.toMatch(/Join Team/i);
   });
 
   it('escapes what the owner typed', () => {

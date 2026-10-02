@@ -16,7 +16,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const { logoUrl } = useAgencyLogo();
   const router = useRouter();
   const pathname = usePathname();
-  const { role, agencyId, allowFullAccess, loading: roleLoading } = usePortalRole();
+  const { role, loading: roleLoading } = usePortalRole();
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -49,7 +49,7 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   }
 
   return (
-    <PortalRoleContext.Provider value={{ role, agencyId, allowFullAccess, loading: roleLoading }}>
+    <PortalRoleContext.Provider value={{ role, loading: roleLoading }}>
       <LeadsProvider enabled={role === 'agency'}>
         <div className="portal-neon h-[100dvh] flex flex-col">
           <div className="flex-1 min-h-0 flex flex-col md:flex-row">

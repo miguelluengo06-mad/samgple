@@ -7,10 +7,6 @@ const nextConfig: NextConfig = {
     optimizePackageImports: [
       'lucide-react',
       'framer-motion',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-popover',
-      '@radix-ui/react-slot',
-      '@radix-ui/react-tooltip',
       '@supabase/supabase-js',
     ],
   },

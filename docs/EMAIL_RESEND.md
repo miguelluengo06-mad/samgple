@@ -26,8 +26,8 @@ Sin `LEAD_NOTIFY_EMAIL`, el aviso va al email de la cuenta del panel (o a `ADMIN
 ## Orden de prioridad
 
 1. Resend (`RESEND_API_KEY`)
-2. SMTP guardado en Ajustes → Conexiones
-3. SMTP de las variables `N8N_SMTP_*` + `ADMIN_EMAIL`
+2. SMTP guardado en Ajustes → Pagos y email
+3. SMTP de las variables `SMTP_*` + `ADMIN_EMAIL`
 
 ## Qué correos se envían
 

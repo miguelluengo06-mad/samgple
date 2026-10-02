@@ -3,7 +3,7 @@
  *
  * Returns branding for the current user:
  * - Clients:       their agency's logo + business name (looked up via client_instances.invited_by)
- * - Company users: { agency_logo_url: null, business_name: null } → UI shows FlowEngine defaults
+ * - Company users: { agency_logo_url: null, business_name: null } → UI shows the samgple defaults
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     const agencyId = clientLinks?.[0]?.invited_by ?? null;
 
     if (!agencyId) {
-      // Company user — no agency branding, frontend shows FlowEngine defaults
+      // Company user — no agency branding, frontend shows the samgple defaults
       return NextResponse.json({ agency_logo_url: null, business_name: null });
     }
 

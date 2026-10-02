@@ -38,9 +38,9 @@ interface BrandedLoadingSpinnerProps {
 }
 
 // Cache keys for reading directly from localStorage
-const AGENCY_LOGO_KEY = 'flowengine_agency_logo';
-const CLIENT_STATUS_KEY = 'flowengine_client_status';
-const AUTH_STATE_KEY = 'flowengine_auth_state';
+const AGENCY_LOGO_KEY = 'samgple_agency_logo';
+const CLIENT_STATUS_KEY = 'samgple_client_status';
+const AUTH_STATE_KEY = 'samgple_auth_state';
 
 /**
  * Read cached client status directly from localStorage.
@@ -169,7 +169,7 @@ function getImmediateLogoUrl(): string | null {
 
 /**
  * Branded loading spinner with spinning logo animation.
- * Shows agency logo if provided, otherwise shows FlowEngine logo.
+ * Shows agency logo if provided, otherwise shows the samgple logo.
  *
  * IMPORTANT: This component reads from localStorage directly on mount to avoid
  * SSR hydration issues. The logo appears immediately on the client without flash.
@@ -232,14 +232,14 @@ export function BrandedLoadingSpinner({
                   alt="Loading"
                   className="max-w-full max-h-full object-contain"
                   onError={(e) => {
-                    // Fallback to FlowEngine logo if image fails to load
+                    // Fallback to the samgple logo if the image fails to load
                     (e.target as HTMLImageElement).src = '/logo.svg';
                   }}
                 />
               ) : (
                 <img
                   src="/logo.svg"
-                  alt="FlowEngine"
+                  alt="samgple"
                   className="max-w-full max-h-full object-contain"
                 />
               )

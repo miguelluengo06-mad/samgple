@@ -9,7 +9,7 @@ import { resolveLeadMailer, sendLeadMail } from '@/lib/leadMailer';
 const supabase = (profile: Record<string, unknown> | null) =>
   ({ from: () => ({ select: () => ({ eq: () => ({ maybeSingle: async () => ({ data: profile }) }) }) }) }) as any;
 
-const KEYS = ['RESEND_API_KEY', 'RESEND_FROM', 'LEAD_NOTIFY_EMAIL', 'ADMIN_EMAIL', 'N8N_SMTP_USER', 'N8N_SMTP_PASS'];
+const KEYS = ['RESEND_API_KEY', 'RESEND_FROM', 'LEAD_NOTIFY_EMAIL', 'ADMIN_EMAIL', 'SMTP_USER', 'SMTP_PASS'];
 let saved: Record<string, string | undefined> = {};
 beforeEach(() => {
   saved = Object.fromEntries(KEYS.map((k) => [k, process.env[k]]));

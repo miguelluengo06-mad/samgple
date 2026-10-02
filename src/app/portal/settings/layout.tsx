@@ -21,7 +21,7 @@ function SettingsLayoutInner({ children }: { children: React.ReactNode }) {
   // Handle URL hash for deep linking
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
-    if (hash === 'branding' || hash === 'team-members' || hash === 'authentication') {
+    if (hash === 'branding' || hash === 'team-members') {
       if (activeTab !== 'company') router.replace('/portal/settings?tab=company#' + hash);
     } else if (hash === 'stripe' || hash === 'smtp') {
       if (activeTab !== 'connections') router.replace('/portal/settings?tab=connections#' + hash);
@@ -52,7 +52,6 @@ function SettingsLayoutInner({ children }: { children: React.ReactNode }) {
   const companySubItems = [
     { id: 'team-members', label: 'Equipo' },
     { id: 'branding', label: 'Nombre y logo' },
-    { id: 'authentication', label: 'Autenticación' },
   ];
 
   const connectionsSubItems = [

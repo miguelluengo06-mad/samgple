@@ -15,18 +15,15 @@ function getSupabaseAdmin(): SupabaseClient {
 }
 
 /**
- * Public endpoint — returns only auth-related settings for the login page.
- * No authentication required (the login page needs these before the user is signed in).
+ * Public endpoint — returns only what the login page needs (no authentication required).
+ * Registration is closed: the only time it opens is the very first run, to create the administrator.
+ * Customer accounts are created by the agency from the panel.
  */
 export async function GET() {
   try {
     const sb = getSupabaseAdmin();
 
-    const [{ data }, { data: profile }, { count }] = await Promise.all([
-      sb.from('portal_settings')
-        .select('allow_signup, enable_google_auth, enable_linkedin_auth, enable_github_auth')
-        .limit(1)
-        .single(),
+    const [{ data: profile }, { count }] = await Promise.all([
       sb.from('profiles')
         .select('business_name')
         .or('business_name.not.is.null')
@@ -38,23 +35,12 @@ export async function GET() {
     const firstRun = (count ?? 0) === 0;
 
     return NextResponse.json({
-      allow_signup: firstRun || (data?.allow_signup ?? false),
-      enable_google_auth: data?.enable_google_auth ?? false,
-      enable_linkedin_auth: data?.enable_linkedin_auth ?? false,
-      enable_github_auth: data?.enable_github_auth ?? false,
+      allow_signup: firstRun,
       // Solo el nombre de empresa: nunca el nombre personal de quien creó la cuenta
       agency_name: profile?.business_name || null,
       first_run: firstRun,
     });
   } catch {
-    // Default: everything disabled
-    return NextResponse.json({
-      allow_signup: false,
-      enable_google_auth: false,
-      enable_linkedin_auth: false,
-      enable_github_auth: false,
-      agency_name: null,
-      first_run: false,
-    });
+    return NextResponse.json({ allow_signup: false, agency_name: null, first_run: false });
   }
 }

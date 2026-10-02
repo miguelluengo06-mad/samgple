@@ -11,7 +11,7 @@ vi.hoisted(() => {
   process.env.ENCRYPTION_SECRET = 'test-secret-key-for-unit-tests-32c';
 });
 
-import { encrypt, decrypt, isEncrypted, encryptApiKey, decryptApiKey } from '@/lib/encryption';
+import { encrypt, decrypt, isEncrypted, decryptApiKey } from '@/lib/encryption';
 
 // ─── encrypt / decrypt ────────────────────────────────────────────────────────
 
@@ -109,33 +109,6 @@ describe('isEncrypted', () => {
     expect(isEncrypted('deadbeef:abcdef0123')).toBe(false);
   });
 });
-
-// ─── encryptApiKey ────────────────────────────────────────────────────────────
-
-describe('encryptApiKey', () => {
-  it('returns null for null/undefined input', () => {
-    expect(encryptApiKey(null)).toBeNull();
-    expect(encryptApiKey(undefined)).toBeNull();
-    expect(encryptApiKey('')).toBeNull();
-  });
-
-  it('encrypts a plain text key', () => {
-    const result = encryptApiKey('sk_live_test123');
-    expect(result).not.toBeNull();
-    expect(isEncrypted(result!)).toBe(true);
-  });
-
-  it('does not double-encrypt an already-encrypted value', () => {
-    const encrypted = encrypt('original');
-    const result = encryptApiKey(encrypted);
-    // Should return the same already-encrypted value unchanged
-    expect(result).toBe(encrypted);
-    // Decrypting it once should give back "original"
-    expect(decrypt(result!)).toBe('original');
-  });
-});
-
-// ─── decryptApiKey ────────────────────────────────────────────────────────────
 
 describe('decryptApiKey', () => {
   it('returns null for null/undefined/empty', () => {

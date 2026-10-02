@@ -66,18 +66,7 @@ export function isEncrypted(value: string | null | undefined): boolean {
 }
 
 /**
- * Encrypt an n8n API key for storage
- * Returns the encrypted value, or null if input is null/empty
- */
-export function encryptApiKey(apiKey: string | null | undefined): string | null {
-  if (!apiKey) return null;
-  // Don't double-encrypt
-  if (isEncrypted(apiKey)) return apiKey;
-  return encrypt(apiKey);
-}
-
-/**
- * Decrypt an n8n API key for use
+ * Decrypt a stored API key for use
  * Handles legacy unencrypted keys gracefully (returns as-is)
  * Returns null if input is null/empty
  */

@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { AccountSettings } from '@/components/settings/AccountSettings';
 import { AgencyBranding } from '@/components/settings/AgencyBranding';
-import { AuthenticationSettings } from '@/components/settings/AuthenticationSettings';
 import { TeamMembers } from '@/components/settings/TeamMembers';
 import { PlatformSettings } from '@/components/settings/PlatformSettings';
 import { useSettingsContext } from './context';
@@ -48,10 +47,6 @@ export default function PortalSettingsPage() {
               </section>
             </div>
 
-            <section id="authentication" className='scroll-mt-24 mt-8'>
-              <h2 className='pn-title mb-4'>Acceso y autenticación</h2>
-              <AuthenticationSettings />
-            </section>
           </>
         )}
 

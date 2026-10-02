@@ -85,8 +85,8 @@ beforeEach(() => {
   state.inserted = null;
   sendMail.mockClear();
   delete process.env.ADMIN_EMAIL;
-  delete process.env.N8N_SMTP_USER;
-  delete process.env.N8N_SMTP_PASS;
+  delete process.env.SMTP_USER;
+  delete process.env.SMTP_PASS;
 });
 
 // ─── Booked call ──────────────────────────────────────────────────────────────
@@ -212,8 +212,8 @@ describe('POST /api/public/contact — landing lead', () => {
 
   it('emails the agency about the lead when SMTP is configured', async () => {
     process.env.ADMIN_EMAIL = 'agencia@example.com';
-    process.env.N8N_SMTP_USER = 'user';
-    process.env.N8N_SMTP_PASS = 'pass';
+    process.env.SMTP_USER = 'user';
+    process.env.SMTP_PASS = 'pass';
     await post(lead());
     expect(sendMail).toHaveBeenCalledTimes(1);
     const mail = sendMail.mock.calls[0][0];
@@ -276,8 +276,8 @@ describe('POST /api/public/contact — Pack de Bienvenida', () => {
 
   it('includes the pack in the notification email', async () => {
     process.env.ADMIN_EMAIL = 'agencia@example.com';
-    process.env.N8N_SMTP_USER = 'user';
-    process.env.N8N_SMTP_PASS = 'pass';
+    process.env.SMTP_USER = 'user';
+    process.env.SMTP_PASS = 'pass';
     await post(pack());
     expect(sendMail.mock.calls[0][0].html).toContain('Pack de Bienvenida');
     expect(sendMail.mock.calls[0][0].html).toContain('Vela de soja');
@@ -306,8 +306,8 @@ describe('POST /api/public/contact — who gets the notification', () => {
 
   it('falls back to the env configuration when the panel SMTP is off', async () => {
     process.env.ADMIN_EMAIL = 'env@agencia.com';
-    process.env.N8N_SMTP_USER = 'user';
-    process.env.N8N_SMTP_PASS = 'pass';
+    process.env.SMTP_USER = 'user';
+    process.env.SMTP_PASS = 'pass';
     state.ownerMail = { email: 'duena@agencia.com', agency_smtp_enabled: false };
     await post(lead);
     expect(sendMail.mock.calls[0][0].to).toBe('env@agencia.com');
@@ -322,8 +322,8 @@ describe('POST /api/public/contact — who gets the notification', () => {
 
   it('still saves the lead when sending the email fails', async () => {
     process.env.ADMIN_EMAIL = 'env@agencia.com';
-    process.env.N8N_SMTP_USER = 'user';
-    process.env.N8N_SMTP_PASS = 'pass';
+    process.env.SMTP_USER = 'user';
+    process.env.SMTP_PASS = 'pass';
     sendMail.mockRejectedValueOnce(new Error('SMTP down'));
     const res = await post(lead);
     expect(res.status).toBe(200);

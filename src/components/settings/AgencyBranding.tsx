@@ -59,10 +59,10 @@ export function AgencyBranding() {
       if (error) throw error;
 
       setServerBusinessName(businessName.trim());
-      setMessage({ type: 'success', text: 'Business name saved!' });
+      setMessage({ type: 'success', text: 'Nombre guardado' });
       setTimeout(() => setMessage(null), 3000);
     } catch (error: any) {
-      setMessage({ type: 'error', text: error.message || 'Failed to save business name' });
+      setMessage({ type: 'error', text: error.message || 'No se pudo guardar el nombre' });
     } finally {
       setSavingName(false);
     }
@@ -103,11 +103,11 @@ export function AgencyBranding() {
     if (!file || !session) return;
 
     if (!file.type.startsWith('image/')) {
-      setMessage({ type: 'error', text: 'Please select an image file' });
+      setMessage({ type: 'error', text: 'Elige un archivo de imagen' });
       return;
     }
     if (file.size > 2 * 1024 * 1024) {
-      setMessage({ type: 'error', text: 'Image must be less than 2MB' });
+      setMessage({ type: 'error', text: 'La imagen debe pesar menos de 2 MB' });
       return;
     }
 
@@ -126,10 +126,10 @@ export function AgencyBranding() {
 
       setLogoUrl(dataUrl);
       if (user?.id) updateCachedAgencyLogo(dataUrl, user.id);
-      setMessage({ type: 'success', text: 'Logo uploaded successfully!' });
+      setMessage({ type: 'success', text: 'Logo subido' });
     } catch (error: any) {
       console.error('Error uploading logo:', error);
-      setMessage({ type: 'error', text: error.message || 'Failed to upload logo' });
+      setMessage({ type: 'error', text: error.message || 'No se pudo subir el logo' });
     } finally {
       setUploading(false);
       if (fileInputRef.current) {
@@ -155,10 +155,10 @@ export function AgencyBranding() {
       setLogoUrl(null);
       // Update cache for loading spinners
       updateCachedAgencyLogo(null, user.id);
-      setMessage({ type: 'success', text: 'Logo removed successfully!' });
+      setMessage({ type: 'success', text: 'Logo eliminado' });
     } catch (error: any) {
       console.error('Error removing logo:', error);
-      setMessage({ type: 'error', text: error.message || 'Failed to remove logo' });
+      setMessage({ type: 'error', text: error.message || 'No se pudo eliminar el logo' });
     } finally {
       setLoading(false);
     }
@@ -168,11 +168,11 @@ export function AgencyBranding() {
     <div className="bg-gray-900/50 rounded-lg border border-gray-800 p-6">
       <div className="flex items-center gap-2 mb-4">
         <Building2 className="h-5 w-5 text-gray-400" />
-        <h3 className="text-lg font-medium text-white">Name and Logo</h3>
+        <h3 className="text-lg font-medium text-white">Nombre y logo</h3>
       </div>
 
       <p className="text-white/60 text-sm mb-4">
-        Set your business name and logo. These replace FlowEngine branding in the client dashboard.
+        Pon el nombre de tu negocio y tu logo. Se muestran a tus clientes en su panel y en la pantalla de acceso.
       </p>
 
       {message && (
@@ -188,13 +188,13 @@ export function AgencyBranding() {
       <div className="space-y-4">
         {/* Business Name */}
         <div className="bg-gray-800/30 border border-gray-700 rounded-lg p-4">
-          <label className="block text-sm text-white/60 mb-2">Business Name</label>
+          <label className="block text-sm text-white/60 mb-2">Nombre del negocio</label>
           <div className="flex gap-3">
             <input
               type="text"
               value={businessName}
               onChange={e => setBusinessName(e.target.value)}
-              placeholder="Your business name"
+              placeholder="samgple"
               className="flex-1 px-4 py-3 card-liquid rounded-lg text-white placeholder:text-gray-500 focus:ring-2 focus:ring-olive-500 focus:border-olive-500"
             />
             <button
@@ -202,23 +202,23 @@ export function AgencyBranding() {
               disabled={savingName || businessName.trim() === serverBusinessName}
               className="px-4 py-3 bg-olive-500 text-black hover:bg-olive-400 disabled:bg-gray-400 disabled:text-gray-600 rounded-full text-sm font-medium transition-colors"
             >
-              {savingName ? 'Saving...' : 'Save'}
+              {savingName ? 'Guardando…' : 'Guardar'}
             </button>
           </div>
           <p className="mt-2 text-xs text-white/40">
-            Shown to clients instead of &quot;FlowEngine&quot;
+            Es el nombre que ven tus clientes.
           </p>
         </div>
 
         {/* Current Logo Preview */}
         {logoUrl && (
           <div className="bg-gray-800/30 border border-gray-700 rounded-lg p-4">
-            <p className="text-white/60 text-sm mb-3">Current Logo</p>
+            <p className="text-white/60 text-sm mb-3">Logo actual</p>
             <div className="flex items-center gap-4">
               <div className="w-24 h-24 bg-gray-900 rounded-lg flex items-center justify-center overflow-hidden border border-gray-700">
                 <img
                   src={logoUrl}
-                  alt="Agency logo"
+                  alt="Logo"
                   className="max-w-full max-h-full object-contain"
                 />
               </div>
@@ -257,13 +257,13 @@ export function AgencyBranding() {
             {uploading ? (
               <>
                 <RefreshCw className="h-8 w-8 text-white/40 animate-spin mb-2" />
-                <span className="text-white/60 text-sm">Uploading...</span>
+                <span className="text-white/60 text-sm">Subiendo…</span>
               </>
             ) : (
               <>
                 <Upload className="h-8 w-8 text-white/40 mb-2" />
                 <span className="text-white font-medium mb-1">
-                  {logoUrl ? 'Change Logo' : 'Upload Logo'}
+                  {logoUrl ? 'Cambiar logo' : 'Subir logo'}
                 </span>
                 <span className="text-white/40 text-sm">
                   PNG, JPG, or SVG (max 2MB)
@@ -276,7 +276,7 @@ export function AgencyBranding() {
         {/* Preview Info */}
         <div className="bg-gray-800/30 border border-gray-700 rounded-lg p-4">
           <p className="text-white/60 text-sm">
-How it works: Your logo will replace the FlowEngine branding in the client dashboard header. Clients will see your logo when they access their automation hub.
+Cómo funciona: tu logo aparece en la cabecera del panel de tus clientes y en la pantalla de carga.
           </p>
         </div>
       </div>

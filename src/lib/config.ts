@@ -5,8 +5,8 @@
  * Uses environment variables with sensible fallbacks.
  */
 
-// Main FlowEngine app URL (NOT n8n instances)
-export const APP_URL = process.env.NEXT_PUBLIC_APP_URL || '';
+// URL pública de la web
+export const APP_URL = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || '';
 
 // Helper to build full URLs
 export function buildAppUrl(path: string): string {

@@ -131,7 +131,7 @@ export function TeamMembers() {
   return (
     <div className='bg-gray-900/50 p-6 rounded-lg border border-gray-800'>
       <p className='text-white/60 text-sm mb-6'>
-        Invite team members to share access to your portal, instances, and workflows.
+        Invita a personas de tu equipo para que gestionen solicitudes, llamadas y clientes contigo.
       </p>
 
       {/* Invite Form */}

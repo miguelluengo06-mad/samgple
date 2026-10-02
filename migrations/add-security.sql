@@ -37,7 +37,7 @@ ALTER TABLE blocked_ips ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON security_events, blocked_ips, trusted_ips FROM anon, authenticated;
 GRANT ALL ON security_events, blocked_ips, trusted_ips TO service_role;
 
--- 2) Nadie puede cambiar su propia antigüedad (el panel considera administrador al perfil más antiguo):
+-- 2) Nadie puede cambiar su propia antigüedad ni su id (el panel considera administrador al perfil más antiguo):
 --    sin esto, cualquier cliente con acceso podría ponerse una fecha anterior y convertirse en admin.
 CREATE OR REPLACE FUNCTION public.protect_profile_identity()
 RETURNS trigger
@@ -57,20 +57,3 @@ DROP TRIGGER IF EXISTS protect_profile_identity ON profiles;
 CREATE TRIGGER protect_profile_identity
   BEFORE UPDATE ON profiles
   FOR EACH ROW EXECUTE FUNCTION public.protect_profile_identity();
-
--- 3) Tablas heredadas que la web ya no usa: sin acceso desde el navegador (el servidor usa la clave de servicio)
-DO $$
-DECLARE t TEXT;
-BEGIN
-  FOREACH t IN ARRAY ARRAY[
-    'whatsapp_servers', 'whatsapp_instances', 'n8n_instances', 'pay_per_instance_deployments',
-    'client_instances', 'client_invites', 'client_widgets', 'widget_categories', 'widget_category_links',
-    'workflow_templates', 'workflow_template_imports', 'credential_records', 'conversations',
-    'agency_client_billing_settings', 'agency_manual_payments', 'agency_client_notes',
-    'agency_client_custom_entries', 'api_key', 'products', 'portal_settings'
-  ] LOOP
-    IF to_regclass('public.' || t) IS NOT NULL THEN
-      EXECUTE format('REVOKE ALL ON public.%I FROM anon, authenticated', t);
-    END IF;
-  END LOOP;
-END $$;

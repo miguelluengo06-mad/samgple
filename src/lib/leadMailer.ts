@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 import { decrypt } from '@/lib/encryption';
 
 export interface LeadMailer {
-  /** 'resend' = API de Resend (RESEND_API_KEY); 'smtp' = nodemailer con el SMTP del panel o de las variables N8N_SMTP_* */
+  /** 'resend' = API de Resend (RESEND_API_KEY); 'smtp' = nodemailer con el SMTP del panel o de las variables SMTP_* */
   provider: 'resend' | 'smtp';
   /** nodemailer.createTransport options (solo con provider 'smtp') */
   transport: { host: string; port: number; secure: boolean; auth: { user: string; pass: string } };
@@ -12,7 +12,7 @@ export interface LeadMailer {
   from: string;
   /** Where the "new lead" notification goes (varias direcciones separadas por comas) */
   to: string;
-  /** 'panel' = SMTP configured in Ajustes → Conexiones; 'env' = variables de entorno */
+  /** 'panel' = SMTP configured in Ajustes → Pagos y email; 'env' = variables de entorno */
   origin: 'panel' | 'env';
 }
 
@@ -27,7 +27,7 @@ const RESEND_TEST_SENDER = 'onboarding@resend.dev';
  *     To: LEAD_NOTIFY_EMAIL, or the owner's account email, or ADMIN_EMAIL.
  *  2. The SMTP the owner saved in the panel (profiles.agency_smtp_*, password encrypted at rest),
  *     notifying the owner's own account email.
- *  3. Otherwise the N8N_SMTP_* / ADMIN_EMAIL environment variables.
+ *  3. Otherwise the SMTP_* / ADMIN_EMAIL environment variables.
  */
 export async function resolveLeadMailer(supabase: SupabaseClient, ownerId: string): Promise<LeadMailer | null> {
   const { data: profile } = await supabase
@@ -77,20 +77,20 @@ export async function resolveLeadMailer(supabase: SupabaseClient, ownerId: strin
   }
 
   const adminEmail = process.env.ADMIN_EMAIL;
-  const smtpUser = process.env.N8N_SMTP_USER;
-  const smtpPass = process.env.N8N_SMTP_PASS;
+  const smtpUser = process.env.SMTP_USER;
+  const smtpPass = process.env.SMTP_PASS;
   if (adminEmail && smtpUser && smtpPass) {
-    const port = parseInt(process.env.N8N_SMTP_PORT || '587');
+    const port = parseInt(process.env.SMTP_PORT || '587');
     return {
       provider: 'smtp',
       origin: 'env',
       transport: {
-        host: process.env.N8N_SMTP_HOST || 'smtp.gmail.com',
+        host: process.env.SMTP_HOST || 'smtp.gmail.com',
         port,
         secure: port === 465,
         auth: { user: smtpUser, pass: smtpPass },
       },
-      from: process.env.N8N_SMTP_SENDER || process.env.SMTP_FROM || smtpUser,
+      from: process.env.SMTP_SENDER || process.env.SMTP_FROM || smtpUser,
       to: adminEmail,
     };
   }

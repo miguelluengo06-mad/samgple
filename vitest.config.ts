@@ -9,8 +9,6 @@ export default defineConfig({
     exclude: [
       'node_modules/**',
       'e2e/**',
-      // Not real tests — usage-examples file mistakenly named .test.ts
-      'src/lib/n8n/multiAgentOrchestrator.test.ts',
     ],
     // Default environment for lib/API tests
     environment: 'node',

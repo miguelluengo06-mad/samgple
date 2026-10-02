@@ -19,7 +19,7 @@ export const supabase = createBrowserClient(
     },
     global: {
       headers: {
-        'x-application-name': 'flowengine-portal',
+        'x-application-name': 'samgple',
       },
     },
   }

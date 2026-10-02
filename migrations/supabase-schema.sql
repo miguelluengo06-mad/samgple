@@ -1,82 +1,28 @@
--- FlowEngine Portal - Supabase Schema Migration
--- Run this in your Supabase SQL Editor to set up the database
+-- samgple — esquema base (solo lo que usa la web y el panel)
 --
--- Prerequisites:
---   1. Create a Supabase project at https://supabase.com
---   2. Go to SQL Editor in the Supabase dashboard
---   3. Paste and run this entire file
+-- Orden para una instalación nueva en Supabase → SQL Editor:
+--   1. este archivo
+--   2. add-prompts.sql   (biblioteca de prompts)
+--   3. add-security.sql  (registro de eventos, IPs bloqueadas e IPs de confianza)
+-- Si vienes de una instalación antigua, ejecuta además drop-legacy-tables.sql (borra tablas que ya no se usan).
+-- Idempotente: se puede ejecutar más de una vez.
 
 -- ============================================
--- Enable required extensions
--- ============================================
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- ============================================
--- Storage schema (pre-created so storage-api finds tables on startup)
--- ============================================
-CREATE TABLE IF NOT EXISTS storage.migrations (
-  id          integer      NOT NULL,
-  name        varchar(100) NOT NULL,
-  hash        varchar(40)  NOT NULL,
-  executed_at timestamp    DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE IF NOT EXISTS storage.buckets (
-  id                 text        NOT NULL PRIMARY KEY,
-  name               text        NOT NULL,
-  owner              uuid,
-  created_at         timestamptz DEFAULT now(),
-  updated_at         timestamptz DEFAULT now(),
-  public             boolean     DEFAULT false,
-  avif_autodetection boolean     DEFAULT false,
-  file_size_limit    bigint,
-  allowed_mime_types text[],
-  owner_id           text
-);
-
-CREATE UNIQUE INDEX IF NOT EXISTS bname ON storage.buckets USING btree (name);
-
-CREATE TABLE IF NOT EXISTS storage.objects (
-  id               uuid        NOT NULL DEFAULT uuid_generate_v4() PRIMARY KEY,
-  bucket_id        text        REFERENCES storage.buckets ON DELETE CASCADE,
-  name             text,
-  owner            uuid,
-  created_at       timestamptz DEFAULT now(),
-  updated_at       timestamptz DEFAULT now(),
-  last_accessed_at timestamptz DEFAULT now(),
-  metadata         jsonb,
-  path_tokens      text[]      GENERATED ALWAYS AS (string_to_array(name, '/')) STORED,
-  version          text,
-  owner_id         text,
-  user_metadata    jsonb
-);
-
-CREATE INDEX IF NOT EXISTS name_prefix_search ON storage.objects USING btree (name text_pattern_ops);
-
-GRANT USAGE ON SCHEMA storage TO authenticated, anon, service_role, supabase_storage_admin;
-GRANT ALL   ON storage.migrations TO supabase_storage_admin;
-GRANT ALL   ON storage.buckets    TO supabase_storage_admin, service_role;
-GRANT ALL   ON storage.objects    TO supabase_storage_admin, service_role;
-GRANT SELECT ON storage.buckets   TO authenticated, anon;
-GRANT SELECT, INSERT, UPDATE, DELETE ON storage.objects TO authenticated, anon;
-
--- ============================================
--- 1. profiles - User profiles (linked to auth.users)
+-- 1. profiles — un perfil por usuario de Supabase Auth
+--    (el más antiguo es la agencia; ver src/lib/agencyAccess.ts)
 -- ============================================
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   full_name TEXT,
   email TEXT,
   avatar_url TEXT,
-  team_id UUID,
-  stripe_customer_id TEXT,
-  -- Agency branding
+  -- Marca de la agencia
   business_name TEXT,
   agency_logo_url TEXT,
-  -- Agency Stripe integration
+  -- Cobros con Stripe (clave cifrada)
   agency_stripe_key_encrypted TEXT,
   agency_stripe_key_set BOOLEAN DEFAULT false,
-  -- Agency SMTP integration
+  -- Correo para los avisos (SMTP cifrado)
   agency_smtp_host TEXT,
   agency_smtp_port INTEGER DEFAULT 587,
   agency_smtp_user TEXT,
@@ -88,10 +34,8 @@ CREATE TABLE IF NOT EXISTS profiles (
 );
 
 CREATE INDEX IF NOT EXISTS idx_profiles_email ON profiles(email);
-CREATE INDEX IF NOT EXISTS idx_profiles_team_id ON profiles(team_id);
-CREATE INDEX IF NOT EXISTS idx_profiles_stripe_customer_id ON profiles(stripe_customer_id);
 
--- Auto-create profile on signup
+-- Crea el perfil al registrarse un usuario
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -108,7 +52,7 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE FUNCTION handle_new_user();
 
 -- ============================================
--- 2. team_members - Agency team membership
+-- 2. team_members — personas del equipo de la agencia
 -- ============================================
 CREATE TABLE IF NOT EXISTS team_members (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -124,9 +68,6 @@ CREATE TABLE IF NOT EXISTS team_members (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Patch: add columns that may be missing on existing deployments
-ALTER TABLE team_members ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '7 days');
-
 CREATE INDEX IF NOT EXISTS idx_team_members_owner_id ON team_members(owner_id);
 CREATE INDEX IF NOT EXISTS idx_team_members_member_id ON team_members(member_id);
 CREATE INDEX IF NOT EXISTS idx_team_members_email ON team_members(email);
@@ -134,835 +75,7 @@ CREATE INDEX IF NOT EXISTS idx_team_members_token ON team_members(token);
 CREATE INDEX IF NOT EXISTS idx_team_members_status ON team_members(status);
 
 -- ============================================
--- 3. n8n_instances - n8n instance records
--- ============================================
-CREATE TABLE IF NOT EXISTS n8n_instances (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  team_id UUID,
-  instance_name TEXT NOT NULL,
-  instance_url TEXT,
-  api_key TEXT,
-  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'provisioning', 'running', 'stopped', 'error', 'destroyed')),
-  storage_gb INTEGER DEFAULT 10,
-  plan TEXT DEFAULT 'pro',
-  coolify_uuid TEXT,
-  domain TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_n8n_instances_user_id ON n8n_instances(user_id);
-CREATE INDEX IF NOT EXISTS idx_n8n_instances_team_id ON n8n_instances(team_id);
-CREATE INDEX IF NOT EXISTS idx_n8n_instances_status ON n8n_instances(status);
-
--- ============================================
--- 4. pay_per_instance_deployments - Instance billing/deployment tracking
--- ============================================
-CREATE TABLE IF NOT EXISTS pay_per_instance_deployments (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  team_id UUID,
-  instance_id UUID REFERENCES n8n_instances(id) ON DELETE SET NULL,
-  instance_name TEXT NOT NULL,
-  instance_url TEXT,
-  subdomain TEXT,
-  domain TEXT,
-  status TEXT DEFAULT 'pending_deploy',
-  storage_limit_gb INTEGER DEFAULT 10,
-  server_ip TEXT,
-  coolify_service_id TEXT,
-  -- Resource limits
-  n8n_cpu_limit NUMERIC,
-  n8n_memory_gb NUMERIC,
-  pg_cpu_limit NUMERIC,
-  pg_memory_gb NUMERIC,
-  -- Postgres credentials (stored for management)
-  postgres_user TEXT,
-  postgres_password TEXT,
-  postgres_database TEXT,
-  -- Billing (optional - only for FlowEngine Cloud)
-  stripe_subscription_id TEXT,
-  stripe_price_id TEXT,
-  billing_cycle TEXT DEFAULT 'monthly' CHECK (billing_cycle IN ('monthly', 'annual')),
-  subscription_status TEXT DEFAULT 'active',
-  -- Hosting mode
-  hosting_mode TEXT DEFAULT 'selfhost' CHECK (hosting_mode IN ('selfhost', 'cloud')),
-  -- Client assignment
-  client_id UUID,
-  client_name TEXT,
-  invited_by_user_id UUID,
-  service_type TEXT DEFAULT 'n8n',
-  platform TEXT,
-  is_external BOOLEAN DEFAULT false,
-  n8n_api_key TEXT,
-  ai_payer TEXT DEFAULT 'agency' CHECK (ai_payer IN ('agency', 'client')),
-  deleted_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_ppid_user_id ON pay_per_instance_deployments(user_id);
-CREATE INDEX IF NOT EXISTS idx_ppid_team_id ON pay_per_instance_deployments(team_id);
-CREATE INDEX IF NOT EXISTS idx_ppid_status ON pay_per_instance_deployments(status);
-CREATE INDEX IF NOT EXISTS idx_ppid_instance_id ON pay_per_instance_deployments(instance_id);
-CREATE INDEX IF NOT EXISTS idx_ppid_stripe_subscription ON pay_per_instance_deployments(stripe_subscription_id);
-
--- ============================================
--- 5. client_instances - Client instance assignments
--- ============================================
-CREATE TABLE IF NOT EXISTS client_instances (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  team_id UUID,
-  client_id UUID,
-  user_id UUID,
-  instance_id UUID REFERENCES pay_per_instance_deployments(id) ON DELETE CASCADE,
-  instance_name TEXT,
-  instance_url TEXT,
-  access_level TEXT DEFAULT 'view' CHECK (access_level IN ('view', 'edit', 'admin')),
-  assigned_by UUID REFERENCES profiles(id),
-  invited_by UUID,
-  allow_full_access BOOLEAN DEFAULT false,
-  agency_stripe_customer_id TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
--- Idempotent patch: drop NOT NULL on team_id if it exists
-ALTER TABLE client_instances ALTER COLUMN team_id DROP NOT NULL;
-
-CREATE INDEX IF NOT EXISTS idx_client_instances_team_id ON client_instances(team_id);
-CREATE INDEX IF NOT EXISTS idx_client_instances_client_id ON client_instances(client_id);
-CREATE INDEX IF NOT EXISTS idx_client_instances_instance_id ON client_instances(instance_id);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_client_instances_instance_id_unique ON client_instances(instance_id);
-
--- ============================================
--- 6. client_invites - Client invitations
--- ============================================
-CREATE TABLE IF NOT EXISTS client_invites (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  team_id UUID,
-  email TEXT NOT NULL,
-  name TEXT,
-  client_name TEXT,
-  role TEXT DEFAULT 'client',
-  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'accepted', 'expired', 'cancelled')),
-  invited_by UUID REFERENCES profiles(id),
-  token TEXT UNIQUE DEFAULT gen_random_uuid()::TEXT,
-  expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '30 days'),
-  accepted_at TIMESTAMPTZ,
-  accepted_by UUID,
-  -- Instance / service linking
-  instance_id UUID REFERENCES pay_per_instance_deployments(id) ON DELETE SET NULL,
-  linked_instance_ids UUID[],
-  linked_service_ids UUID[],
-  storage_size_gb INTEGER DEFAULT 0,
-  billing_cycle TEXT DEFAULT 'monthly',
-  allow_full_access BOOLEAN DEFAULT false,
-  is_external BOOLEAN DEFAULT false,
-  include_whatsapp BOOLEAN DEFAULT false,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
--- Idempotent patch: add client_name if missing (older deployments may not have it)
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS client_name TEXT;
-
-CREATE INDEX IF NOT EXISTS idx_client_invites_team_id ON client_invites(team_id);
-CREATE INDEX IF NOT EXISTS idx_client_invites_email ON client_invites(email);
-CREATE INDEX IF NOT EXISTS idx_client_invites_token ON client_invites(token);
-CREATE INDEX IF NOT EXISTS idx_client_invites_status ON client_invites(status);
-CREATE INDEX IF NOT EXISTS idx_client_invites_invited_by ON client_invites(invited_by);
-
--- ============================================
--- 7. client_widgets - Widgets assigned to clients
--- ============================================
-CREATE TABLE IF NOT EXISTS client_widgets (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  team_id UUID,
-  client_id UUID,
-  widget_id UUID,
-  user_id UUID,
-  created_by UUID,
-  instance_id UUID REFERENCES pay_per_instance_deployments(id) ON DELETE SET NULL,
-  name TEXT,
-  description TEXT,
-  widget_type TEXT DEFAULT 'form',
-  form_fields JSONB,
-  chatbot_config JSONB,
-  webhook_url TEXT,
-  styles JSONB DEFAULT '{}'::jsonb,
-  is_active BOOLEAN DEFAULT false,
-  display_order INTEGER DEFAULT 0,
-  workflow_id TEXT,
-  workflow_name TEXT,
-  template_id UUID,
-  assigned_by UUID REFERENCES profiles(id),
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_client_widgets_team_id ON client_widgets(team_id);
-CREATE INDEX IF NOT EXISTS idx_client_widgets_client_id ON client_widgets(client_id);
-CREATE INDEX IF NOT EXISTS idx_client_widgets_user_id ON client_widgets(user_id);
-CREATE INDEX IF NOT EXISTS idx_client_widgets_instance_id ON client_widgets(instance_id);
-
--- ============================================
--- 8. widget_categories - Widget categorization
--- ============================================
-CREATE TABLE IF NOT EXISTS widget_categories (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID,
-  team_id UUID,
-  name TEXT NOT NULL,
-  description TEXT,
-  color TEXT DEFAULT '#6366f1',
-  sort_order INTEGER DEFAULT 0,
-  display_order INTEGER DEFAULT 0,
-  instance_id UUID REFERENCES pay_per_instance_deployments(id) ON DELETE SET NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_widget_categories_team_id ON widget_categories(team_id);
-CREATE INDEX IF NOT EXISTS idx_widget_categories_user_id ON widget_categories(user_id);
-CREATE INDEX IF NOT EXISTS idx_widget_categories_instance_id ON widget_categories(instance_id);
-
--- ============================================
--- 9. widget_category_links - Widget-to-category mapping
--- ============================================
-CREATE TABLE IF NOT EXISTS widget_category_links (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  widget_id UUID NOT NULL,
-  category_id UUID REFERENCES widget_categories(id) ON DELETE CASCADE,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(widget_id, category_id)
-);
-
--- ============================================
--- 10. workflow_templates - Workflow template definitions
--- ============================================
-CREATE TABLE IF NOT EXISTS workflow_templates (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  team_id UUID,
-  name TEXT NOT NULL,
-  description TEXT,
-  category TEXT,
-  icon TEXT,
-  workflow_json JSONB,
-  thumbnail_url TEXT,
-  is_public BOOLEAN DEFAULT false,
-  is_active BOOLEAN DEFAULT true,
-  import_count INTEGER DEFAULT 0,
-  required_credentials JSONB DEFAULT '[]'::jsonb,
-  version INTEGER DEFAULT 1,
-  changelog TEXT,
-  created_by UUID REFERENCES profiles(id),
-  install_count INTEGER DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_workflow_templates_team_id ON workflow_templates(team_id);
-CREATE INDEX IF NOT EXISTS idx_workflow_templates_category ON workflow_templates(category);
-CREATE INDEX IF NOT EXISTS idx_workflow_templates_is_public ON workflow_templates(is_public);
-CREATE INDEX IF NOT EXISTS idx_workflow_templates_is_active ON workflow_templates(is_active);
-
--- ============================================
--- 11. workflow_template_imports - Template import tracking
--- ============================================
-CREATE TABLE IF NOT EXISTS workflow_template_imports (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  template_id UUID REFERENCES workflow_templates(id) ON DELETE CASCADE,
-  user_id UUID REFERENCES profiles(id),
-  imported_by UUID REFERENCES profiles(id),
-  instance_id UUID,
-  n8n_workflow_id TEXT,
-  installed_version INTEGER DEFAULT 1,
-  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'imported', 'failed')),
-  imported_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_wti_template_id ON workflow_template_imports(template_id);
-CREATE INDEX IF NOT EXISTS idx_wti_user_id ON workflow_template_imports(user_id);
-
--- ============================================
--- 12. credential_records - Credential management
--- ============================================
-CREATE TABLE IF NOT EXISTS credential_records (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  team_id UUID NOT NULL,
-  user_id UUID REFERENCES profiles(id),
-  created_by UUID REFERENCES profiles(id),
-  name TEXT NOT NULL,
-  type TEXT NOT NULL,
-  data_encrypted TEXT,
-  instance_id UUID,
-  n8n_credential_id TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(instance_id, n8n_credential_id)
-);
-
-CREATE INDEX IF NOT EXISTS idx_credential_records_team_id ON credential_records(team_id);
-CREATE INDEX IF NOT EXISTS idx_credential_records_user_id ON credential_records(user_id);
-
--- ============================================
--- 13. whatsapp_servers - WhatsApp hosting servers (Evolution API)
--- ============================================
-CREATE TABLE IF NOT EXISTS whatsapp_servers (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name TEXT,
-  server_ip TEXT,
-  evolution_api_url TEXT,
-  evolution_api_admin_key TEXT,
-  whatsapp_session_count INTEGER DEFAULT 0,
-  max_whatsapp_sessions INTEGER DEFAULT 100,
-  is_accepting_new_sessions BOOLEAN DEFAULT true,
-  deleted_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_whatsapp_servers_accepting ON whatsapp_servers(is_accepting_new_sessions);
-
-ALTER TABLE whatsapp_servers ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Service role full access whatsapp_servers" ON whatsapp_servers FOR ALL TO service_role USING (true);
-
-GRANT SELECT, INSERT, UPDATE, DELETE ON whatsapp_servers TO authenticated;
-GRANT ALL ON whatsapp_servers TO service_role;
-
--- RPC: safely increment session count
-CREATE OR REPLACE FUNCTION increment_whatsapp_session_count(p_server_id UUID)
-RETURNS void AS $$
-  UPDATE whatsapp_servers SET whatsapp_session_count = whatsapp_session_count + 1 WHERE id = p_server_id;
-$$ LANGUAGE sql SECURITY DEFINER;
-
--- ============================================
--- 14. whatsapp_instances - WhatsApp service instances
--- ============================================
-CREATE TABLE IF NOT EXISTS whatsapp_instances (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  team_id UUID NOT NULL,
-  user_id UUID REFERENCES profiles(id),
-  instance_name TEXT NOT NULL,
-  display_name TEXT,
-  instance_url TEXT,
-  api_key TEXT,
-  session_token TEXT,
-  server_url TEXT,
-  deployment_server_id UUID REFERENCES whatsapp_servers(id) ON DELETE SET NULL,
-  server_ip TEXT,
-  phone_number TEXT,
-  webhook_url TEXT,
-  linked_instance_id UUID REFERENCES pay_per_instance_deployments(id) ON DELETE SET NULL,
-  stripe_subscription_id TEXT,
-  stripe_customer_id TEXT,
-  billing_cycle TEXT DEFAULT 'monthly',
-  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'pending_scan', 'connecting', 'connected', 'disconnected', 'error', 'deleted')),
-  n8n_instance_id UUID REFERENCES n8n_instances(id) ON DELETE SET NULL,
-  deleted_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_whatsapp_instances_team_id ON whatsapp_instances(team_id);
-CREATE INDEX IF NOT EXISTS idx_whatsapp_instances_user_id ON whatsapp_instances(user_id);
-CREATE INDEX IF NOT EXISTS idx_whatsapp_instances_linked ON whatsapp_instances(linked_instance_id);
-
--- ============================================
--- 14. conversations - Chat/conversation storage
--- ============================================
-CREATE TABLE IF NOT EXISTS conversations (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  conversation_id TEXT,
-  title TEXT,
-  messages JSONB DEFAULT '[]'::jsonb,
-  metadata JSONB DEFAULT '{}'::jsonb,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(user_id, conversation_id)
-);
-
-CREATE INDEX IF NOT EXISTS idx_conversations_user_id ON conversations(user_id);
-CREATE INDEX IF NOT EXISTS idx_conversations_updated_at ON conversations(updated_at);
-
--- Auto-update updated_at
-CREATE OR REPLACE FUNCTION update_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_conversations_updated_at
-  BEFORE UPDATE ON conversations
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
-
--- ============================================
--- Row Level Security (RLS) Policies
--- ============================================
-
--- Enable RLS on all tables
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
-ALTER TABLE n8n_instances ENABLE ROW LEVEL SECURITY;
-ALTER TABLE pay_per_instance_deployments ENABLE ROW LEVEL SECURITY;
-ALTER TABLE client_instances ENABLE ROW LEVEL SECURITY;
-ALTER TABLE client_invites ENABLE ROW LEVEL SECURITY;
-ALTER TABLE client_widgets ENABLE ROW LEVEL SECURITY;
-ALTER TABLE widget_categories ENABLE ROW LEVEL SECURITY;
-ALTER TABLE widget_category_links ENABLE ROW LEVEL SECURITY;
-ALTER TABLE workflow_templates ENABLE ROW LEVEL SECURITY;
-ALTER TABLE workflow_template_imports ENABLE ROW LEVEL SECURITY;
-ALTER TABLE credential_records ENABLE ROW LEVEL SECURITY;
-ALTER TABLE whatsapp_instances ENABLE ROW LEVEL SECURITY;
-ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
-
--- Profiles: users can read/update their own profile
-CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = id);
-CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
-
--- Team members: owners manage, members can see their own invite
-CREATE POLICY "Owner can manage team" ON team_members FOR ALL USING (owner_id = auth.uid());
-CREATE POLICY "Member can view own invite" ON team_members FOR SELECT USING (member_id = auth.uid() OR email = auth.email());
-
--- n8n instances: users can manage their own instances
-CREATE POLICY "Users can view own instances" ON n8n_instances FOR SELECT
-  USING (user_id = auth.uid() OR team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-CREATE POLICY "Users can manage own instances" ON n8n_instances FOR ALL
-  USING (user_id = auth.uid());
-
--- Deployments: team-scoped access + clients can read instances assigned to them
-CREATE POLICY "Users can view own deployments" ON pay_per_instance_deployments FOR SELECT
-  USING (user_id = auth.uid() OR team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-CREATE POLICY "Clients can view assigned deployments" ON pay_per_instance_deployments FOR SELECT
-  USING (id IN (SELECT instance_id FROM client_instances WHERE user_id = auth.uid()));
-CREATE POLICY "Users can manage own deployments" ON pay_per_instance_deployments FOR ALL
-  USING (user_id = auth.uid());
-
--- Client instances: team-scoped access (agency side) + client can read own assignments
-CREATE POLICY "Team can view client instances" ON client_instances FOR SELECT
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-CREATE POLICY "Team can manage client instances" ON client_instances FOR ALL
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-CREATE POLICY "Client can view own instance assignments" ON client_instances FOR SELECT
-  USING (user_id = auth.uid());
-
--- Client invites: agency-scoped access
-CREATE POLICY "Agency can view sent invites" ON client_invites FOR SELECT USING (invited_by = auth.uid());
-CREATE POLICY "Agency can manage sent invites" ON client_invites FOR ALL USING (invited_by = auth.uid());
-
--- Client widgets: team-scoped access
-CREATE POLICY "Team can view client widgets" ON client_widgets FOR SELECT
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-CREATE POLICY "Team can manage client widgets" ON client_widgets FOR ALL
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-
--- Widget categories: team-scoped
-CREATE POLICY "Team can view categories" ON widget_categories FOR SELECT
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-CREATE POLICY "Team can manage categories" ON widget_categories FOR ALL
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-
--- Widget category links: accessible if widget is accessible
-CREATE POLICY "Users can view category links" ON widget_category_links FOR SELECT USING (true);
-CREATE POLICY "Users can manage category links" ON widget_category_links FOR ALL USING (true);
-
--- Workflow templates: public templates visible to all, team templates to team
-CREATE POLICY "Anyone can view public templates" ON workflow_templates FOR SELECT
-  USING (is_public = true OR team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-CREATE POLICY "Team can manage templates" ON workflow_templates FOR ALL
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-
--- Template imports: user-scoped
-CREATE POLICY "Users can view own imports" ON workflow_template_imports FOR SELECT
-  USING (user_id = auth.uid());
-CREATE POLICY "Users can manage own imports" ON workflow_template_imports FOR ALL
-  USING (user_id = auth.uid());
-
--- Credential records: team-scoped
-CREATE POLICY "Team can view credentials" ON credential_records FOR SELECT
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-CREATE POLICY "Team can manage credentials" ON credential_records FOR ALL
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-
--- WhatsApp instances: team-scoped
-CREATE POLICY "Team can view whatsapp" ON whatsapp_instances FOR SELECT
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-CREATE POLICY "Team can manage whatsapp" ON whatsapp_instances FOR ALL
-  USING (team_id IN (SELECT team_id FROM profiles WHERE id = auth.uid()));
-
--- Conversations: user-scoped
-CREATE POLICY "Users can view own conversations" ON conversations FOR SELECT USING (auth.uid() = user_id);
-CREATE POLICY "Users can insert own conversations" ON conversations FOR INSERT WITH CHECK (auth.uid() = user_id);
-CREATE POLICY "Users can update own conversations" ON conversations FOR UPDATE USING (auth.uid() = user_id);
-CREATE POLICY "Users can delete own conversations" ON conversations FOR DELETE USING (auth.uid() = user_id);
-
--- Service role bypass (for API routes using service role key)
-CREATE POLICY "Service role full access profiles" ON profiles FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access team_members" ON team_members FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access n8n_instances" ON n8n_instances FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access ppid" ON pay_per_instance_deployments FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access client_instances" ON client_instances FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access client_invites" ON client_invites FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access client_widgets" ON client_widgets FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access widget_categories" ON widget_categories FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access widget_category_links" ON widget_category_links FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access workflow_templates" ON workflow_templates FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access wti" ON workflow_template_imports FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access credential_records" ON credential_records FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access whatsapp" ON whatsapp_instances FOR ALL TO service_role USING (true);
-CREATE POLICY "Service role full access conversations" ON conversations FOR ALL TO service_role USING (true);
-
--- ============================================
--- 15. portal_settings - System-wide configuration
--- ============================================
-CREATE TABLE IF NOT EXISTS portal_settings (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-
-  -- n8n Connection
-  n8n_base_url TEXT,
-  n8n_api_key TEXT,
-  n8n_webhook_url TEXT,
-
-  -- Hosting (Coolify)
-  coolify_url TEXT,
-  coolify_api_token TEXT,
-
-  -- AI Provider (OpenAI-compatible, e.g. OpenRouter)
-  ai_base_url TEXT,
-  ai_api_key TEXT,
-
-  -- n8n Instance SMTP (used when provisioning new n8n instances)
-  n8n_smtp_host TEXT,
-  n8n_smtp_port INTEGER DEFAULT 587,
-  n8n_smtp_user TEXT,
-  n8n_smtp_pass TEXT,
-  n8n_smtp_sender TEXT,
-  n8n_smtp_ssl BOOLEAN DEFAULT false,
-
-  -- n8n Docker Settings
-  n8n_docker_image TEXT DEFAULT 'n8nio/n8n:latest',
-  n8n_runners_enabled BOOLEAN DEFAULT false,
-  n8n_runner_image TEXT,
-
-  -- FlowEngine Managed Hosting API
-  flowengine_api_key TEXT,
-  flowengine_api_url TEXT,
-
-  -- Auth / Login Page
-  allow_signup BOOLEAN DEFAULT false,
-  enable_google_auth BOOLEAN DEFAULT false,
-  enable_linkedin_auth BOOLEAN DEFAULT false,
-  enable_github_auth BOOLEAN DEFAULT false,
-
-  -- General
-  admin_email TEXT,
-
-  -- OAuth provider credentials (Google, Microsoft, Slack, etc.)
-  oauth_credentials JSONB DEFAULT '{}'::jsonb,
-
-  -- Timestamps
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_by UUID REFERENCES auth.users(id)
-);
-
--- Insert default row only if none exists (single-row settings pattern)
-INSERT INTO portal_settings (id)
-SELECT gen_random_uuid()
-WHERE NOT EXISTS (SELECT 1 FROM portal_settings);
-
-ALTER TABLE portal_settings ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Authenticated users can read portal settings"
-  ON portal_settings FOR SELECT TO authenticated
-  USING (true);
-
-CREATE POLICY "Admin can update portal settings"
-  ON portal_settings FOR UPDATE TO authenticated
-  USING (true);
-
-CREATE POLICY "Service role full access portal_settings"
-  ON portal_settings FOR ALL TO service_role USING (true);
-
--- ============================================
--- 16. agency_client_billing_settings
--- ============================================
-CREATE TABLE IF NOT EXISTS agency_client_billing_settings (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  agency_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  client_user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  monthly_expected_amount NUMERIC DEFAULT 0,
-  currency TEXT DEFAULT 'usd',
-  notes TEXT DEFAULT '',
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(agency_id, client_user_id)
-);
-
-CREATE INDEX IF NOT EXISTS idx_acbs_agency_id ON agency_client_billing_settings(agency_id);
-CREATE INDEX IF NOT EXISTS idx_acbs_client_user_id ON agency_client_billing_settings(client_user_id);
-
-ALTER TABLE agency_client_billing_settings ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Agency can manage billing settings" ON agency_client_billing_settings FOR ALL USING (agency_id = auth.uid());
-CREATE POLICY "Service role full access acbs" ON agency_client_billing_settings FOR ALL TO service_role USING (true);
-
--- ============================================
--- 17. agency_manual_payments
--- ============================================
-CREATE TABLE IF NOT EXISTS agency_manual_payments (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  agency_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  client_user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  amount INTEGER NOT NULL,
-  currency TEXT DEFAULT 'usd',
-  payment_method TEXT NOT NULL CHECK (payment_method IN ('bank_transfer', 'cash', 'check', 'crypto', 'other')),
-  description TEXT,
-  payment_date DATE NOT NULL,
-  reference TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_amp_agency_id ON agency_manual_payments(agency_id);
-CREATE INDEX IF NOT EXISTS idx_amp_client_user_id ON agency_manual_payments(client_user_id);
-
-ALTER TABLE agency_manual_payments ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Agency can manage manual payments" ON agency_manual_payments FOR ALL USING (agency_id = auth.uid());
-CREATE POLICY "Service role full access amp" ON agency_manual_payments FOR ALL TO service_role USING (true);
-
--- ============================================
--- 16. agency_client_notes - Per-client notes (agency-only)
--- ============================================
-CREATE TABLE IF NOT EXISTS agency_client_notes (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  agency_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  client_user_id TEXT NOT NULL,
-  notes TEXT DEFAULT '',
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  UNIQUE(agency_id, client_user_id)
-);
-
-CREATE INDEX IF NOT EXISTS idx_acn_agency_id ON agency_client_notes(agency_id);
-CREATE INDEX IF NOT EXISTS idx_acn_client_user_id ON agency_client_notes(client_user_id);
-
-ALTER TABLE agency_client_notes ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Agency can manage client notes" ON agency_client_notes FOR ALL USING (agency_id = auth.uid());
-CREATE POLICY "Service role full access acn" ON agency_client_notes FOR ALL TO service_role USING (true);
-
--- ============================================
--- 17. agency_client_custom_entries - Custom properties per client
--- ============================================
-CREATE TABLE IF NOT EXISTS agency_client_custom_entries (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  agency_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  client_user_id TEXT NOT NULL,
-  name TEXT NOT NULL,
-  domain TEXT DEFAULT '',
-  access TEXT DEFAULT '',
-  notes TEXT DEFAULT '',
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_acce_agency_id ON agency_client_custom_entries(agency_id);
-CREATE INDEX IF NOT EXISTS idx_acce_client_user_id ON agency_client_custom_entries(client_user_id);
-
-ALTER TABLE agency_client_custom_entries ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Agency can manage custom entries" ON agency_client_custom_entries FOR ALL USING (agency_id = auth.uid());
-CREATE POLICY "Service role full access acce" ON agency_client_custom_entries FOR ALL TO service_role USING (true);
-
--- ============================================
--- 18. api_key - User API keys for external API and MCP access
--- ============================================
-CREATE TABLE IF NOT EXISTS api_key (
-  user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  key_hash TEXT NOT NULL UNIQUE,
-  key_prefix TEXT NOT NULL,
-  last_used_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_api_key_hash ON api_key(key_hash);
-
-ALTER TABLE api_key ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Users can view own api key" ON api_key
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert own api key" ON api_key
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
-CREATE POLICY "Users can update own api key" ON api_key
-  FOR UPDATE USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can delete own api key" ON api_key
-  FOR DELETE USING (auth.uid() = user_id);
-
--- ============================================
--- Role grants (required for PostgREST + RLS to work)
--- ============================================
-
--- authenticated users: full CRUD (RLS policies control row access)
-GRANT SELECT, INSERT, UPDATE, DELETE ON
-  profiles,
-  team_members,
-  n8n_instances,
-  pay_per_instance_deployments,
-  client_instances,
-  client_invites,
-  client_widgets,
-  widget_categories,
-  widget_category_links,
-  workflow_templates,
-  workflow_template_imports,
-  credential_records,
-  whatsapp_instances,
-  conversations,
-  portal_settings,
-  agency_client_billing_settings,
-  agency_manual_payments,
-  agency_client_notes,
-  agency_client_custom_entries
-TO authenticated;
-
-GRANT SELECT, INSERT, UPDATE, DELETE ON api_key TO authenticated;
-
--- service_role: full access (bypasses RLS via BYPASSRLS attribute)
-GRANT ALL ON
-  profiles,
-  team_members,
-  n8n_instances,
-  pay_per_instance_deployments,
-  client_instances,
-  client_invites,
-  client_widgets,
-  widget_categories,
-  widget_category_links,
-  workflow_templates,
-  workflow_template_imports,
-  credential_records,
-  whatsapp_instances,
-  conversations,
-  portal_settings,
-  agency_client_billing_settings,
-  agency_manual_payments,
-  agency_client_notes,
-  agency_client_custom_entries,
-  api_key
-TO service_role;
-
--- anon: read-only access to public/portal config tables
-GRANT SELECT ON portal_settings, widget_categories TO anon;
-
--- ============================================
--- Upgrade patches for EXISTING installs
--- (fresh installs already have all columns via CREATE TABLE above;
---  these ALTER TABLE statements are no-ops on fresh installs but
---  essential for upgrading databases created with older schema versions)
--- ============================================
-
--- portal_settings: flowengine keys added post-launch
-ALTER TABLE portal_settings ADD COLUMN IF NOT EXISTS flowengine_api_key TEXT;
-ALTER TABLE portal_settings ADD COLUMN IF NOT EXISTS flowengine_api_url TEXT;
-
--- widget_categories: originally had team_id NOT NULL only; relaxed + added missing columns
-ALTER TABLE widget_categories ADD COLUMN IF NOT EXISTS user_id UUID;
-ALTER TABLE widget_categories ADD COLUMN IF NOT EXISTS color TEXT DEFAULT '#6366f1';
-ALTER TABLE widget_categories ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;
-ALTER TABLE widget_categories ADD COLUMN IF NOT EXISTS instance_id UUID REFERENCES pay_per_instance_deployments(id) ON DELETE SET NULL;
-ALTER TABLE widget_categories ALTER COLUMN team_id DROP NOT NULL;
-CREATE INDEX IF NOT EXISTS idx_widget_categories_user_id ON widget_categories(user_id);
-CREATE INDEX IF NOT EXISTS idx_widget_categories_instance_id ON widget_categories(instance_id);
-
--- client_instances: unique constraint + nullable client_id + stripe customer field
-CREATE UNIQUE INDEX IF NOT EXISTS idx_client_instances_instance_id_unique ON client_instances(instance_id);
-ALTER TABLE client_instances ALTER COLUMN client_id DROP NOT NULL;
-ALTER TABLE client_instances ADD COLUMN IF NOT EXISTS agency_stripe_customer_id TEXT;
-
--- credential_records: n8n credential tracking added post-launch
-ALTER TABLE credential_records ADD COLUMN IF NOT EXISTS n8n_credential_id TEXT;
-ALTER TABLE credential_records ADD COLUMN IF NOT EXISTS created_by UUID REFERENCES profiles(id);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_credential_records_instance_credential ON credential_records(instance_id, n8n_credential_id);
-
--- client_widgets: workflow linkage and ordering added post-launch
-ALTER TABLE client_widgets ADD COLUMN IF NOT EXISTS workflow_id TEXT;
-ALTER TABLE client_widgets ADD COLUMN IF NOT EXISTS workflow_name TEXT;
-ALTER TABLE client_widgets ADD COLUMN IF NOT EXISTS display_order INTEGER DEFAULT 0;
-ALTER TABLE client_widgets ADD COLUMN IF NOT EXISTS template_id UUID;
-
--- workflow_template_imports: tracking columns added post-launch
-ALTER TABLE workflow_template_imports ADD COLUMN IF NOT EXISTS n8n_workflow_id TEXT;
-ALTER TABLE workflow_template_imports ADD COLUMN IF NOT EXISTS imported_by UUID REFERENCES profiles(id);
-ALTER TABLE workflow_template_imports ADD COLUMN IF NOT EXISTS installed_version INTEGER DEFAULT 1;
-
--- whatsapp_instances: bulk additions from stripe webhook and client routes
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS display_name TEXT;
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS session_token TEXT;
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS server_url TEXT;
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS deployment_server_id UUID REFERENCES whatsapp_servers(id) ON DELETE SET NULL;
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS server_ip TEXT;
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS webhook_url TEXT;
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS linked_instance_id UUID REFERENCES pay_per_instance_deployments(id) ON DELETE SET NULL;
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS stripe_subscription_id TEXT;
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS stripe_customer_id TEXT;
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS billing_cycle TEXT DEFAULT 'monthly';
-ALTER TABLE whatsapp_instances ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMPTZ;
-ALTER TABLE whatsapp_instances DROP CONSTRAINT IF EXISTS whatsapp_instances_status_check;
-ALTER TABLE whatsapp_instances ADD CONSTRAINT whatsapp_instances_status_check
-  CHECK (status IN ('pending', 'pending_scan', 'connecting', 'connected', 'disconnected', 'error', 'deleted'));
-CREATE INDEX IF NOT EXISTS idx_whatsapp_instances_linked ON whatsapp_instances(linked_instance_id);
-
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS accepted_by UUID;
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS accepted_at TIMESTAMPTZ;
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ DEFAULT (NOW() + INTERVAL '30 days');
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS storage_size_gb INTEGER DEFAULT 0;
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS billing_cycle TEXT DEFAULT 'monthly';
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS allow_full_access BOOLEAN DEFAULT false;
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS is_external BOOLEAN DEFAULT false;
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS include_whatsapp BOOLEAN DEFAULT false;
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS linked_instance_ids UUID[];
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS linked_service_ids UUID[];
-ALTER TABLE client_invites ADD COLUMN IF NOT EXISTS instance_id UUID REFERENCES pay_per_instance_deployments(id) ON DELETE SET NULL;
-
--- Idempotent patches for columns added after initial schema release
-ALTER TABLE pay_per_instance_deployments ADD COLUMN IF NOT EXISTS platform TEXT;
-ALTER TABLE client_instances ADD COLUMN IF NOT EXISTS client_name TEXT;
-ALTER TABLE client_instances ADD COLUMN IF NOT EXISTS allow_full_access BOOLEAN DEFAULT false;
-
--- Allow team members to be pre-invited for pending clients (no profile yet)
-ALTER TABLE team_members ALTER COLUMN owner_id DROP NOT NULL;
-ALTER TABLE team_members ADD COLUMN IF NOT EXISTS pending_client_invite_id UUID REFERENCES client_invites(id) ON DELETE CASCADE;
-
--- ============================================
--- 21. products - Agency products/services sold via the public store
--- ============================================
-CREATE TABLE IF NOT EXISTS products (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  owner_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  name TEXT NOT NULL,
-  description TEXT,
-  price_cents INTEGER NOT NULL CHECK (price_cents >= 0),
-  currency TEXT NOT NULL DEFAULT 'usd',
-  image_url TEXT,
-  active BOOLEAN NOT NULL DEFAULT true,
-  display_order INTEGER NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS idx_products_owner_id ON products(owner_id);
-CREATE INDEX IF NOT EXISTS idx_products_active ON products(active);
-
-ALTER TABLE products ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Service role full access products" ON products FOR ALL TO service_role USING (true);
-CREATE POLICY "Owners manage their own products" ON products FOR ALL TO authenticated
-  USING (owner_id = auth.uid()) WITH CHECK (owner_id = auth.uid());
-CREATE POLICY "Public can view active products" ON products FOR SELECT TO anon USING (active = true);
-
-GRANT SELECT, INSERT, UPDATE, DELETE ON products TO authenticated;
-GRANT SELECT ON products TO anon;
-GRANT ALL ON products TO service_role;
-
--- ============================================
--- 22. leads - Proposal requests from the public contact form
+-- 3. leads — solicitudes, llamadas agendadas y carritos
 -- ============================================
 CREATE TABLE IF NOT EXISTS leads (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -970,9 +83,13 @@ CREATE TABLE IF NOT EXISTS leads (
   name TEXT NOT NULL,
   email TEXT NOT NULL,
   company TEXT,
+  phone TEXT,
   message TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'won', 'lost')),
   source TEXT NOT NULL DEFAULT 'website',
+  kind TEXT NOT NULL DEFAULT 'proposal' CHECK (kind IN ('proposal', 'call')),
+  call_at TIMESTAMPTZ,
+  answers JSONB,
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -980,69 +97,50 @@ CREATE TABLE IF NOT EXISTS leads (
 
 CREATE INDEX IF NOT EXISTS idx_leads_owner_id ON leads(owner_id);
 CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
-
-ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Service role full access leads" ON leads FOR ALL TO service_role USING (true);
-CREATE POLICY "Owners manage their own leads" ON leads FOR ALL TO authenticated
-  USING (owner_id = auth.uid()) WITH CHECK (owner_id = auth.uid());
-
-GRANT SELECT, UPDATE, DELETE ON leads TO authenticated;
-GRANT ALL ON leads TO service_role;
-
--- Call booking columns (see migrations/add-call-booking.sql)
-ALTER TABLE leads ADD COLUMN IF NOT EXISTS kind TEXT NOT NULL DEFAULT 'proposal';
-ALTER TABLE leads ADD COLUMN IF NOT EXISTS phone TEXT;
-ALTER TABLE leads ADD COLUMN IF NOT EXISTS call_at TIMESTAMPTZ;
-ALTER TABLE leads ADD COLUMN IF NOT EXISTS answers JSONB;
-DO $$
-BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'leads_kind_check') THEN
-    ALTER TABLE leads ADD CONSTRAINT leads_kind_check CHECK (kind IN ('proposal', 'call'));
-  END IF;
-END $$;
 CREATE INDEX IF NOT EXISTS idx_leads_call_at ON leads(call_at) WHERE call_at IS NOT NULL;
+
+-- Una llamada activa por franja horaria (cancelar = status 'lost' libera la franja)
 CREATE UNIQUE INDEX IF NOT EXISTS uq_leads_call_slot
   ON leads(owner_id, call_at)
   WHERE kind = 'call' AND call_at IS NOT NULL AND status <> 'lost';
 
 -- ============================================
--- Registration hardening (see migrations/harden-registration.sql)
+-- Seguridad a nivel de fila (RLS)
 -- ============================================
--- Hardening for public registration.
---
--- The original policies assume every account belongs to the agency. With a public
--- "Registrarse" link that is no longer true: any registered visitor could read the
--- agency's keys, rewrite its settings, or join someone else's team. Idempotent.
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE leads ENABLE ROW LEVEL SECURITY;
 
--- 1) portal_settings holds the agency's n8n / Coolify / AI / SMTP / OAuth secrets.
---    The app only touches it through server routes using the service role (which bypasses
---    RLS), so no policy for `authenticated` is needed at all.
-DROP POLICY IF EXISTS "Authenticated users can read portal settings" ON portal_settings;
-DROP POLICY IF EXISTS "Admin can update portal settings" ON portal_settings;
-REVOKE ALL ON portal_settings FROM anon, authenticated;
-
--- 2) profiles.team_id decides which team's data a user can see (client_instances,
---    credentials, templates, widgets...). The "update own profile" policy let anyone
---    set their own team_id to any value. Only the server (service role) may change it.
-CREATE OR REPLACE FUNCTION public.protect_profile_team_id()
-RETURNS trigger
-LANGUAGE plpgsql
-AS $$
+DO $$
 BEGIN
-  IF NEW.team_id IS DISTINCT FROM OLD.team_id
-     AND coalesce(auth.role(), '') <> 'service_role'
-     AND current_user NOT IN ('postgres', 'supabase_admin', 'service_role') THEN
-    RAISE EXCEPTION 'team_id can only be changed by the server' USING ERRCODE = '42501';
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'profiles' AND policyname = 'Users can view own profile') THEN
+    CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = id);
   END IF;
-  RETURN NEW;
-END;
-$$;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'profiles' AND policyname = 'Users can update own profile') THEN
+    CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'team_members' AND policyname = 'Owner can manage team') THEN
+    CREATE POLICY "Owner can manage team" ON team_members FOR ALL USING (owner_id = auth.uid());
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'team_members' AND policyname = 'Member can view own invite') THEN
+    CREATE POLICY "Member can view own invite" ON team_members FOR SELECT USING (member_id = auth.uid() OR email = auth.email());
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'leads' AND policyname = 'Owners manage their own leads') THEN
+    CREATE POLICY "Owners manage their own leads" ON leads FOR ALL TO authenticated
+      USING (owner_id = auth.uid()) WITH CHECK (owner_id = auth.uid());
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'profiles' AND policyname = 'Service role full access profiles') THEN
+    CREATE POLICY "Service role full access profiles" ON profiles FOR ALL TO service_role USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'team_members' AND policyname = 'Service role full access team_members') THEN
+    CREATE POLICY "Service role full access team_members" ON team_members FOR ALL TO service_role USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'leads' AND policyname = 'Service role full access leads') THEN
+    CREATE POLICY "Service role full access leads" ON leads FOR ALL TO service_role USING (true);
+  END IF;
+END $$;
 
-DROP TRIGGER IF EXISTS protect_profile_team_id ON profiles;
-CREATE TRIGGER protect_profile_team_id
-  BEFORE UPDATE ON profiles
-  FOR EACH ROW EXECUTE FUNCTION public.protect_profile_team_id();
-
--- ============================================
--- Done! Your FlowEngine Portal database is ready.
--- ============================================
+GRANT SELECT, UPDATE ON profiles TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON team_members TO authenticated;
+GRANT SELECT, UPDATE, DELETE ON leads TO authenticated;
+GRANT ALL ON profiles, team_members, leads TO service_role;

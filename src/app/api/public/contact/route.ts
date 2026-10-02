@@ -184,7 +184,7 @@ export async function POST(req: NextRequest) {
         console.error('Contact form: lead saved but email notification failed:', emailError);
       }
     } else {
-      console.warn('Contact form: no email configured (RESEND_API_KEY, Ajustes → Conexiones, or N8N_SMTP_* env vars) — lead saved, no email sent.');
+      console.warn('Contact form: no email configured (RESEND_API_KEY, Ajustes → Pagos y email, or SMTP_* env vars) — lead saved, no email sent.');
     }
 
     return NextResponse.json({ success: true, id: lead?.id, callAt: callAt ? callAt.toISOString() : null });

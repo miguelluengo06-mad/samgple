@@ -16,7 +16,7 @@ const DEMO_PASSWORD = process.env.NEXT_PUBLIC_DEMO_PASSWORD || '';
 function getCachedLogo(): string | null {
   if (typeof window === 'undefined') return null;
   try {
-    const cached = localStorage.getItem('flowengine_agency_logo');
+    const cached = localStorage.getItem('samgple_agency_logo');
     if (cached) {
       const data = JSON.parse(cached);
       if (data?.url) return data.url;
@@ -27,9 +27,6 @@ function getCachedLogo(): string | null {
 
 interface AuthConfig {
   allow_signup: boolean;
-  enable_google_auth: boolean;
-  enable_linkedin_auth: boolean;
-  enable_github_auth: boolean;
   agency_name: string | null;
   first_run: boolean;
 }
@@ -77,14 +74,7 @@ export default function AuthPage() {
       .then(setAuthConfig)
       .catch(() => {
         // Default: everything disabled
-        setAuthConfig({
-          allow_signup: false,
-          enable_google_auth: false,
-          enable_linkedin_auth: false,
-          enable_github_auth: false,
-          agency_name: null,
-          first_run: false,
-        });
+        setAuthConfig({ allow_signup: false, agency_name: null, first_run: false });
       });
   }, []);
 
@@ -143,7 +133,7 @@ export default function AuthPage() {
           initialMode={authConfig?.first_run || isInviteFlow ? 'signup' : 'signin'}
           // Solo acceso: las cuentas de cliente las crea la agencia. El alta solo se abre en la primera
           // configuración (para crear al administrador) y con una invitación de equipo.
-          authConfig={{ ...authConfig, allow_signup: authConfig.first_run || isInviteFlow }}
+          authConfig={{ allow_signup: authConfig.first_run || isInviteFlow }}
         />
         </>
       )}
