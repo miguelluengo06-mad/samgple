@@ -3,9 +3,9 @@
  * (ver src/lib/cookieConsent.ts y src/components/MetaPixel.tsx).
  *
  * El ID va en la variable de entorno NEXT_PUBLIC_META_PIXEL_ID (Vercel → Settings → Environment Variables).
- * Vacío = píxel apagado. Al ser NEXT_PUBLIC_, hay que volver a desplegar tras cambiarla.
+ * También vale META_PIXEL_ID (next.config.ts la copia). Vacío = píxel apagado. Al ser NEXT_PUBLIC_, hay que volver a desplegar tras cambiarla.
  */
-export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
+export const META_PIXEL_ID = (process.env.NEXT_PUBLIC_META_PIXEL_ID || '').trim();
 
 /** Rutas donde nunca se carga (panel de administración y acceso). */
 export const PIXEL_EXCLUDED_PREFIXES = ['/portal', '/cuenta', '/vista-cliente', '/auth', '/invite'];
