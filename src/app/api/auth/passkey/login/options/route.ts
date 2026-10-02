@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateAuthenticationOptions } from '@simplewebauthn/server';
 import { checkRateLimit } from '@/lib/validation';
 import { getClientIp, isBlocked, reportSuspicious } from '@/lib/security';
-import { relyingParty, saveChallenge } from '@/lib/passkeys';
+import { explainOrigin, relyingParty, saveChallenge } from '@/lib/passkeys';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Demasiados intentos. Espera un momento.' }, { status: 429 });
   }
   const rp = relyingParty(req.headers);
-  if (!rp) return NextResponse.json({ error: 'Origen no permitido' }, { status: 400 });
+  if (!rp) return NextResponse.json({ error: explainOrigin(req.headers) }, { status: 400 });
 
   const options = await generateAuthenticationOptions({ rpID: rp.rpID, userVerification: 'required' });
   const challengeId = await saveChallenge(options.challenge, 'login');

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateRegistrationOptions } from '@simplewebauthn/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { agencyUser } from '@/lib/routeAuth';
-import { listPasskeys, relyingParty, saveChallenge } from '@/lib/passkeys';
+import { listPasskeys, explainOrigin, relyingParty, saveChallenge } from '@/lib/passkeys';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   const auth = await agencyUser(req);
   if ('error' in auth) return auth.error;
   const rp = relyingParty(req.headers);
-  if (!rp) return NextResponse.json({ error: 'Origen no permitido' }, { status: 400 });
+  if (!rp) return NextResponse.json({ error: explainOrigin(req.headers) }, { status: 400 });
 
   const { rows, setup } = await listPasskeys(auth.userId);
   if (setup) return NextResponse.json({ error: 'Falta crear las tablas de passkeys', setup: true }, { status: 409 });

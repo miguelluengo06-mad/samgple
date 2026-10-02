@@ -16,7 +16,7 @@ const h = vi.hoisted(() => {
 
 vi.mock('@/lib/supabaseAdmin', () => ({ supabaseAdmin: h.admin }));
 
-import { consumeChallenge, relyingParty, sessionIdFromToken } from '../passkeys';
+import { consumeChallenge, explainOrigin, relyingParty, sessionIdFromToken } from '../passkeys';
 
 const jwt = (claims: object) => `h.${Buffer.from(JSON.stringify(claims)).toString('base64url')}.s`;
 
@@ -53,6 +53,23 @@ describe('relyingParty', () => {
     expect(relyingParty(headers('https://evil.com'))).toBeNull();
     expect(relyingParty(headers('https://samgple.com.evil.com'))).toBeNull();
     expect(relyingParty(headers('not a url'))).toBeNull();
+  });
+
+  it('works with and without «www» whichever one is configured', () => {
+    process.env.NEXT_PUBLIC_SITE_URL = 'https://www.samgple.com';
+    expect(relyingParty(headers('https://samgple.com'))).toMatchObject({ rpID: 'samgple.com', origin: 'https://samgple.com' });
+    expect(relyingParty(headers('https://www.samgple.com'))).toMatchObject({ rpID: 'samgple.com' });
+    expect(relyingParty(headers('https://other.com'))).toBeNull();
+  });
+
+  it('tells the person which address to use when the origin is wrong', () => {
+    process.env.NEXT_PUBLIC_SITE_URL = 'https://samgple.com';
+    const msg = explainOrigin(headers('https://samgple.vercel.app'));
+    expect(msg).toContain('samgple.com');
+    expect(msg).toContain('samgple.vercel.app');
+    expect(explainOrigin(headers())).toContain('Recarga');
+    delete process.env.NEXT_PUBLIC_SITE_URL;
+    expect(explainOrigin(headers('https://x.com'))).toContain('NEXT_PUBLIC_SITE_URL');
   });
 
   it('uses the received origin when no site is configured (local development)', () => {

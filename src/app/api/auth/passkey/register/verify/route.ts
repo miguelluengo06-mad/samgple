@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyRegistrationResponse } from '@simplewebauthn/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { agencyUser } from '@/lib/routeAuth';
-import { consumeChallenge, countPasskeys, forgetPasskeyCount, markPasskeySession, relyingParty, sessionIdFromToken, toB64u } from '@/lib/passkeys';
+import { consumeChallenge, countPasskeys, forgetPasskeyCount, markPasskeySession, explainOrigin, relyingParty, sessionIdFromToken, toB64u } from '@/lib/passkeys';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
   const auth = await agencyUser(req);
   if ('error' in auth) return auth.error;
   const rp = relyingParty(req.headers);
-  if (!rp) return NextResponse.json({ error: 'Origen no permitido' }, { status: 400 });
+  if (!rp) return NextResponse.json({ error: explainOrigin(req.headers) }, { status: 400 });
 
   const body = await req.json().catch(() => ({}));
   const challenge = typeof body.challengeId === 'string' ? await consumeChallenge(body.challengeId, 'register') : null;

@@ -110,9 +110,21 @@ export async function isPasskeySession(sessionId: string, userId: string): Promi
 
 /* ── Dominio de la web ───────────────────────────────────────────────────── */
 
+/** Host de la web configurada, sin «www.»: así el passkey vale para samgple.com y para www.samgple.com. */
+function siteHost(): string | null {
+  const site = process.env.NEXT_PUBLIC_SITE_URL || '';
+  if (!site) return null;
+  try {
+    return new URL(site).hostname.replace(/^www\./, '');
+  } catch {
+    return null;
+  }
+}
+
 /**
- * rpID y origen esperados. Con NEXT_PUBLIC_SITE_URL, el origen de la petición solo vale si es esa web (o un
- * subdominio suyo): un passkey de otra web no sirve aquí. Sin la variable (desarrollo) se usa el origen recibido.
+ * rpID y origen esperados. Con NEXT_PUBLIC_SITE_URL, el origen de la petición solo vale si es esa web (con o sin
+ * «www») o un subdominio suyo: un passkey de otra web no sirve aquí. Sin la variable (desarrollo) se usa el origen
+ * recibido.
  */
 export function relyingParty(headers: Headers): { rpID: string; origin: string; rpName: string } | null {
   const origin = headers.get('origin');
@@ -123,15 +135,28 @@ export function relyingParty(headers: Headers): { rpID: string; origin: string; 
   } catch {
     return null;
   }
-  const site = process.env.NEXT_PUBLIC_SITE_URL || '';
+  const configured = process.env.NEXT_PUBLIC_SITE_URL || '';
   let rpID = host;
-  if (site) {
-    try {
-      rpID = new URL(site).hostname;
-    } catch {
-      return null;
-    }
+  if (configured) {
+    const base = siteHost();
+    if (!base) return null;
+    rpID = base;
     if (host !== rpID && !host.endsWith(`.${rpID}`)) return null;
   }
   return { rpID, origin, rpName: 'samgple' };
+}
+
+/** Mensaje en español para cuando el origen no vale: dice desde qué dirección hay que usarlo. */
+export function explainOrigin(headers: Headers): string {
+  const origin = headers.get('origin');
+  if (!origin) return 'El navegador no ha indicado desde qué dirección entras. Recarga la página e inténtalo de nuevo.';
+  let host = origin;
+  try {
+    host = new URL(origin).hostname;
+  } catch {
+    /* se muestra tal cual */
+  }
+  const base = siteHost();
+  if (!base) return 'La dirección de la web no está bien configurada (NEXT_PUBLIC_SITE_URL en Vercel).';
+  return `Los passkeys solo funcionan desde ${base}. Ahora estás en ${host}: abre el panel desde https://${base} y vuelve a intentarlo.`;
 }
