@@ -4,6 +4,7 @@ import { AuthProvider } from '@/components/AuthContext';
 import { Suspense } from 'react';
 import CookieConsent from '@/components/CookieConsent';
 import MetaPixel from '@/components/MetaPixel';
+import WebAnalytics from '@/components/WebAnalytics';
 
 export const metadata: Metadata = {
   title: 'samgple — Agencia de contenido y marketing',
@@ -58,6 +59,7 @@ export default function RootLayout({
         </AuthProvider>
         <CookieConsent />
         <MetaPixel />
+        <WebAnalytics />
       </body>
     </html>
   );

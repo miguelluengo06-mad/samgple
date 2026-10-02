@@ -44,6 +44,12 @@ export default function CookiesPage() {
             <td>Según Stripe</td>
           </tr>
           <tr>
+            <td>Vercel Web Analytics</td>
+            <td>Estadística (sin cookies)</td>
+            <td>Cuenta visitas y páginas vistas de forma anónima y agregada. No usa cookies ni te identifica, y no mide el panel de administración.</td>
+            <td>No guarda cookies</td>
+          </tr>
+          <tr>
             <td>Meta Pixel (<code>_fbp</code>, <code>fr</code>)</td>
             <td>Publicidad (terceros)</td>
             <td>Medir conversiones y mejorar nuestros anuncios en Meta. <strong>Solo se cargan si aceptas las cookies de publicidad.</strong></td>

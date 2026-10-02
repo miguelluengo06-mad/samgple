@@ -42,8 +42,8 @@ export default function PrivacidadPage() {
           </tr>
           <tr>
             <td>Medir el rendimiento de la web y de nuestros anuncios</td>
-            <td>Datos de navegación e identificadores de publicidad (solo si aceptas esas cookies)</td>
-            <td>Tu consentimiento (art. 6.1.a), que puedes retirar en cualquier momento</td>
+            <td>Estadísticas anónimas y agregadas de visitas (sin cookies) e identificadores de publicidad (solo si aceptas esas cookies)</td>
+            <td>Interés legítimo (art. 6.1.f) para las estadísticas anónimas; tu consentimiento (art. 6.1.a) para la publicidad, que puedes retirar en cualquier momento</td>
           </tr>
           <tr>
             <td>Seguridad de la web y prevención del fraude</td>
@@ -61,7 +61,7 @@ export default function PrivacidadPage() {
       <p>Solo compartimos datos con los proveedores necesarios para prestarte el servicio, con los que tenemos un contrato de encargado del tratamiento:</p>
       <ul>
         <li><strong>Stripe Payments Europe, Ltd.</strong> — procesamiento de pagos y facturas.</li>
-        <li><strong>Supabase</strong> y el proveedor de alojamiento de la Web (p. ej. Vercel) — almacenamiento de datos y hospedaje.</li>
+        <li><strong>Supabase</strong> y el proveedor de alojamiento de la Web (p. ej. Vercel) — almacenamiento de datos, hospedaje y estadísticas anónimas de visitas.</li>
         <li>Proveedor de correo electrónico transaccional — envío de avisos, facturas e invitaciones.</li>
         <li>Herramientas de comunicación que utilices para hablar con nosotros (WhatsApp, Telegram, videollamadas), bajo sus propias políticas.</li>
         <li>Asesoría fiscal y contable, y las Administraciones públicas cuando la ley lo exija.</li>
