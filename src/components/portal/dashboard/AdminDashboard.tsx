@@ -8,6 +8,7 @@ import {
   ArrowUpRight,
   BellRing,
   CheckCircle2,
+  Clapperboard,
   Circle,
   CreditCard,
   Inbox,
@@ -103,7 +104,8 @@ function feedOf(leads: Lead[]): FeedEvent[] {
 
 export default function AdminDashboard() {
   const { leads, loading } = useLeadsContext();
-  const { user } = useAuth();
+  const { user, session } = useAuth();
+  const [videosTodo, setVideosTodo] = useState(0);
   const [stripeConnected, setStripeConnected] = useState<boolean | null>(null);
   const [now, setNow] = useState(() => Date.now());
 
@@ -111,6 +113,16 @@ export default function AdminDashboard() {
     const t = setInterval(() => setNow(Date.now()), 30000);
     return () => clearInterval(t);
   }, []);
+
+  // Pedidos de vídeo pendientes (por hacer = solicitados o con el guion en preparación)
+  useEffect(() => {
+    const token = session?.access_token;
+    if (!token) return;
+    fetch('/api/videos', { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => r.json())
+      .then((d) => setVideosTodo(((d.requests || []) as { status: string }[]).filter((r) => r.status === 'requested' || r.status === 'scripting').length))
+      .catch(() => {});
+  }, [session?.access_token]);
 
   // ¿Tiene ya la clave de Stripe? (para el paso "Conecta Stripe" de Primeros pasos)
   useEffect(() => {
@@ -194,6 +206,7 @@ export default function AdminDashboard() {
   const next = stats.next;
   const nextWa = whatsappUrl(next?.phone);
   const todos: { n: number; label: string; href: string; icon: React.ReactNode }[] = [
+    { n: videosTodo, label: videosTodo === 1 ? 'vídeo por hacer' : 'vídeos por hacer', href: '/portal/videos', icon: <Clapperboard className="w-4 h-4" /> },
     { n: stats.newList.length, label: stats.newList.length === 1 ? 'solicitud por responder' : 'solicitudes por responder', href: '/portal/leads', icon: <Inbox className="w-4 h-4" /> },
     { n: stats.unmarked, label: stats.unmarked === 1 ? 'llamada sin marcar' : 'llamadas sin marcar', href: '/portal/calls', icon: <PhoneCall className="w-4 h-4" /> },
     { n: stats.possible, label: stats.possible === 1 ? 'carrito sin pagar' : 'carritos sin pagar', href: '/portal/leads', icon: <BellRing className="w-4 h-4" /> },

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CornerDownLeft, Inbox, LayoutDashboard, LineChart, PhoneCall, Eye, Puzzle, Search, Settings, ShieldCheck, UserRound, type LucideIcon } from 'lucide-react';
+import { Clapperboard, CornerDownLeft, Inbox, LayoutDashboard, LineChart, PhoneCall, Eye, Puzzle, Search, Settings, ShieldCheck, UserRound, type LucideIcon } from 'lucide-react';
 import { useLeadsContext } from '@/app/portal/leads/context';
 import type { Lead } from '@/app/portal/leads/context';
 import { statusMeta, timeAgo } from '@/components/portal/leadMeta';
@@ -23,6 +23,7 @@ const PAGES: Item[] = [
   { id: 'p-home', label: 'Resumen', icon: LayoutDashboard, href: '/portal', group: 'Ir a' },
   { id: 'p-calls', label: 'Llamadas', icon: PhoneCall, href: '/portal/calls', group: 'Ir a' },
   { id: 'p-leads', label: 'Solicitudes', icon: Inbox, href: '/portal/leads', group: 'Ir a' },
+  { id: 'p-videos', label: 'Vídeos', icon: Clapperboard, href: '/portal/videos', group: 'Ir a' },
   { id: 'p-fin', label: 'Finanzas', icon: LineChart, href: '/portal/finance', group: 'Ir a' },
   { id: 'p-prompts', label: 'Prompts', icon: Puzzle, href: '/portal/prompts', group: 'Ir a' },
   { id: 'p-sec', label: 'Seguridad', icon: ShieldCheck, href: '/portal/security', group: 'Ir a' },

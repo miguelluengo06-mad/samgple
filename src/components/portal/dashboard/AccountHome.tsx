@@ -20,6 +20,7 @@ import { cn } from '@/lib/utils';
 import { buildIcs, formatCallDate, formatCallTime } from '@/lib/booking';
 import { statusMeta, timeAgo } from '@/components/portal/leadMeta';
 import { CountUp, EmptyState, Page, Panel, Skeleton, untilLabel } from '@/components/portal/ui';
+import VideoStudio, { type StudioData } from '@/components/portal/dashboard/VideoStudio';
 
 export interface AccountCall {
   id: string;
@@ -70,6 +71,7 @@ export interface AccountPreview {
   calls: AccountCall[];
   notices: AccountNotice[];
   purchases: AccountPurchase[];
+  studio?: StudioData;
 }
 
 /** Lo que ve un cliente: sus avisos, su próxima llamada, sus compras y un canal directo con la agencia. */
@@ -182,58 +184,37 @@ export default function AccountHome({ preview }: { preview?: AccountPreview }) {
         </p>
       )}
 
-      {/* Lo más importante ahora */}
-      <section className="pn-hero p-5 md:p-7 pn-in">
-        {loading ? (
-          <Skeleton className="h-32" />
-        ) : (
-          <div className="grid gap-6 md:grid-cols-[1.5fr_1fr] items-center">
-            <div className="min-w-0">
-              {next ? (
-                <>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-3 py-1 bg-[var(--signal)] text-black mb-3">
-                    <PhoneCall className="w-3.5 h-3.5" /> Tu próxima llamada · {untilLabel(next.call_at!, now)}
-                  </span>
-                  <h2 className="text-2xl md:text-3xl font-semibold tracking-tight capitalize">{formatCallDate(next.call_at!)}</h2>
-                  <p className="text-sm text-white/55 mt-1">{formatCallTime(next.call_at!)} · horario de Madrid · 30 min</p>
-                  <button onClick={() => downloadIcs(next)} className="mt-5 inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/15 text-sm hover:border-[var(--portal-line-strong)] cursor-pointer">
-                    <CalendarDays className="w-4 h-4" /> Añadir al calendario
-                  </button>
-                </>
-              ) : (
-                <>
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold rounded-full px-3 py-1 border border-[var(--portal-line-strong)] text-[var(--signal)] mb-3">
-                    <Sparkles className="w-3.5 h-3.5" /> Tu espacio
-                  </span>
-                  <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">¿Hablamos de tu próximo vídeo?</h2>
-                  <p className="text-sm text-white/55 mt-1 max-w-md">Agenda una llamada de 30 minutos o elige directamente el pack que mejor encaje con tu negocio.</p>
-                  <div className="flex flex-wrap gap-2 mt-5">
-                    <Link href="/#contacto" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full portal-cta text-sm">
-                      <CalendarPlus className="w-4 h-4" /> Agendar llamada
-                    </Link>
-                    <Link href="/#precios" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-white/15 text-sm hover:border-[var(--portal-line-strong)]">
-                      <Package className="w-4 h-4" /> Ver packs
-                    </Link>
-                  </div>
-                </>
-              )}
-            </div>
+      {/* Estudio de vídeos: saldo, pedir un vídeo y seguimiento */}
+      <VideoStudio token={token} preview={preview?.studio} />
 
-            <dl className="grid grid-cols-3 md:grid-cols-1 gap-2">
-              {[
-                { label: 'Avisos sin leer', value: <CountUp value={unread} />, accent: unread > 0, icon: <BellRing className="w-4 h-4" /> },
-                { label: 'Compras', value: <CountUp value={(purchases || []).length} />, accent: false, icon: <Receipt className="w-4 h-4" /> },
-                { label: 'Invertido', value: <CountUp value={spent} format={(n) => `${n.toLocaleString('es-ES')} €`} />, accent: false, icon: <Package className="w-4 h-4" /> },
-              ].map((s) => (
-                <div key={s.label} className="rounded-2xl border border-white/10 bg-white/[0.04] px-3.5 py-3 flex md:items-center md:justify-between gap-1 flex-col md:flex-row">
-                  <dt className="pn-title flex items-center gap-1.5">{s.icon}<span className="hidden sm:inline">{s.label}</span></dt>
-                  <dd className={cn('text-xl font-semibold tabular-nums', s.accent && 'text-[var(--signal)]')}>{s.value}</dd>
-                </div>
-              ))}
-            </dl>
+      {/* Resumen rápido */}
+      <div className="grid gap-3 md:gap-4 grid-cols-2 lg:grid-cols-4">
+        <div className="card-liquid rounded-3xl p-4 col-span-2 lg:col-span-1 pn-in">
+          <div className="pn-title flex items-center gap-1.5"><PhoneCall className="w-3.5 h-3.5 text-[var(--signal)]" /> Próxima llamada</div>
+          {next ? (
+            <>
+              <div className="text-lg font-semibold mt-2 capitalize leading-tight">{formatCallDate(next.call_at!)}</div>
+              <div className="text-xs text-white/50 mt-0.5">{formatCallTime(next.call_at!)} · {untilLabel(next.call_at!, now)}</div>
+              <button onClick={() => downloadIcs(next)} className="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--signal)] hover:underline cursor-pointer"><CalendarDays className="w-3.5 h-3.5" /> Añadir al calendario</button>
+            </>
+          ) : (
+            <>
+              <div className="text-sm text-white/60 mt-2">No tienes ninguna agendada.</div>
+              <Link href="/#contacto" className="mt-3 inline-flex items-center gap-1.5 text-xs text-[var(--signal)] hover:underline"><CalendarPlus className="w-3.5 h-3.5" /> Agendar llamada</Link>
+            </>
+          )}
+        </div>
+        {[
+          { label: 'Avisos sin leer', value: <CountUp value={unread} />, accent: unread > 0, icon: <BellRing className="w-3.5 h-3.5" /> },
+          { label: 'Compras', value: <CountUp value={(purchases || []).length} />, accent: false, icon: <Receipt className="w-3.5 h-3.5" /> },
+          { label: 'Invertido', value: <CountUp value={spent} format={(n) => `${n.toLocaleString('es-ES')} €`} />, accent: false, icon: <Package className="w-3.5 h-3.5" /> },
+        ].map((st) => (
+          <div key={st.label} className="card-liquid rounded-3xl p-4 pn-in">
+            <div className="pn-title flex items-center gap-1.5">{st.icon}{st.label}</div>
+            <div className={cn('text-2xl font-semibold tabular-nums mt-2', st.accent && 'text-[var(--signal)]')}>{st.value}</div>
           </div>
-        )}
-      </section>
+        ))}
+      </div>
 
       <div className="grid gap-4 md:gap-5 lg:grid-cols-[1.4fr_1fr] items-start">
         <div className="space-y-4 md:space-y-5 min-w-0">

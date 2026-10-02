@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ChevronDown,
+  Clapperboard,
   ChevronsLeft,
   ChevronsRight,
   Eye,
@@ -55,6 +56,7 @@ const AGENCY_GROUPS: NavGroup[] = [
       { label: 'Resumen', href: '/portal', icon: LayoutDashboard, exact: true },
       { label: 'Llamadas', href: '/portal/calls', icon: PhoneCall, badge: 'calls' },
       { label: 'Solicitudes', href: '/portal/leads', icon: Inbox, badge: 'leads' },
+      { label: 'Vídeos', href: '/portal/videos', icon: Clapperboard },
     ],
   },
   {

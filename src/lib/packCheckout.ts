@@ -6,6 +6,7 @@ import { resolveLeadMailer, sendLeadMail } from '@/lib/leadMailer';
 import { purchaseEmail } from '@/lib/emailTemplates';
 import { isValidUUID } from '@/lib/validation';
 import { sendMetaPurchase } from '@/lib/metaCapi';
+import { provisionCustomer } from '@/lib/videoServer';
 import { purchaseAlertText, sendTelegram } from '@/lib/telegram';
 import { VAT_LABEL, type PurchasablePack } from '@/lib/packs';
 import { cartLines, cartSummary, cartTotalCents, compactItems, parseCompactItems, type CartItem, type OrderItem } from '@/lib/cart';
@@ -290,6 +291,7 @@ export async function recordOrder(ownerId: string, session: Stripe.Checkout.Sess
       if (error) throw new Error(`Could not update lead: ${error.message}`);
       await notifyPurchase(ownerId, order, details, lead.id);
       await sendMetaPurchase(session);
+      await provisionCustomer(ownerId, order, { email: details?.email, name: details?.name });
       return { leadId: lead.id, created: false, duplicate: false };
     }
   }
@@ -316,6 +318,7 @@ export async function recordOrder(ownerId: string, session: Stripe.Checkout.Sess
 
   await notifyPurchase(ownerId, order, details, created.id);
   await sendMetaPurchase(session);
+  await provisionCustomer(ownerId, order, { email: details?.email, name: details?.name });
   return { leadId: created.id, created: true, duplicate: false };
 }
 

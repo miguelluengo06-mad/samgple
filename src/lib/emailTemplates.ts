@@ -371,3 +371,83 @@ export function teamInviteEmail(d: TeamInviteData): RenderedEmail {
 
   return { subject, html, text };
 }
+
+/* ── Correos al cliente ──────────────────────────────────────────────────── */
+
+export interface CustomerWelcomeData {
+  name?: string | null;
+  credits: number;
+  packName: string;
+  /** Enlace para crear la contraseña (cuenta nueva) o para entrar (cuenta existente) */
+  url: string;
+  isNew: boolean;
+  brand?: string;
+}
+
+function customerShell(brand: string, bodyHtml: string, title: string): string {
+  return `<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>${esc(title)}</title></head>
+<body style="margin:0;padding:0;background:${C.page};">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.page};"><tr><td align="center" style="padding:28px 12px;">
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;">
+    <tr><td style="background:${C.head};border-radius:18px 18px 0 0;padding:20px 28px;font:800 22px/1 ${FONT};letter-spacing:-.02em;color:#ffffff;">${esc(brand)}<span style="color:${C.lime};">.</span></td></tr>
+    <tr><td style="background:${C.card};border-radius:0 0 18px 18px;padding:30px 28px 26px;">${bodyHtml}</td></tr>
+  </table>
+</td></tr></table>
+</body></html>`;
+}
+
+/** Correo tras la compra: cuenta creada (o ya existente) y vídeos disponibles. */
+export function customerWelcomeEmail(d: CustomerWelcomeData): RenderedEmail {
+  const brand = d.brand || 'samgple';
+  const hello = d.name ? `Hola ${d.name.split(' ')[0]},` : 'Hola,';
+  const videos = `${d.credits} ${d.credits === 1 ? 'vídeo disponible' : 'vídeos disponibles'}`;
+  const subject = d.isNew ? `Tu cuenta de ${brand} está lista · ${videos}` : `Ya tienes ${videos} en tu cuenta de ${brand}`;
+  const cta = d.isNew ? 'Crear mi contraseña y entrar' : 'Entrar a mi panel';
+
+  const html = customerShell(
+    brand,
+    `<h1 style="margin:0;font:800 26px/1.15 ${FONT};letter-spacing:-.02em;color:${C.ink};">${d.isNew ? 'Tu cuenta está lista' : 'Tus vídeos ya están en tu cuenta'}</h1>
+      <p style="margin:12px 0 0;font:400 16px/1.5 ${FONT};color:${C.muted};">${esc(hello)} gracias por tu compra de <strong style="color:${C.ink};">${esc(d.packName)}</strong>.</p>
+      <div style="margin:22px 0;background:${C.soft};border:1px solid ${C.line};border-radius:14px;padding:18px 20px;">
+        <div style="font:700 12px/1 ${FONT};letter-spacing:.12em;text-transform:uppercase;color:${C.muted};">Tu saldo</div>
+        <div style="margin-top:8px;font:800 30px/1.1 ${FONT};letter-spacing:-.02em;color:${C.ink};">${esc(videos)}</div>
+      </div>
+      <p style="margin:0 0 6px;font:400 15px/1.6 ${FONT};color:${C.ink};">Desde tu panel eliges un avatar, nos cuentas qué quieres que diga (hasta 45 segundos) y nosotros nos encargamos. Antes de producir nada, <strong>tú apruebas el guion</strong>.</p>
+      <div style="margin:22px 0 8px;">${button(d.url, cta, true)}</div>
+      ${d.isNew ? `<p style="margin:14px 0 0;font:400 13px/1.6 ${FONT};color:${C.muted};">El botón te lleva a elegir tu propia contraseña. Si caduca, entra en la web y pulsa «¿Has olvidado la contraseña?».</p>` : ''}`,
+    subject
+  );
+
+  const text = [
+    `${hello} gracias por tu compra de ${d.packName}.`,
+    '',
+    `Tu saldo: ${videos}.`,
+    'Elige un avatar, cuéntanos qué quieres que diga (hasta 45 segundos) y nosotros nos encargamos. Tú apruebas el guion antes de producir.',
+    '',
+    `${cta}: ${d.url}`,
+  ].join('\n');
+
+  return { subject, html, text };
+}
+
+export interface CustomerUpdateData {
+  title: string;
+  body: string;
+  ctaLabel: string;
+  ctaUrl: string;
+  brand?: string;
+}
+
+/** Correo corto cuando cambia algo en un pedido (guion listo, vídeo entregado…). */
+export function customerUpdateEmail(d: CustomerUpdateData): RenderedEmail {
+  const brand = d.brand || 'samgple';
+  const html = customerShell(
+    brand,
+    `<h1 style="margin:0;font:800 26px/1.15 ${FONT};letter-spacing:-.02em;color:${C.ink};">${esc(d.title)}</h1>
+      <p style="margin:12px 0 0;font:400 16px/1.5 ${FONT};color:${C.muted};">${esc(d.body)}</p>
+      <div style="margin:24px 0 6px;">${button(d.ctaUrl, d.ctaLabel, true)}</div>`,
+    d.title
+  );
+  return { subject: d.title, html, text: `${d.title}\n\n${d.body}\n\n${d.ctaLabel}: ${d.ctaUrl}` };
+}
