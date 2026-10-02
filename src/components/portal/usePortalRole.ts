@@ -8,6 +8,8 @@ export type PortalRole = 'agency' | 'free';
 
 export interface PortalRoleInfo {
   role: PortalRole;
+  /** Es del equipo, pero esta sesión no entró con passkey: tiene que volver a entrar con él */
+  passkeyRequired: boolean;
   loading: boolean;
 }
 
@@ -21,7 +23,7 @@ function getCache(): Omit<PortalRoleInfo, 'loading'> | null {
     if (!raw) return null;
     const { data, ts } = JSON.parse(raw);
     if (Date.now() - ts > CACHE_TTL) return null;
-    return data?.role === 'agency' || data?.role === 'free' ? data : null;
+    return (data?.role === 'agency' || data?.role === 'free') ? { role: data.role, passkeyRequired: !!data.passkeyRequired } : null;
   } catch { return null; }
 }
 
@@ -32,7 +34,7 @@ function setCache(data: Omit<PortalRoleInfo, 'loading'>) {
 export function usePortalRole(): PortalRoleInfo {
   const { user, session, loading: authLoading } = useAuth();
   const cached = getCache();
-  const [info, setInfo] = useState<Omit<PortalRoleInfo, 'loading'>>(() => cached || { role: 'free' });
+  const [info, setInfo] = useState<Omit<PortalRoleInfo, 'loading'>>(() => cached || { role: 'free', passkeyRequired: false });
   const [loading, setLoading] = useState(!cached);
 
   const detect = useCallback(async () => {
@@ -41,7 +43,7 @@ export function usePortalRole(): PortalRoleInfo {
       // El servidor decide quién es la agencia (dueño o equipo): el navegador no puede inventárselo
       const res = await fetch('/api/portal/whoami', { headers: { Authorization: `Bearer ${session.access_token}` } });
       const data = await res.json().catch(() => ({}));
-      const result: Omit<PortalRoleInfo, 'loading'> = { role: data?.isAgency === true ? 'agency' : 'free' };
+      const result: Omit<PortalRoleInfo, 'loading'> = { role: data?.isAgency === true ? 'agency' : 'free', passkeyRequired: data?.passkeyRequired === true };
       setInfo(result);
       setCache(result);
     } catch (err) {

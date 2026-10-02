@@ -47,6 +47,7 @@ function SettingsLayoutInner({ children }: { children: React.ReactNode }) {
 
   const accountSubItems = [
     { id: 'account-settings', label: 'Cuenta' },
+    ...(role === 'agency' ? [{ id: 'passkeys', label: 'Passkeys' }] : []),
   ];
 
   const companySubItems = [

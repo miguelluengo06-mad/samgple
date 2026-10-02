@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { loginWithPasskey, passkeysSupported } from '@/lib/passkeyClient';
 
 interface AuthConfig {
   allow_signup: boolean;
@@ -39,6 +40,9 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<'signin' | 'signup' | 'reset'>(initialMode);
   const [resetLoading, setResetLoading] = useState(false);
+  const [passkeyLoading, setPasskeyLoading] = useState(false);
+  const [canPasskey, setCanPasskey] = useState(false);
+  useEffect(() => setCanPasskey(passkeysSupported()), []);
   const isInfo = !!error && error.startsWith(INFO_PREFIX);
 
   const handleAuth = async (e: React.FormEvent) => {
@@ -104,6 +108,25 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
       setError(err instanceof Error ? friendlyError(err.message) : 'Ha ocurrido un error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePasskey = async () => {
+    setPasskeyLoading(true);
+    setError(null);
+    try {
+      const tokens = await loginWithPasskey();
+      const { error } = await supabase.auth.setSession(tokens);
+      if (error) throw error;
+      if (redirectTo) {
+        window.location.href = redirectTo;
+        return;
+      }
+      onSuccess?.();
+    } catch (err) {
+      setError(err instanceof Error ? friendlyError(err.message) : 'No se pudo entrar con passkey.');
+    } finally {
+      setPasskeyLoading(false);
     }
   };
 
@@ -393,6 +416,31 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
               )}
             </button>
           </div>
+
+          {mode === 'signin' && !lockedEmail && canPasskey && (
+            <div className='pt-1'>
+              <div className='relative my-1'>
+                <div className='absolute inset-0 flex items-center'><div className='w-full border-t border-white/15' /></div>
+                <div className='relative flex justify-center text-xs'><span className='bg-black px-2 text-white/50'>Equipo de la agencia</span></div>
+              </div>
+              <button
+                type='button'
+                onClick={handlePasskey}
+                disabled={passkeyLoading || loading}
+                className='mt-3 btn-minimal flex w-full items-center justify-center gap-2 rounded-lg py-3 px-4 text-sm font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+              >
+                {passkeyLoading ? (
+                  <div className='animate-spin rounded-full h-5 w-5 border-b-2 border-white'></div>
+                ) : (
+                  <>
+                    <svg className='h-5 w-5' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='1.8' strokeLinecap='round' strokeLinejoin='round' aria-hidden='true'><path d='M12 11c0-1.1.9-2 2-2s2 .9 2 2v3' /><path d='M8 14v-3a4 4 0 0 1 8 0' /><path d='M6 15c0 3 1 5 2 6' /><path d='M12 14c0 3 .5 5.500 1.500 7.500' /><path d='M18 13c0 3-.5 5-1.500 7' /><path d='M4 12a8 8 0 0 1 16 0' /></svg>
+                    Entrar con huella o passkey
+                  </>
+                )}
+              </button>
+              <p className='mt-2 text-center text-xs text-white/40'>En el ordenador, el navegador te mostrará un QR para escanearlo con tu móvil.</p>
+            </div>
+          )}
 
           {mode === 'signup' && (
             <p className='text-center text-xs text-white/40'>

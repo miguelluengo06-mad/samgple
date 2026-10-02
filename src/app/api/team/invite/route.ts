@@ -6,6 +6,7 @@ import { checkRateLimit, isValidEmail } from '@/lib/validation';
 import { buildAppUrl } from '@/lib/config';
 import { getEffectiveOwnerId, canManageTeam } from '@/lib/teamUtils';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 
 
 export async function POST(req: NextRequest) {
@@ -21,6 +22,8 @@ export async function POST(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
+    const agencyDenied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+    if (agencyDenied) return agencyDenied;
 
     // Rate limit: 10 invites per hour
     const rl = checkRateLimit(`team-invite:${user.id}`, 10, 60 * 60 * 1000);

@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { encrypt } from '@/lib/encryption';
 import { checkRateLimit } from '@/lib/validation';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 
 export const runtime = 'nodejs';
 
@@ -28,6 +29,8 @@ export async function POST(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
+    const agencyDenied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+    if (agencyDenied) return agencyDenied;
 
     // Rate limiting: 5 Stripe key changes per minute per user
     const rateLimitResult = checkRateLimit(`stripe-key:${user.id}`, 5, 60 * 1000);
@@ -132,6 +135,8 @@ export async function DELETE(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
+    const agencyDenied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+    if (agencyDenied) return agencyDenied;
 
     const { error: updateError } = await supabaseAdmin
       .from('profiles')

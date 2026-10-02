@@ -16,7 +16,8 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
   const { logoUrl } = useAgencyLogo();
   const router = useRouter();
   const pathname = usePathname();
-  const { role, loading: roleLoading } = usePortalRole();
+  const { role, passkeyRequired, loading: roleLoading } = usePortalRole();
+  const { signOut } = useAuth();
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -48,8 +49,29 @@ export default function PortalLayout({ children }: { children: React.ReactNode }
     return <BrandedLoadingSpinner logoUrl={logoUrl} />;
   }
 
+  // Persona del equipo con la sesión abierta sin passkey: solo se le pide que vuelva a entrar con él
+  if (passkeyRequired) {
+    return (
+      <div className="portal-neon min-h-[100dvh] flex items-center justify-center px-4">
+        <div className="card-liquid rounded-3xl p-8 max-w-md text-center space-y-4">
+          <h1 className="text-xl font-semibold">Entra con tu passkey</h1>
+          <p className="text-sm text-white/65">Tu cuenta de administración se protege con huella, cara o PIN del móvil. Cierra esta sesión y entra con «Entrar con huella o passkey».</p>
+          <button
+            onClick={async () => {
+              await signOut();
+              window.location.href = '/auth';
+            }}
+            className="px-6 h-11 rounded-full portal-cta text-sm cursor-pointer"
+          >
+            Cerrar sesión y entrar con passkey
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <PortalRoleContext.Provider value={{ role, loading: roleLoading }}>
+    <PortalRoleContext.Provider value={{ role, passkeyRequired, loading: roleLoading }}>
       <LeadsProvider enabled={role === 'agency'}>
         <div className="portal-neon h-[100dvh] flex flex-col">
           <div className="flex-1 min-h-0 flex flex-col md:flex-row">

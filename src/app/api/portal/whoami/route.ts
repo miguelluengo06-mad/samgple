@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import { getSiteOwnerId, isAgencyPrincipal } from '@/lib/agencyAccess';
+import { agencyAccessFor, getSiteOwnerId } from '@/lib/agencyAccess';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
   const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
   if (error || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const [ownerId, isAgency] = await Promise.all([getSiteOwnerId(supabaseAdmin), isAgencyPrincipal(supabaseAdmin, user.id)]);
-  return NextResponse.json({ isOwner: ownerId === user.id, isAgency });
+  const [ownerId, access] = await Promise.all([getSiteOwnerId(supabaseAdmin), agencyAccessFor(supabaseAdmin, user.id, req)]);
+  // passkeyRequired: es del equipo pero esta sesión no entró con passkey (el panel le pide que entre con él)
+  return NextResponse.json({ isOwner: ownerId === user.id, isAgency: access === 'ok', passkeyRequired: access === 'passkey_required' });
 }

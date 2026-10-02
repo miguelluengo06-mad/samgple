@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { isAgencyPrincipal } from '@/lib/agencyAccess';
+import { mustUsePasskey } from '@/lib/passkeys';
 import { alertNewAdminIp, countRecentByDetail, getClientIp, isBlocked, reportSuspicious, trustIp } from '@/lib/security';
 
 export const runtime = 'nodejs';
@@ -19,7 +20,7 @@ const GENERIC = 'Email o contraseña incorrectos';
  */
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req.headers);
-  const path = req.nextUrl.pathname;
+  const path = req.nextUrl?.pathname;
   const userAgent = req.headers.get('user-agent');
 
   if (await isBlocked(ip)) return new NextResponse('Acceso denegado', { status: 403, headers: { 'Cache-Control': 'no-store' } });
@@ -29,6 +30,20 @@ export async function POST(req: NextRequest) {
   const password = typeof body?.password === 'string' ? body.password : '';
   if (!email || !password || email.length > 254 || password.length > 200 || !email.includes('@')) {
     return NextResponse.json({ error: GENERIC }, { status: 400 });
+  }
+
+  // Si esta cuenta es del equipo y ya tiene sus passkeys, la contraseña no sirve para entrar: ni se prueba
+  try {
+    const { data: staffProfile } = await supabaseAdmin
+      .from('profiles')
+      .select('id')
+      .ilike('email', email.replace(/[\\%_]/g, (c) => `\\${c}`))
+      .maybeSingle();
+    if (staffProfile && (await isAgencyPrincipal(supabaseAdmin, staffProfile.id)) && (await mustUsePasskey(staffProfile.id))) {
+      return NextResponse.json({ error: 'Tu cuenta entra con passkey: usa «Entrar con huella o passkey».', code: 'passkey_required' }, { status: 403 });
+    }
+  } catch {
+    /* si no se puede comprobar, se sigue con el acceso normal (el servidor protege la administración igualmente) */
   }
 
   // Ataque repartido contra una misma cuenta (muchas IPs): pausa esa cuenta, no a la gente

@@ -21,3 +21,5 @@ Variables de entorno principales: Supabase, `NEXT_PUBLIC_SITE_URL`, `STRIPE_PACK
 
 - [Cobro de packs con Stripe](docs/STRIPE_PACKS.md)
 - [Email con Resend](docs/EMAIL_RESEND.md)
+- [Estudio de vídeos](docs/VIDEOS.md)
+- [Passkeys para el equipo](docs/PASSKEYS.md)

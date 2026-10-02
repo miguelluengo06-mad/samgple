@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getEffectiveOwnerId, canManageTeam } from '@/lib/teamUtils';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 
 
 // GET: List team members
@@ -17,6 +18,8 @@ export async function GET(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
+    const agencyDenied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+    if (agencyDenied) return agencyDenied;
 
     const ctx = await getEffectiveOwnerId(supabaseAdmin, user.id);
 

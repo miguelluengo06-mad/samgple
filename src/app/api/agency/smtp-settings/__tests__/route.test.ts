@@ -10,6 +10,9 @@ const { mockSupabaseAdmin, mockVerify } = vi.hoisted(() => {
 });
 
 vi.mock('@/lib/supabaseAdmin', () => ({ supabaseAdmin: mockSupabaseAdmin }));
+
+// Quién es «la agencia» (y la exigencia de passkey) se prueba en agencyAccess; aquí se da por buena
+vi.mock('@/lib/agencyAccess', () => ({ requireAgencyPrincipal: vi.fn().mockResolvedValue(null) }));
 vi.mock('@/lib/teamAccess', () => ({
   resolveEffectiveUserId: vi.fn().mockResolvedValue('user-123'),
 }));

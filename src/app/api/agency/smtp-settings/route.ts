@@ -12,6 +12,7 @@ import nodemailer from 'nodemailer';
 import { encrypt, decrypt } from '@/lib/encryption';
 import { checkRateLimit } from '@/lib/validation';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 import { resolveEffectiveUserId } from '@/lib/teamAccess';
 
 export const runtime = 'nodejs';
@@ -31,6 +32,8 @@ export async function POST(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
+    const agencyDenied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+    if (agencyDenied) return agencyDenied;
 
     const effectiveUserId = await resolveEffectiveUserId(supabaseAdmin, user.id);
 
@@ -177,6 +180,8 @@ export async function DELETE(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
+    const agencyDenied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+    if (agencyDenied) return agencyDenied;
 
     const effectiveUserId = await resolveEffectiveUserId(supabaseAdmin, user.id);
 
@@ -224,6 +229,8 @@ export async function GET(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
+    const agencyDenied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+    if (agencyDenied) return agencyDenied;
 
     const effectiveUserId = await resolveEffectiveUserId(supabaseAdmin, user.id);
 

@@ -3,9 +3,15 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 vi.mock('@/lib/teamUtils', () => ({
   getEffectiveOwnerId: vi.fn(),
 }));
+vi.mock('@/lib/passkeys', () => ({
+  mustUsePasskey: vi.fn().mockResolvedValue(false),
+  isPasskeySession: vi.fn().mockResolvedValue(false),
+  sessionIdFromToken: vi.fn((h: string | null | undefined) => (h ? h.replace('Bearer ', '') : null)),
+}));
 
 import { getEffectiveOwnerId } from '@/lib/teamUtils';
-import { getSiteOwnerId, isAgencyPrincipal, requireAgencyPrincipal, resetAgencyAccessCache } from '../agencyAccess';
+import { isPasskeySession, mustUsePasskey } from '@/lib/passkeys';
+import { agencyAccessFor, getSiteOwnerId, isAgencyPrincipal, requireAgencyPrincipal, resetAgencyAccessCache } from '../agencyAccess';
 
 const OWNER = 'owner-id';
 
@@ -57,5 +63,43 @@ describe('agencyAccess', () => {
     const denied = await requireAgencyPrincipal(stub(OWNER), 'visitor-id');
     expect(denied?.status).toBe(403);
     expect(await requireAgencyPrincipal(stub(OWNER), OWNER)).toBeNull();
+  });
+
+  describe('passkey enforcement for staff', () => {
+    const req = (token?: string) => new Request('http://localhost/api/x', { headers: token ? { Authorization: `Bearer ${token}` } : {} });
+
+    beforeEach(() => {
+      vi.mocked(mustUsePasskey).mockReset().mockResolvedValue(false);
+      vi.mocked(isPasskeySession).mockReset().mockResolvedValue(false);
+    });
+
+    it('does not ask for a passkey until the person has registered enough of them', async () => {
+      expect(await agencyAccessFor(stub(OWNER), OWNER, req('pw-session'))).toBe('ok');
+    });
+
+    it('blocks a staff session that did not sign in with a passkey (stolen password, recovery link…)', async () => {
+      vi.mocked(mustUsePasskey).mockResolvedValue(true);
+      expect(await agencyAccessFor(stub(OWNER), OWNER, req('pw-session'))).toBe('passkey_required');
+      const denied = await requireAgencyPrincipal(stub(OWNER), OWNER, req('pw-session'));
+      expect(denied?.status).toBe(403);
+      expect(await denied?.json()).toMatchObject({ code: 'passkey_required' });
+    });
+
+    it('lets a passkey session through', async () => {
+      vi.mocked(mustUsePasskey).mockResolvedValue(true);
+      vi.mocked(isPasskeySession).mockResolvedValue(true);
+      expect(await agencyAccessFor(stub(OWNER), OWNER, req('passkey-session'))).toBe('ok');
+      expect(isPasskeySession).toHaveBeenCalledWith('passkey-session', OWNER);
+    });
+
+    it('denies when the request is missing (fails closed)', async () => {
+      vi.mocked(mustUsePasskey).mockResolvedValue(true);
+      expect(await agencyAccessFor(stub(OWNER), OWNER)).toBe('passkey_required');
+    });
+
+    it('never treats an outsider as staff, with or without passkeys', async () => {
+      vi.mocked(getEffectiveOwnerId).mockResolvedValue({ ownerId: 'visitor-id', isTeamMember: false, role: 'owner' });
+      expect(await agencyAccessFor(stub(OWNER), 'visitor-id', req('x'))).toBe('not_staff');
+    });
   });
 });

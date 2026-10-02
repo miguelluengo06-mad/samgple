@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getEffectiveOwnerId, canManageTeam } from '@/lib/teamUtils';
 import { isValidUUID } from '@/lib/validation';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 
 
 // DELETE: Remove a team member
@@ -23,6 +24,8 @@ export async function DELETE(
     if (authError || !user) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
+    const agencyDenied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+    if (agencyDenied) return agencyDenied;
 
     if (!isValidUUID(id)) {
       return NextResponse.json({ error: 'Invalid member ID' }, { status: 400 });
@@ -75,6 +78,8 @@ export async function PATCH(
     if (authError || !user) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
+    const agencyDenied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+    if (agencyDenied) return agencyDenied;
 
     if (!isValidUUID(id)) {
       return NextResponse.json({ error: 'Invalid member ID' }, { status: 400 });

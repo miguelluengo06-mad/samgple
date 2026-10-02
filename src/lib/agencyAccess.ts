@@ -2,6 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import { getEffectiveOwnerId } from '@/lib/teamUtils';
 import { getClientIp, reportSuspicious } from '@/lib/security';
+import { isPasskeySession, mustUsePasskey, sessionIdFromToken } from '@/lib/passkeys';
 
 /**
  * Who counts as "the agency" on this deployment.
@@ -48,13 +49,31 @@ export async function isAgencyPrincipal(supabase: SupabaseClient, userId: string
   return ctx.isTeamMember && ctx.ownerId === ownerId;
 }
 
+export type AgencyAccess = 'ok' | 'not_staff' | 'passkey_required';
+
 /**
- * Returns a 403 response when the user is not part of the agency, or null when access is fine.
- * Pass the request so that a logged-in non-agency account poking at agency routes is logged and, if it
- * keeps doing it, its IP is blocked (see lib/security.ts).
+ * ¿Puede esta sesión usar la administración? Además de ser del equipo, si la persona tiene 2 o más passkeys
+ * la sesión tiene que haber entrado con passkey. Sin la petición no se puede comprobar: se deniega.
+ */
+export async function agencyAccessFor(supabase: SupabaseClient, userId: string, req?: Request): Promise<AgencyAccess> {
+  if (!(await isAgencyPrincipal(supabase, userId))) return 'not_staff';
+  if (!(await mustUsePasskey(userId))) return 'ok';
+  const sid = sessionIdFromToken(req?.headers.get('authorization'));
+  if (sid && (await isPasskeySession(sid, userId))) return 'ok';
+  return 'passkey_required';
+}
+
+/**
+ * Returns a 403 response when the user is not part of the agency (or is staff but did not sign in with a
+ * passkey), or null when access is fine. Pass the request so that (a) a logged-in non-agency account poking at
+ * agency routes is logged and, if it keeps doing it, its IP is blocked, and (b) the passkey session is checked.
  */
 export async function requireAgencyPrincipal(supabase: SupabaseClient, userId: string, req?: Request): Promise<NextResponse | null> {
-  if (await isAgencyPrincipal(supabase, userId)) return null;
+  const access = await agencyAccessFor(supabase, userId, req);
+  if (access === 'ok') return null;
+  if (access === 'passkey_required') {
+    return NextResponse.json({ error: 'Entra con tu passkey para usar la administración.', code: 'passkey_required' }, { status: 403 });
+  }
   if (req) {
     await reportSuspicious({
       ip: getClientIp(req.headers),
