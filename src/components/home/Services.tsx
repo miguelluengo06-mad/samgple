@@ -1,49 +1,50 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Video, PenTool, Camera, TrendingUp, Megaphone, Sparkles } from 'lucide-react';
+import { Video, PenTool, Sparkles, UserRound, Captions, Clapperboard } from 'lucide-react';
+import { SINGLE_VIDEO } from '@/lib/packs';
 
 const SERVICES = [
   {
     icon: Video,
     n: '01',
-    title: 'Vídeo',
-    description: 'Contenido en corto y largo formato, grabado y editado para cómo se consume hoy: rápido, vertical, sin relleno.',
+    title: 'Anuncios UGC con IA',
+    description: 'Anuncios que parecen de un cliente real, en vertical 9:16 para TikTok, Reels, Shorts y Ads. Sin grabar y sin pagar a creadores.',
     size: 'lg',
   },
   {
-    icon: TrendingUp,
+    icon: Sparkles,
     n: '02',
-    title: 'Estrategia',
-    description: 'Calendarios de contenido construidos sobre lo que mueve resultados, no vanity metrics.',
+    title: 'Influencer IA',
+    description: 'Un personaje propio, siempre con su misma cara, su voz y su estilo, para publicar con constancia.',
+    size: 'sm',
+  },
+  {
+    icon: UserRound,
+    n: '03',
+    title: 'Clonación y gemelo digital',
+    description: 'Tu cara y tu voz, clonadas solo con tu autorización por escrito, para publicar sin ponerte delante de la cámara.',
     size: 'sm',
   },
   {
     icon: PenTool,
-    n: '03',
-    title: 'Copy & voz de marca',
-    description: 'Guiones, captions y textos web con una voz reconocible — la vuestra, no una plantilla.',
-    size: 'sm',
-  },
-  {
-    icon: Camera,
     n: '04',
-    title: 'Fotografía',
-    description: 'Producto, marca y lifestyle con dirección de arte consistente en cada pieza.',
+    title: 'Guiones a medida',
+    description: 'Los escribimos tras un brief contigo, con varios ganchos, y los apruebas antes de producir nada.',
     size: 'sm',
   },
   {
-    icon: Megaphone,
+    icon: Captions,
     n: '05',
-    title: 'Contenido para pago',
-    description: 'Creatividades pensadas para parar el scroll en paid social, testadas contra rendimiento real.',
+    title: 'Voz, subtítulos y formato',
+    description: 'Voz IA natural, subtítulos dinámicos y entrega lista para cada red, con música libre de derechos.',
     size: 'sm',
   },
   {
-    icon: Sparkles,
+    icon: Clapperboard,
     n: '06',
-    title: 'Gestión de redes',
-    description: 'Publicación, comunidad y reporting — vuestros canales, llevados de principio a fin.',
+    title: 'Vídeo suelto',
+    description: `¿Solo necesitas una pieza? Un vídeo por ${SINGLE_VIDEO.price} €, con una revisión y entrega en 5 días.`,
     size: 'full',
   },
 ];
@@ -71,7 +72,7 @@ export default function Services() {
             hacemos
           </motion.h2>
           <p className="text-white/40 max-w-xs text-sm">
-            Seis disciplinas, un mismo equipo. Sin subcontratar cada pieza a una agencia distinta.
+            Vídeo con IA de principio a fin: guion, voz, edición y entrega en un solo sitio.
           </p>
         </div>
 

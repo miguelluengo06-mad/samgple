@@ -1,9 +1,5 @@
 import type { NextConfig } from 'next';
 
-// Internal Kong URL — only used server-side for proxying Supabase calls.
-// In Docker this is http://kong:8000; locally it falls back to the public URL.
-const supabaseInternalUrl = process.env.SUPABASE_URL || 'http://kong:8000';
-
 const nextConfig: NextConfig = {
   devIndicators: false,
   poweredByHeader: false,
@@ -18,10 +14,9 @@ const nextConfig: NextConfig = {
       '@supabase/supabase-js',
     ],
   },
+  // La web no usa el optimizador de imágenes: sin dominios remotos permitidos (evita que se use como proxy)
   images: {
-    remotePatterns: [
-      { protocol: 'https', hostname: '**' },
-    ],
+    remotePatterns: [],
   },
   eslint: {
     ignoreDuringBuilds: true,
@@ -36,14 +31,6 @@ const nextConfig: NextConfig = {
       },
     },
   }),
-  async rewrites() {
-    return [
-      { source: '/auth/v1/:path*',    destination: `${supabaseInternalUrl}/auth/v1/:path*` },
-      { source: '/rest/v1/:path*',    destination: `${supabaseInternalUrl}/rest/v1/:path*` },
-      { source: '/storage/v1/:path*', destination: `${supabaseInternalUrl}/storage/v1/:path*` },
-      { source: '/realtime/v1/:path*',destination: `${supabaseInternalUrl}/realtime/v1/:path*` },
-    ];
-  },
   async headers() {
     const securityHeaders = [
       { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -52,6 +39,9 @@ const nextConfig: NextConfig = {
       { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
       { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
       { key: 'X-DNS-Prefetch-Control', value: 'on' },
+      { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
+      { key: 'Cross-Origin-Resource-Policy', value: 'same-site' },
+      { key: 'X-Permitted-Cross-Domain-Policies', value: 'none' },
       // Next.js inline scripts require 'unsafe-inline'; this still blocks external script injection.
       // connect-src must allow the Supabase project directly: the browser client (src/lib/supabase.ts)
       // is initialized with NEXT_PUBLIC_SUPABASE_URL and calls it cross-origin (auth, REST, storage,
@@ -61,7 +51,7 @@ const nextConfig: NextConfig = {
         key: 'Content-Security-Policy',
         value: [
           "default-src 'self'",
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://connect.facebook.net",
+          "script-src 'self' 'unsafe-inline' https://connect.facebook.net",
           "style-src 'self' 'unsafe-inline'",
           "img-src 'self' data: blob: https:",
           "font-src 'self' data:",
@@ -70,6 +60,9 @@ const nextConfig: NextConfig = {
           "frame-src 'self'",
           "object-src 'none'",
           "base-uri 'self'",
+          "form-action 'self' https://checkout.stripe.com",
+          "frame-ancestors 'none'",
+          "upgrade-insecure-requests",
         ].join('; '),
       },
     ];
@@ -78,15 +71,7 @@ const nextConfig: NextConfig = {
       {
         source: '/(.*)',
         headers: securityHeaders,
-      },
-      {
-        // Allow widget pages to be iframed from any origin
-        source: '/w/:path*',
-        headers: [
-          ...securityHeaders.filter(h => h.key !== 'X-Frame-Options' && h.key !== 'Content-Security-Policy'),
-          { key: 'Content-Security-Policy', value: "frame-ancestors *; default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'self'" },
-        ],
-      },
+      }
     ];
   },
 };

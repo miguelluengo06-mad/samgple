@@ -11,6 +11,11 @@ const { mockSupabaseAdmin } = vi.hoisted(() => {
 
 vi.mock('@/lib/supabaseAdmin', () => ({ supabaseAdmin: mockSupabaseAdmin }));
 
+// Quién es «la agencia» se prueba en agencyAccess; aquí se da por buena
+vi.mock('@/lib/agencyAccess', () => ({ requireAgencyPrincipal: vi.fn().mockResolvedValue(null) }));
+// Sin equipo: el usuario actúa por sí mismo
+vi.mock('@/lib/teamAccess', () => ({ resolveEffectiveUserId: vi.fn(async (_s: unknown, id: string) => id) }));
+
 vi.mock('@/lib/encryption', () => ({
   encrypt: vi.fn((v: string) => `encrypted:${v}`),
   decrypt: vi.fn((v: string) => v.replace('encrypted:', '')),

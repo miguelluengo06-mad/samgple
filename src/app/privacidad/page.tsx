@@ -47,7 +47,7 @@ export default function PrivacidadPage() {
           </tr>
           <tr>
             <td>Seguridad de la web y prevención del fraude</td>
-            <td>Dirección IP y registros técnicos</td>
+            <td>Dirección IP, tipo de dispositivo y registros técnicos. Si detectamos intentos de acceso no autorizado o ataques, guardamos la IP y bloqueamos el acceso desde ella.</td>
             <td>Interés legítimo (art. 6.1.f)</td>
           </tr>
         </tbody>

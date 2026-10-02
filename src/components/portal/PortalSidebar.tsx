@@ -8,6 +8,7 @@ import {
   ChevronDown,
   ChevronsLeft,
   ChevronsRight,
+  Eye,
   ExternalLink,
   Inbox,
   LayoutDashboard,
@@ -16,6 +17,7 @@ import {
   Menu,
   PhoneCall,
   Puzzle,
+  ShieldCheck,
   Search,
   Settings as SettingsIcon,
   UserRound,
@@ -60,6 +62,7 @@ const AGENCY_GROUPS: NavGroup[] = [
     items: [
       { label: 'Finanzas', href: '/portal/finance', icon: LineChart },
       { label: 'Prompts', href: '/portal/prompts', icon: Puzzle },
+      { label: 'Seguridad', href: '/portal/security', icon: ShieldCheck },
     ],
   },
 ];
@@ -175,6 +178,9 @@ function SidebarFooter({ role, collapsed, onNavigate }: { role: PortalRole; coll
   return (
     <div className="flex flex-col gap-1 border-t border-white/10 pt-3">
       <NavLink item={{ label: 'Ajustes', href: '/portal/settings', icon: SettingsIcon }} active={settingsActive} collapsed={collapsed} count={0} onNavigate={onNavigate} />
+      {role === 'agency' && (
+        <NavLink item={{ label: 'Ver como cliente', href: '/portal/preview', icon: Eye }} active={pathname === '/portal/preview'} collapsed={collapsed} count={0} onNavigate={onNavigate} />
+      )}
       <Link
         href="/"
         target="_blank"

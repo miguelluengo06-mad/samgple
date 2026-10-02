@@ -1,3 +1,4 @@
+import { getClientIp, reportSuspicious } from '@/lib/security';
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit } from '@/lib/validation';
@@ -8,8 +9,9 @@ export const dynamic = 'force-dynamic';
 // GET /api/public/availability?date=YYYY-MM-DD
 // Returns every slot of that day with whether it can still be booked.
 export async function GET(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for') || 'unknown';
+  const ip = getClientIp(req.headers);
   if (!checkRateLimit(`availability:${ip}`, 60, 60 * 1000).allowed) {
+      await reportSuspicious({ ip, kind: 'rate_limited', path: req.nextUrl?.pathname, userAgent: req.headers.get('user-agent') });
     return NextResponse.json({ error: 'Demasiadas peticiones' }, { status: 429 });
   }
 

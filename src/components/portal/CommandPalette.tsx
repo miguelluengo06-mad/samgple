@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { CornerDownLeft, Inbox, LayoutDashboard, LineChart, PhoneCall, Puzzle, Search, Settings, UserRound, type LucideIcon } from 'lucide-react';
+import { CornerDownLeft, Inbox, LayoutDashboard, LineChart, PhoneCall, Eye, Puzzle, Search, Settings, ShieldCheck, UserRound, type LucideIcon } from 'lucide-react';
 import { useLeadsContext } from '@/app/portal/leads/context';
 import type { Lead } from '@/app/portal/leads/context';
 import { statusMeta, timeAgo } from '@/components/portal/leadMeta';
@@ -25,6 +25,8 @@ const PAGES: Item[] = [
   { id: 'p-leads', label: 'Solicitudes', icon: Inbox, href: '/portal/leads', group: 'Ir a' },
   { id: 'p-fin', label: 'Finanzas', icon: LineChart, href: '/portal/finance', group: 'Ir a' },
   { id: 'p-prompts', label: 'Prompts', icon: Puzzle, href: '/portal/prompts', group: 'Ir a' },
+  { id: 'p-sec', label: 'Seguridad', icon: ShieldCheck, href: '/portal/security', group: 'Ir a' },
+  { id: 'p-preview', label: 'Ver como cliente', icon: Eye, href: '/portal/preview', group: 'Ir a' },
   { id: 'p-set', label: 'Ajustes', icon: Settings, href: '/portal/settings', group: 'Ir a' },
 ];
 

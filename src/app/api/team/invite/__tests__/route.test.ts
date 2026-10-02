@@ -20,10 +20,9 @@ vi.mock('@/lib/teamUtils', () => ({
   getEffectiveOwnerId: vi.fn().mockResolvedValue({ ownerId: 'user-123', role: 'owner', isTeamMember: false }),
   canManageTeam: vi.fn().mockReturnValue(true),
 }));
-vi.mock('@/lib/emailService', () => ({
-  emailService: {
-    sendTeamMemberInvite: vi.fn().mockResolvedValue(undefined),
-  },
+vi.mock('@/lib/leadMailer', () => ({
+  resolveLeadMailer: vi.fn().mockResolvedValue({ provider: 'resend', to: 'owner@agency.com', from: 'samgple <a@b.c>', resendApiKey: 'k', origin: 'env', transport: {} }),
+  sendLeadMail: vi.fn().mockResolvedValue(undefined),
 }));
 
 import { POST } from '../route';
@@ -187,12 +186,11 @@ describe('POST /api/team/invite – success', () => {
 
     await POST(makePost({ email: 'newuser@test.com', role: 'member' }) as any);
 
-    const { emailService } = await import('@/lib/emailService');
-    expect(emailService.sendTeamMemberInvite).toHaveBeenCalledWith(
-      'newuser@test.com',
-      expect.any(String),
-      'member',
-      expect.stringContaining('tm_')
+    const { sendLeadMail } = await import('@/lib/leadMailer');
+    // El correo va al invitado (no a la agencia) y lleva el enlace con el token
+    expect(sendLeadMail).toHaveBeenCalledWith(
+      expect.objectContaining({ to: 'newuser@test.com' }),
+      expect.objectContaining({ subject: expect.stringContaining('invitado'), html: expect.stringContaining('tm_'), text: expect.stringContaining('tm_') })
     );
   });
 
@@ -205,8 +203,8 @@ describe('POST /api/team/invite – success', () => {
       return mockInsertSuccess();
     });
 
-    const { emailService } = await import('@/lib/emailService');
-    (emailService.sendTeamMemberInvite as any).mockRejectedValueOnce(new Error('SMTP failure'));
+    const { sendLeadMail } = await import('@/lib/leadMailer');
+    (sendLeadMail as any).mockRejectedValueOnce(new Error('SMTP failure'));
 
     const res = await POST(makePost({ email: 'newuser@test.com', role: 'member' }) as any);
     expect(res.status).toBe(200);

@@ -570,13 +570,13 @@ export default function LandingPage() {
                 <button type="submit" className="lp-btn lp-btn--primary lp-btn--lg lp-btn--block">
                   Quiero mis primeros vídeos
                 </button>
-                <p className="lp-form__note">Te contactamos en menos de [X horas].</p>
+                <p className="lp-form__note">Te contactamos lo antes posible.</p>
               </form>
 
               <div className="lp-success" data-success hidden tabIndex={-1} role="status">
                 <CheckCircle />
                 <h3>¡Recibido!</h3>
-                <p>Te contactamos en menos de [X horas].</p>
+                <p>Te contactamos lo antes posible.</p>
               </div>
             </div>
           </div>

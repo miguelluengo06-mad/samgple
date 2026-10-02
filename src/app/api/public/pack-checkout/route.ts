@@ -1,3 +1,4 @@
+import { getClientIp, reportSuspicious } from '@/lib/security';
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit, isValidUUID } from '@/lib/validation';
@@ -17,8 +18,9 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(req: NextRequest) {
   try {
-    const ip = req.headers.get('x-forwarded-for') || 'unknown';
+    const ip = getClientIp(req.headers);
     if (!checkRateLimit(`pack-checkout:${ip}`, 10, 60 * 1000).allowed) {
+      await reportSuspicious({ ip, kind: 'rate_limited', path: req.nextUrl?.pathname, userAgent: req.headers.get('user-agent') });
       return NextResponse.json({ error: 'Demasiados intentos. Espera un momento.' }, { status: 429 });
     }
 

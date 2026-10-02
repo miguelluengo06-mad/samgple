@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 import { getEffectiveOwnerId, canWrite } from '@/lib/teamUtils';
 import { isValidUUID } from '@/lib/validation';
 import { addNotice } from '@/lib/notices';
@@ -13,6 +14,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   if (!authHeader?.startsWith('Bearer ')) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { data: { user }, error: authError } = await supabaseAdmin.auth.getUser(authHeader.replace('Bearer ', ''));
   if (authError || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const forbidden = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+  if (forbidden) return forbidden;
 
   const { ownerId, role } = await getEffectiveOwnerId(supabaseAdmin, user.id);
   if (!canWrite(role)) return NextResponse.json({ error: 'You do not have permission to manage leads' }, { status: 403 });

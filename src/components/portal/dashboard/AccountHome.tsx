@@ -21,7 +21,7 @@ import { buildIcs, formatCallDate, formatCallTime } from '@/lib/booking';
 import { statusMeta, timeAgo } from '@/components/portal/leadMeta';
 import { CountUp, EmptyState, Page, Panel, Skeleton, untilLabel } from '@/components/portal/ui';
 
-interface AccountCall {
+export interface AccountCall {
   id: string;
   kind: 'call' | 'proposal';
   call_at: string | null;
@@ -29,7 +29,7 @@ interface AccountCall {
   created_at: string;
 }
 
-interface AccountNotice {
+export interface AccountNotice {
   lead_id: string;
   id: string;
   title: string;
@@ -38,7 +38,7 @@ interface AccountNotice {
   read_at: string | null;
 }
 
-interface AccountPurchase {
+export interface AccountPurchase {
   id: string;
   pack_name: string;
   items: { name: string; qty: number; total_eur: number }[];
@@ -62,18 +62,29 @@ function downloadIcs(call: AccountCall) {
   URL.revokeObjectURL(url);
 }
 
+/** Datos con los que se pinta la vista previa del administrador (sin llamar a la API del cliente). */
+export interface AccountPreview {
+  name: string;
+  email: string;
+  sample: boolean;
+  calls: AccountCall[];
+  notices: AccountNotice[];
+  purchases: AccountPurchase[];
+}
+
 /** Lo que ve un cliente: sus avisos, su próxima llamada, sus compras y un canal directo con la agencia. */
-export default function AccountHome() {
-  const { user, session } = useAuth();
-  const [calls, setCalls] = useState<AccountCall[] | null>(null);
-  const [purchases, setPurchases] = useState<AccountPurchase[] | null>(null);
-  const [notices, setNotices] = useState<AccountNotice[] | null>(null);
+export default function AccountHome({ preview }: { preview?: AccountPreview }) {
+  const { user: authUser, session } = useAuth();
+  const user = preview ? ({ email: preview.email, email_confirmed_at: 'preview' } as typeof authUser) : authUser;
+  const [calls, setCalls] = useState<AccountCall[] | null>(preview ? preview.calls : null);
+  const [purchases, setPurchases] = useState<AccountPurchase[] | null>(preview ? preview.purchases : null);
+  const [notices, setNotices] = useState<AccountNotice[] | null>(preview ? preview.notices : null);
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
   const [supportMsg, setSupportMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [now, setNow] = useState(() => Date.now());
-  const token = session?.access_token;
+  const token = preview ? undefined : session?.access_token;
 
   useEffect(() => {
     const t = setInterval(() => setNow(Date.now()), 30000);
@@ -99,6 +110,10 @@ export default function AccountHome() {
 
   const sendSupport = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (preview) {
+      setSupportMsg({ ok: true, text: 'En la vista previa no se envía nada. El cliente recibiría esto por email.' });
+      return;
+    }
     if (!token) return;
     setSending(true);
     setSupportMsg(null);
@@ -124,8 +139,9 @@ export default function AccountHome() {
   };
 
   const markRead = (n: AccountNotice) => {
-    if (n.read_at || !token) return;
+    if (n.read_at || (!token && !preview)) return;
     setNotices((all) => (all || []).map((x) => (x.id === n.id ? { ...x, read_at: new Date().toISOString() } : x)));
+    if (preview) return; // en la vista previa no se toca nada del cliente
     fetch('/api/account/notices', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -143,12 +159,23 @@ export default function AccountHome() {
   const unconfirmed = !!user && !user.email_confirmed_at;
   const unread = (notices || []).filter((n) => !n.read_at).length;
   const spent = (purchases || []).reduce((a, p) => a + p.amount_eur, 0);
-  const name = (user?.email || '').split('@')[0].split(/[._-]/)[0];
+  const name = preview ? preview.name.split(' ')[0] : (user?.email || '').split('@')[0].split(/[._-]/)[0];
   const next = upcoming[0];
   const loading = calls === null || purchases === null || notices === null;
 
   return (
     <Page title={name ? `Hola, ${name}` : 'Mi cuenta'} subtitle={user?.email} width="max-w-5xl">
+      {preview && (
+        <div className="rounded-2xl border border-[var(--portal-line-strong)] bg-[var(--signal)]/[0.08] px-4 py-3 flex flex-wrap items-center justify-between gap-2 text-sm pn-in">
+          <span>
+            <b className="text-[var(--signal)]">Vista previa de cliente.</b>{' '}
+            {preview.sample ? 'Datos de ejemplo: así ve su cuenta un cliente.' : `Así ve su cuenta ${preview.name}. Solo lectura: no se envía ni se cambia nada.`}
+          </span>
+          <Link href="/portal" className="inline-flex items-center gap-1 text-xs font-semibold text-[var(--signal)] hover:underline">
+            Volver al panel <ArrowUpRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      )}
       {unconfirmed && (
         <p className="text-sm text-yellow-400/90 card-liquid rounded-2xl p-4 pn-in">
           Confirma tu email para ver aquí tus avisos, llamadas y compras. Te hemos enviado un enlace al registrarte.
@@ -342,9 +369,9 @@ export default function AccountHome() {
             </button>
             {supportMsg && <p role="status" className={cn('text-xs text-center', supportMsg.ok ? 'text-green-400' : 'text-red-400')}>{supportMsg.text}</p>}
           </form>
-          <Link href="/portal/settings" className="mt-5 inline-flex items-center gap-1 text-xs text-white/45 hover:text-white transition-colors">
+          {!preview && <Link href="/portal/settings" className="mt-5 inline-flex items-center gap-1 text-xs text-white/45 hover:text-white transition-colors">
             Ajustes de la cuenta <ArrowUpRight className="w-3.5 h-3.5" />
-          </Link>
+          </Link>}
         </Panel>
       </div>
     </Page>

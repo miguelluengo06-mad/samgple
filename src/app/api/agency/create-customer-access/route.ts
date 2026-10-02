@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   const { data: { user }, error } = await supabaseAdmin.auth.getUser(authHeader.replace('Bearer ', ''));
   if (error || !user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const forbidden = await requireAgencyPrincipal(supabaseAdmin, user.id);
+  const forbidden = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
   if (forbidden) return forbidden;
 
   if (!checkRateLimit(`customer-access:${user.id}`, 30, 60 * 60 * 1000).allowed) {

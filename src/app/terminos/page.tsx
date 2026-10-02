@@ -41,9 +41,9 @@ export default function TerminosPage() {
 
       <H2>5. Entrega y colaboración del cliente</H2>
       <p>
-        Los plazos de entrega son orientativos y empiezan cuando recibimos todo el material y la información necesarios. El cliente se compromete a
+        Los plazos de entrega son orientativos y empiezan cuando recibimos todo el material y la información necesarios y, en los packs con guion a medida, cuando el cliente aprueba el guion (no producimos antes de ese visto bueno). El cliente se compromete a
         facilitarlos a tiempo y a garantizar que tiene derecho a usar los logotipos, imágenes, textos, voces y marcas que nos entregue. Las
-        revisiones incluidas son las indicadas en cada pack; las adicionales pueden tener coste.
+        revisiones incluidas (del guion y del vídeo) son las indicadas en cada pack; las adicionales pueden tener coste.
       </p>
 
       <H2>6. Contenido generado con inteligencia artificial</H2>

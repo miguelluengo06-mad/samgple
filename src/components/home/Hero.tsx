@@ -5,7 +5,7 @@ import { ArrowUpRight } from 'lucide-react';
 import Marquee from './Marquee';
 import { BookCallButton } from './BookCall';
 
-const TICKER_WORDS = ['VIDEO', 'ESTRATEGIA', 'REDES SOCIALES', 'COPY', 'FOTOGRAFÍA', 'CONTENIDO QUE VENDE'];
+const TICKER_WORDS = ['VÍDEO CON IA', 'UGC', 'INFLUENCERS IA', 'ANUNCIOS', 'GUIONES', 'LISTO PARA PUBLICAR'];
 
 export default function Hero({ businessName }: { businessName: string }) {
   return (
@@ -18,7 +18,7 @@ export default function Hero({ businessName }: { businessName: string }) {
           className="flex items-center gap-2 text-xs tracking-[0.25em] uppercase text-[var(--signal)] mb-8"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal)]" />
-          Agencia de contenido &amp; estrategia
+          Vídeos con IA para negocios y marcas
         </motion.div>
 
         <motion.h1
@@ -41,8 +41,8 @@ export default function Hero({ businessName }: { businessName: string }) {
           className="mt-10 flex flex-col md:flex-row md:items-end justify-between gap-8"
         >
           <p className="text-lg md:text-xl text-white/60 max-w-md leading-relaxed">
-            <span className="font-kinetic text-white">{businessName}</span> planea, produce y lanza
-            contenido y estrategia de marketing para empresas que quieren resultados, no solo "presencia".
+            <span className="font-kinetic text-white">{businessName}</span> crea vídeos, influencers y
+            anuncios con IA para negocios y ecommerce: con guiones que tú apruebas antes de producir.
           </p>
 
           <BookCallButton className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full border border-white/15 hover:border-[var(--signal)] transition-colors w-fit shrink-0">

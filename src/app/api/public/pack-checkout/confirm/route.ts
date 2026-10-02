@@ -1,3 +1,4 @@
+import { getClientIp, reportSuspicious } from '@/lib/security';
 import { NextRequest, NextResponse } from 'next/server';
 import { checkRateLimit } from '@/lib/validation';
 import { getAgencyStripe, isPaidSession, orderFromSession, recordOrder } from '@/lib/packCheckout';
@@ -12,8 +13,9 @@ export const dynamic = 'force-dynamic';
  * registra la compra en el panel y devuelve un resumen mínimo para enseñárselo al cliente.
  */
 export async function GET(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for') || 'unknown';
+  const ip = getClientIp(req.headers);
   if (!checkRateLimit(`pack-confirm:${ip}`, 30, 60 * 1000).allowed) {
+      await reportSuspicious({ ip, kind: 'rate_limited', path: req.nextUrl?.pathname, userAgent: req.headers.get('user-agent') });
     return NextResponse.json({ error: 'Demasiadas peticiones' }, { status: 429 });
   }
 

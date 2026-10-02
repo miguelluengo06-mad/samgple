@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
     }
 
     // These are the agency's infrastructure keys — never hand them to a merely registered account
-    const denied = await requireAgencyPrincipal(supabaseAdmin, user.id);
+    const denied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
     if (denied) return denied;
 
     const { data, error } = await getSupabaseAdmin()
@@ -110,7 +110,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     // getEffectiveOwnerId() treats any non-team account as an "owner", so also require real agency membership
-    const denied = await requireAgencyPrincipal(supabaseAdmin, user.id);
+    const denied = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
     if (denied) return denied;
 
     const ctx = await getEffectiveOwnerId(supabaseAdmin, user.id);

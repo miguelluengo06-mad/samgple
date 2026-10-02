@@ -1,3 +1,4 @@
+import { getClientIp, reportSuspicious } from '@/lib/security';
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { checkRateLimit, isValidEmail, sanitizeString } from '@/lib/validation';
@@ -31,9 +32,10 @@ function sanitizeUtm(input: any): Record<string, string> | null {
 // Email notification to the agency is best-effort on top of that.
 export async function POST(req: NextRequest) {
   try {
-    const ip = req.headers.get('x-forwarded-for') || 'unknown';
+    const ip = getClientIp(req.headers);
     const rateLimitResult = checkRateLimit(`contact:${ip}`, 5, 60 * 1000);
     if (!rateLimitResult.allowed) {
+      await reportSuspicious({ ip, kind: 'rate_limited', path: req.nextUrl?.pathname, userAgent: req.headers.get('user-agent') });
       return NextResponse.json({ error: 'Demasiados intentos. Espera un momento.' }, { status: 429 });
     }
 
@@ -49,6 +51,7 @@ export async function POST(req: NextRequest) {
 
     // Honeypot: real people never see or fill this field. Pretend success so bots don't retry.
     if (typeof body.website === 'string' && body.website.trim() !== '') {
+      await reportSuspicious({ ip, kind: 'bot_honeypot', path: req.nextUrl?.pathname, userAgent: req.headers.get('user-agent') });
       return NextResponse.json({ success: true });
     }
 

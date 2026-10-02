@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 import { getEffectiveOwnerId } from '@/lib/teamUtils';
 
 async function authenticate(req: NextRequest) {
@@ -15,6 +16,9 @@ async function authenticate(req: NextRequest) {
 export async function GET(req: NextRequest) {
   const user = await authenticate(req);
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const forbidden = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+  if (forbidden) return forbidden;
 
   const { ownerId } = await getEffectiveOwnerId(supabaseAdmin, user.id);
 

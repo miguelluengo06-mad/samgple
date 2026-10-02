@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { decrypt } from '@/lib/encryption';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 
 export const runtime = 'nodejs';
 
@@ -24,6 +25,9 @@ export async function POST(req: NextRequest) {
     if (authError || !user) {
       return NextResponse.json({ error: 'Invalid session' }, { status: 401 });
     }
+
+    const forbidden = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+    if (forbidden) return forbidden;
 
     // Get SMTP settings
     const { data: profile, error: profileError } = await supabaseAdmin

@@ -1,6 +1,7 @@
 'use client';
 
 import { whatsappDigits } from '@/lib/contact';
+import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import {
   BellRing,
@@ -22,6 +23,7 @@ import {
   X,
   Check,
   Copy,
+  Eye,
   KeyRound,
 } from 'lucide-react';
 import type { Lead } from '@/app/portal/leads/context';
@@ -602,6 +604,9 @@ export default function LeadDetailModal({ lead, onClose, accessToken, onChange, 
                   </div>
                 )}
                 {accessMsg && <p role="status" className="text-xs text-white/70">{accessMsg}</p>}
+                <Link href={`/portal/preview?lead=${lead.id}`} onClick={onClose} className="inline-flex items-center gap-2 text-xs text-[var(--signal)] hover:underline">
+                  <Eye className="w-3.5 h-3.5" /> Ver su panel tal como lo ve {lead.name.split(' ')[0]}
+                </Link>
               </div>
 
               <div>

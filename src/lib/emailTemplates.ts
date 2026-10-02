@@ -327,3 +327,47 @@ export function purchaseEmail(p: PurchaseMailData, opts: EmailOptions): Rendered
 
   return { subject, html, text };
 }
+
+/* ── Invitación al equipo ────────────────────────────────────────────────── */
+
+export interface TeamInviteData {
+  ownerName: string;
+  role: string;
+  inviteUrl: string;
+  brand?: string;
+}
+
+const ROLE_LABEL: Record<string, string> = { admin: 'administrador', manager: 'gestor', member: 'miembro' };
+
+export function teamInviteEmail(d: TeamInviteData): RenderedEmail {
+  const brand = d.brand || 'samgple';
+  const role = ROLE_LABEL[d.role] || ROLE_LABEL.member;
+  const subject = `${d.ownerName} te ha invitado al equipo de ${brand}`;
+
+  const html = `<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>${esc(subject)}</title></head>
+<body style="margin:0;padding:0;background:${C.page};">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${C.page};"><tr><td align="center" style="padding:28px 12px;">
+  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;">
+    <tr><td style="background:${C.head};border-radius:18px 18px 0 0;padding:20px 28px;font:800 22px/1 ${FONT};letter-spacing:-.02em;color:#ffffff;">${esc(brand)}<span style="color:${C.lime};">.</span></td></tr>
+    <tr><td style="background:${C.card};border-radius:0 0 18px 18px;padding:30px 28px 26px;">
+      <h1 style="margin:0;font:800 26px/1.15 ${FONT};letter-spacing:-.02em;color:${C.ink};">Te han invitado al equipo</h1>
+      <p style="margin:12px 0 0;font:400 16px/1.5 ${FONT};color:${C.muted};"><strong style="color:${C.ink};">${esc(d.ownerName)}</strong> te ha invitado a unirte al panel de ${esc(brand)} como <strong style="color:${C.ink};">${esc(role)}</strong>.</p>
+      <div style="margin:24px 0 10px;">${button(d.inviteUrl, 'Aceptar la invitación', true)}</div>
+      <p style="margin:18px 0 0;font:400 13px/1.6 ${FONT};color:${C.muted};">Si el botón no funciona, copia este enlace en tu navegador:<br><a href="${esc(d.inviteUrl)}" style="color:${C.button};word-break:break-all;">${esc(d.inviteUrl)}</a></p>
+      <p style="margin:18px 0 0;font:400 13px/1.6 ${FONT};color:${C.muted};">Si no esperabas este correo, puedes ignorarlo: no se crea ninguna cuenta hasta que aceptes.</p>
+    </td></tr>
+  </table>
+</td></tr></table>
+</body></html>`;
+
+  const text = [
+    `${d.ownerName} te ha invitado al equipo de ${brand} como ${role}.`,
+    '',
+    `Acepta la invitación aquí: ${d.inviteUrl}`,
+    '',
+    'Si no esperabas este correo, puedes ignorarlo.',
+  ].join('\n');
+
+  return { subject, html, text };
+}

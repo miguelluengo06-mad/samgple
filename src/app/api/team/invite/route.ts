@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { randomBytes } from 'crypto';
-import { emailService } from '@/lib/emailService';
+import { resolveLeadMailer, sendLeadMail } from '@/lib/leadMailer';
+import { teamInviteEmail } from '@/lib/emailTemplates';
 import { checkRateLimit, isValidEmail } from '@/lib/validation';
 import { buildAppUrl } from '@/lib/config';
 import { getEffectiveOwnerId, canManageTeam } from '@/lib/teamUtils';
@@ -112,11 +113,15 @@ export async function POST(req: NextRequest) {
 
     // Send invite email
     const inviteUrl = buildAppUrl(`/invite/accept-team?token=${token}`);
-    const ownerName = ownerProfile?.full_name || 'Your team';
+    const ownerName = ownerProfile?.full_name || 'Tu equipo';
 
     let emailSent = false;
     try {
-      await emailService.sendTeamMemberInvite(normalizedEmail, ownerName, role || 'member', inviteUrl);
+      // Se envía con el mismo correo que los avisos (Resend o el SMTP de Ajustes), pero al invitado
+      const mailer = await resolveLeadMailer(supabaseAdmin, effectiveOwnerId);
+      if (!mailer) throw new Error('No hay correo configurado (Ajustes → Pagos y email)');
+      const mail = teamInviteEmail({ ownerName, role: role || 'member', inviteUrl });
+      await sendLeadMail({ ...mailer, to: normalizedEmail }, { ...mail, idempotencyKey: `team-invite-${token}` });
       emailSent = true;
     } catch (emailErr) {
       console.error('Failed to send team invite email:', emailErr);

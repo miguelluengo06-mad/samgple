@@ -85,10 +85,16 @@ export default function Auth({ onSuccess, initialMode = 'signin', redirectTo, lo
         // Show success message for sign up
         setError(`${INFO_PREFIX}: te hemos enviado un enlace para confirmar tu cuenta.`);
       } else {
-        const { error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
+        // El acceso pasa por el servidor para poder contar los fallos y bloquear a quien intente adivinar claves
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
         });
+        if (res.status === 403) throw new Error('Acceso denegado desde este dispositivo.');
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Email o contraseña incorrectos');
+        const { error } = await supabase.auth.setSession({ access_token: data.access_token, refresh_token: data.refresh_token });
         if (error) throw error;
 
         // After successful sign in, redirect if redirectTo is provided, otherwise call onSuccess

@@ -5,23 +5,23 @@ import { motion } from 'framer-motion';
 const STEPS = [
   {
     n: '01',
-    title: 'Descubrimiento',
-    description: 'Auditamos vuestra marca, competencia y canales actuales. Entendemos el negocio antes de tocar una cámara.',
+    title: 'Brief',
+    description: 'Nos cuentas qué vendes, a quién y cómo hablas. Con eso entendemos tu negocio antes de escribir una línea.',
   },
   {
     n: '02',
-    title: 'Estrategia',
-    description: 'Definimos línea editorial, formatos y calendario — con objetivos y métricas claras desde el día uno.',
+    title: 'Guion para tu visto bueno',
+    description: 'Escribimos los guiones y te los enviamos. Pides los cambios que quieras y no producimos nada hasta que los apruebes.',
   },
   {
     n: '03',
     title: 'Producción',
-    description: 'Grabamos, escribimos y diseñamos. Un equipo fijo, no freelancers distintos cada mes.',
+    description: 'Con el guion aprobado creamos los vídeos con IA: voz, subtítulos y el formato de cada red.',
   },
   {
     n: '04',
-    title: 'Lanzamiento & medición',
-    description: 'Publicamos, seguimos el rendimiento y ajustamos en tiempo real. Reporting mensual, sin sorpresas.',
+    title: 'Ajustes y entrega',
+    description: 'Revisas el resultado, te lo ajustamos y lo recibes listo para publicar.',
   },
 ];
 

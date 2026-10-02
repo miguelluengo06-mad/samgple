@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { requireAgencyPrincipal } from '@/lib/agencyAccess';
 import { getEffectiveOwnerId, canWrite } from '@/lib/teamUtils';
 import { isValidUUID, sanitizeString } from '@/lib/validation';
 
@@ -21,6 +22,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   const user = await authenticate(req);
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const forbidden = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+  if (forbidden) return forbidden;
 
   const { ownerId, role } = await getEffectiveOwnerId(supabaseAdmin, user.id);
   if (!canWrite(role)) {
@@ -81,6 +85,9 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
 
   const user = await authenticate(req);
   if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const forbidden = await requireAgencyPrincipal(supabaseAdmin, user.id, req);
+  if (forbidden) return forbidden;
 
   const { ownerId, role } = await getEffectiveOwnerId(supabaseAdmin, user.id);
   if (!canWrite(role)) {

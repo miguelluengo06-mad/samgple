@@ -14,7 +14,6 @@ import Services from '@/components/home/Services';
 import VideoExamples from '@/components/home/VideoExamples';
 import Pricing from '@/components/home/Pricing';
 import PaymentNotice from '@/components/home/PaymentNotice';
-import CaseStudies from '@/components/home/CaseStudies';
 import Process from '@/components/home/Process';
 import BookCallForm from '@/components/home/BookCallForm';
 import { BookCallProvider, BookCallButton } from '@/components/home/BookCall';
@@ -34,8 +33,8 @@ async function getBranding() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const { businessName } = await getBranding();
-  const title = `${businessName} — Contenido y estrategia para marcas`;
-  const description = `${businessName} es una agencia de creación de contenido y estrategia de marketing para empresas: vídeo, redes sociales, copy y fotografía con resultados medibles.`;
+  const title = `${businessName} — Vídeos, influencers y anuncios con IA`;
+  const description = `${businessName} crea vídeos, influencers y anuncios con IA para negocios y ecommerce: guiones que tú apruebas, listos para TikTok, Reels y tus campañas.`;
   return {
     title,
     description,
@@ -60,9 +59,6 @@ export default async function HomePage() {
           <nav className="flex items-center gap-1 md:gap-2">
             <a href="#servicios" className="hidden md:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
               Servicios
-            </a>
-            <a href="#casos" className="hidden md:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
-              Casos
             </a>
             <a href="#ejemplos" className="hidden md:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
               Ejemplos
@@ -89,7 +85,6 @@ export default async function HomePage() {
         <VideoExamples />
         <Services />
         <Pricing />
-        <CaseStudies />
         <Process />
 
         {/* Contact */}
