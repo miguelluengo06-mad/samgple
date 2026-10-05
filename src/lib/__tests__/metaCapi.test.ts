@@ -7,7 +7,7 @@ const sha = (v: string) => createHash('sha256').update(v).digest('hex');
 
 const session = {
   id: 'cs_live_abc',
-  amount_total: 32000,
+  amount_total: 25000,
   currency: 'eur',
   livemode: true,
   metadata: { pack_name: 'Anuncios UGC con IA · Escala', ad_consent: '1', fbp: 'fb.1.1.2', fbc: 'fb.1.1.3' },
@@ -32,7 +32,7 @@ describe('metaCapi', () => {
   it('builds a Purchase with the Stripe session as event_id and hashed customer data', () => {
     const e = buildPurchaseEvent(session, 'https://example.com');
     expect(e).toMatchObject({ event_name: 'Purchase', event_id: 'cs_live_abc', action_source: 'website', event_source_url: 'https://example.com/gracias' });
-    expect(e.custom_data).toEqual({ value: 320, currency: 'EUR', content_name: 'Anuncios UGC con IA · Escala', content_type: 'product' });
+    expect(e.custom_data).toEqual({ value: 250, currency: 'EUR', content_name: 'Anuncios UGC con IA · Escala', content_type: 'product' });
     expect(e.user_data).toEqual({ em: [sha('ana@example.com')], ph: [sha('34600000000')], country: [sha('es')], fbp: 'fb.1.1.2', fbc: 'fb.1.1.3' });
   });
 

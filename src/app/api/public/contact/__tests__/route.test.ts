@@ -246,7 +246,7 @@ describe('POST /api/public/contact — Pack de Bienvenida', () => {
       pack: { id: 'welcome', website: 'https://tiendaluna.es', product: 'Vela de soja', runs_ads: 'Sí' },
       utm: { utm_source: 'instagram' },
     });
-    expect(state.inserted.message).toContain('Pack de Bienvenida (30 € IVA incluido)');
+    expect(state.inserted.message).toContain('Pack de Bienvenida (20 € IVA incluido)');
     expect(state.inserted.message).toContain('Web o tienda: https://tiendaluna.es');
     expect(state.inserted.message).toContain('Producto a promocionar: Vela de soja');
     expect(state.inserted.message).toContain('¿Ya hace anuncios en redes?: Sí');

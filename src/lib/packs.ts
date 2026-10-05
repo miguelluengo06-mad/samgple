@@ -36,8 +36,8 @@ export const WELCOME_PACK = {
   /** Identificador para el cobro con Stripe */
   id: 'bienvenida',
   name: 'Pack de Bienvenida',
-  price: 30,
-  cta: 'Quiero mi pack por 30 €',
+  price: 20,
+  cta: 'Quiero mi pack por 20 €',
   /** Precio ancla */
   anchor: 'Un vídeo con creador humano cuesta entre 100 y 400 €',
   includes: [
@@ -48,7 +48,7 @@ export const WELCOME_PACK = {
   ],
   conditions: ['1 producto', 'Sin revisiones', 'Una sola vez por empresa'],
   bonus:
-    'Si contratas cualquier otro pack en los 7 días siguientes, te descontamos los 30 € y te regalamos 2 vídeos extra.',
+    'Si contratas cualquier otro pack en los 7 días siguientes, te descontamos los 20 € y te regalamos 2 vídeos extra.',
 } as const;
 
 /** Enlace de la landing a la sección de precios de la web. */
@@ -66,7 +66,7 @@ export const WELCOME_FAQ = [
   },
   {
     q: '¿Qué pasa después?',
-    a: 'Recibes 2 vídeos listos para publicar y probar cuál funciona mejor. Si te convencen, contrata otro pack en los 7 días siguientes: te descontamos los 30 € y te regalamos 2 vídeos extra.',
+    a: 'Recibes 2 vídeos listos para publicar y probar cuál funciona mejor. Si te convencen, contrata otro pack en los 7 días siguientes: te descontamos los 20 € y te regalamos 2 vídeos extra.',
   },
   {
     q: '¿Cómo pago y recibo factura?',
@@ -136,20 +136,21 @@ export const PACK_GROUPS: PackGroup[] = [
     title: 'Anuncios UGC con IA',
     tagline: 'Anuncios que parecen de un cliente real, listos para TikTok, Reels, Shorts y Ads. Sin grabar y sin pagar a creadores.',
     summary: 'Vídeos UGC con IA en vertical 9:16, con guion, voz y subtítulos, para testear y escalar tus anuncios.',
-    from: 'Desde 190 €',
+    from: 'Desde 130 €',
     packs: [
       {
         id: 'ugc-starter',
         name: 'Starter',
-        price: 190,
+        price: 130,
         unit: 'once',
         headline: '5 vídeos',
+        perk: '+1 vídeo gratis',
         badge: 'Ideal para testear',
         featured: false,
         forWho: 'Para testear tu primera tanda de anuncios.',
         pitch: 'Cinco vídeos con guiones que tú apruebas, para ver qué funciona antes de invertir más.',
         includes: [
-          '5 vídeos UGC completos (formato 9:16 vertical para TikTok / Reels / Shorts / Ads)',
+          '5 vídeos UGC completos + 1 vídeo gratis, 6 en total (formato 9:16 vertical para TikTok / Reels / Shorts / Ads)',
           'Guiones a medida, escritos tras un brief contigo',
           'Locución con voz IA natural y música libre de derechos',
           'Edición dinámica con subtítulos estilo viral',
@@ -160,7 +161,7 @@ export const PACK_GROUPS: PackGroup[] = [
       {
         id: 'ugc-escala',
         name: 'Escala',
-        price: 320,
+        price: 250,
         unit: 'once',
         headline: '10 vídeos',
         badge: 'Más popular',
@@ -179,7 +180,7 @@ export const PACK_GROUPS: PackGroup[] = [
       {
         id: 'ugc-volumen',
         name: 'Volumen',
-        price: 599,
+        price: 470,
         unit: 'once',
         headline: '20 vídeos',
         badge: 'Mejor precio',
@@ -344,7 +345,7 @@ export const SINGLE_VIDEO: Pack = {
   id: 'video-suelto',
   name: 'Vídeo suelto',
   headline: '1 vídeo',
-  price: 60,
+  price: 15,
   unit: 'video',
   forWho: 'Para cuando solo necesitas una pieza.',
   pitch: 'Un vídeo, cuando lo necesitas.',

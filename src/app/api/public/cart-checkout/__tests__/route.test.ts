@@ -78,26 +78,26 @@ describe('POST /api/public/cart-checkout', () => {
     expect(params.mode).toBe('payment');
     expect(params.customer_email).toBe('ana@tienda.es');
     expect(params.line_items.map((l: any) => [l.quantity, l.price_data.unit_amount, l.price_data.tax_behavior])).toEqual([
-      [2, 32000, 'inclusive'],
-      [1, 6000, 'inclusive'],
+      [2, 25000, 'inclusive'],
+      [1, 1500, 'inclusive'],
     ]);
     expect(params.metadata.pack_id).toBe('cart');
-    expect(JSON.parse(params.metadata.cart_items)).toEqual([['ugc-escala', 2, 32000], ['video-suelto', 1, 6000]]);
+    expect(JSON.parse(params.metadata.cart_items)).toEqual([['ugc-escala', 2, 25000], ['video-suelto', 1, 1500]]);
     expect(params.cancel_url).toBe('http://localhost:3001/carrito?pago=cancelado');
     expect(params.invoice_creation.enabled).toBe(true);
   });
 
   it('takes prices from the catalog, never from the browser', async () => {
     await post({ items: [{ id: 'ugc-starter', qty: 1, price: 1, unit_amount: 1, cents: 1 }], email: 'a@b.es' });
-    expect(createSession.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(19000);
+    expect(createSession.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(13000);
   });
 
   it('saves the unpaid cart as a possible purchase and links the session to it', async () => {
     await post({ items: CART, email: 'ana@tienda.es', name: 'Ana', phone: '+34 600 000 000' });
     expect(db.inserts).toHaveLength(1);
     expect(db.inserts[0]).toMatchObject({ owner_id: 'owner-1', email: 'ana@tienda.es', name: 'Ana', source: 'cart', status: 'new' });
-    expect(db.inserts[0].answers.cart.total_eur).toBe(700);
-    expect(db.inserts[0].answers.cart.items[0]).toMatchObject({ pack_id: 'ugc-escala', qty: 2, total_eur: 640 });
+    expect(db.inserts[0].answers.cart.total_eur).toBe(515);
+    expect(db.inserts[0].answers.cart.items[0]).toMatchObject({ pack_id: 'ugc-escala', qty: 2, total_eur: 500 });
     expect(createSession.mock.calls[0][0].metadata.lead_id).toBe('new-lead');
   });
 

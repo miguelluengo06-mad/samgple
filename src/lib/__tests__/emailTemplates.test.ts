@@ -25,7 +25,7 @@ describe('leadEmail', () => {
       opts
     );
     expect(m.subject).toBe('Nuevo lead del Pack de Bienvenida — Tienda Luna (Tienda Luna)');
-    expect(m.html).toContain('30 € (IVA incluido)');
+    expect(m.html).toContain('20 € (IVA incluido)');
     expect(m.html).toContain('Vela de soja');
     expect(m.html).toContain('Campaña: pack30');
     expect(m.html).not.toContain('mailto:'); // no hay email
@@ -47,10 +47,10 @@ describe('leadEmail', () => {
 describe('purchaseEmail', () => {
   it('compra pagada con IVA incluido y enlace a Stripe', () => {
     const m = purchaseEmail(
-      { packName: 'Pack de Bienvenida', amountEur: 30, monthly: false, livemode: true, customerName: 'Ana', customerEmail: 'ana@x.es', customerPhone: '+34 692168981', stripeUrl: 'https://dashboard.stripe.com/payments/pi_1' },
+      { packName: 'Pack de Bienvenida', amountEur: 20, monthly: false, livemode: true, customerName: 'Ana', customerEmail: 'ana@x.es', customerPhone: '+34 692168981', stripeUrl: 'https://dashboard.stripe.com/payments/pi_1' },
       opts
     );
-    expect(m.subject).toBe('Nueva compra — Pack de Bienvenida · 30 € (IVA incluido)');
+    expect(m.subject).toBe('Nueva compra — Pack de Bienvenida · 20 € (IVA incluido)');
     expect(m.html).toContain('https://dashboard.stripe.com/payments/pi_1');
     expect(m.html).toContain('Compra pagada');
   });

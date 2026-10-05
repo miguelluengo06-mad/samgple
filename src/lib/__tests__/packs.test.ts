@@ -26,9 +26,9 @@ describe('formatAmount / formatEur', () => {
 describe('price table (exactly as agreed — do not round or change)', () => {
   // [servicio, pack, precio €, unidad]
   const TABLE: [string, string, number, string][] = [
-    ['Anuncios UGC con IA', 'Starter', 190, 'once'],
-    ['Anuncios UGC con IA', 'Escala', 320, 'once'],
-    ['Anuncios UGC con IA', 'Volumen', 599, 'once'],
+    ['Anuncios UGC con IA', 'Starter', 130, 'once'],
+    ['Anuncios UGC con IA', 'Escala', 250, 'once'],
+    ['Anuncios UGC con IA', 'Volumen', 470, 'once'],
     ['Influencer IA para tu marca', 'Presencia', 490, 'once'],
     ['Influencer IA para tu marca', 'Crecimiento', 690, 'once'],
     ['Influencer IA para tu marca', 'Dominio', 1190, 'once'],
@@ -43,7 +43,7 @@ describe('price table (exactly as agreed — do not round or change)', () => {
   });
 
   it('single video and extras', () => {
-    expect([SINGLE_VIDEO.name, SINGLE_VIDEO.price, SINGLE_VIDEO.unit]).toEqual(['Vídeo suelto', 60, 'video']);
+    expect([SINGLE_VIDEO.name, SINGLE_VIDEO.price, SINGLE_VIDEO.unit]).toEqual(['Vídeo suelto', 15, 'video']);
     expect(SINGLE_VIDEO.includes).toEqual(['1 vídeo', '1 revisión', 'Entrega en 5 días']);
     expect(EXTRAS.map((e) => [e.name, e.price])).toEqual([
       ['Gancho adicional', '15 €'],
@@ -52,8 +52,8 @@ describe('price table (exactly as agreed — do not round or change)', () => {
     ]);
   });
 
-  it('welcome pack: 30 €, 30 spots, 2 videos (1 base + 2 hooks), 72 h', () => {
-    expect(WELCOME_PACK.price).toBe(30);
+  it('welcome pack: 20 €, 30 spots, 2 videos (1 base + 2 hooks), 72 h', () => {
+    expect(WELCOME_PACK.price).toBe(20);
     expect(WELCOME_SPOTS_TOTAL).toBe(30);
     expect(WELCOME_PACK.includes[0]).toContain('2 vídeos');
     expect(WELCOME_PACK.includes[0]).toContain('1 vídeo base con 2 ganchos');
@@ -75,11 +75,11 @@ describe('price list', () => {
 
   it('has the three service lines in order', () => {
     expect(PACK_GROUPS.map((g) => g.id)).toEqual(['ugc', 'influencer', 'replica']);
-    expect(SINGLE_VIDEO.price).toBe(60);
+    expect(SINGLE_VIDEO.price).toBe(15);
   });
 
   it('UGC', () => {
-    expect(prices('ugc')).toEqual([['Starter', 190, 'once'], ['Escala', 320, 'once'], ['Volumen', 599, 'once']]);
+    expect(prices('ugc')).toEqual([['Starter', 130, 'once'], ['Escala', 250, 'once'], ['Volumen', 470, 'once']]);
     expect(byId('ugc').packs.map((p) => p.badge)).toEqual(['Ideal para testear', 'Más popular', 'Mejor precio']);
     // solo el de 10 vídeos se resalta como recomendado
     expect(byId('ugc').packs.map((p) => p.featured)).toEqual([false, true, false]);
@@ -134,11 +134,11 @@ describe('price list', () => {
   });
 
   it('every group has a "desde" label for the landing summary', () => {
-    expect(PACK_GROUPS.map((g) => g.from)).toEqual(['Desde 190 €', 'Desde 490 €', 'Desde 490 €']);
+    expect(PACK_GROUPS.map((g) => g.from)).toEqual(['Desde 130 €', 'Desde 490 €', 'Desde 490 €']);
   });
 
   it('startingPrice picks the cheapest pack of each group', () => {
-    expect(startingPrice(byId('ugc'))).toEqual({ amount: 190, unit: 'once' });
+    expect(startingPrice(byId('ugc'))).toEqual({ amount: 130, unit: 'once' });
     expect(startingPrice(byId('influencer'))).toEqual({ amount: 490, unit: 'once' });
     expect(unitLabel('month')).toBe('/mes');
   });
@@ -146,8 +146,8 @@ describe('price list', () => {
 
 describe('Pack de Bienvenida', () => {
   it('matches the offer', () => {
-    expect(WELCOME_PACK.price).toBe(30);
-    expect(WELCOME_PACK.cta).toBe('Quiero mi pack por 30 €');
+    expect(WELCOME_PACK.price).toBe(20);
+    expect(WELCOME_PACK.cta).toBe('Quiero mi pack por 20 €');
     expect(WELCOME_PACK.anchor).toBe('Un vídeo con creador humano cuesta entre 100 y 400 €');
     expect(WELCOME_PACK.conditions).toEqual(['1 producto', 'Sin revisiones', 'Una sola vez por empresa']);
     expect(WELCOME_PACK.includes).toHaveLength(4);

@@ -36,9 +36,9 @@ describe('cart', () => {
 
   it('prices come from the catalog, never from the cart', () => {
     const items = sanitizeCart([{ id: 'ugc-escala', qty: 2, price: 1, cents: 1 }, { id: 'video-suelto', qty: 3 }]);
-    expect(cartTotalCents(items)).toBe(32000 * 2 + 6000 * 3);
+    expect(cartTotalCents(items)).toBe(25000 * 2 + 1500 * 3);
     expect(cartCount(items)).toBe(5);
-    expect(cartLines(items).map((l) => l.totalCents)).toEqual([64000, 18000]);
+    expect(cartLines(items).map((l) => l.totalCents)).toEqual([50000, 4500]);
     expect(cartSummary(cartLines(items))).toBe('Anuncios UGC con IA · Escala ×2 + Vídeo suelto ×3');
   });
 
@@ -47,8 +47,8 @@ describe('cart', () => {
     const raw = compactItems(lines);
     expect(raw.length).toBeLessThan(500); // límite de Stripe para un valor de metadata
     expect(parseCompactItems(raw)).toEqual([
-      { pack_id: 'ugc-escala', name: 'Anuncios UGC con IA · Escala', qty: 2, unit_eur: 320, total_eur: 640 },
-      { pack_id: 'video-suelto', name: 'Vídeo suelto', qty: 1, unit_eur: 60, total_eur: 60 },
+      { pack_id: 'ugc-escala', name: 'Anuncios UGC con IA · Escala', qty: 2, unit_eur: 250, total_eur: 500 },
+      { pack_id: 'video-suelto', name: 'Vídeo suelto', qty: 1, unit_eur: 15, total_eur: 15 },
     ]);
     expect(parseCompactItems('not json')).toEqual([]);
     expect(parseCompactItems(undefined)).toEqual([]);

@@ -62,12 +62,12 @@ describe('POST /api/public/pack-checkout', () => {
     expect((await res.json()).url).toBe('https://checkout.stripe.com/c/pay/cs_test_1');
     const params = createSession.mock.calls[0][0];
     expect(params.mode).toBe('payment');
-    expect(params.line_items[0].price_data.unit_amount).toBe(32000);
+    expect(params.line_items[0].price_data.unit_amount).toBe(25000);
   });
 
   it('takes the price from the catalog, never from the browser', async () => {
     await post({ packId: 'ugc-starter', price: 1, amount: 1, unit_amount: 1, cents: 1 });
-    expect(createSession.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(19000);
+    expect(createSession.mock.calls[0][0].line_items[0].price_data.unit_amount).toBe(13000);
   });
 
   it('404 for a pack that does not exist', async () => {
@@ -93,11 +93,11 @@ describe('POST /api/public/pack-checkout', () => {
     expect(createSession).not.toHaveBeenCalled();
   });
 
-  it('welcome pack with its form: charges 30 € and links the payment to that lead', async () => {
+  it('welcome pack with its form: charges 20 € and links the payment to that lead', async () => {
     const res = await post({ packId: 'bienvenida', leadId: LEAD });
     expect(res.status).toBe(200);
     const params = createSession.mock.calls[0][0];
-    expect(params.line_items[0].price_data.unit_amount).toBe(3000);
+    expect(params.line_items[0].price_data.unit_amount).toBe(2000);
     expect(params.metadata.lead_id).toBe(LEAD);
     expect(params.cancel_url).toContain('/landing?pago=cancelado#pack');
   });

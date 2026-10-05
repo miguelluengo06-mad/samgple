@@ -183,7 +183,7 @@ export function leadEmail(lead: LeadMailData, opts: EmailOptions): RenderedEmail
         : `Nueva propuesta solicitada — ${who}`;
 
   const tone: Tone = isCall ? 'call' : isPack ? 'pack' : 'lead';
-  const badge = isCall ? 'Llamada agendada' : isPack ? 'Pack de Bienvenida · 30 €' : lead.source === 'landing' ? 'Lead de la landing' : 'Propuesta desde la web';
+  const badge = isCall ? 'Llamada agendada' : isPack ? 'Pack de Bienvenida · 20 €' : lead.source === 'landing' ? 'Lead de la landing' : 'Propuesta desde la web';
 
   const preheader = isCall
     ? `${when} (hora de Madrid) · ${lead.phone || lead.email || 'sin contacto'}`
@@ -192,7 +192,7 @@ export function leadEmail(lead: LeadMailData, opts: EmailOptions): RenderedEmail
   const highlightHtml = isCall
     ? highlight('Cuándo', formatCallDate(lead.callAt!, { withYear: true }), `${formatCallTime(lead.callAt!)} · hora de Madrid · 30 minutos`, 'call')
     : isPack
-      ? highlight('Pedido', 'Pack de Bienvenida · 30 € (IVA incluido)', 'Ha rellenado el formulario y pasa al pago con Stripe. Si paga, te llega otro aviso de compra.', 'pack')
+      ? highlight('Pedido', 'Pack de Bienvenida · 20 € (IVA incluido)', 'Ha rellenado el formulario y pasa al pago con Stripe. Si paga, te llega otro aviso de compra.', 'pack')
       : '';
 
   const digits = whatsappDigits(lead.phone);
@@ -242,7 +242,7 @@ export function leadEmail(lead: LeadMailData, opts: EmailOptions): RenderedEmail
   const text = [
     `${badge.toUpperCase()} — ${who}`,
     isCall ? `Llamada: ${formatCallDate(lead.callAt!, { withYear: true })} a las ${formatCallTime(lead.callAt!)} (hora de Madrid, 30 min)` : '',
-    isPack ? 'Pedido: Pack de Bienvenida · 30 € (IVA incluido). Pasa al pago con Stripe.' : '',
+    isPack ? 'Pedido: Pack de Bienvenida · 20 € (IVA incluido). Pasa al pago con Stripe.' : '',
     '',
     `Nombre: ${lead.name}`,
     lead.phone ? `Teléfono: ${lead.phone}` : '',
