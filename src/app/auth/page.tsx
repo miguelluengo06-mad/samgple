@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthContext';
 import Auth from '@/components/Auth';
 import { supabase } from '@/lib/supabase';
-import KineticWordmark from '@/components/home/KineticWordmark';
+import AuthShell from '@/components/studio/AuthShell';
 
 const DEMO_MODE = process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 const DEMO_EMAIL = process.env.NEXT_PUBLIC_DEMO_EMAIL || '';
@@ -81,7 +81,7 @@ export default function AuthPage() {
   if (loading || !authConfig) {
     return (
       <div className="home-root min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[var(--signal)]" />
       </div>
     );
   }
@@ -90,21 +90,8 @@ export default function AuthPage() {
 
 
   return (
-    <div className="home-root min-h-screen flex flex-col items-center justify-center px-4 py-16">
-      <Link
-        href="/"
-        className="home-slab absolute top-5 left-5 !rounded-full px-4 py-2 text-sm text-white/70 hover:text-white transition-colors"
-      >
-        ← Volver a la web
-      </Link>
-      <div className="home-slab w-full max-w-md px-6 sm:px-10 py-10 flex flex-col items-center">
-      {/* Agency logo (when set) or the wordmark used on the public site */}
-      <div className="mb-8 flex flex-col items-center gap-3">
-        {logoUrl && <img src={logoUrl} alt="" className="w-16 h-16 object-contain" />}
-        <Link href="/" aria-label="Ir a la web">
-          <KineticWordmark name={authConfig?.agency_name || 'samgple'} className="text-2xl" />
-        </Link>
-      </div>
+    <AuthShell businessName={authConfig?.agency_name || 'samgple'} title="Tu panel de *rodaje.*">
+      {logoUrl && <img src={logoUrl} alt="" className="w-14 h-14 object-contain mb-6" />}
       {DEMO_MODE && DEMO_EMAIL ? (
         <div className="w-full max-w-sm flex flex-col gap-4">
           <button
@@ -137,7 +124,6 @@ export default function AuthPage() {
         />
         </>
       )}
-      </div>
-    </div>
+    </AuthShell>
   );
 }

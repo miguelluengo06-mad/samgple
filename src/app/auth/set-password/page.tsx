@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthContext';
 import { supabase } from '@/lib/supabase';
-import KineticWordmark from '@/components/home/KineticWordmark';
+import AuthShell from '@/components/studio/AuthShell';
 
 /** Pantalla a la que lleva el correo de bienvenida: el cliente elige su contraseña y entra. */
 export default function SetPasswordPage() {
@@ -45,13 +44,10 @@ export default function SetPasswordPage() {
   if (loading || !user) return <div className="home-root min-h-screen" />;
 
   return (
-    <div className="home-root min-h-screen flex items-center justify-center px-4 py-16">
-      <div className="home-slab w-full max-w-md px-6 sm:px-10 py-10">
-        <div className="flex justify-center mb-6">
-          <Link href="/" aria-label="Ir a la web"><KineticWordmark name={brand} className="text-2xl" /></Link>
-        </div>
-        <h1 className="text-2xl font-bold text-center text-white">Crea tu contraseña</h1>
-        <p className="text-sm text-white/60 text-center mt-2">Con ella entrarás a tu panel, donde están tus vídeos disponibles.</p>
+    <AuthShell businessName={brand} title="Casi *dentro.*" kicker="/ Primera vez">
+      <div>
+        <h2 className="text-2xl font-bold text-white">Crea tu contraseña</h2>
+        <p className="text-sm text-white/60 mt-2">Con ella entrarás a tu panel, donde están tus vídeos disponibles.</p>
         <form onSubmit={submit} className="mt-8 space-y-4">
           <div>
             <label htmlFor="pw" className="block text-sm font-medium text-white/80 mb-1">Contraseña</label>
@@ -67,6 +63,6 @@ export default function SetPasswordPage() {
           </button>
         </form>
       </div>
-    </div>
+    </AuthShell>
   );
 }

@@ -105,7 +105,7 @@ function NavLink({ item, active, collapsed, count, onNavigate }: { item: NavItem
       aria-current={active ? 'page' : undefined}
       title={collapsed ? item.label : undefined}
       className={cn(
-        'group relative flex items-center rounded-xl text-sm font-medium transition-all',
+        'group relative flex items-center rounded-xl text-sm font-medium transition-[background-color,color,border-color,padding]',
         collapsed ? 'justify-center h-11 w-11 mx-auto' : 'gap-3 px-2.5 py-2',
         active
           ? 'bg-[var(--signal)]/10 text-white shadow-[inset_0_0_0_1px_var(--portal-line-strong),0_0_22px_-8px_var(--portal-glow)]'
@@ -272,7 +272,7 @@ export default function PortalSidebar({ role }: { role: PortalRole }) {
       {/* Desktop: panel flotante */}
       <aside
         className={cn(
-          'hidden md:flex shrink-0 flex-col justify-between gap-6 m-3 mr-0 rounded-2xl border border-[var(--portal-line)] bg-black/95 backdrop-blur-xl px-2.5 py-4 overflow-y-auto overflow-x-hidden shadow-[0_20px_60px_-30px_var(--portal-glow)] transition-[width] duration-200',
+          'hidden md:flex shrink-0 flex-col justify-between gap-6 m-3 mr-0 rounded-2xl border border-[var(--portal-line)] ink bg-black/95 backdrop-blur-xl px-2.5 py-4 overflow-y-auto overflow-x-hidden shadow-[0_20px_60px_-30px_var(--portal-glow)] transition-[width] duration-200',
           collapsed ? 'w-[68px]' : 'w-60'
         )}
       >
@@ -310,7 +310,7 @@ export default function PortalSidebar({ role }: { role: PortalRole }) {
       </aside>
 
       {/* Móvil: cabecera fina */}
-      <header className="md:hidden flex-shrink-0 h-14 px-4 flex items-center justify-between border-b border-white/10 bg-black/90 backdrop-blur-xl">
+      <header className="md:hidden flex-shrink-0 h-14 px-4 flex items-center justify-between border-b border-white/10 ink bg-black/90 backdrop-blur-xl">
         {brand()}
         <div className="flex items-center gap-2">
         {role === 'agency' && (
@@ -349,7 +349,7 @@ export default function PortalSidebar({ role }: { role: PortalRole }) {
               role="dialog"
               aria-modal="true"
               aria-label="Menú"
-              className="absolute inset-x-0 bottom-0 max-h-[88dvh] flex flex-col gap-5 rounded-t-3xl border-t border-[var(--portal-line-strong)] bg-black px-4 pt-3 pb-6 overflow-y-auto"
+              className="absolute inset-x-0 bottom-0 max-h-[88dvh] flex flex-col gap-5 rounded-t-3xl border-t border-[var(--portal-line-strong)] ink bg-black px-4 pt-3 pb-6 overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mx-auto h-1 w-10 rounded-full bg-white/20" aria-hidden="true" />
@@ -388,7 +388,7 @@ export function PortalBottomNav({ role }: { role: PortalRole }) {
       className="md:hidden flex-shrink-0 px-3 pt-2"
       style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 10px)' }}
     >
-      <div className="grid grid-cols-5 rounded-2xl border border-[var(--portal-line-strong)] bg-black/95 backdrop-blur-xl shadow-[0_10px_40px_-12px_var(--portal-glow)] p-1">
+      <div className="grid grid-cols-5 rounded-2xl border border-[var(--portal-line-strong)] ink bg-black/95 backdrop-blur-xl shadow-[0_10px_40px_-12px_var(--portal-glow)] p-1">
         {items.map((item) => {
           const active = item.exact ? pathname === item.href : pathname?.startsWith(item.href) ?? false;
           const n = item.badge ? badges[item.badge] : 0;

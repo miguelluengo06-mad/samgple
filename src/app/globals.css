@@ -243,7 +243,7 @@ h1, h2, h3, h4,
   background: transparent;
   border: 1px solid light-dark(rgba(10, 10, 10, 0.2), rgba(245, 245, 245, 0.2));
   color: var(--foreground);
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .btn-minimal:hover {
@@ -255,7 +255,7 @@ h1, h2, h3, h4,
   background: var(--primary);
   color: var(--primary-foreground);
   border: 1px solid var(--primary);
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
 .btn-minimal-filled:hover {
@@ -322,24 +322,6 @@ select {
   --signal-dim: var(--color-olive-600);
 }
 
-.home-root {
-  color: #16210e;
-  /*
-   * Public site = light theme on an animated white ↔ military-green background. The shared
-   * white/black/gray Tailwind tokens are light-dark() pairs, so forcing color-scheme keeps every
-   * text-white / border-white / bg-white utility consistent whatever the visitor's OS mode is
-   * (under "light" they resolve to dark ink on the light glass panels).
-   */
-  color-scheme: light;
-  /* Accent for text and buttons on light panels: a darker, military olive instead of acid lime */
-  --signal: #56741a;
-  --signal-dim: #435a13;
-}
-
-.force-dark {
-  color-scheme: dark;
-}
-
 /*
  * Animated background: white ↔ military green.
  *  ::before — one huge linear gradient (white → sage → army green → white) that slowly rotates about the
@@ -349,14 +331,12 @@ select {
  * uses it must create a stacking context (isolation) so the layers sit above its background colour
  * and below its content.
  */
-.home-root,
 .mil-bg {
   position: relative;
   isolation: isolate;
   background: #dfe7cd;
 }
 
-.home-root::before,
 .mil-bg::before {
   content: '';
   position: fixed;
@@ -383,7 +363,6 @@ select {
   animation: mil-sweep 70s linear infinite;
 }
 
-.home-root::after,
 .mil-bg::after {
   content: '';
   position: fixed;
@@ -410,56 +389,10 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-root::before,
-  .home-root::after,
   .mil-bg::before,
   .mil-bg::after {
     animation: none;
   }
-}
-
-/*
- * Light "glass" panel: content of the public site sits on these so text always has contrast,
- * whichever part of the moving white/green background is behind it.
- */
-.home-slab,
-.home-root main > section {
-  /* Translucent enough to let the moving white/green background tint the panel, opaque enough that
-     dark text keeps ≥ 7:1 contrast even over the deepest army green. */
-  background: rgba(255, 255, 255, 0.6);
-  -webkit-backdrop-filter: blur(16px) saturate(1.15);
-  backdrop-filter: blur(16px) saturate(1.15);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  border-radius: 32px;
-  box-shadow: 0 24px 60px -34px rgba(35, 50, 15, 0.5);
-}
-
-.home-root main > section {
-  width: calc(100% - clamp(20px, 5vw, 72px));
-  max-width: 1320px;
-  margin: 18px auto;
-}
-
-/* Secondary text was tuned for a near-black page; on tinted glass it needs a little more weight */
-.home-root .text-white\/25 { color: rgba(22, 33, 14, 0.45); }
-.home-root .text-white\/30 { color: rgba(22, 33, 14, 0.58); }
-.home-root .text-white\/40 { color: rgba(22, 33, 14, 0.66); }
-.home-root .text-white\/50 { color: rgba(22, 33, 14, 0.74); }
-.home-root .text-white\/60 { color: rgba(22, 33, 14, 0.82); }
-
-.home-root .home-glow-text {
-  text-shadow: none;
-}
-
-/* Auth form button (shared component) in the site's olive instead of the app's acid lime */
-.home-root .btn-minimal-filled {
-  background: var(--signal);
-  border-color: var(--signal);
-  color: #ffffff;
-}
-
-.home-root .btn-minimal-filled:hover {
-  background: var(--signal-dim);
 }
 
 .home-glow-text {

@@ -117,22 +117,22 @@ export default function Pricing({ variant = 'web' }: { variant?: Variant }) {
   const [tab, setTab] = useState('all');
   const show = (id: string) => tab === 'all' || tab === id;
   const isLanding = variant === 'landing';
-  const h2Class = isLanding ? '' : 'font-kinetic font-black uppercase text-4xl md:text-6xl leading-none mt-4';
+  const h2Class = isLanding ? '' : 'display-lg mt-5';
   const h3Class = isLanding ? 'pack-group-title' : 'font-kinetic font-black uppercase text-2xl md:text-4xl leading-tight';
   const Wrapper = isLanding ? 'div' : 'section';
 
   return (
     <Wrapper
       id={isLanding ? undefined : 'precios'}
-      className={isLanding ? 'lp-container' : 'px-4 md:px-8 py-16 md:py-24'}
+      className={isLanding ? 'lp-container' : 'px-5 md:px-10 py-24 md:py-36'}
       {...(isLanding ? {} : { 'aria-labelledby': 'precios-title' })}
     >
-      <div className={isLanding ? '' : 'max-w-6xl mx-auto'}>
+      <div className={isLanding ? '' : 'max-w-[1320px] mx-auto'}>
         <TrackView name="Packs" />
         <div className="mb-8 md:mb-10 max-w-3xl">
-          <span className="text-xs tracking-[0.25em] uppercase text-[var(--signal)]">Servicios y precios</span>
+          <span className={isLanding ? 'text-xs tracking-[0.25em] uppercase text-[var(--signal)]' : 'kicker'}>{isLanding ? 'Servicios y precios' : '/ 03 · Tarifas'}</span>
           <h2 id="precios-title" className={h2Class} {...(isLanding ? { style: { marginTop: 16 } } : {})}>
-            Elige tu pack y empieza hoy
+            {isLanding ? 'Elige tu pack y empieza hoy' : <>Elige tu pack y <em>empieza hoy</em></>}
           </h2>
           <p className="text-white/60 mt-4 text-base md:text-lg">
             Precio cerrado y sin sorpresas. Pagas online con tarjeta, recibes tu factura y nosotros nos ponemos manos a la obra.

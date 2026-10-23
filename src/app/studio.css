@@ -1,0 +1,672 @@
+/* ============================================================
+ * samgple — "estudio de cine" (web pública, carrito, acceso, gracias)
+ *
+ * Idea: toda la web es un set de rodaje. Dos "luces": papel hueso (.home-root) y tinta verde casi
+ * negra (.ink), con lima ácido como señal. Motivos: visor con esquinas, REC, timecode, perforaciones
+ * de película y claqueta. Los paneles ya no flotan en cristal: son escenas a sangre.
+ *
+ * Los tokens white/black/gray de Tailwind son light-dark(): al cambiar color-scheme en .ink todo el
+ * texto de un bloque se invierte solo; aquí solo se ajusta el matiz de los grises.
+ * ============================================================ */
+
+:root {
+  --paper: #ece9dc;
+  --paper-hi: #f6f4ea;
+  --paper-lo: #dedbc9;
+  --ink: #0c1208;
+  --ink-hi: #151d0e;
+  --ink-line: rgba(236, 242, 224, 0.14);
+  --lime: #d3ff3c;
+  --olive: #4d6a12;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.font-mono-studio {
+  font-family: 'Commit Mono', ui-monospace, monospace;
+  font-feature-settings: 'tnum';
+}
+
+.font-serif-display {
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* ── Luz de papel (por defecto) ─────────────────────────────── */
+.home-root {
+  color-scheme: light;
+  color: #16210e;
+  background: var(--paper);
+  --signal: var(--olive);
+  --signal-dim: #3b520d;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Grano de película fijo sobre todo el set */
+.home-root::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.home-root main > section,
+.home-root main > .scene {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* ── Luz de tinta ──────────────────────────────────────────── */
+.ink {
+  color-scheme: dark;
+  color: #ecf2e0;
+  background: var(--ink);
+  --signal: var(--lime);
+  --signal-dim: #b6e022;
+}
+
+/* ink-glow: la luz verde de fondo. Solo ahí el contenedor es posicional (esta regla no está en capa y ganaría a absolute/fixed) */
+.ink-glow { position: relative; }
+.ink.ink-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 85% 0%, rgba(211, 255, 60, 0.12), transparent 70%),
+    radial-gradient(50% 60% at 0% 100%, rgba(77, 106, 18, 0.35), transparent 70%);
+}
+
+.ink-glow > * {
+  position: relative;
+}
+
+/* Grises de texto: más cálidos y legibles en cada luz */
+.home-root .text-white\/25 { color: rgba(22, 33, 14, 0.5); }
+.home-root .text-white\/30 { color: rgba(22, 33, 14, 0.6); }
+.home-root .text-white\/40 { color: rgba(22, 33, 14, 0.68); }
+.home-root .text-white\/50 { color: rgba(22, 33, 14, 0.76); }
+.home-root .text-white\/60 { color: rgba(22, 33, 14, 0.84); }
+.home-root .text-white\/70 { color: rgba(22, 33, 14, 0.9); }
+
+.home-root .ink .text-white\/25 { color: rgba(236, 242, 224, 0.35); }
+.home-root .ink .text-white\/30 { color: rgba(236, 242, 224, 0.45); }
+.home-root .ink .text-white\/40 { color: rgba(236, 242, 224, 0.58); }
+.home-root .ink .text-white\/50 { color: rgba(236, 242, 224, 0.68); }
+.home-root .ink .text-white\/60 { color: rgba(236, 242, 224, 0.78); }
+.home-root .ink .text-white\/70 { color: rgba(236, 242, 224, 0.88); }
+
+.home-glow-text { text-shadow: none; }
+
+/* Botón del formulario de acceso (componente compartido) */
+.home-root .btn-minimal-filled {
+  background: var(--signal);
+  border-color: var(--signal);
+  color: #ffffff;
+}
+.home-root .btn-minimal-filled:hover { background: var(--signal-dim); }
+.home-root .ink .btn-minimal-filled { color: #0c1208; }
+
+/* ── "Slab": tarjeta de papel con sombra dura, como un ticket de rodaje ── */
+.home-slab {
+  background: var(--paper-hi);
+  color: #16210e;
+  border: 1.5px solid #16210e;
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 #16210e;
+}
+
+footer.home-slab {
+  /* el pie ya no es una tarjeta: va a sangre */
+  background: var(--ink);
+  color: #ecf2e0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color-scheme: dark;
+  --signal: var(--lime);
+}
+
+/* ── Visor: esquinas de encuadre ───────────────────────────── */
+/* El contenedor que usa .viewfinder debe ser posicional (relative/absolute) por su cuenta: esta regla no está en capa y ganaría a las utilidades de Tailwind */
+.viewfinder::before,
+.viewfinder::after,
+.viewfinder > .vf-b::before,
+.viewfinder > .vf-b::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  border-color: var(--signal);
+  border-style: solid;
+  border-width: 0;
+  z-index: 3;
+}
+.viewfinder::before { top: 10px; left: 10px; border-top-width: 2px; border-left-width: 2px; }
+.viewfinder::after { top: 10px; right: 10px; border-top-width: 2px; border-right-width: 2px; }
+.viewfinder > .vf-b::before { bottom: 10px; left: 10px; border-bottom-width: 2px; border-left-width: 2px; }
+.viewfinder > .vf-b::after { bottom: 10px; right: 10px; border-bottom-width: 2px; border-right-width: 2px; }
+
+/* REC parpadeante */
+.rec-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff3b30;
+  box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.6);
+  animation: rec-pulse 1.4s ease-in-out infinite;
+}
+@keyframes rec-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.55); opacity: 1; }
+  60% { box-shadow: 0 0 0 8px rgba(255, 59, 48, 0); opacity: 0.55; }
+  100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); opacity: 1; }
+}
+
+/* Perforaciones de película (tira superior/inferior) */
+.sprockets {
+  height: 18px;
+  background:
+    radial-gradient(circle at 9px 9px, var(--paper) 0 4px, transparent 4.5px) 0 0 / 28px 18px repeat-x,
+    var(--ink);
+}
+.sprockets--paper {
+  background:
+    radial-gradient(circle at 9px 9px, var(--ink) 0 4px, transparent 4.5px) 0 0 / 28px 18px repeat-x,
+    var(--paper);
+}
+
+/* ── Titulares ─────────────────────────────────────────────── */
+.display-xl {
+  font-family: 'Unbounded Variable', 'Unbounded', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+  font-size: clamp(2.6rem, 8.4vw, 8.2rem);
+}
+.display-lg {
+  font-family: 'Unbounded Variable', 'Unbounded', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  font-size: clamp(2.2rem, 6vw, 5.4rem);
+}
+.display-lg em,
+.display-xl em {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.02em;
+  color: var(--signal);
+}
+.display-xl em { font-size: 1.12em; line-height: 0.8; }
+.display-lg em { font-size: 1.12em; }
+
+.kicker {
+  font-family: 'Commit Mono', ui-monospace, monospace;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--signal);
+}
+
+/* Revelado por máscara: cada palabra sube desde una "ranura" */
+.mask-line { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.mask-line > span { display: inline-block; will-change: transform; }
+
+/* ── Botones ───────────────────────────────────────────────── */
+.btn-signal {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 6px 6px 24px;
+  border-radius: 999px;
+  background: var(--signal);
+  color: #0c1208;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  transition: transform 0.35s var(--ease-out), background 0.2s ease;
+}
+.home-root:not(.ink) .btn-signal { color: #f6f4ea; }
+.home-root .ink .btn-signal { color: #0c1208; }
+.btn-signal:hover { transform: translateY(-2px); background: var(--signal-dim); }
+.btn-signal .btn-dot {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #0c1208;
+  color: var(--lime);
+  transition: transform 0.4s var(--ease-back);
+}
+.home-root:not(.ink) .btn-signal .btn-dot { background: #f6f4ea; color: var(--olive); }
+.home-root .ink .btn-signal .btn-dot { background: #0c1208; color: var(--lime); }
+.btn-signal:hover .btn-dot { transform: rotate(45deg); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 22px;
+  border-radius: 999px;
+  border: 1.5px solid currentColor;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.btn-ghost:hover { background: var(--signal); border-color: var(--signal); color: #0c1208; }
+
+/* ── Navegación flotante ───────────────────────────────────── */
+.site-nav {
+  position: fixed;
+  z-index: 50;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1100px, calc(100% - 24px));
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px 0 22px;
+  border-radius: 999px;
+  color: #ecf2e0;
+  color-scheme: dark;
+  background: rgba(12, 18, 8, 0.78);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  border: 1px solid rgba(236, 242, 224, 0.12);
+  box-shadow: 0 14px 40px -18px rgba(12, 18, 8, 0.7);
+  transition: transform 0.5s var(--ease-out), width 0.5s var(--ease-out), background 0.3s ease;
+}
+.site-nav[data-hidden='true'] { transform: translate(-50%, -90px); }
+.nav-link {
+  position: relative;
+  padding: 8px 12px;
+  font-size: 13.5px;
+  color: rgba(236, 242, 224, 0.7);
+  transition: color 0.2s ease;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 3px;
+  height: 1.5px;
+  background: var(--lime);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease-out);
+}
+.nav-link:hover { color: #ecf2e0; }
+.nav-link:hover::after { transform: scaleX(1); }
+
+/* ── Cursor propio ─────────────────────────────────────────── */
+.studio-cursor {
+  position: fixed;
+  z-index: 90;
+  top: 0;
+  left: 0;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--lime);
+  border: 1.5px solid #0c1208;
+  box-shadow: 0 0 0 1px rgba(236, 242, 224, 0.5);
+  pointer-events: none;
+  transition: width 0.35s var(--ease-out), height 0.35s var(--ease-out), margin 0.35s var(--ease-out), opacity 0.2s;
+}
+.studio-cursor[data-state='link'] { width: 46px; height: 46px; margin: -23px 0 0 -23px; }
+.studio-cursor[data-state='view'] { width: 84px; height: 84px; margin: -42px 0 0 -42px; display: grid; place-items: center; }
+.studio-cursor span { font: 600 11px 'Commit Mono', monospace; letter-spacing: 0.1em; color: #0c1208; opacity: 0; transition: opacity 0.2s; }
+.studio-cursor[data-state='view'] span { opacity: 1; }
+@media (pointer: coarse), (prefers-reduced-motion: reduce) { .studio-cursor { display: none; } }
+
+/* Barra de progreso de lectura = tira de película que se recorre */
+.scroll-reel {
+  position: fixed;
+  z-index: 55;
+  left: 0;
+  top: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--olive), var(--lime));
+}
+
+/* Cortinilla de transición entre páginas */
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--ink);
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+}
+.page-curtain::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 6px;
+  background: var(--lime);
+}
+
+/* ── Servicios: lista de filas, no tarjetas ────────────────── */
+.service-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 8px 20px;
+  padding: 26px 0;
+  border-top: 1px solid var(--ink-line);
+  transition: padding 0.5s var(--ease-out);
+}
+.service-row:last-child { border-bottom: 1px solid var(--ink-line); }
+.service-row__title {
+  font-family: 'Unbounded Variable', 'Unbounded', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  font-size: clamp(1.5rem, 4.2vw, 3.6rem);
+  transition: color 0.3s ease, transform 0.5s var(--ease-out);
+}
+.service-row__desc {
+  grid-column: 2;
+  max-width: 44ch;
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(236, 242, 224, 0.7);
+}
+@media (min-width: 900px) {
+  .service-row { grid-template-columns: 84px 1.2fr 1fr 40px; align-items: center; padding: 34px 0; }
+  .service-row__desc { grid-column: auto; }
+  .service-row:hover { padding-left: 20px; }
+  .service-row:hover .service-row__title { color: var(--lime); transform: translateX(6px); }
+}
+.service-row:focus-within .service-row__title { color: var(--lime); }
+
+/* ── Proceso: raíl de película con 4 tomas ─────────────────── */
+.reel { position: relative; }
+.reel__rail {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 22px;
+  height: 2px;
+  background: var(--ink-line);
+}
+.reel__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--lime);
+  transform-origin: left;
+}
+.take-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 8px;
+  border-radius: 6px;
+  background: var(--ink-hi);
+  border: 1px solid var(--ink-line);
+  font: 500 11px 'Commit Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* ── Ejemplos: fotogramas con perforación ──────────────────── */
+.frame-card {
+  position: relative;
+  padding: 14px 0;
+  background: var(--ink);
+  border-radius: 10px;
+  color: #ecf2e0;
+}
+.frame-card::before,
+.frame-card::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  height: 8px;
+  background: radial-gradient(circle at 5px 4px, var(--paper) 0 2.5px, transparent 3px) 0 0 / 16px 8px repeat-x;
+}
+.frame-card::before { top: 3px; }
+.frame-card::after { bottom: 3px; }
+.frame-card__screen { margin: 0 8px; border-radius: 4px; overflow: hidden; position: relative; }
+.frame-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 12px;
+  padding: 8px 0 2px;
+  font: 500 10.5px 'Commit Mono', monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(236, 242, 224, 0.7);
+}
+
+/* ── Pie: nombre gigante ───────────────────────────────────── */
+.mega-word {
+  font-family: 'Unbounded Variable', 'Unbounded', sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.78;
+  text-transform: lowercase;
+  font-size: clamp(3rem, 12.2vw, 15.5rem);
+  color: rgba(236, 242, 224, 0.07);
+  white-space: nowrap;
+  overflow: hidden;
+  user-select: none;
+}
+.mega-word b { color: var(--lime); font-weight: 900; }
+
+/* Selección y foco con la marca */
+.home-root ::selection { background: var(--lime); color: #0c1208; }
+.home-root :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+.home-root:not(.ink) :focus-visible { outline-color: var(--olive); }
+.home-root .ink :focus-visible { outline-color: var(--lime); }
+
+@media (prefers-reduced-motion: reduce) {
+  .rec-dot { animation: none; }
+  .site-nav, .service-row, .service-row__title, .btn-signal, .btn-dot { transition: none; }
+}
+
+/* Con el cursor propio activo, se oculta el del sistema en la web pública */
+html.has-studio-cursor .home-root,
+html.has-studio-cursor .home-root *,
+html.has-studio-cursor .home-root button,
+html.has-studio-cursor .home-root a { cursor: none !important; }
+
+.display-hero {
+  font-family: 'Unbounded Variable', 'Unbounded', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  font-size: clamp(2.5rem, 6.6vw, 6.6rem);
+}
+.display-hero em {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.02em;
+  color: var(--lime);
+  font-size: 1.14em;
+}
+
+/* Las secciones en tinta ganan a la regla de "sección transparente" de arriba */
+.home-root main > section.ink,
+.home-root main > .scene.ink {
+  background: var(--ink);
+}
+
+/* La nav es siempre oscura: sus grises son los de la luz de tinta, esté donde esté */
+.home-root .site-nav .text-white\/70 { color: rgba(236, 242, 224, 0.88); }
+.home-root .site-nav .text-white\/60 { color: rgba(236, 242, 224, 0.78); }
+.home-root .site-nav button.text-white\/70:hover,
+.home-root .site-nav a.text-white\/70:hover { color: var(--lime); }
+
+@media (max-width: 640px) {
+  .frame-card__meta { font-size: 9px; letter-spacing: 0.08em; margin: 0 8px; gap: 6px; }
+  .site-nav { padding-left: 16px; }
+}
+
+/* Titular para columnas estrechas (p. ej. contacto, junto al formulario) */
+.display-md {
+  font-family: 'Unbounded Variable', 'Unbounded', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  font-size: clamp(2.1rem, 8vw, 3.6rem);
+}
+@media (min-width: 1024px) { .display-md { font-size: clamp(2.6rem, 4.1vw, 4.4rem); } }
+.display-md em {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.02em;
+  color: var(--signal);
+  font-size: 1.12em;
+}
+
+/* ── Formularios de acceso: campos con borde firme sobre papel ── */
+.auth-panel input:not([type='checkbox']),
+.auth-panel select,
+.auth-panel textarea {
+  background: var(--paper-hi);
+  border: 1.5px solid rgba(22, 33, 14, 0.35);
+  color: #16210e;
+  border-radius: 10px;
+  min-height: 46px;
+  font-size: 16px; /* evita el zoom automático de iOS al enfocar */
+}
+.auth-panel input::placeholder { color: rgba(22, 33, 14, 0.4); }
+.auth-panel input:focus,
+.auth-panel select:focus,
+.auth-panel textarea:focus {
+  outline: none;
+  border-color: var(--olive);
+  box-shadow: 0 0 0 3px rgba(77, 106, 18, 0.18);
+}
+.auth-panel .btn-minimal-filled {
+  min-height: 48px;
+  border-radius: 999px;
+  background: #0c1208;
+  border-color: #0c1208;
+  color: var(--lime);
+  letter-spacing: 0.01em;
+}
+.auth-panel .btn-minimal-filled:hover { background: var(--olive); border-color: var(--olive); color: #fff; transform: translateY(-1px); }
+.auth-panel .btn-minimal { min-height: 48px; border-radius: 999px; border-width: 1.5px; }
+.auth-panel h2 { font-family: 'Unbounded Variable', 'Unbounded', sans-serif; letter-spacing: -0.02em; }
+
+.auth-panel .bg-black { background: var(--paper); }
+
+/* ══════════════════════════════════════════════════════════════════
+   Paneles (/portal, /cuenta, /vista-cliente): mismo estudio, versión de trabajo.
+   Menús en tinta con lima; área de contenido en papel; botones de acción en tinta.
+   ══════════════════════════════════════════════════════════════════ */
+.portal-ui {
+  --signal: var(--olive);
+  --signal-dim: #3b520d;
+  --portal-ink: #0c1208;
+  --portal-line: rgba(12, 18, 8, 0.14);
+  --portal-line-strong: rgba(12, 18, 8, 0.32);
+  --portal-glow: rgba(211, 255, 60, 0.18);
+  background:
+    radial-gradient(800px 420px at 96% -8%, rgba(211, 255, 60, 0.16), transparent 62%),
+    var(--paper);
+}
+
+/* Los menús en tinta llevan su propia señal (lima) y sus líneas claras */
+.portal-ui .ink {
+  --portal-line: rgba(236, 242, 224, 0.14);
+  --portal-line-strong: rgba(236, 242, 224, 0.3);
+  color: #ecf2e0;
+  border-color: rgba(236, 242, 224, 0.12);
+  box-shadow: 0 24px 50px -30px rgba(12, 18, 8, 0.7);
+}
+.portal-ui .ink .portal-cta { background: var(--lime); color: #0c1208; box-shadow: none; }
+.portal-ui .ink .portal-cta:hover { background: #c2ee2a; }
+.portal-ui .ink [class*='border-white/'],
+.portal-ui .ink [class*='divide-white/'] > * { border-color: rgba(236, 242, 224, 0.14); }
+
+.portal-ui .card-liquid {
+  background: var(--paper-hi);
+  border: 1px solid rgba(12, 18, 8, 0.16);
+  border-radius: 16px;
+  box-shadow: 0 1px 0 rgba(12, 18, 8, 0.06);
+}
+.portal-ui .card-liquid-interactive:hover,
+.portal-ui button.card-liquid:hover,
+.portal-ui a.card-liquid:hover {
+  border-color: var(--olive);
+  box-shadow: 3px 3px 0 var(--olive);
+  transform: translate(-1px, -1px);
+}
+.portal-ui input,
+.portal-ui select,
+.portal-ui textarea { background-color: var(--paper-hi); }
+
+.portal-ui h1 {
+  font-family: 'Unbounded Variable', 'Unbounded', var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* Acción principal: tinta con lima, como el resto de la marca */
+.portal-ui .portal-cta {
+  background: #0c1208;
+  color: var(--lime);
+  box-shadow: none;
+}
+.portal-ui .portal-cta:hover { background: var(--olive); color: #fff; }
+
+.portal-ui .pn-hero {
+  border: 1.5px solid #0c1208;
+  border-radius: 20px;
+  box-shadow: 5px 5px 0 #0c1208;
+  background:
+    radial-gradient(520px 200px at 100% 0%, rgba(211, 255, 60, 0.35), transparent 65%),
+    var(--paper-hi);
+}
+.portal-ui .pn-title { font-family: 'Commit Mono', ui-monospace, monospace; letter-spacing: 0.14em; }
+.portal-ui :focus-visible { outline: 2px solid var(--olive); outline-offset: 2px; }
+.portal-ui .ink :focus-visible { outline-color: var(--lime); }
+.portal-ui ::selection { background: var(--lime); color: #0c1208; }
+
+/* Polish pass: balanced headings, no double-tap zoom delay, safe areas */
+.display-xl, .display-lg, .display-md, .display-hero, .kicker { text-wrap: balance; }
+.home-root a, .home-root button, .home-root summary, .home-root [role="button"] { touch-action: manipulation; }
+.ink-glow, .page-curtain { padding-left: max(0px, env(safe-area-inset-left)); padding-right: max(0px, env(safe-area-inset-right)); }
+
+.skip-link { position: fixed; left: 12px; top: -64px; z-index: 200; padding: 10px 16px; background: var(--lime); color: var(--ink); font-weight: 700; border-radius: 999px; transition: top .2s; }
+.skip-link:focus { top: 12px; }

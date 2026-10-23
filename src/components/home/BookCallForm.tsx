@@ -51,7 +51,8 @@ function Chip({ selected, onClick, children }: { selected: boolean; onClick: () 
 }
 
 /**
- * Two-step call booking: pick a slot, then answer a few short questions.
+ * Two-step contact form: optionally pick a call slot, then answer a few short questions.
+ * The call is optional — "Prefiero que me escribáis" skips the slot and sends a written request instead.
  * Rendered inline in the page and inside the modal opened by every "Agendar llamada" button.
  */
 export default function BookCallForm({
@@ -67,6 +68,8 @@ export default function BookCallForm({
   // Inline form and modal can be on the page at the same time — ids must not collide
   const uid = useId();
   const [step, setStep] = useState<1 | 2>(1);
+  // true = the visitor chose not to book a call and will be answered by email instead
+  const [noCall, setNoCall] = useState(false);
   const [days, setDays] = useState<string[]>([]);
   const [date, setDate] = useState<string | null>(null);
   const [time, setTime] = useState<string | null>(null);
@@ -125,20 +128,31 @@ export default function BookCallForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!date || !time) return goToStep(1);
+    if (!noCall && (!date || !time)) return goToStep(1);
     setStatus('sending');
     setError(null);
     try {
+      // Without a call there is nowhere to store the answers, so they travel inside the written message.
+      const written = [
+        pack ? `Pack de interés: ${pack}` : '',
+        needs.length ? `Necesita: ${needs.join(', ')}` : '',
+        budget ? `Presupuesto: ${budget}` : '',
+        timeline ? `Empezar: ${timeline}` : '',
+        message.trim(),
+      ].filter(Boolean).join('\n');
+      const payload = noCall
+        ? { kind: 'proposal', name, email, phone, company, message: written }
+        : {
+            kind: 'call',
+            name, email, phone, company,
+            message: pack ? `Pack de interés: ${pack}${message.trim() ? `\n${message.trim()}` : ''}` : message,
+            date, time,
+            answers: { needs, budget, timeline },
+          };
       const res = await fetch('/api/public/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          kind: 'call',
-          name, email, phone, company,
-          message: pack ? `Pack de interés: ${pack}${message.trim() ? `\n${message.trim()}` : ''}` : message,
-          date, time,
-          answers: { needs, budget, timeline },
-        }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -150,12 +164,12 @@ export default function BookCallForm({
           setError(data.error || 'Esa franja acaba de reservarse. Elige otra.');
           return;
         }
-        throw new Error(data.error || 'No se pudo agendar la llamada');
+        throw new Error(data.error || (noCall ? 'No se pudo enviar el mensaje' : 'No se pudo agendar la llamada'));
       }
       setBookingId(data.id || null);
       setStatus('sent');
     } catch (err: any) {
-      setError(err.message || 'No se pudo agendar la llamada');
+      setError(err.message || (noCall ? 'No se pudo enviar el mensaje' : 'No se pudo agendar la llamada'));
       setStatus('idle');
     }
   };
@@ -177,6 +191,27 @@ export default function BookCallForm({
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
+
+  if (status === 'sent' && noCall) {
+    return (
+      <div className="flex flex-col items-center text-center py-10 md:py-14" role="status">
+        <CheckCircle2 className="w-10 h-10 text-[var(--signal)] mb-4" />
+        <h3 className="font-kinetic text-2xl uppercase mb-3">Mensaje enviado</h3>
+        <p className="text-white/50 max-w-sm text-sm mb-8">
+          Gracias, {name.split(' ')[0]}. Te escribiremos a {email}. Si más adelante prefieres hablar, puedes reservar una llamada cuando quieras.
+        </p>
+        {onClose && (
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-5 py-2.5 rounded-full bg-[var(--signal)] text-black text-sm font-medium hover:bg-[var(--signal-dim)] transition-colors"
+          >
+            Cerrar
+          </button>
+        )}
+      </div>
+    );
+  }
 
   if (status === 'sent' && callAt) {
     return (
@@ -224,7 +259,7 @@ export default function BookCallForm({
               {n}
             </span>
             <span className={`text-xs uppercase tracking-widest ${step >= n ? 'text-white' : 'text-white/30'}`}>
-              {n === 1 ? 'Día y hora' : 'Tus datos'}
+              {n === 1 ? 'Llamada (opcional)' : 'Tus datos'}
             </span>
             {n === 1 && <span className={`flex-1 h-px ${step > 1 ? 'bg-[var(--signal)]' : 'bg-white/15'}`} />}
           </div>
@@ -303,14 +338,21 @@ export default function BookCallForm({
                 <Clock className="w-3.5 h-3.5" /> Llamada de 30 min · horario de Madrid ({BOOKING_TZ})
               </p>
 
-              <div className="flex justify-end mt-8">
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-4 mt-8">
+                <button
+                  type="button"
+                  onClick={() => { setNoCall(true); goToStep(2); }}
+                  className="text-sm text-white/60 hover:text-white underline underline-offset-4 decoration-white/30 hover:decoration-[var(--signal)] transition-colors text-left"
+                >
+                  Prefiero que me escribáis, sin llamada
+                </button>
                 <button
                   type="button"
                   disabled={!time}
-                  onClick={() => goToStep(2)}
-                  className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[var(--signal)] text-black hover:bg-[var(--signal-dim)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  onClick={() => { setNoCall(false); goToStep(2); }}
+                  className="group inline-flex items-center justify-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[var(--signal)] text-black hover:bg-[var(--signal-dim)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                 >
-                  <span className="text-sm font-medium tracking-wide">Continuar</span>
+                  <span className="text-sm font-medium tracking-wide">Reservar este hueco</span>
                   <span className="w-9 h-9 rounded-full bg-[#03150d] text-[var(--signal)] flex items-center justify-center">
                     <ArrowUpRight className="w-4 h-4" />
                   </span>
@@ -321,20 +363,26 @@ export default function BookCallForm({
         </div>
       )}
 
-      {step === 2 && callAt && (
+      {step === 2 && (callAt || noCall) && (
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
           <div className="md:col-span-2 flex items-center justify-between gap-3 rounded-2xl border border-white/10 px-4 py-3">
             <div className="text-sm">
-              <span className="text-white/70">{formatCallDate(callAt)}</span>
-              <span className="text-white/30"> · </span>
-              <span className="font-kinetic text-[var(--signal)]">{formatCallTime(callAt)}</span>
+              {callAt && !noCall ? (
+                <>
+                  <span className="text-white/70">{formatCallDate(callAt)}</span>
+                  <span className="text-white/30"> · </span>
+                  <span className="font-kinetic text-[var(--signal)]">{formatCallTime(callAt)}</span>
+                </>
+              ) : (
+                <span className="text-white/70">Sin llamada: te respondemos por email</span>
+              )}
             </div>
             <button
               type="button"
-              onClick={() => goToStep(1)}
+              onClick={() => { setNoCall(false); goToStep(1); }}
               className="inline-flex items-center gap-1 text-xs text-white/50 hover:text-white transition-colors"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> Cambiar
+              <ArrowLeft className="w-3.5 h-3.5" /> {noCall ? 'Prefiero una llamada' : 'Cambiar'}
             </button>
           </div>
 
@@ -357,8 +405,8 @@ export default function BookCallForm({
             <input id={`${uid}-email`} type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className={inputClass} placeholder="tu@empresa.com" />
           </div>
           <div>
-            <label htmlFor={`${uid}-phone`} className={labelClass}>Teléfono</label>
-            <input id={`${uid}-phone`} type="tel" required autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} placeholder="+34 600 000 000" />
+            <label htmlFor={`${uid}-phone`} className={labelClass}>Teléfono{noCall && <span className="normal-case tracking-normal text-white/25"> (opcional)</span>}</label>
+            <input id={`${uid}-phone`} type="tel" required={!noCall} autoComplete="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className={inputClass} placeholder="+34 600 000 000" />
           </div>
 
           <fieldset className="md:col-span-2">
@@ -389,13 +437,13 @@ export default function BookCallForm({
           </fieldset>
 
           <div className="md:col-span-2">
-            <label htmlFor={`${uid}-message`} className={labelClass}>¿Algo más que debamos saber? <span className="normal-case tracking-normal text-white/25">(opcional)</span></label>
-            <textarea id={`${uid}-message`} rows={2} value={message} onChange={(e) => setMessage(e.target.value)} className={`${inputClass} resize-none`} placeholder="Cuéntanos tu proyecto en una frase" />
+            <label htmlFor={`${uid}-message`} className={labelClass}>{noCall ? 'Cuéntanos qué necesitas' : '¿Algo más que debamos saber?'}{!noCall && <span className="normal-case tracking-normal text-white/25"> (opcional)</span>}</label>
+            <textarea id={`${uid}-message`} rows={2} required={noCall} value={message} onChange={(e) => setMessage(e.target.value)} className={`${inputClass} resize-none`} placeholder="Cuéntanos tu proyecto en una frase" />
           </div>
 
           <div className="md:col-span-2 flex items-center justify-between flex-wrap gap-4 mt-2">
             <p className="text-xs text-white/30 max-w-xs">
-              Al agendar aceptas que {businessName} te contacte para esta llamada.
+              {noCall ? `Al enviar aceptas que ${businessName} te responda por email.` : `Al agendar aceptas que ${businessName} te contacte para esta llamada.`}
             </p>
             <button
               type="submit"
@@ -403,7 +451,7 @@ export default function BookCallForm({
               className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full bg-[var(--signal)] text-black hover:bg-[var(--signal-dim)] disabled:opacity-60 transition-colors"
             >
               <span className="text-sm font-medium tracking-wide">
-                {status === 'sending' ? 'Agendando…' : 'Confirmar llamada'}
+                {status === 'sending' ? (noCall ? 'Enviando…' : 'Agendando…') : noCall ? 'Enviar mensaje' : 'Confirmar llamada'}
               </span>
               <span className="w-9 h-9 rounded-full bg-[#03150d] text-[var(--signal)] flex items-center justify-center group-hover:rotate-45 transition-transform">
                 {status === 'sending' ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowUpRight className="w-4 h-4" />}

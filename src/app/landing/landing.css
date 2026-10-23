@@ -9,28 +9,28 @@
   /* ── Design tokens ─────────────────────────────── */
   /* Light tokens: content sits on translucent white glass panels over the moving white ↔ army-green
      background (.mil-bg in globals.css). Dark accent slabs override them (.lp-section--army). */
-  --bg: #ffffff;
-  --surface: rgba(255, 255, 255, 0.86);
-  --surface-2: #e9efdb;
-  --border: #d3dcc0;
-  --border-strong: #b3c095;
-  --text: #141b0d;
-  --text-2: #2f3b1f;
-  --muted: #47533a;
+  --bg: #ecebdc;
+  --surface: #f6f4ea;
+  --surface-2: #dedbc9;
+  --border: rgba(22, 33, 14, 0.2);
+  --border-strong: rgba(22, 33, 14, 0.5);
+  --text: #0c1208;
+  --text-2: #1f2a14;
+  --muted: #3d4a2c;
   --placeholder: #6c7a58;
-  --accent: #ff5b35;
-  --accent-hover: #ff6f4e;
-  --accent-text: #cf3f19; /* darker orange for text on light panels (AA) */
-  --on-accent: #1a0d07;
-  --army: #4b5d2a;
-  --army-deep: #2f3a19;
-  --army-soft: #7f9552;
+  --accent: #d3ff3c; /* lima ácido de la marca: el CTA con borde de tinta se ve sobre papel y sobre tinta */
+  --accent-hover: #c2ee2a;
+  --accent-text: #4d6a12; /* oliva para texto de acento sobre papel (AA) */
+  --on-accent: #0c1208;
+  --army: #4d6a12;
+  --army-deep: #0c1208;
+  --army-soft: #9bc22b;
 
   /* Accent used by the shared product cards (.pack-card*) and Tailwind's var(--signal) inside this page */
-  --signal: #56741a;
-  --signal-dim: #435a13;
+  --signal: #4d6a12;
+  --signal-dim: #3b520d;
 
-  --font-display: var(--font-bricolage), 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-display: 'Unbounded Variable', 'Unbounded', var(--font-bricolage), system-ui, sans-serif;
   --font-serif: var(--font-instrument), 'Instrument Serif', Georgia, serif;
   --font-body: var(--font-dmsans), 'DM Sans', system-ui, sans-serif;
 
@@ -2449,3 +2449,136 @@ button.lp-video:hover {
     gap: 28px;
   }
 }
+
+
+/* ══════════════════════════════════════════════════════════════════
+   Piel "estudio de cine": papel hueso + tinta verde + lima ácido.
+   Mismo lenguaje que la web (src/app/studio.css) sobre la estructura de la landing.
+   ══════════════════════════════════════════════════════════════════ */
+.lp {
+  background: var(--bg);
+}
+
+/* Las secciones ya no son tarjetas de cristal: van a sangre, alternando papel y tinta */
+.lp-section {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  background: transparent;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.lp-section--army {
+  --text: #ecf2e0;
+  --text-2: #d9e3c6;
+  --muted: #b9c6a1;
+  --placeholder: #8fa070;
+  --border: rgba(236, 242, 224, 0.2);
+  --border-strong: rgba(236, 242, 224, 0.42);
+  --surface: rgba(236, 242, 224, 0.07);
+  --accent-text: #d3ff3c;
+  background:
+    radial-gradient(60% 50% at 88% 0%, rgba(211, 255, 60, 0.12), transparent 70%),
+    radial-gradient(50% 60% at 0% 100%, rgba(77, 106, 18, 0.35), transparent 70%),
+    #0c1208;
+  border: 0;
+  color-scheme: dark;
+}
+
+/* Titulares: Unbounded en mayúsculas, con la cursiva serif como contrapunto */
+.lp h1,
+.lp h2 {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  font-size: clamp(1.9rem, 5.6vw, 4.2rem);
+}
+.lp h1 { font-size: clamp(2rem, 5.2vw, 4.6rem); }
+.lp h3 { font-weight: 800; letter-spacing: -0.02em; }
+.lp h1 em,
+.lp h2 em,
+.lp h1 .lp-serif,
+.lp h2 .lp-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: -0.02em;
+  font-size: 1.12em;
+  color: var(--accent-text);
+  text-decoration-color: currentColor;
+}
+
+/* Botón principal: pegatina lima con borde y sombra dura de tinta */
+.lp-btn--primary {
+  border: 1.5px solid #0c1208;
+  box-shadow: 4px 4px 0 #0c1208;
+  transition: transform 0.25s var(--ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow 0.25s ease, background-color 0.2s ease;
+}
+.lp-btn--primary:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #0c1208; }
+.lp-btn--primary:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #0c1208; }
+.lp-section--army .lp-btn--primary { border-color: #ecf2e0; box-shadow: 4px 4px 0 rgba(236, 242, 224, 0.9); }
+.lp-section--army .lp-btn--primary:hover { box-shadow: 6px 6px 0 rgba(236, 242, 224, 0.9); }
+.lp-btn--secondary { border-width: 1.5px; }
+
+/* Cabecera: píldora oscura flotante, como la de la web */
+.lp-header {
+  top: 12px;
+  width: min(1180px, calc(100% - 24px));
+  margin: 12px auto 0;
+  border-radius: 999px;
+  border: 1px solid rgba(236, 242, 224, 0.12);
+  background: rgba(12, 18, 8, 0.82);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  color-scheme: dark;
+  --text: #ecf2e0;
+  --text-2: rgba(236, 242, 224, 0.78);
+  color: #ecf2e0;
+}
+.lp-header .lp-container { padding-inline: 20px 8px; max-width: none; }
+.lp-header__inner { height: 56px; }
+.lp-logo { font-family: 'Unbounded Variable', 'Unbounded', sans-serif; font-weight: 900; text-transform: lowercase; font-size: 19px; }
+.lp-logo__dot { background: #ff3b30; animation: rec-pulse 1.4s ease-in-out infinite; }
+.lp-nav a { position: relative; font-size: 14px; }
+.lp-nav a:hover { color: var(--accent); }
+
+/* Eyebrow con punto REC */
+.lp-eyebrow { font-family: 'Commit Mono', ui-monospace, monospace; font-weight: 500; color: var(--accent-text); }
+.lp-eyebrow::before { background: #ff3b30; animation: rec-pulse 1.4s ease-in-out infinite; }
+
+/* Ticks de verificación en olive/lima en lugar del naranja */
+.lp-checks .lp-icon { color: var(--accent-text); }
+.lp-section--army .lp-checks .lp-icon { color: var(--accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-logo__dot, .lp-eyebrow::before { animation: none; }
+}
+
+/* Cabecera fija y siempre oscura (el estado "scrolled" original la ponía blanca) */
+.lp-header,
+.lp-header.is-scrolled {
+  position: fixed;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  background: rgba(12, 18, 8, 0.86);
+  border: 1px solid rgba(236, 242, 224, 0.12);
+  box-shadow: 0 14px 40px -18px rgba(12, 18, 8, 0.7);
+}
+.lp-header.is-scrolled .lp-header__inner { height: 56px; }
+.lp-hero { padding-top: 112px; }
+@media (min-width: 768px) { .lp-hero { padding-top: 150px; } }
+
+/* Barra móvil: tinta con lima, como la nav de la web */
+.lp-mobile-bar {
+  background: rgba(12, 18, 8, 0.92);
+  border-top: 1px solid rgba(236, 242, 224, 0.14);
+}
+.lp-mobile-bar .lp-btn--primary { border-color: #ecf2e0; box-shadow: none; }

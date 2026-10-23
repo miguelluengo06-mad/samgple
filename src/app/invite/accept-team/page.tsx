@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAuth } from '@/components/AuthContext';
 import { Loader2 } from 'lucide-react';
+import AuthShell from '@/components/studio/AuthShell';
 
 interface InviteInfo {
   id: string;
@@ -78,37 +79,35 @@ function AcceptTeamInviteContent() {
 
   if (authLoading || (!invite && !fetchError)) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-black">
-        <Loader2 className="h-6 w-6 animate-spin text-white/40" />
+      <div className="home-root flex items-center justify-center min-h-screen">
+        <Loader2 className="h-6 w-6 animate-spin text-[var(--signal)]" />
       </div>
     );
   }
 
   if (fetchError) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="card-liquid rounded-xl p-8 max-w-md w-full mx-4 text-center">
-          <p className="text-red-400 text-sm">{fetchError}</p>
-        </div>
-      </div>
+      <AuthShell title="Esa invitación no *vale.*" kicker="/ Invitación">
+        <p role="alert" className="text-[#b42318] text-sm">{fetchError}</p>
+      </AuthShell>
     );
   }
 
   if (done) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-black">
-        <div className="card-liquid rounded-xl p-8 max-w-md w-full mx-4 text-center">
-          <p className="text-olive-400 font-medium">You've joined the team!</p>
+      <AuthShell title="Ya eres *del equipo.*" kicker="/ Invitación">
+        <div className="text-center">
+          <p className="text-[var(--signal)] font-semibold">You've joined the team!</p>
           <p className="text-white/50 text-sm mt-1">Redirecting to portal…</p>
         </div>
-      </div>
+      </AuthShell>
     );
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="card-liquid rounded-xl p-8 max-w-md w-full mx-4">
-        <h1 className="text-xl font-semibold text-white mb-2">Team invitation</h1>
+    <AuthShell title="Te han *invitado.*" kicker="/ Invitación de equipo">
+      <div>
+        <h2 className="text-xl font-semibold text-white mb-2">Team invitation</h2>
         <p className="text-white/60 text-sm mb-6">
           <span className="text-white font-medium">{invite?.inviterName}</span> has invited you to join their team as{' '}
           <span className="text-white font-medium capitalize">{invite?.role}</span>.
@@ -127,20 +126,20 @@ function AcceptTeamInviteContent() {
         <button
           onClick={handleAccept}
           disabled={accepting}
-          className="w-full py-3 bg-olive-500 text-black rounded-lg font-medium hover:bg-gray-100 disabled:bg-gray-400 disabled:text-gray-600 transition-colors flex items-center justify-center"
+          className="btn-minimal-filled w-full py-3 rounded-lg font-semibold disabled:opacity-50 transition-colors flex items-center justify-center"
         >
           {accepting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Accept invitation'}
         </button>
       </div>
-    </div>
+    </AuthShell>
   );
 }
 
 export default function AcceptTeamInvitePage() {
   return (
     <Suspense fallback={
-      <div className="flex items-center justify-center min-h-screen bg-black">
-        <Loader2 className="h-6 w-6 animate-spin text-white/40" />
+      <div className="home-root flex items-center justify-center min-h-screen">
+        <Loader2 className="h-6 w-6 animate-spin text-[var(--signal)]" />
       </div>
     }>
       <AcceptTeamInviteContent />

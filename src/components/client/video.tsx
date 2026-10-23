@@ -159,7 +159,7 @@ export function Wizard() {
                           <button
                             onClick={() => setD({ ...d, avatarId: a.id })}
                             aria-pressed={on}
-                            className={cn('relative w-full text-left rounded-2xl overflow-hidden border transition-all cursor-pointer bg-white/[0.03]', on ? 'border-[var(--signal)] shadow-[0_0_0_2px_var(--signal),0_0_28px_-6px_var(--signal)]' : 'border-white/10 hover:border-[var(--portal-line-strong)]')}
+                            className={cn('relative w-full text-left rounded-2xl overflow-hidden border transition-[border-color,box-shadow] cursor-pointer bg-white/[0.03]', on ? 'border-[var(--signal)] shadow-[0_0_0_2px_var(--signal),0_0_28px_-6px_var(--signal)]' : 'border-white/10 hover:border-[var(--portal-line-strong)]')}
                           >
                             <AvatarImage src={a.image_url} name={a.name} className="w-full aspect-[3/4]" />
                             {on && <span className="absolute top-2 right-2 w-7 h-7 rounded-full bg-[var(--signal)] text-black flex items-center justify-center shadow-lg"><Check className="w-4 h-4" /></span>}
@@ -200,7 +200,7 @@ export function Wizard() {
                   />
                   <div id="seconds-meter" className="mt-2" aria-live="polite">
                     <div className="h-2 rounded-full bg-white/[0.08] overflow-hidden">
-                      <div className={cn('h-full rounded-full transition-all duration-300', over ? 'bg-red-400' : seconds > 38 ? 'bg-yellow-400' : 'bg-[var(--signal)] shadow-[0_0_10px_var(--portal-glow)]')} style={{ width: `${Math.min(100, (seconds / MAX_VIDEO_SECONDS) * 100)}%` }} />
+                      <div className={cn('h-full rounded-full transition-[width,background-color] duration-300', over ? 'bg-red-400' : seconds > 38 ? 'bg-yellow-400' : 'bg-[var(--signal)] shadow-[0_0_10px_var(--portal-glow)]')} style={{ width: `${Math.min(100, (seconds / MAX_VIDEO_SECONDS) * 100)}%` }} />
                     </div>
                     <div className={cn('mt-1.5 text-xs flex justify-between', over ? 'text-red-400 font-medium' : 'text-white/50')}>
                       <span>≈ {seconds} s de {MAX_VIDEO_SECONDS} s{over ? ' · te pasas, acorta un poco' : ''}</span>

@@ -1,74 +1,137 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import Marquee from './Marquee';
+import Timecode from './Timecode';
 import { BookCallButton } from './BookCall';
+import { EXAMPLE_VIDEOS } from '@/lib/exampleVideos';
 
-const TICKER_WORDS = ['VÍDEO CON IA', 'UGC', 'INFLUENCERS IA', 'ANUNCIOS', 'GUIONES', 'LISTO PARA PUBLICAR'];
+const TICKER_WORDS = ['Vídeo con IA', 'UGC', 'Influencers IA', 'Anuncios', 'Guiones', 'Listo para publicar'];
+const EASE = [0.16, 1, 0.3, 1] as const;
+
+/** Cada línea del titular sube desde una ranura (máscara) con un pequeño retardo entre líneas. */
+function Line({ children, delay, calm }: { children: React.ReactNode; delay: number; calm: boolean | null }) {
+  return (
+    <span className="mask-line">
+      <motion.span
+        initial={calm ? false : { y: '110%', rotate: 2 }}
+        animate={{ y: 0, rotate: 0 }}
+        transition={{ duration: 1, delay, ease: EASE }}
+      >
+        {children}
+      </motion.span>
+    </span>
+  );
+}
+
+function Phone({ index, className, rotate, y }: { index: number; className: string; rotate: number; y: ReturnType<typeof useTransform<number, number>> }) {
+  const ex = EXAMPLE_VIDEOS[index];
+  return (
+    <motion.div
+      style={{ y, rotate }}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1, delay: 0.5 + index * 0.15, ease: EASE }}
+      className={`absolute viewfinder overflow-hidden rounded-[22px] border border-[rgba(236,242,224,0.18)] bg-[var(--ink-hi)] shadow-[0_40px_80px_-30px_rgba(0,0,0,0.8)] ${className}`}
+    >
+      {ex?.src && (
+        <video
+          src={ex.src}
+          poster={ex.poster || undefined}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-label={`Vídeo de ejemplo: ${ex.label}`}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      )}
+      <span className="absolute z-[4] top-3 left-4 flex items-center gap-1.5 font-mono-studio text-[10px] tracking-[0.14em] text-white">
+        <span className="rec-dot" style={{ width: 7, height: 7 }} /> REC
+      </span>
+      <span className="absolute z-[4] bottom-3 left-4 font-mono-studio text-[10px] tracking-[0.14em] uppercase text-white/80">
+        {ex?.label}
+      </span>
+      <span className="vf-b" />
+    </motion.div>
+  );
+}
 
 export default function Hero({ businessName }: { businessName: string }) {
+  const ref = useRef<HTMLElement>(null);
+  const calm = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
+  const yA = useTransform(scrollYProgress, [0, 1], [0, calm ? 0 : -120]);
+  const yB = useTransform(scrollYProgress, [0, 1], [0, calm ? 0 : -40]);
+  const yC = useTransform(scrollYProgress, [0, 1], [0, calm ? 0 : -200]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, calm ? 0 : 80]);
+
   return (
-    <section className="relative pt-28 pb-16 md:pt-40 md:pb-24 px-4 md:px-6 overflow-hidden">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="flex items-center gap-2 text-xs tracking-[0.25em] uppercase text-[var(--signal)] mb-8"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal)]" />
-          Vídeos con IA para negocios y marcas
-        </motion.div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="font-kinetic font-black uppercase leading-[0.88] tracking-tight text-[10vw] sm:text-[9vw] md:text-[7.5vw] lg:text-[6.5vw]"
-        >
-          Hacemos
-          <br />
-          contenido que
-          <br />
-          <span className="home-glow-text text-[var(--signal)]">se mueve.</span>
-        </motion.h1>
-
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.35 }}
-          className="mt-10 flex flex-col md:flex-row md:items-end justify-between gap-8"
-        >
-          <p className="text-lg md:text-xl text-white/60 max-w-md leading-relaxed">
-            <span className="font-kinetic text-white">{businessName}</span> crea vídeos, influencers y
-            anuncios con IA para negocios y ecommerce: con guiones que tú apruebas antes de producir.
-          </p>
-
-          <BookCallButton className="group inline-flex items-center gap-3 pl-6 pr-2 py-2 rounded-full border border-white/15 hover:border-[var(--signal)] transition-colors w-fit shrink-0">
-            <span className="text-sm font-medium tracking-wide">Agenda una llamada</span>
-            <span className="w-9 h-9 rounded-full bg-[var(--signal)] text-black flex items-center justify-center group-hover:rotate-45 transition-transform">
-              <ArrowUpRight className="w-4 h-4" />
+    <section ref={ref} className="ink ink-glow relative overflow-hidden pt-28 md:pt-32 min-h-[100svh] flex flex-col">
+      <div className="relative flex-1 max-w-[1320px] w-full mx-auto px-5 md:px-10 grid lg:grid-cols-[1.2fr_0.8fr] gap-10 items-center pb-16">
+        <motion.div style={{ y: textY }} className="relative z-[3]">
+          <motion.div
+            initial={calm ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: EASE }}
+            className="inline-flex items-center gap-3 px-3 py-1.5 rounded-md border border-[var(--ink-line)] bg-[var(--ink-hi)]/80 mb-8"
+          >
+            <span className="flex items-center gap-2 font-mono-studio text-[11px] tracking-[0.16em] text-white">
+              <span className="rec-dot" /> REC
             </span>
-          </BookCallButton>
+            <span className="w-px h-3.5 bg-[var(--ink-line)]" />
+            <Timecode className="text-[11px] tracking-[0.12em] text-white/60" />
+            <span className="w-px h-3.5 bg-[var(--ink-line)] hidden sm:block" />
+            <span className="hidden sm:inline font-mono-studio text-[11px] tracking-[0.16em] uppercase text-white/50">9:16 · 24 fps</span>
+          </motion.div>
+
+          <h1 className="display-hero">
+            <Line delay={0.1} calm={calm}>Hacemos</Line>
+            <Line delay={0.2} calm={calm}>contenido</Line>
+            <Line delay={0.3} calm={calm}>
+              que <em>se mueve.</em>
+            </Line>
+          </h1>
+
+          <motion.div
+            initial={calm ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7, ease: EASE }}
+            className="mt-10 flex flex-col sm:flex-row sm:items-center gap-7 sm:gap-10"
+          >
+            <p className="max-w-md text-[17px] md:text-lg leading-relaxed text-white/60">
+              <span className="font-kinetic text-white">{businessName}</span> crea vídeos, influencers y anuncios con IA para negocios y
+              ecommerce. Los guiones los apruebas tú antes de producir.
+            </p>
+            <BookCallButton className="btn-signal shrink-0 w-fit">
+              Agenda una llamada
+              <span className="btn-dot"><ArrowUpRight className="w-4 h-4" aria-hidden="true" /></span>
+            </BookCallButton>
+          </motion.div>
         </motion.div>
+
+        {/* Tres planos de rodaje que flotan a distinta velocidad al hacer scroll */}
+        <div className="relative h-[470px] sm:h-[560px] lg:h-[640px] mb-6 lg:mb-0">
+          <Phone index={0} y={yA} rotate={-6} className="left-[0%] top-[12%] w-[38%] sm:w-[40%] aspect-[9/16]" />
+          <Phone index={1} y={yB} rotate={3} className="left-[31%] top-0 w-[38%] sm:w-[40%] aspect-[9/16] z-[2]" />
+          <Phone index={2} y={yC} rotate={9} className="right-[0%] top-[22%] w-[36%] sm:w-[38%] aspect-[9/16]" />
+        </div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.5 }}
-        className="mt-20 md:mt-28 border-y border-white/10 py-5"
-      >
+      {/* Cinta de rótulos, ligeramente inclinada */}
+      <div className="relative -mx-4 rotate-[-1.4deg] bg-[var(--lime)] text-[#0c1208] py-3.5 md:py-4 mb-6" role="presentation">
         <Marquee
           items={TICKER_WORDS.map((word) => (
             <span key={word} className="flex items-center gap-6 px-6">
-              <span className="font-kinetic text-2xl md:text-3xl uppercase text-white/25">{word}</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--signal)]" />
+              <span className="font-kinetic font-black text-xl md:text-3xl uppercase tracking-tight">{word}</span>
+              <span className="w-2 h-2 rounded-full bg-[#0c1208]" />
             </span>
           ))}
         />
-      </motion.div>
+      </div>
     </section>
   );
 }

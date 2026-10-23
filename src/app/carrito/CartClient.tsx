@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Loader2, Lock, Minus, Plus, ShoppingCart, Trash2 } from 'lucide-react';
+import { Loader2, Lock, Minus, Plus, ShoppingCart, Trash2, ArrowUpRight } from 'lucide-react';
 import { CART_MAX_QTY, cartLines, cartTotalCents } from '@/lib/cart';
 import { useCart } from '@/lib/useCart';
 import { formatEur } from '@/lib/packs';
@@ -61,23 +61,23 @@ export default function CartClient() {
 
   if (lines.length === 0) {
     return (
-      <div className="max-w-xl mx-auto text-center home-slab p-8 md:p-12">
+      <div className="max-w-xl mx-auto text-center home-slab p-8 md:p-12 bg-[var(--paper-hi)]">
         <ShoppingCart className="w-10 h-10 mx-auto text-white/30" aria-hidden="true" />
-        <h1 className="font-kinetic font-black uppercase text-3xl md:text-4xl leading-none mt-5">Tu carrito está vacío</h1>
+        <h2 className="font-kinetic font-black uppercase text-3xl md:text-4xl leading-none mt-5">Tu carrito está vacío</h2>
         <p className="text-white/60 mt-3">Elige un pack y añádelo para pagar de forma segura con tarjeta.</p>
         <Link
           href="/#precios"
-          className="mt-8 inline-flex items-center justify-center min-h-12 px-6 rounded-full bg-[var(--signal)] text-black text-sm font-semibold hover:bg-[var(--signal-dim)] transition-colors"
+          className="btn-signal mt-8"
         >
           Ver packs y precios
+          <span className="btn-dot"><ArrowUpRight className="w-4 h-4" aria-hidden="true" /></span>
         </Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto">
-      <h1 className="font-kinetic font-black uppercase text-4xl md:text-6xl leading-none mb-6 md:mb-10">Tu carrito</h1>
+    <div className="max-w-[1320px] mx-auto">
       {cancelled && (
         <p role="status" className="mb-6 rounded-xl border border-white/15 bg-white/50 px-4 py-3 text-sm text-white/70">
           El pago se ha cancelado y no se ha cobrado nada. Tu carrito sigue aquí.
@@ -164,7 +164,7 @@ export default function CartClient() {
             type="submit"
             disabled={busy || !accepted}
             aria-busy={busy}
-            className="w-full min-h-12 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--signal)] text-black text-sm font-semibold hover:bg-[var(--signal-dim)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full min-h-14 inline-flex items-center justify-center gap-2 rounded-full bg-[#0c1208] text-[var(--lime)] text-[15px] font-semibold hover:bg-[var(--olive)] hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {busy ? <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" /> : <Lock className="w-4 h-4" aria-hidden="true" />}
             {busy ? 'Abriendo el pago seguro…' : `Pagar ${formatEur(total)}`}

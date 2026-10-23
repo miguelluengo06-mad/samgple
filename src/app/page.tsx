@@ -1,14 +1,12 @@
 import Link from 'next/link';
 import SiteFooter from '@/components/home/SiteFooter';
-import CartLink from '@/components/home/CartLink';
 import type { Metadata } from 'next';
-import { ArrowUpRight } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 
 // Business name and featured products come from the database and can change
 // any time via the dashboard — never prerender this page statically at build time.
 export const dynamic = 'force-dynamic';
-import KineticWordmark from '@/components/home/KineticWordmark';
+import SiteNav from '@/components/home/SiteNav';
 import Hero from '@/components/home/Hero';
 import Services from '@/components/home/Services';
 import VideoExamples from '@/components/home/VideoExamples';
@@ -16,7 +14,7 @@ import Pricing from '@/components/home/Pricing';
 import PaymentNotice from '@/components/home/PaymentNotice';
 import Process from '@/components/home/Process';
 import BookCallForm from '@/components/home/BookCallForm';
-import { BookCallProvider, BookCallButton } from '@/components/home/BookCall';
+import { BookCallProvider } from '@/components/home/BookCall';
 
 async function getBranding() {
   const { data } = await supabaseAdmin
@@ -50,37 +48,11 @@ export default async function HomePage() {
     <BookCallProvider businessName={businessName}>
     <div className="home-root min-h-screen relative">
 
-      {/* Nav */}
-      <header className="fixed top-0 inset-x-0 z-40 border-b border-white/10 bg-black/60 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-          <Link href="/">
-            <KineticWordmark name={businessName} className="text-xl" />
-          </Link>
-          <nav className="flex items-center gap-1 md:gap-2">
-            <a href="#servicios" className="hidden md:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
-              Servicios
-            </a>
-            <a href="#ejemplos" className="hidden md:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
-              Ejemplos
-            </a>
-            <a href="#precios" className="hidden md:inline-block px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
-              Precios
-            </a>
-            <Link href="/auth" className="px-3 py-2 text-sm text-white/60 hover:text-white transition-colors">
-              Acceder
-            </Link>
-            <CartLink />
-            <BookCallButton className="ml-1 px-4 py-2 min-h-10 inline-flex items-center rounded-full bg-[var(--signal)] text-black text-sm font-medium hover:bg-[var(--signal-dim)] transition-colors whitespace-nowrap">
-              <span className="sm:hidden">Agendar</span>
-              <span className="hidden sm:inline">Agendar llamada</span>
-            </BookCallButton>
-          </nav>
-        </div>
-      </header>
+      <SiteNav businessName={businessName} book />
 
       <PaymentNotice />
 
-      <main className="relative z-[2]">
+      <main id="contenido" className="relative z-[2]">
         <Hero businessName={businessName} />
         <VideoExamples />
         <Services />
@@ -88,27 +60,31 @@ export default async function HomePage() {
         <Process />
 
         {/* Contact */}
-        <section id="contacto" className="px-4 md:px-6 py-24 md:py-32 border-t border-white/10">
-          <div className="max-w-4xl mx-auto">
-            <span className="text-xs tracking-[0.25em] uppercase text-[var(--signal)]">Hablemos</span>
-            <h2 className="font-kinetic font-black uppercase text-4xl md:text-6xl leading-none mt-4 mb-4">
-              Agenda tu llamada
-            </h2>
-            <p className="text-white/50 max-w-lg mb-12">
-              Elige un hueco y respóndenos unas preguntas rápidas: en 30 minutos vemos qué necesitas.
-              ¿Prefieres ver precios cerrados primero? <a href="#precios" className="text-[var(--signal)] hover:underline">Consulta nuestros packs</a>.
-            </p>
-            <BookCallForm businessName={businessName} />
-            <p className="text-sm text-white/40 mt-12 pt-8 border-t border-white/10">
-              ¿Ya eres cliente?{' '}
-              <Link href="/auth" className="text-[var(--signal)] hover:underline">Accede a tu cuenta</Link>
-              {' '}para ver tus compras y escribirnos.
-            </p>
+        <section id="contacto" className="px-5 md:px-10 py-24 md:py-36">
+          <div className="max-w-[1320px] mx-auto grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] gap-12 lg:gap-20">
+            <div className="lg:sticky lg:top-28 self-start">
+              <span className="kicker">/ 05 · Última escena</span>
+              <h2 className="display-md mt-5 mb-6">
+                Hablemos de <em>tu vídeo</em>
+              </h2>
+              <p className="text-white/60 max-w-md leading-relaxed">
+                Si te viene bien, reserva una llamada de 30 minutos. Si no, déjanos tus datos y te escribimos:
+                la llamada es opcional. ¿Prefieres ver precios cerrados primero? <a href="#precios" className="underline underline-offset-4 decoration-[var(--signal)] hover:text-[var(--signal)]">Consulta nuestros packs</a>.
+              </p>
+              <p className="text-sm text-white/50 mt-10">
+                ¿Ya eres cliente?{' '}
+                <Link href="/auth" className="underline underline-offset-4 decoration-[var(--signal)] hover:text-[var(--signal)]">Accede a tu cuenta</Link>
+                {' '}para ver tus compras y escribirnos.
+              </p>
+            </div>
+            <div className="home-slab min-w-0 p-5 sm:p-6 md:p-10">
+              <BookCallForm businessName={businessName} />
+            </div>
           </div>
         </section>
       </main>
 
-      <SiteFooter businessName={businessName} className="w-[calc(100%-clamp(20px,5vw,72px))] max-w-[1320px] mx-auto mt-3 mb-4" />
+      <SiteFooter businessName={businessName} />
     </div>
     </BookCallProvider>
   );

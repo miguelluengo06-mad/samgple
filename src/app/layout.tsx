@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import './studio.css';
 import { AuthProvider } from '@/components/AuthContext';
 import { Suspense } from 'react';
 import CookieConsent from '@/components/CookieConsent';
 import MetaPixel from '@/components/MetaPixel';
 import WebAnalytics from '@/components/WebAnalytics';
+import StudioChrome from '@/components/studio/StudioChrome';
 
 export const metadata: Metadata = {
   title: 'samgple — Agencia de contenido y marketing',
@@ -26,8 +28,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
     { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
@@ -52,6 +52,7 @@ export default function RootLayout({
         `}} />
       </head>
       <body className='antialiased'>
+        <a href="#contenido" className="skip-link">Saltar al contenido</a>
         <AuthProvider>
           <Suspense fallback={null}>
             {children}
@@ -60,6 +61,7 @@ export default function RootLayout({
         <CookieConsent />
         <MetaPixel />
         <WebAnalytics />
+        <StudioChrome />
       </body>
     </html>
   );

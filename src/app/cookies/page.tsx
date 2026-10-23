@@ -65,7 +65,7 @@ export default function CookiesPage() {
       <H2>3. Cómo cambiar tu elección</H2>
       <p>
         Puedes aceptar, rechazar o personalizar las cookies en cualquier momento:{' '}
-        <CookieSettingsLink className="underline underline-offset-2 text-white cursor-pointer" />. Retirar el consentimiento es tan fácil como
+        <CookieSettingsLink className="underline underline-offset-4 cursor-pointer" />. Retirar el consentimiento es tan fácil como
         darlo.
       </p>
       <p>

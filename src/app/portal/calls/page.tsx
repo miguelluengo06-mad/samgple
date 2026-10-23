@@ -141,7 +141,7 @@ export default function CallsPage() {
                 onClick={() => { setTab('upcoming'); setDay(active ? null : d.key); }}
                 aria-pressed={active}
                 className={cn(
-                  'relative flex flex-col items-center gap-0.5 rounded-2xl py-2 md:py-2.5 transition-all cursor-pointer border',
+                  'relative flex flex-col items-center gap-0.5 rounded-2xl py-2 md:py-2.5 transition-colors cursor-pointer border',
                   active ? 'bg-[var(--signal)] text-black border-transparent shadow-[0_0_20px_-4px_var(--signal)]' : 'bg-white/[0.03] border-transparent hover:border-[var(--portal-line-strong)]'
                 )}
               >

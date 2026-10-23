@@ -101,10 +101,10 @@ export function ClientShell({ active, hrefFor, banner, children }: { active: Cli
       {banner}
       <div className="flex-1 min-h-0 flex flex-col md:flex-row">
       {/* Escritorio */}
-      <aside className="hidden md:block w-64 shrink-0 m-3 mr-0 rounded-3xl border border-[var(--portal-line)] bg-black/95 p-3.5 overflow-y-auto shadow-[0_18px_50px_-30px_rgba(22,33,14,0.35)]">{sidebar}</aside>
+      <aside className="hidden md:block w-64 shrink-0 m-3 mr-0 rounded-3xl border border-[var(--portal-line)] ink bg-black/95 p-3.5 overflow-y-auto shadow-[0_18px_50px_-30px_rgba(22,33,14,0.35)]">{sidebar}</aside>
 
       {/* Móvil: cabecera */}
-      <header className="md:hidden flex-shrink-0 h-14 px-4 flex items-center justify-between border-b border-white/10 bg-black/95">
+      <header className="md:hidden flex-shrink-0 h-14 px-4 flex items-center justify-between border-b border-white/10 ink bg-black/95">
         <Link href={hrefFor('inicio')}><KineticWordmark name={brand} className="text-lg" /></Link>
         <Link href={hrefFor('videos')} className="inline-flex items-center gap-1.5 rounded-full border border-[var(--portal-line-strong)] px-3 h-9 text-sm font-semibold"><Clapperboard className="w-4 h-4 text-[var(--signal)]" /> {balance}</Link>
       </header>
@@ -122,7 +122,7 @@ export function ClientShell({ active, hrefFor, banner, children }: { active: Cli
 
       {/* Móvil: barra inferior */}
       <nav aria-label="Navegación rápida" className="md:hidden flex-shrink-0 px-3 pt-2" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 10px)' }}>
-        <div className="grid grid-cols-5 rounded-2xl border border-[var(--portal-line-strong)] bg-black/95 shadow-[0_10px_30px_-14px_rgba(22,33,14,0.4)] p-1">
+        <div className="grid grid-cols-5 rounded-2xl border border-[var(--portal-line-strong)] ink bg-black/95 shadow-[0_10px_30px_-14px_rgba(22,33,14,0.4)] p-1">
           {BOTTOM.map((p) => {
             const item = NAV.find((n) => n.page === p)!;
             const Icon = item.icon;
@@ -144,7 +144,7 @@ export function ClientShell({ active, hrefFor, banner, children }: { active: Cli
       <AnimatePresence>
         {more && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 md:hidden bg-black/60" onClick={() => setMore(false)}>
-            <motion.aside initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'tween', duration: 0.24 }} role="dialog" aria-modal="true" aria-label="Menú" className="absolute inset-x-0 bottom-0 max-h-[88dvh] rounded-t-3xl border-t border-[var(--portal-line-strong)] bg-black px-4 pt-3 pb-6 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <motion.aside initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'tween', duration: 0.24 }} role="dialog" aria-modal="true" aria-label="Menú" className="absolute inset-x-0 bottom-0 max-h-[88dvh] rounded-t-3xl border-t border-[var(--portal-line-strong)] ink bg-black px-4 pt-3 pb-6 overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <div className="mx-auto h-1 w-10 rounded-full bg-white/20 mb-3" aria-hidden="true" />
               <div className="flex items-center justify-between mb-3"><span className="font-semibold">Menú</span><button onClick={() => setMore(false)} aria-label="Cerrar" className="text-white/60 cursor-pointer"><X className="w-5 h-5" /></button></div>
               <nav className="flex flex-col gap-1">{NAV.filter((n) => !BOTTOM.includes(n.page)).map((n) => link(n.page, () => setMore(false)))}</nav>

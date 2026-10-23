@@ -43,7 +43,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: '#0F0E0D',
+  themeColor: '#0c1208',
 };
 
 /* ── Inline stroke icons (decorative → aria-hidden) ── */
@@ -130,7 +130,7 @@ export default function LandingPage() {
   const packCtaLabel = spots.soldOut ? 'Ver todos los packs' : WELCOME_PACK.cta;
 
   return (
-    <div className={`lp mil-bg ${bricolage.variable} ${instrument.variable} ${dmSans.variable}`}>
+    <div className={`lp ${bricolage.variable} ${instrument.variable} ${dmSans.variable}`}>
 
       {/* Barra de progreso de scroll (LandingScripts.tsx actualiza --lp-progress) */}
       <div className="lp-progress" aria-hidden="true" />
@@ -158,7 +158,7 @@ export default function LandingPage() {
 
       <main>
         {/* Hero */}
-        <section className="lp-section lp-hero" id="inicio" aria-labelledby="hero-title">
+        <section className="lp-section lp-section--army lp-hero" id="inicio" aria-labelledby="hero-title">
           <div className="lp-container lp-hero__grid">
             <div>
               <p className="lp-eyebrow">Vídeos con IA para negocios y ecommerce</p>

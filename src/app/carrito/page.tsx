@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import KineticWordmark from '@/components/home/KineticWordmark';
+import SiteNav from '@/components/home/SiteNav';
 import SiteFooter from '@/components/home/SiteFooter';
-import CartLink from '@/components/home/CartLink';
 import CartClient from './CartClient';
 
 export const dynamic = 'force-dynamic';
@@ -27,25 +25,24 @@ export default async function CartPage() {
   const businessName = await getBusinessName();
   return (
     <div className="home-root min-h-screen relative">
-      <header className="fixed top-0 inset-x-0 z-40 border-b border-white/10 bg-black/60 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-          <Link href="/">
-            <KineticWordmark name={businessName} className="text-xl" />
-          </Link>
-          <nav className="flex items-center gap-1 md:gap-2">
-            <Link href="/#precios" className="px-3 py-2 min-h-10 inline-flex items-center text-sm text-white/60 hover:text-white transition-colors">
-              Seguir comprando
-            </Link>
-            <CartLink />
-          </nav>
-        </div>
-      </header>
+      <SiteNav businessName={businessName} items={[{ href: '/#precios', label: 'Seguir comprando' }]} />
 
-      <main className="relative z-[2] px-4 md:px-8 pt-28 pb-16 md:pt-32 md:pb-24">
-        <CartClient />
+      <main id="contenido" className="relative z-[2]">
+        <section className="ink ink-glow px-5 md:px-10 pt-32 md:pt-40 pb-24 md:pb-32">
+          <div className="max-w-[1320px] mx-auto">
+            <span className="kicker">/ Hoja de pedido</span>
+            <h1 className="display-lg mt-5">
+              Tu <em>carrito</em>
+            </h1>
+          </div>
+        </section>
+
+        <section className="px-5 md:px-10 pb-24 md:pb-32 -mt-12 md:-mt-16 relative z-[3]">
+          <CartClient />
+        </section>
       </main>
 
-      <SiteFooter businessName={businessName} className="max-w-6xl mx-3 md:mx-auto mt-4 mb-4" />
+      <SiteFooter businessName={businessName} />
     </div>
   );
 }

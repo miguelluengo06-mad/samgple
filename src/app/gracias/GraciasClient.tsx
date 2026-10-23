@@ -3,7 +3,8 @@
 import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { CheckCircle2, Clock, Loader2, TriangleAlert } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowUpRight, Clock, Loader2, TriangleAlert } from 'lucide-react';
 import { metaTrackOnce } from '@/lib/metaPixel';
 import { clearCart } from '@/lib/useCart';
 
@@ -17,6 +18,27 @@ interface Confirmation {
 }
 
 type State = { kind: 'loading' } | { kind: 'error' } | { kind: 'done'; data: Confirmation };
+
+/** Claqueta que se cierra de golpe al confirmarse el pago: ¡toma buena! */
+function Clapper() {
+  const calm = useReducedMotion();
+  return (
+    <div className="mx-auto w-52 select-none" aria-hidden="true">
+      <motion.div
+        style={{ transformOrigin: '0% 100%', background: 'repeating-linear-gradient(115deg, #0c1208 0 16px, #ecf2e0 16px 32px)' }}
+        initial={calm ? false : { rotate: -26 }}
+        animate={{ rotate: 0 }}
+        transition={{ type: 'spring', stiffness: 380, damping: 11, delay: 0.35 }}
+        className="h-7 rounded-t-md border-2 border-[#ecf2e0]"
+      />
+      <div className="rounded-b-md border-2 border-t-0 border-[#ecf2e0] bg-[#0c1208] px-4 py-3 text-left font-mono-studio text-[10px] tracking-[0.16em] uppercase text-[#ecf2e0]/70">
+        <div className="flex justify-between"><span>Escena</span><span className="text-[var(--lime)]">Pedido</span></div>
+        <div className="flex justify-between mt-1.5"><span>Toma</span><span className="text-[var(--lime)]">Buena</span></div>
+        <div className="flex justify-between mt-1.5"><span>Estado</span><span className="text-[var(--lime)]">Pagado ✓</span></div>
+      </div>
+    </div>
+  );
+}
 
 /** Una sola comprobación por sesión: React StrictMode monta dos veces en desarrollo. */
 function Confirm() {
@@ -45,7 +67,7 @@ function Confirm() {
   }, [sessionId]);
 
   return (
-    <div className="max-w-xl mx-auto px-4 pt-32 pb-24 text-center">
+    <div className="max-w-xl mx-auto px-5 py-24 text-center">
       {state.kind === 'loading' && (
         <>
           <Loader2 className="w-10 h-10 mx-auto animate-spin text-[var(--signal)]" aria-hidden="true" />
@@ -56,14 +78,14 @@ function Confirm() {
 
       {state.kind === 'done' && state.data.paid && (
         <>
-          <CheckCircle2 className="w-14 h-14 mx-auto text-[var(--signal)]" aria-hidden="true" />
-          <h1 className="font-kinetic font-black uppercase text-4xl md:text-5xl leading-none mt-6">¡Pago recibido!</h1>
+          <Clapper />
+          <h1 className="display-lg mt-10">¡Pago <em>recibido!</em></h1>
           <p className="text-white/70 mt-4 text-lg">
             Gracias por confiar en nosotros. Ya tenemos tu pedido y nos ponemos manos a la obra.
           </p>
           <dl
-            className="mt-8 rounded-2xl p-5 text-left space-y-3"
-            style={{ background: 'rgba(255,255,255,0.78)', border: '1px solid rgba(20,27,10,0.12)', color: '#16210e' }}
+            className="mt-8 rounded-xl p-5 text-left space-y-3 border-2 border-dashed"
+            style={{ background: '#f6f4ea', borderColor: 'rgba(20,27,10,0.45)', color: '#16210e' }}
           >
             <div className="flex justify-between gap-4">
               <dt style={{ opacity: 0.65 }}>Pack</dt>
@@ -107,11 +129,9 @@ function Confirm() {
         </>
       )}
 
-      <Link
-        href="/"
-        className="mt-10 inline-flex items-center justify-center min-h-12 px-6 rounded-full bg-[var(--signal)] text-white text-sm font-semibold hover:bg-[var(--signal-dim)] transition-colors"
-      >
+      <Link href="/" className="btn-signal mt-10">
         Volver a la web
+        <span className="btn-dot"><ArrowUpRight className="w-4 h-4" aria-hidden="true" /></span>
       </Link>
     </div>
   );
@@ -120,7 +140,7 @@ function Confirm() {
 export default function GraciasClient() {
   return (
     <div className="home-root min-h-screen relative">
-      <main className="relative z-[2]">
+      <main className="ink ink-glow relative z-[2] min-h-screen flex items-center justify-center">
         <Suspense fallback={null}>
           <Confirm />
         </Suspense>
