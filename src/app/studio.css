@@ -1,5 +1,5 @@
 /* ============================================================
- * samgple — "estudio de cine" (web pública, carrito, acceso, gracias)
+ * samgple — "estudio de cine" (web pública, acceso, gracias)
  *
  * Idea: toda la web es un set de rodaje. Dos "luces": papel hueso (.home-root) y tinta verde casi
  * negra (.ink), con lima ácido como señal. Motivos: visor con esquinas, REC, timecode, perforaciones
@@ -663,10 +663,9 @@ html.has-studio-cursor .home-root a { cursor: none !important; }
 .portal-ui .ink :focus-visible { outline-color: var(--lime); }
 .portal-ui ::selection { background: var(--lime); color: #0c1208; }
 
-/* Polish pass: balanced headings, no double-tap zoom delay, safe areas */
+/* Polish pass: balanced headings, no double-tap zoom delay */
 .display-xl, .display-lg, .display-md, .display-hero, .kicker { text-wrap: balance; }
 .home-root a, .home-root button, .home-root summary, .home-root [role="button"] { touch-action: manipulation; }
-.ink-glow, .page-curtain { padding-left: max(0px, env(safe-area-inset-left)); padding-right: max(0px, env(safe-area-inset-right)); }
 
 .skip-link { position: fixed; left: 12px; top: -64px; z-index: 200; padding: 10px 16px; background: var(--lime); color: var(--ink); font-weight: 700; border-radius: 999px; transition: top .2s; }
 .skip-link:focus { top: 12px; }

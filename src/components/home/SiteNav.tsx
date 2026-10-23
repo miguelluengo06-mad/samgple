@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import KineticWordmark from './KineticWordmark';
-import CartLink from './CartLink';
 import { BookCallButton } from './BookCall';
 
 type Item = { href: string; label: string };
@@ -12,7 +11,6 @@ type Item = { href: string; label: string };
 const HOME_ITEMS: Item[] = [
   { href: '/#ejemplos', label: 'Ejemplos' },
   { href: '/#servicios', label: 'Servicios' },
-  { href: '/#precios', label: 'Precios' },
   { href: '/#metodo', label: 'Método' },
 ];
 
@@ -55,7 +53,6 @@ export default function SiteNav({
           </Link>
         ))}
         <Link href="/auth" className="nav-link hidden sm:inline-block">Acceder</Link>
-        <CartLink className="relative inline-flex items-center justify-center w-10 h-10 rounded-full text-white/70 hover:text-white transition-colors" />
         {book ? (
           <BookCallButton className="ml-1 inline-flex items-center gap-2 pl-4 pr-1.5 h-10 rounded-full bg-[var(--lime)] text-[#0c1208] text-[13px] font-semibold whitespace-nowrap hover:brightness-95 transition">
             Hablemos
@@ -64,8 +61,8 @@ export default function SiteNav({
             </span>
           </BookCallButton>
         ) : (
-          <Link href="/#precios" className="ml-1 inline-flex items-center h-10 px-4 rounded-full bg-[var(--lime)] text-[#0c1208] text-[13px] font-semibold whitespace-nowrap">
-            Ver packs
+          <Link href="/#contacto" className="ml-1 inline-flex items-center h-10 px-4 rounded-full bg-[var(--lime)] text-[#0c1208] text-[13px] font-semibold whitespace-nowrap">
+            Hablemos
           </Link>
         )}
       </nav>

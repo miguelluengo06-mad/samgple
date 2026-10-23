@@ -87,7 +87,7 @@ export function HomePage({ hrefFor }: { hrefFor: HrefFor }) {
               {studio.balance > 0 ? (
                 <button onClick={() => c.openWizard()} className="inline-flex items-center gap-2 px-6 h-12 rounded-full portal-cta text-sm cursor-pointer"><Sparkles className="w-4 h-4" /> Pedir un vídeo</button>
               ) : (
-                <Link href="/#precios" className="inline-flex items-center gap-2 px-6 h-12 rounded-full portal-cta text-sm">Ver packs <ArrowRight className="w-4 h-4" /></Link>
+                <Link href="/#contacto" className="inline-flex items-center gap-2 px-6 h-12 rounded-full portal-cta text-sm">Ver packs <ArrowRight className="w-4 h-4" /></Link>
               )}
               {c.waiting > 0 && (
                 <Link href={hrefFor('videos')} className="inline-flex items-center gap-1.5 px-4 h-12 rounded-full border border-blue-400/40 text-blue-400 text-sm font-medium"><PenLine className="w-4 h-4" /> {c.waiting} {c.waiting === 1 ? 'guion espera' : 'guiones esperan'} tu visto bueno</Link>
@@ -298,7 +298,7 @@ export function AvatarsPage() {
                   {balance > 0 ? (
                     <button onClick={() => { setOpenId(null); c.openWizard(open.id); }} className="w-full inline-flex items-center justify-center gap-2 h-12 rounded-full portal-cta text-sm cursor-pointer"><Sparkles className="w-4 h-4" /> Pedir un vídeo con {open.name}</button>
                   ) : (
-                    <Link href="/#precios" className="w-full inline-flex items-center justify-center h-12 rounded-full border border-[var(--portal-line-strong)] text-sm">Consigue vídeos para pedirlo</Link>
+                    <Link href="/#contacto" className="w-full inline-flex items-center justify-center h-12 rounded-full border border-[var(--portal-line-strong)] text-sm">Consigue vídeos para pedirlo</Link>
                   )}
                 </div>
               </div>
@@ -357,7 +357,7 @@ export function PurchasesPage() {
       title="Compras"
       subtitle={c.purchases.length > 0 ? `${c.purchases.length} ${c.purchases.length === 1 ? 'compra' : 'compras'} · ${total.toLocaleString('es-ES')} € en total` : undefined}
       width="max-w-3xl"
-      actions={<Link href="/#precios" className="inline-flex items-center gap-1.5 px-4 h-10 rounded-full portal-cta text-sm"><Sparkles className="w-4 h-4" /> <span className="hidden sm:inline">Conseguir más vídeos</span><span className="sm:hidden">Más vídeos</span></Link>}
+      actions={<Link href="/#contacto" className="inline-flex items-center gap-1.5 px-4 h-10 rounded-full portal-cta text-sm"><Sparkles className="w-4 h-4" /> <span className="hidden sm:inline">Conseguir más vídeos</span><span className="sm:hidden">Más vídeos</span></Link>}
     >
       {c.loading ? (
         <Skeleton className="h-32" />

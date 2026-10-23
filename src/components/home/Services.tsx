@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { SINGLE_VIDEO } from '@/lib/packs';
 
 const SERVICES = [
   {
@@ -29,11 +28,6 @@ const SERVICES = [
     n: '05',
     title: 'Voz, subtítulos y formato',
     description: 'Voz IA natural, subtítulos dinámicos y entrega lista para cada red, con música libre de derechos.',
-  },
-  {
-    n: '06',
-    title: 'Vídeo suelto',
-    description: `¿Solo necesitas una pieza? Un vídeo por ${SINGLE_VIDEO.price} €, con una revisión y entrega en 5 días.`,
   },
 ];
 

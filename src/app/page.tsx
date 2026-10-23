@@ -10,8 +10,6 @@ import SiteNav from '@/components/home/SiteNav';
 import Hero from '@/components/home/Hero';
 import Services from '@/components/home/Services';
 import VideoExamples from '@/components/home/VideoExamples';
-import Pricing from '@/components/home/Pricing';
-import PaymentNotice from '@/components/home/PaymentNotice';
 import Process from '@/components/home/Process';
 import BookCallForm from '@/components/home/BookCallForm';
 import { BookCallProvider } from '@/components/home/BookCall';
@@ -50,26 +48,23 @@ export default async function HomePage() {
 
       <SiteNav businessName={businessName} book />
 
-      <PaymentNotice />
-
       <main id="contenido" className="relative z-[2]">
         <Hero businessName={businessName} />
         <VideoExamples />
         <Services />
-        <Pricing />
         <Process />
 
         {/* Contact */}
         <section id="contacto" className="px-5 md:px-10 py-24 md:py-36">
           <div className="max-w-[1320px] mx-auto grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] gap-12 lg:gap-20">
             <div className="lg:sticky lg:top-28 self-start">
-              <span className="kicker">/ 05 · Última escena</span>
+              <span className="kicker">/ 04 · Última escena</span>
               <h2 className="display-md mt-5 mb-6">
                 Hablemos de <em>tu vídeo</em>
               </h2>
               <p className="text-white/60 max-w-md leading-relaxed">
                 Si te viene bien, reserva una llamada de 30 minutos. Si no, déjanos tus datos y te escribimos:
-                la llamada es opcional. ¿Prefieres ver precios cerrados primero? <a href="#precios" className="underline underline-offset-4 decoration-[var(--signal)] hover:text-[var(--signal)]">Consulta nuestros packs</a>.
+                la llamada es opcional.
               </p>
               <p className="text-sm text-white/50 mt-10">
                 ¿Ya eres cliente?{' '}

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight, BadgeCheck, Check, Lock, Receipt } from 'lucide-react';
 import { BookCallButton } from './BookCall';
-import { AddToCartButton } from './AddToCart';
 import PackCover from './PackCover';
 import TrackView from './TrackView';
 import {
@@ -76,7 +75,9 @@ function ProductCard({ pack, kind, chip, group, variant }: { pack: Pack; kind: s
         </ul>
 
         <div className="pack-card__actions">
-          <AddToCartButton packId={pack.id} name={`${group} · ${pack.name}`} value={pack.price} className="pack-card__cta" />
+          <a href="#empezar" data-pack-choice={choice} className="pack-card__cta">
+            Quiero este pack
+          </a>
           <p className="pack-card__secure">
             <Lock aria-hidden="true" /> Pago seguro con Stripe · Factura incluida
           </p>

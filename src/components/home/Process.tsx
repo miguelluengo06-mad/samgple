@@ -36,7 +36,7 @@ export default function Process() {
     <section id="metodo" className="ink ink-glow px-5 md:px-10 py-24 md:py-36 border-t border-[var(--ink-line)]">
       <div className="max-w-[1320px] mx-auto">
         <div className="mb-16 md:mb-24">
-          <span className="kicker">/ 04 · Montaje</span>
+          <span className="kicker">/ 03 · Montaje</span>
           <h2 className="display-lg mt-5">
             Cómo <em>trabajamos</em>
           </h2>

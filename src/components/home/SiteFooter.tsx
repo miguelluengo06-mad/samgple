@@ -35,7 +35,6 @@ export default function SiteFooter({ businessName, className = '' }: { businessN
             <h2 className="mb-4 kicker !text-white/40">Web</h2>
             <ul className="space-y-2.5">
               <li><Link href="/#ejemplos" className={link}>Ejemplos</Link></li>
-              <li><Link href="/#precios" className={link}>Precios</Link></li>
               <li>
                 <Link href="/auth" className={`${link} inline-flex items-center gap-1`}>
                   Acceso clientes <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />

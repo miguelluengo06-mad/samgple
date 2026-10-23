@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import { Bricolage_Grotesque, DM_Sans, Instrument_Serif } from 'next/font/google';
 import LandingScripts from './LandingScripts';
 import CookieSettingsLink from '@/components/legal/CookieSettingsLink';
-import CartLink from '@/components/home/CartLink';
 import Pricing from '@/components/home/Pricing';
 import PaymentNotice from '@/components/home/PaymentNotice';
 import { EXAMPLE_VIDEOS } from '@/lib/exampleVideos';
@@ -148,7 +147,6 @@ export default function LandingPage() {
             <a href="#packs">Packs</a>
             <a href="#faq">Preguntas</a>
           </nav>
-          <CartLink className="lp-cart" />
           <a className="lp-btn lp-btn--primary" href={packCtaHref}>
             <span className="lp-only-desktop">{spots.soldOut ? 'Ver packs' : 'Quiero mi pack'}</span>
             <span className="lp-only-mobile">{spots.soldOut ? 'Packs' : 'Mi pack'}</span>

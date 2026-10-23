@@ -52,7 +52,7 @@ export const WELCOME_PACK = {
 } as const;
 
 /** Enlace de la landing a la sección de precios de la web. */
-export const WEB_PRICING_URL = '/#precios';
+export const WEB_PRICING_URL = '/#contacto';
 
 /** Preguntas frecuentes del Pack de Bienvenida. */
 export const WELCOME_FAQ = [

@@ -84,7 +84,7 @@ export function ClientShell({ active, hrefFor, banner, children }: { active: Cli
           {balance > 0 ? (
             <button onClick={() => c.openWizard()} className="mt-3 w-full inline-flex items-center justify-center gap-2 h-10 rounded-full portal-cta text-sm cursor-pointer"><Sparkles className="w-4 h-4" /> Pedir un vídeo</button>
           ) : (
-            <Link href="/#precios" className="mt-3 w-full inline-flex items-center justify-center h-10 rounded-full border border-[var(--portal-line-strong)] text-sm hover:border-[var(--signal)]">Conseguir más vídeos</Link>
+            <Link href="/#contacto" className="mt-3 w-full inline-flex items-center justify-center h-10 rounded-full border border-[var(--portal-line-strong)] text-sm hover:border-[var(--signal)]">Conseguir más vídeos</Link>
           )}
         </div>
         <div className="flex items-center gap-2.5 px-1">
