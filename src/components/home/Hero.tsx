@@ -5,7 +5,6 @@ import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion
 import { ArrowUpRight } from 'lucide-react';
 import Marquee from './Marquee';
 import Timecode from './Timecode';
-import { BookCallButton } from './BookCall';
 import { EXAMPLE_VIDEOS } from '@/lib/exampleVideos';
 
 const TICKER_WORDS = ['Vídeo con IA', 'UGC', 'Influencers IA', 'Anuncios', 'Guiones', 'Listo para publicar'];
@@ -106,10 +105,10 @@ export default function Hero({ businessName }: { businessName: string }) {
               <span className="font-kinetic text-white">{businessName}</span> crea vídeos, influencers y anuncios con IA para negocios y
               ecommerce. Los guiones los apruebas tú antes de producir.
             </p>
-            <BookCallButton className="btn-signal shrink-0 w-fit">
-              Agenda una llamada
+            <a href="#prueba" className="btn-signal shrink-0 w-fit">
+              Pide tu prueba gratis
               <span className="btn-dot"><ArrowUpRight className="w-4 h-4" aria-hidden="true" /></span>
-            </BookCallButton>
+            </a>
           </motion.div>
         </motion.div>
 

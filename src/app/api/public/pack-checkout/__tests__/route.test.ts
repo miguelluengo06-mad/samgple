@@ -99,7 +99,7 @@ describe('POST /api/public/pack-checkout', () => {
     const params = createSession.mock.calls[0][0];
     expect(params.line_items[0].price_data.unit_amount).toBe(2000);
     expect(params.metadata.lead_id).toBe(LEAD);
-    expect(params.cancel_url).toContain('/landing?pago=cancelado#pack');
+    expect(params.cancel_url).toContain('pago=cancelado');
   });
 
   it('welcome pack sold out: 409, no session', async () => {

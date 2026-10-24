@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     }
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${req.nextUrl.protocol}//${req.nextUrl.host}`;
-    const returnPath = safeReturnPath(body.returnPath, pack.id === WELCOME_PACK.id ? '/landing#pack' : '/#precios');
+    const returnPath = safeReturnPath(body.returnPath, '/');
 
     const session = await stripeCtx.stripe.checkout.sessions.create(
       buildCheckoutParams(pack, { siteUrl, returnPath, leadId, tracking: trackingFromCookies((n) => req.cookies.get(n)?.value) })

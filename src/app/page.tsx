@@ -10,9 +10,9 @@ import SiteNav from '@/components/home/SiteNav';
 import Hero from '@/components/home/Hero';
 import Services from '@/components/home/Services';
 import VideoExamples from '@/components/home/VideoExamples';
+import FreeTrial from '@/components/home/FreeTrial';
 import Process from '@/components/home/Process';
-import BookCallForm from '@/components/home/BookCallForm';
-import { BookCallProvider } from '@/components/home/BookCall';
+import ContactForm from '@/components/home/ContactForm';
 
 async function getBranding() {
   const { data } = await supabaseAdmin
@@ -43,13 +43,13 @@ export default async function HomePage() {
   const { businessName } = await getBranding();
 
   return (
-    <BookCallProvider businessName={businessName}>
     <div className="home-root min-h-screen relative">
 
-      <SiteNav businessName={businessName} book />
+      <SiteNav businessName={businessName} />
 
       <main id="contenido" className="relative z-[2]">
         <Hero businessName={businessName} />
+        <FreeTrial />
         <VideoExamples />
         <Services />
         <Process />
@@ -63,8 +63,7 @@ export default async function HomePage() {
                 Hablemos de <em>tu vídeo</em>
               </h2>
               <p className="text-white/60 max-w-md leading-relaxed">
-                Si te viene bien, reserva una llamada de 30 minutos. Si no, déjanos tus datos y te escribimos:
-                la llamada es opcional.
+                Cuéntanos qué necesitas y te respondemos por email en menos de 24 h laborables.
               </p>
               <p className="text-sm text-white/50 mt-10">
                 ¿Ya eres cliente?{' '}
@@ -73,7 +72,7 @@ export default async function HomePage() {
               </p>
             </div>
             <div className="home-slab min-w-0 p-5 sm:p-6 md:p-10">
-              <BookCallForm businessName={businessName} />
+              <ContactForm />
             </div>
           </div>
         </section>
@@ -81,6 +80,5 @@ export default async function HomePage() {
 
       <SiteFooter businessName={businessName} />
     </div>
-    </BookCallProvider>
   );
 }

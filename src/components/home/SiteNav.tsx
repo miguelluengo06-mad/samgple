@@ -4,28 +4,25 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import KineticWordmark from './KineticWordmark';
-import { BookCallButton } from './BookCall';
 
 type Item = { href: string; label: string };
 
 const HOME_ITEMS: Item[] = [
   { href: '/#ejemplos', label: 'Ejemplos' },
   { href: '/#servicios', label: 'Servicios' },
+  { href: '/#prueba', label: 'Prueba gratis' },
   { href: '/#metodo', label: 'Método' },
 ];
 
 /**
  * Cabecera flotante en píldora oscura: se esconde al bajar y vuelve al subir, así no tapa el contenido.
- * `book` pone el botón de agendar llamada (solo donde hay BookCallProvider); si no, el acceso a clientes.
  */
 export default function SiteNav({
   businessName,
   items = HOME_ITEMS,
-  book = false,
 }: {
   businessName: string;
   items?: Item[];
-  book?: boolean;
 }) {
   const [hidden, setHidden] = useState(false);
 
@@ -53,18 +50,12 @@ export default function SiteNav({
           </Link>
         ))}
         <Link href="/auth" className="nav-link hidden sm:inline-block">Acceder</Link>
-        {book ? (
-          <BookCallButton className="ml-1 inline-flex items-center gap-2 pl-4 pr-1.5 h-10 rounded-full bg-[var(--lime)] text-[#0c1208] text-[13px] font-semibold whitespace-nowrap hover:brightness-95 transition">
-            Hablemos
-            <span className="grid place-items-center w-7 h-7 rounded-full bg-[#0c1208] text-[var(--lime)]">
-              <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
-            </span>
-          </BookCallButton>
-        ) : (
-          <Link href="/#contacto" className="ml-1 inline-flex items-center h-10 px-4 rounded-full bg-[var(--lime)] text-[#0c1208] text-[13px] font-semibold whitespace-nowrap">
-            Hablemos
-          </Link>
-        )}
+        <Link href="/#contacto" className="ml-1 inline-flex items-center gap-2 pl-4 pr-1.5 h-10 rounded-full bg-[var(--lime)] text-[#0c1208] text-[13px] font-semibold whitespace-nowrap hover:brightness-95 transition">
+          Hablemos
+          <span className="grid place-items-center w-7 h-7 rounded-full bg-[#0c1208] text-[var(--lime)]">
+            <ArrowUpRight className="w-3.5 h-3.5" aria-hidden="true" />
+          </span>
+        </Link>
       </nav>
     </header>
   );
